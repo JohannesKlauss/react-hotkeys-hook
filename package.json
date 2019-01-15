@@ -5,6 +5,7 @@
   "typings": "dist/index.d.ts",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "author": "Johannes Klauss",
+  "keywords": ["react", "hook", "component", "hotkey", "shortcut", "keyboard", "shortcuts", "keypress", "hotkeys"],
   "license": "MIT",
   "scripts": {
     "dev": "parcel example/index.html",

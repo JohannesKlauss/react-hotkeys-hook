@@ -4,17 +4,21 @@ This is a hook version for the [hotkeys-js] package.
 
 ### Installation
 
-`npm install react-hotkeys-hook`
+```shell
+npm install react-hotkeys-hook
+```
 
 or
 
-`yarn add react-hotkeys-hook`
+```shell
+yarn add react-hotkeys-hook
+```
 
 Make sure that you have `react@next` and `react-dom@next` installed, or otherwise hooks won't work for you.
 
 ### Usage
 With TypeScript
-```
+```typescript jsx
 export const ExampleComponent: React.FunctionComponent<{}> = () => {
   const [count, setCount] = useState(0);
   useHotKeys('ctrl+k', () => setCount(count + 1));
@@ -28,7 +32,7 @@ export const ExampleComponent: React.FunctionComponent<{}> = () => {
 ```
 
 Or plain JS:
-```
+```js
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0);
   useHotKeys('ctrl+k', () => setCount(count + 1));
@@ -66,4 +70,4 @@ MIT License.
 
 ---
 
-[hotkeys-js]: https://github.com/jaywcjlove/hotkeyshotkeys-js
+[hotkeys-js]: https://github.com/jaywcjlove/hotkeys
