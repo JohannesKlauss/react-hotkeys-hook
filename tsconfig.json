@@ -22,7 +22,8 @@
     "strict": true,
     "strictNullChecks": true,
     "stripInternal": true,
-    "target": "es5"
+    "target": "es5",
+    "jsx": "react"
   },
   "include": [
     "src"
