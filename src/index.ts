@@ -6,7 +6,7 @@ export default function useHotKeys(keys: string, callback: (event: KeyboardEvent
     hotkeys(keys, (event, handler) => callback(event, handler));
 
     return function cleanUp() {
-      
+      hotkeys.unbind(keys);
     }
   });
 }

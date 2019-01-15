@@ -1,20 +1,21 @@
 {
   "name": "react-keymap-hook",
-  "version": "0.0.1",
-  "main": "index.js",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "author": "Johannes Klauss",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel index.ts",
-    "build": "parcel build index.ts",
+    "dev": "parcel example/index.html",
+    "build": "parcel build src/index.ts",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
     "hotkeys-js": "^3.4.1",
     "react": "^16.8.0-alpha.0",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.8.0-alpha.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -26,13 +27,16 @@
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/jest": "^23.3.12",
     "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
     "babel-loader": "^8.0.5",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "jest": "^23.6.0",
-    "parcel-bundler": "^1.11.0"
+    "parcel-bundler": "^1.11.0",
+    "typescript": "^3.2.2"
   },
   "peerDependencies": {
-    "react": "^16.8.0-alpha.0"
+    "react": "^16.8.0-alpha.0",
+    "react-dom": "^16.8.0-alpha.0"
   }
 }
