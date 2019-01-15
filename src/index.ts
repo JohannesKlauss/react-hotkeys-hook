@@ -10,3 +10,4 @@ export default function useHotKeys(keys: string, callback: (event: KeyboardEvent
     }
   });
 }
+}
