@@ -1,6 +1,6 @@
 {
   "name": "react-hotkeys-hook",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
@@ -14,9 +14,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "hotkeys-js": "^3.4.1",
-    "react": "^16.8.0-alpha.0",
-    "react-dom": "^16.8.0-alpha.0"
+    "hotkeys-js": "^3.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -34,6 +32,8 @@
     "enzyme-adapter-react-16": "^1.7.1",
     "jest": "^23.6.0",
     "parcel-bundler": "^1.11.0",
+    "react": "^16.8.0-alpha.0",
+    "react-dom": "^16.8.0-alpha.0",
     "typescript": "^3.2.2"
   },
   "peerDependencies": {

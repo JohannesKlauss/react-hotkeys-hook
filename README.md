@@ -1,6 +1,6 @@
 # react-hotkeys-hook
 React hook for using keyboard shortcuts in components.
-This is a hook version for the [hotkeys-js] package.
+This is a hook version for the [hotkeys] package.
 
 ### Installation
 
@@ -51,10 +51,13 @@ listened to. When the component unmounts it will stop listening.
 
 ### Call Signature
 
-`useHotkey(key: string, (keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void))`
+```typescript
+useHotkey(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void)
+```
 
+The `useHotkey` hook follows the [hotkeys] call signature.
 The callback function takes the exact parameters as the callback function in the hotkeys-js package.
-See [hotkeys-js] documentation for more info or look into the typings file.
+See [hotkeys] documentation for more info or look into the typings file.
 
 ### Found an issue or have a feature request?
 
@@ -70,4 +73,4 @@ MIT License.
 
 ---
 
-[hotkeys-js]: https://github.com/jaywcjlove/hotkeys
+[hotkeys]: https://github.com/jaywcjlove/hotkeys
