@@ -52,11 +52,11 @@ listened to. When the component unmounts it will stop listening.
 ### Call Signature
 
 ```typescript
-useHotkey(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void)
+useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void)
 ```
 
-The `useHotkey` hook follows the [hotkeys] call signature.
-The callback function takes the exact parameters as the callback function in the hotkeys-js package.
+The `useHotkeys` hook follows the [hotkeys] call signature.
+The callback function takes the exact parameters as the callback function in the hotkeys package.
 See [hotkeys] documentation for more info or look into the typings file.
 
 ### Found an issue or have a feature request?
