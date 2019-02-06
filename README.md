@@ -14,7 +14,7 @@ or
 yarn add react-hotkeys-hook
 ```
 
-Make sure that you have `react@next` and `react-dom@next` installed, or otherwise hooks won't work for you.
+Make sure that you have at least version 16.8 of `react` and `react-dom` installed, or otherwise hooks won't work for you.
 
 ### Usage
 With TypeScript
