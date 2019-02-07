@@ -9,31 +9,17 @@
   "license": "MIT",
   "scripts": {
     "dev": "parcel example/index.html",
-    "build": "parcel build src/index.ts",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build": "parcel build src/index.ts"
   },
   "dependencies": {
     "hotkeys-js": "^3.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
-    "@storybook/addon-actions": "^4.1.6",
-    "@storybook/addon-links": "^4.1.6",
-    "@storybook/addons": "^4.1.6",
-    "@storybook/react": "^4.1.6",
-    "@types/enzyme": "^3.1.15",
-    "@types/enzyme-adapter-react-16": "^1.0.3",
-    "@types/jest": "^23.3.12",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "babel-loader": "^8.0.5",
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.7.1",
-    "jest": "^23.6.0",
     "parcel-bundler": "^1.11.0",
-    "react": "^16.8.0-alpha.0",
-    "react-dom": "^16.8.0-alpha.0",
     "typescript": "^3.2.2"
   },
   "peerDependencies": {
