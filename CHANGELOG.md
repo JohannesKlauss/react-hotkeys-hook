@@ -1,3 +1,6 @@
+## [1.0.3] - 13-Feb-2019
+* Bumped up hotkeys-js version to 3.4.4
+
 ## [1.0.2] - 07-Feb-2019
 * Bumped up hotkeys-js version
 

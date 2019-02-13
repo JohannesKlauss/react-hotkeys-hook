@@ -1,6 +1,6 @@
 {
   "name": "react-hotkeys-hook",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
@@ -12,7 +12,7 @@
     "build": "parcel build src/index.ts"
   },
   "dependencies": {
-    "hotkeys-js": "^3.4.3"
+    "hotkeys-js": "^3.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

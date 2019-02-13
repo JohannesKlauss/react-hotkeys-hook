@@ -2357,10 +2357,10 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hotkeys-js@^3.4.3:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.4.3.tgz#20d4d30cb1362264f57fe03170a9ffbba226f2aa"
-  integrity sha512-uSiEF2r7ElQ+cnbgICRCYId1cZEZIdbEe8Hhjdly7tN+QIEzU6mP1VEcQCK9bhu5/RV1h327zRK9Mc/m5vT+Cg==
+hotkeys-js@^3.4.4:
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.4.4.tgz#ecf24deb4b4df59123668a762a2fc970ca68abd8"
+  integrity sha512-UmjYxR45flFBB4pGOFqD33oaLls/ZNqESsh5flrajF4F4extk/eWULPMIpe2HFI4f3czXcN/bafNjIKJIwCvzw==
 
 hsl-regex@^1.0.0:
   version "1.0.0"
