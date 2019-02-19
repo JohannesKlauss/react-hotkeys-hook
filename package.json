@@ -20,7 +20,7 @@
     "@types/react-dom": "16.8.2",
     "babel-loader": "8.0.5",
     "parcel-bundler": "1.11.0",
-    "typescript": "3.2.2",
+    "typescript": "3.3.3",
     "react": "16.8.2",
     "react-dom": "16.8.2"
   },
