@@ -1,7 +1,8 @@
 .idea
-node_modules
-pkg
 .docz
+.npmrc
+pkg
+node_modules
 
 # Logs
 logs

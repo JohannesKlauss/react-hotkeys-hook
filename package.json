@@ -3,7 +3,18 @@
   "version": "1.0.3",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "author": "Johannes Klauss",
-  "keywords": ["react", "hook", "hooks", "component", "hotkey", "shortcut", "keyboard", "shortcuts", "keypress", "hotkeys"],
+  "keywords": [
+    "react",
+    "hook",
+    "hooks",
+    "component",
+    "hotkey",
+    "shortcut",
+    "keyboard",
+    "shortcuts",
+    "keypress",
+    "hotkeys"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "pack build",
@@ -20,10 +31,18 @@
   },
   "@pika/pack": {
     "pipeline": [
-      ["@pika/plugin-ts-standard-pkg"],
-      ["@pika/plugin-build-node"],
-      ["@pika/plugin-build-web"],
-      ["@pika/plugin-build-types"]
+      [
+        "@pika/plugin-ts-standard-pkg"
+      ],
+      [
+        "@pika/plugin-build-node"
+      ],
+      [
+        "@pika/plugin-build-web"
+      ],
+      [
+        "@pika/plugin-build-types"
+      ]
     ]
   },
   "dependencies": {
@@ -36,16 +55,16 @@
     "@babel/preset-typescript": "7.3.3",
     "@pika/pack": "0.3.2",
     "@pika/plugin-build-node": "0.3.11",
-    "@pika/plugin-build-web": "0.3.11",
     "@pika/plugin-build-types": "0.3.11",
+    "@pika/plugin-build-web": "0.3.11",
     "@pika/plugin-ts-standard-pkg": "0.3.10",
     "@types/react": "16.8.4",
     "@types/react-dom": "16.8.2",
     "docz": "0.13.7",
     "docz-theme-default": "0.12.9",
-    "typescript": "3.3.3",
     "react": "16.8.2",
-    "react-dom": "16.8.2"
+    "react-dom": "16.8.2",
+    "typescript": "3.3.3"
   },
   "peerDependencies": {
     "react": ">=16.8.1"
