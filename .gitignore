@@ -1,5 +1,7 @@
-.idea/
-.cache/
+.idea
+node_modules
+pkg
+.docz
 
 # Logs
 logs

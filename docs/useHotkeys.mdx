@@ -1,0 +1,51 @@
+---
+name: useHotkeys
+---
+
+import { Playground } from 'docz';
+import { useState } from 'react';
+import { useHotkeys } from '../src';
+
+# useHotkeys
+
+The `useHotkeys` hook follows the hotkeys call signature.
+The callback function takes the exact parameters as the callback function in the hotkeys package.
+See hotkeys documentation for more info or look into the typings file.
+
+```ts
+useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void)
+```
+
+## Example
+
+This will listen to the `ctrl+k` keystroke. If you press it, the counter will go up.
+
+```js
+import { useHotkeys } from 'react-hotkeys-hook';
+```
+
+```jsx
+const ExampleComponent = () => {
+  const [count, setCount] = useState(0);
+  useHotkeys('ctrl+k', () => setCount(count + 1));
+
+  return (
+    <div>
+      Pressed {count} times.
+    </div>
+  );
+};
+```
+
+<Playground>
+  {() => {
+    const [count, setCount] = useState(0);
+    useHotkeys('ctrl+k', () => setCount(count + 1))
+
+    return (
+      <div>
+        Pressed {count} times.
+      </div>
+    );
+  }}
+</Playground>

@@ -1,35 +1,11 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "declarationDir": "dist",
-    "emitDecoratorMetadata": false,
-    "experimentalDecorators": false,
-    "esModuleInterop": true,
-    "importHelpers": true,
-    "module": "commonjs",
+    "target": "es2018",
+    "module": "esnext",
     "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "dist",
-    "pretty": true,
-    "removeComments": true,
-    "sourceMap": true,
+    "jsx": "react",
     "strict": true,
-    "strictNullChecks": true,
-    "stripInternal": true,
-    "target": "es5",
-    "jsx": "react"
+    "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src"]
 }
