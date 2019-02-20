@@ -2,6 +2,10 @@
 React hook for using keyboard shortcuts in components.
 This is a hook version for the [hotkeys] package.
 
+### Documentation and live example
+
+https://johannesklauss.github.io/react-hotkeys-hook/
+
 ### Installation
 
 ```shell
