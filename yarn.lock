@@ -1124,7 +1124,7 @@
     standard-pkg "^0.2.0"
 
 "@pika/types@^0.3.3", "@pika/types@^0.3.5":
-  version "0.3.1"
+  version "0.3.9"
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.3.9.tgz#4356dcfdc115c5371bc0b96a31d12e4e506ceb53"
   integrity sha512-hzc0IHPvz4sdlaXP4Gzu9x1WF6CUTxyXbiYDLzxJQP9kvp8w4raeL0TB9YVFyayy6bplTaakTIoNrayy0ApBbw==
 
@@ -4958,7 +4958,7 @@ hosted-git-info@^2.1.4, hosted-git-info@^2.7.1:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
   integrity sha512-7T/BxH19zbcCTa8XkMlbK5lTo1WtgkFi3GvdWEyNuc4Vex7/9Dqbnpsf4JMydcfj9HCg4zUWFTL3Za6lapg5/w==
 
-hotkeys-js@^3.3.7, hotkeys-js@^3.4.4:
+hotkeys-js@3.4.4, hotkeys-js@^3.3.7:
   version "3.4.4"
   resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.4.4.tgz#ecf24deb4b4df59123668a762a2fc970ca68abd8"
   integrity sha512-UmjYxR45flFBB4pGOFqD33oaLls/ZNqESsh5flrajF4F4extk/eWULPMIpe2HFI4f3czXcN/bafNjIKJIwCvzw==
