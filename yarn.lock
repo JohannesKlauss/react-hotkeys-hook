@@ -1124,7 +1124,7 @@
     standard-pkg "^0.2.0"
 
 "@pika/types@^0.3.3", "@pika/types@^0.3.5":
-  version "0.3.9"
+  version "0.3.1"
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.3.9.tgz#4356dcfdc115c5371bc0b96a31d12e4e506ceb53"
   integrity sha512-hzc0IHPvz4sdlaXP4Gzu9x1WF6CUTxyXbiYDLzxJQP9kvp8w4raeL0TB9YVFyayy6bplTaakTIoNrayy0ApBbw==
 
