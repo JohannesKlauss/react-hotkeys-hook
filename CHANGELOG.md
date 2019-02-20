@@ -1,3 +1,6 @@
+## [1.1.1] - 20-Feb-2019
+* Updated examples in readme.md
+
 ## [1.1.0] - 20-Feb-2019
 * BC: Renamed `useHotKeys` to `useHotkeys` to keep it identical with the hotkeys package
 * Switched to docz for documentation
