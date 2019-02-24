@@ -1066,11 +1066,12 @@
     mkdirp "^0.5.1"
     typescript "^3.0.0"
 
-"@pika/plugin-build-web@0.3.11":
-  version "0.3.11"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.3.11.tgz#ef799484343881f4fc82b36932288ce20f6f785a"
-  integrity sha512-3GfIkQFffzMMNtQ92BMX/HkvcYK8HkE2+kSPiHli6i6f8Qva5tspKILbq30NduBylMrasQsTm8JHKLm0/iwsGg==
+"@pika/plugin-build-web@0.3.12":
+  version "0.3.12"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.3.12.tgz#4e742f263e84aa560f38952434d4b02eb23bdade"
+  integrity sha512-up8DF9Bc8Wpiw49LPLS+Fd7+Ze/5WyoEGOjGGuLKyBSe1c9jCOMv/dXATdA9NyqJfPY7pdapvpkDa8wUM82LEw==
   dependencies:
+    "@babel/core" "^7.0.0"
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
     "@babel/plugin-syntax-import-meta" "^7.2.0"
     "@babel/preset-env" "^7.2.3"
