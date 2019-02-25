@@ -1007,10 +1007,10 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@pika/pack@0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@pika/pack/-/pack-0.3.2.tgz#a193a60edf9f8d923a01bc860ea1e0a20a9ec678"
-  integrity sha512-bxvqV1K9/nLRVbM4//Zdh9vVOA1jPZKBXjHhb870UokkH1UV5FEFQb7h+gZCkVcYipZ2Mm3rlV/TzENi1a3FqQ==
+"@pika/pack@0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@pika/pack/-/pack-0.3.3.tgz#fdaccaf94389133274398fac1c2339492a8b27ba"
+  integrity sha512-h+U/sVSCxa0bUKoeq7lyc2Fs/8xAJ932HgFhlU2fxGNHK4oMpfb14qNd/LFZgT1JmuuDwR30Ki7fLoKxh+oxSA==
   dependencies:
     "@pika/types" "^0.3.3"
     camelcase "^4.0.0"
@@ -1066,11 +1066,12 @@
     mkdirp "^0.5.1"
     typescript "^3.0.0"
 
-"@pika/plugin-build-web@0.3.11":
-  version "0.3.11"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.3.11.tgz#ef799484343881f4fc82b36932288ce20f6f785a"
-  integrity sha512-3GfIkQFffzMMNtQ92BMX/HkvcYK8HkE2+kSPiHli6i6f8Qva5tspKILbq30NduBylMrasQsTm8JHKLm0/iwsGg==
+"@pika/plugin-build-web@0.3.12":
+  version "0.3.12"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.3.12.tgz#4e742f263e84aa560f38952434d4b02eb23bdade"
+  integrity sha512-up8DF9Bc8Wpiw49LPLS+Fd7+Ze/5WyoEGOjGGuLKyBSe1c9jCOMv/dXATdA9NyqJfPY7pdapvpkDa8wUM82LEw==
   dependencies:
+    "@babel/core" "^7.0.0"
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
     "@babel/plugin-syntax-import-meta" "^7.2.0"
     "@babel/preset-env" "^7.2.3"
@@ -1079,10 +1080,10 @@
     rollup "^1.1.0"
     rollup-plugin-babel "^4.3.0"
 
-"@pika/plugin-ts-standard-pkg@0.3.11":
-  version "0.3.11"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.3.11.tgz#db4912b7d1afd7a7c1eadd4c568b4893bd264e03"
-  integrity sha512-SzXizAoPqel78/Tx3It3iIuqudYz889quRh8Qdz9qvAcY54TCww26n6Y0VdDHAfNDbG9/lIsySROSlHvT9ic5Q==
+"@pika/plugin-ts-standard-pkg@0.3.12":
+  version "0.3.12"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.3.12.tgz#d4bcfee9bd0bae7f09ca7e006f412f93d3f8859d"
+  integrity sha512-plJx/5D+NybVBHHqAWwI73OcAt3Bf3dBXX9X25eF3cGAF4ZXmWyq02SIJ8EoFYbYPRWdkxk5j02x4h8IKkggRg==
   dependencies:
     execa "^1.0.0"
     standard-pkg "^0.2.0"
