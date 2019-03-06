@@ -1239,10 +1239,10 @@
     mkdirp "^0.5.1"
     typescript "^3.0.0"
 
-"@pika/plugin-build-web@0.3.12":
-  version "0.3.12"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.3.12.tgz#4e742f263e84aa560f38952434d4b02eb23bdade"
-  integrity sha512-up8DF9Bc8Wpiw49LPLS+Fd7+Ze/5WyoEGOjGGuLKyBSe1c9jCOMv/dXATdA9NyqJfPY7pdapvpkDa8wUM82LEw==
+"@pika/plugin-build-web@0.3.14":
+  version "0.3.14"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.3.14.tgz#bfbadef32a22937519ef8ac2e76462766b4d2d47"
+  integrity sha512-KtC1WDeVWJ3272xS3G4K5Sq0VXK66y3vt72SLGaXwAT0s4BJsj2KfzFqe4UO32v/lezZuKwdAUGxE2fyC9f8oA==
   dependencies:
     "@babel/core" "^7.0.0"
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
