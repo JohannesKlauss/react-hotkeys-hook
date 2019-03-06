@@ -54,7 +54,7 @@
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.3.3",
     "@pika/pack": "0.3.4",
-    "@pika/plugin-build-node": "0.3.12",
+    "@pika/plugin-build-node": "0.3.14",
     "@pika/plugin-build-types": "0.3.14",
     "@pika/plugin-build-web": "0.3.12",
     "@pika/plugin-ts-standard-pkg": "0.3.13",
