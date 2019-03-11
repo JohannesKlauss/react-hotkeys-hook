@@ -1180,10 +1180,10 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@pika/pack@0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@pika/pack/-/pack-0.3.4.tgz#882668ad3914e98754006640f6bb18c903fc442d"
-  integrity sha512-rHCTiPo24vqYjDuXGZu+Nw7jmf2clBrHjaze6M8zjXh3tuZ5PgQHYZvlogzMata4WBk5w/J0sIMxoTdlVvyOJg==
+"@pika/pack@0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@pika/pack/-/pack-0.3.5.tgz#75288028fa66a08115be01cf9652a8c1f7b778dc"
+  integrity sha512-iynhy5FrSENO5MWO4X/ATno93fcS0XK3Y02TqL/rfzq0FhzOu8Syq9qosuN5AXhZlKuLecS1WtKOFRFTsnvTDw==
   dependencies:
     "@pika/types" "^0.3.3"
     camelcase "^4.0.0"
