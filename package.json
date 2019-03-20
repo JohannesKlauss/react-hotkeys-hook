@@ -59,7 +59,7 @@
     "@pika/plugin-build-web": "0.3.14",
     "@pika/plugin-ts-standard-pkg": "0.3.14",
     "@types/react": "16.8.8",
-    "@types/react-dom": "16.8.2",
+    "@types/react-dom": "16.8.3",
     "docz": "0.13.7",
     "docz-theme-default": "0.13.7",
     "react": "16.8.4",
