@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.4.0",
-    "@babel/preset-env": "7.4.1",
+    "@babel/preset-env": "7.4.2",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.3.3",
     "@pika/pack": "0.3.5",
