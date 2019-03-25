@@ -4669,10 +4669,10 @@ hosted-git-info@^2.1.4, hosted-git-info@^2.7.1:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
   integrity sha512-7T/BxH19zbcCTa8XkMlbK5lTo1WtgkFi3GvdWEyNuc4Vex7/9Dqbnpsf4JMydcfj9HCg4zUWFTL3Za6lapg5/w==
 
-hotkeys-js@3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.5.0.tgz#21c8d2462db41a883dc0e759433c9f4f9f90564b"
-  integrity sha512-Xh3G95yfXG6+2LJg5c47tZSovIGzUHipVK6clqEhOBUe7OvY/rQdNdtb0WvJWZXV4cIK7lFksSdeU0HDrEu3og==
+hotkeys-js@3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.5.1.tgz#9e60cce7bfd1ba1ee866ddb6028064d0417df195"
+  integrity sha512-EcXueBfbvvhkvX8tGLYyUxaW7Vgx+urC48hQn0U9XK/buW1ldl1hMbMu/VsklWFF4nz1E/UH1qTUBgRY87AFoA==
 
 hotkeys-js@^3.4.1:
   version "3.4.4"
