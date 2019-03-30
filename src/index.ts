@@ -5,7 +5,7 @@ export function useHotkeys(keys: string, callback: (event: KeyboardEvent, handle
   useEffect(() => {
     hotkeys(keys, (event, handler) => callback(event, handler));
 
-    return function cleanUp() {
+    return function () {
       hotkeys.unbind(keys);
     }
   });

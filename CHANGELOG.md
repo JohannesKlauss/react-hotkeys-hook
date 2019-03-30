@@ -1,3 +1,8 @@
+## [1.2.0] - 30-Mar-2019
+* Updated hotkeys
+* Support for hotkeys 3.6
+* Fixed typos in docz
+
 ## [1.1.1] - 20-Feb-2019
 * Updated examples in readme.md
 

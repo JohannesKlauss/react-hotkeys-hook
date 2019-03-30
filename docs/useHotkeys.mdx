@@ -13,8 +13,8 @@ The `useHotkeys` hook follows the hotkeys call signature.
 The callback function takes the exact parameters as the callback function in the hotkeys package.
 See hotkeys documentation for more info or look into the typings file.
 
-When the component gets mounted into the DOM it will listen for the keystroke. When it gets unmount it stops listening
-for the keystroke.
+When the component gets mounted into the DOM, it will listen for the keystroke. When the component will unmount, it
+stops listening for the keystroke.
 
 ```ts
 useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void)
@@ -22,8 +22,8 @@ useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent)
 
 ## Example
 
-This will listen to the `ctrl+k` keystroke. If you press it, the counter increment by one. If `ctrl+l` gets pressed the
-counter will decrement by one.
+This will listen to the `ctrl+k` keystroke. If you press it, the counter increments by one. If `ctrl+l` gets pressed,
+the counter will decrement by one.
 
 ```js
 import { useHotkeys } from 'react-hotkeys-hook';
