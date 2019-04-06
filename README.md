@@ -25,7 +25,7 @@ With TypeScript
 ```typescript jsx
 export const ExampleComponent: React.FunctionComponent<{}> = () => {
   const [count, setCount] = useState(0);
-  useHotkeys('ctrl+k', () => setCount(count + 1));
+  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1));
 
   return (
     <p>
@@ -39,7 +39,7 @@ Or plain JS:
 ```js
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0);
-  useHotkeys('ctrl+k', () => setCount(count + 1));
+  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1));
     
   return (
     <p>

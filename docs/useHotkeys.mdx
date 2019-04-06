@@ -32,8 +32,8 @@ import { useHotkeys } from 'react-hotkeys-hook';
 ```jsx
 const ExampleComponent = () => {
   const [count, setCount] = useState(0);
-  useHotkeys('ctrl+k', () => setCount(count + 1));
-  useHotkeys('ctrl+l', () => setCount(count - 1));
+  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1));
+  useHotkeys('ctrl+l', () => setCount(prevCount => prevCount - 1));
 
   return (
     <div>
@@ -46,8 +46,8 @@ const ExampleComponent = () => {
 <Playground>
   {() => {
     const [count, setCount] = useState(0);
-    useHotkeys('ctrl+k', () => setCount(count + 1))
-    useHotkeys('ctrl+l', () => setCount(count - 1))
+    useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1));
+    useHotkeys('ctrl+l', () => setCount(prevCount => prevCount - 1));
 
     return (
       <div>

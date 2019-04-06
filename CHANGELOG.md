@@ -1,3 +1,7 @@
+## [1.3.0] - 06-Apr-2019
+* Fixed bind and unbind on every render
+* Updated docz to make it work with the new deps array
+
 ## [1.2.0] - 30-Mar-2019
 * Updated hotkeys
 * Support for hotkeys 3.6
