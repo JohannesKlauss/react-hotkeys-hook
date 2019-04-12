@@ -1,3 +1,8 @@
+## [1.3.1] - 12-Apr-2019
+* Removed console.logs
+* tightened source
+* Updated docz
+
 ## [1.3.0] - 06-Apr-2019
 * Fixed bind and unbind on every render
 * Updated docz to make it work with the new deps array
