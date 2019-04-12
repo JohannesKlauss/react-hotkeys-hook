@@ -1079,10 +1079,10 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@pika/pack@0.3.6":
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/@pika/pack/-/pack-0.3.6.tgz#3ac3f1f54a8710bfa5b594c42d527e931000ef00"
-  integrity sha512-nMoF/Hq7DPIX7dhpF/oEKbIkwsJMM2yhE2GHZKlS67DBDq1XBfBqyAIGHNEhG2nvHDaHK8C3t5DypUMw0hc7zQ==
+"@pika/pack@0.3.7":
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/@pika/pack/-/pack-0.3.7.tgz#fa093b4b075947c8c1d1a72e659522e70966c68e"
+  integrity sha512-YoY5eRji4ABupF0SNyeRPFaCZ1VPYTI7ytorgSnphstqup9krBFe41EtEVHXD7VQkINlXKXgJUfTS41spaL2vA==
   dependencies:
     "@pika/types" "^0.3.3"
     camelcase "^4.0.0"

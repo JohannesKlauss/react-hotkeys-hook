@@ -54,7 +54,7 @@
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.3.3",
     "@emotion/core": "10.0.10",
-    "@pika/pack": "0.3.6",
+    "@pika/pack": "0.3.7",
     "@pika/plugin-build-node": "0.3.14",
     "@pika/plugin-build-types": "0.3.14",
     "@pika/plugin-build-web": "0.3.14",
