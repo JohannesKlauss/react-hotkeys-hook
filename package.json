@@ -66,7 +66,7 @@
     "emotion-theming": "10.0.10",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "typescript": "3.4.2"
+    "typescript": "3.4.3"
   },
   "peerDependencies": {
     "react": ">=16.8.1"
