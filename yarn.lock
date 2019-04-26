@@ -1161,10 +1161,10 @@
     rollup "^1.1.0"
     rollup-plugin-babel "^4.3.0"
 
-"@pika/plugin-ts-standard-pkg@0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.3.15.tgz#c61f4d6a2c4b4a352d7b55411a0eb172336a8651"
-  integrity sha512-ms4qoBo/uQLISW11Ymlmgdh8Y/+g6iMuTqLM85xw9h1hcG6HcZOB1GAAFvOawaw5YhIqhGm7p4wx+VXIPq05GQ==
+"@pika/plugin-ts-standard-pkg@0.3.16":
+  version "0.3.16"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.3.16.tgz#7055efd8e2e5ca2917d8b5f679f9a907679da7bd"
+  integrity sha512-O52nqmDGxSHGFGkvc916AL/2lRJIlNRC3lawDMmZIfk2kL+fC61q05WD0yrwkMZLUO85Gb5Z+MKRaBRFmjj71g==
   dependencies:
     "@pika/types" "^0.3.5"
     execa "^1.0.0"
