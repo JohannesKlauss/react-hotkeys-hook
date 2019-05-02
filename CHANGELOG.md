@@ -1,4 +1,4 @@
-## [1.3.1] - 12-Apr-2019
+## [1.3.3] - 02-May-2019
 * Removed console.logs
 * tightened source
 * Updated docz
