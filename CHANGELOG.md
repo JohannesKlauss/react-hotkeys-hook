@@ -1,3 +1,6 @@
+## [1.3.4] - 11-May-2019
+* Bump hotkeys version to 3.6.8
+
 ## [1.3.3] - 02-May-2019
 * Removed console.logs
 * tightened source
