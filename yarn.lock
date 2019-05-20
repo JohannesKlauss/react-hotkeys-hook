@@ -1113,16 +1113,16 @@
     strip-bom "^3.0.0"
     validate-npm-package-license "^3.0.4"
 
-"@pika/plugin-build-node@0.3.16":
-  version "0.3.16"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-node/-/plugin-build-node-0.3.16.tgz#893e1486ddcb3a472154f5faac8b5a802d86b921"
-  integrity sha512-GL5syXwAyP3XhNtUGmEbs4JlDTyb76g+Scmib6QwFnkjeS7AkuIUVhWCMC31Sm7t4uQqrws9nXJmbRLedVsHcA==
+"@pika/plugin-build-node@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-node/-/plugin-build-node-0.4.0.tgz#8824ce505fb200bf81d9cb40a316b110bd710f6b"
+  integrity sha512-G6h6h8Y+BObwVG5Mq1X0munTXw7/WwNa0GdXp6CblH2L8nc6tPlB5gfFGzH0ej32W3XDKXuLV+G9xkvZ1g+MHg==
   dependencies:
     "@babel/core" "^7.0.0"
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
     "@babel/plugin-syntax-import-meta" "^7.2.0"
     "@babel/preset-env" "^7.2.3"
-    "@pika/types" "^0.3.5"
+    "@pika/types" "^0.4.0"
     babel-plugin-dynamic-import-node-babel-7 "^2.0.7"
     builtin-modules "^3.0.0"
     rollup "^1.1.0"
@@ -1166,6 +1166,11 @@
   version "0.3.16"
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.3.16.tgz#9a8c612d878fc89b886a01865b105885d6fab235"
   integrity sha512-hM3WHhN4RxXRVVBijyYO4/B1DwT/9dFhemeDaplPsPVZEUumm3/PDo24VIFLJMrk68yio1lBby3X0IbGtPZClQ==
+
+"@pika/types@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.4.0.tgz#e55f4ddca4d1e6362b7f43ee7afc494c114a7d58"
+  integrity sha512-vgNcz+tvlWtHzLRmuGfpUU8I3tRTfv4YFnhrx8ZXag2kE3kPw/DnC4yMVCx9wgimI1iptyXGDTNYui+kyBGoDg==
 
 "@reach/router@^1.2.1":
   version "1.2.1"
