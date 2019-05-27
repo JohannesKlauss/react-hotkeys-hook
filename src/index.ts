@@ -6,5 +6,5 @@ export function useHotkeys(keys: string, callback: (event: KeyboardEvent, handle
     hotkeys(keys, (event, handler) => callback(event, handler));
 
     return () => hotkeys.unbind(keys);
-  }, []);
+  }, [callback]);
 }
