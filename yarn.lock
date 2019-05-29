@@ -1247,16 +1247,16 @@
     mkdirp "^0.5.1"
     typescript "^3.0.0"
 
-"@pika/plugin-build-web@0.3.16":
-  version "0.3.16"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.3.16.tgz#c4e65a791920543273906c33ef868258fe91870e"
-  integrity sha512-q6Fzi6HAuD6mxgjoRuajhSs7q9FyFfJ/oaG7KEuEke9C8ONaZTY+fWMwpzBgni46WXmIF4Zx6tUQWcb+YDdZIA==
+"@pika/plugin-build-web@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.4.0.tgz#4d4b1ee6907813d016880763790cd747fc2ce7ae"
+  integrity sha512-uUxIYe5GL6IitQ/jX9PCuqRf7L/n81NeJp9lGE3ePzY4ZtAM9TpCdqKuyPPtsyuhAIrCcMO91raxWojczbbtOw==
   dependencies:
     "@babel/core" "^7.0.0"
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
     "@babel/plugin-syntax-import-meta" "^7.2.0"
     "@babel/preset-env" "^7.2.3"
-    "@pika/types" "^0.3.5"
+    "@pika/types" "^0.4.0"
     "@types/node" "^10.12.18"
     rollup "^1.1.0"
     rollup-plugin-babel "^4.3.0"
@@ -1274,6 +1274,11 @@
   version "0.3.16"
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.3.16.tgz#9a8c612d878fc89b886a01865b105885d6fab235"
   integrity sha512-hM3WHhN4RxXRVVBijyYO4/B1DwT/9dFhemeDaplPsPVZEUumm3/PDo24VIFLJMrk68yio1lBby3X0IbGtPZClQ==
+
+"@pika/types@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.4.0.tgz#e55f4ddca4d1e6362b7f43ee7afc494c114a7d58"
+  integrity sha512-vgNcz+tvlWtHzLRmuGfpUU8I3tRTfv4YFnhrx8ZXag2kE3kPw/DnC4yMVCx9wgimI1iptyXGDTNYui+kyBGoDg==
 
 "@reach/router@^1.2.1":
   version "1.2.1"
