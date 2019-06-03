@@ -1,6 +1,7 @@
 ## [1.4.0] - 03-Jun-2019
 * Add callback to useEffect deps to allow update of hotkeys when callback changes
 * This also fixes the stale state bug
+* Bump hotkeys version to 3.6.11
 
 ## [1.3.4] - 11-May-2019
 * Bump hotkeys version to 3.6.8
