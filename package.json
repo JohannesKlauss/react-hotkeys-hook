@@ -47,11 +47,11 @@
     ]
   },
   "dependencies": {
-    "hotkeys-js": "3.6.11"
+    "hotkeys-js": "3.6.12"
   },
   "devDependencies": {
-    "@babel/core": "7.5.4",
-    "@babel/preset-env": "7.5.4",
+    "@babel/core": "7.5.5",
+    "@babel/preset-env": "7.5.5",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.3.3",
     "@emotion/core": "10.0.14",
