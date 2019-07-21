@@ -1,10 +1,14 @@
 import hotkeys, {HotkeysEvent} from 'hotkeys-js';
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 
-export function useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void) {
+type CallbackFn = (event: KeyboardEvent, handler: HotkeysEvent) => void;
+
+export function useHotkeys(keys: string, callback: CallbackFn, deps: any[] = []) {
+  const memoisedCallback = useCallback(callback, deps);
+
   useEffect(() => {
-    hotkeys(keys, (event, handler) => callback(event, handler));
+    hotkeys(keys, memoisedCallback);
 
     return () => hotkeys.unbind(keys);
-  }, [callback]);
+  }, [memoisedCallback]);
 }

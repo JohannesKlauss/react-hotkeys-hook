@@ -20,7 +20,8 @@
     "build": "pack build",
     "publish": "pack publish",
     "docz:dev": "docz dev",
-    "docz:build": "docz build"
+    "docz:build": "docz build",
+    "version": "npm run build"
   },
   "babel": {
     "presets": [
