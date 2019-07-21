@@ -56,12 +56,26 @@ listened to. When the component unmounts it will stop listening.
 ### Call Signature
 
 ```typescript
-useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void)
+useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, deps: any[] = [])
 ```
 
 The `useHotkeys` hook follows the [hotkeys] call signature.
 The callback function takes the exact parameters as the callback function in the hotkeys package.
 See [hotkeys] documentation for more info or look into the typings file.
+
+### Parameters
+- `keys: string`: Here you can set the key strokes you want the hook to listen to. You can use single or multiple keys,
+modifier combination, etc. See [this](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts)
+section on the hotkeys documentation for more info.
+- `callback: (event: KeyboardEvent, handler: HotkeysEvent) => void`: Gets executed when the defined keystroke
+gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
+to do this anymore by yourself.
+- `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
+dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
+that will change over time, you should add this value to your deps array. Since most of the time your callback won't
+depend on any unstable callbacks or changing values over time you can leave this value alone since it will be set to an
+empty array by default. See the [Memoisation](#memoisation) section to
+learn more and see an example where you have to set this array.
 
 ### Found an issue or have a feature request?
 

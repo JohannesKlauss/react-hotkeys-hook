@@ -1,3 +1,10 @@
+## [1.5.1] - 21-Jul-2019
+* Update readme.
+
+## [1.5.0] - 21-Jul-2019
+* Callback gets memoised inside hook by default
+* Add memo deps array as third argument to hook
+
 ## [1.4.0] - 03-Jun-2019
 * Add callback to useEffect deps to allow update of hotkeys when callback changes
 * This also fixes the stale state bug
