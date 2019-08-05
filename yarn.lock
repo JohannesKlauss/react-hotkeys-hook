@@ -1406,10 +1406,10 @@
     validate-npm-package-license "^3.0.4"
     yargs-parser "^13.1.1"
 
-"@pika/plugin-build-node@0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-node/-/plugin-build-node-0.5.1.tgz#bf35e6f9551f5dfa8bab11d79e3cd2d9d9eb7f56"
-  integrity sha512-AcaS1PzLOJUZ3wjiawAJH0HdrxJBaOW5hiqswrdFwe/VHW7ZApTTMBH+g/RllZzXYPyrTtrEdjD5sfOSSJ28vA==
+"@pika/plugin-build-node@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-node/-/plugin-build-node-0.6.0.tgz#d1f7a5c3851e31a28c9340589787f5c1bf1fe399"
+  integrity sha512-9s9TN6I7P+XJLBhoT9WV8zUUZDE2tCOfquNlP5UJVnJEOrf2b2AsVc5sxQNIIkTVUmH5z8w1D7IucL+cXCrWag==
   dependencies:
     "@babel/core" "^7.0.0"
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
