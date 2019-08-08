@@ -65,8 +65,8 @@
     "docz": "1.2.0",
     "docz-theme-default": "1.2.0",
     "emotion-theming": "10.0.14",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
     "typescript": "3.5.3"
   },
   "peerDependencies": {
