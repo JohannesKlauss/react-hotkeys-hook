@@ -23,7 +23,9 @@ Make sure that you have at least version 16.8 of `react` and `react-dom` install
 ### Usage
 With TypeScript
 ```typescript jsx
-export const ExampleComponent: React.FunctionComponent<{}> = () => {
+import { useHotkeys } from 'react-hotkeys-hook';
+
+export const ExampleComponent: React.FC = () => {
   const [count, setCount] = useState(0);
   useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1));
 
