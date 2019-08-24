@@ -17,8 +17,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "pack build",
-    "publish": "pack publish",
+    "build": "pika build",
+    "publish": "pika publish",
     "docz:dev": "docz dev",
     "docz:build": "docz build",
     "version": "npm run build"
