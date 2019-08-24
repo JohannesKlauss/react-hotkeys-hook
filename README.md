@@ -83,6 +83,13 @@ learn more and see an example where you have to set this array.
 
 Open up an issue or pull request and participate.
 
+### Local Development
+
+Checkout this repo, run `yarn` or `npm i` and then run the `docz:dev` script.
+You can use the `docs/useHotkeys.mdx` to test the behavior of the hook. It directly imports the
+`src/index.ts` file and transpiles it automatically. So you don't have to worry about. For more info
+on .mdx files, check out the docz documentation: https://www.docz.site/docs/writing-mdx
+
 ### Authors
 
 * Johannes Klauss

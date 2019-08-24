@@ -1,3 +1,7 @@
+## [1.5.2] - 24-Aug-2019
+* Update readme.
+* Bump hotkeys version to 3.7.1
+
 ## [1.5.1] - 21-Jul-2019
 * Update readme.
 
