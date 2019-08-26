@@ -7,6 +7,10 @@ export function useHotkeys(keys: string, callback: CallbackFn, deps: any[] = [])
   const memoisedCallback = useCallback(callback, deps);
 
   useEffect(() => {
+    // Enable hotkeys for INPUT/SELECT/TEXTAREA elements
+    hotkeys.filter = () => {
+      return true;
+    };
     hotkeys(keys, memoisedCallback);
 
     return () => hotkeys.unbind(keys);
