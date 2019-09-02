@@ -3925,7 +3925,27 @@ docz-utils@^1.2.0:
     unist-util-is "^2.1.2"
     unist-util-visit "^1.4.0"
 
-docz@1.2.0, docz@^1.2.0:
+docz@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/docz/-/docz-1.3.0.tgz#bcdb4c9573c7af3c030202e7ab5286fdc79c9d6b"
+  integrity sha512-1KcIOmBZ5ECvBTfZtQ6z6Eqw7NTm98/jPMw4Sd6sS9AUbEZ3erhGS2cxWqwQOKzBMXKhuE3bWgBuTCT2EG4coQ==
+  dependencies:
+    "@loadable/component" "^5.9.0"
+    "@mdx-js/react" "^1.0.16"
+    "@reach/router" "^1.2.1"
+    array-sort "^1.0.0"
+    capitalize "^2.0.0"
+    docz-core "^1.2.0"
+    fast-deep-equal "^2.0.1"
+    lodash "^4.17.11"
+    match-sorter "^3.0.0"
+    prop-types "^15.7.2"
+    react "^16.8.6"
+    react-dom "^16.8.6"
+    ulid "^2.3.0"
+    yargs "^13.2.2"
+
+docz@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/docz/-/docz-1.2.0.tgz#916091b52686d2421487bd710f7b3004df947969"
   integrity sha512-E9X9ffYtv3W/jXVdOi24oeQ4zM6ZCCgp4ls3CIfMRPjR2ZB02qCzIDzXa7pjQyqUVpQAerQ98CVjR1LjLJwj6Q==
