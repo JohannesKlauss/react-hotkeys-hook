@@ -62,7 +62,7 @@
     "@pika/plugin-ts-standard-pkg": "0.6.0",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",
-    "docz": "1.2.0",
+    "docz": "1.3.0",
     "docz-theme-default": "1.2.0",
     "emotion-theming": "10.0.17",
     "react": "16.9.0",
