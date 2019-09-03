@@ -3925,10 +3925,10 @@ docz-utils@^1.2.0:
     unist-util-is "^2.1.2"
     unist-util-visit "^1.4.0"
 
-docz@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/docz/-/docz-1.3.0.tgz#bcdb4c9573c7af3c030202e7ab5286fdc79c9d6b"
-  integrity sha512-1KcIOmBZ5ECvBTfZtQ6z6Eqw7NTm98/jPMw4Sd6sS9AUbEZ3erhGS2cxWqwQOKzBMXKhuE3bWgBuTCT2EG4coQ==
+docz@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/docz/-/docz-1.3.1.tgz#0e2381d1d435af9ef3884c4a79121e301ae3ddbf"
+  integrity sha512-Y6MOmuZLDldVoTXw3G3IK/GCvfyCyKF7R0gYW7B4Y0/31CHccx1yeXa1lXVtXWvQ5cCZIgeUM5a7+QWhFCLJ9g==
   dependencies:
     "@loadable/component" "^5.9.0"
     "@mdx-js/react" "^1.0.16"
