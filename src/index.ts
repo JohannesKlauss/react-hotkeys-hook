@@ -9,6 +9,6 @@ export function useHotkeys(keys: string, callback: CallbackFn, deps: any[] = [])
   useEffect(() => {
     hotkeys(keys, memoisedCallback);
 
-    return () => hotkeys.unbind(keys);
+    return () => hotkeys.unbind(keys, memoisedCallback);
   }, [memoisedCallback]);
 }
