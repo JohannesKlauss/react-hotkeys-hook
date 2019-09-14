@@ -1540,10 +1540,10 @@
     "@types/node" "^10.12.18"
     rollup "^1.1.0"
 
-"@pika/plugin-ts-standard-pkg@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.6.0.tgz#cf8fd7fa8a15709399e9cd61a0bd1c787365374c"
-  integrity sha512-R28JeAboHP9QrSZBijZGsbyOYBnGkRmNRWMjxqS81RugXLvBuivfLtaBVQWclN+c3lP6PDZFYpe6qRHIWvdTaQ==
+"@pika/plugin-ts-standard-pkg@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.6.1.tgz#1b9989daacd5670a89ec1108103019734b07d9de"
+  integrity sha512-STo94Vb7+eKxUg7JkoKib3Y2vgyID1ADCriiksAtLgns41R6rA1O0gk1rU8lovK2g0+RmoT8znJA3yFfYXlG4Q==
   dependencies:
     execa "^2.0.0"
     standard-pkg "^0.4.0"
