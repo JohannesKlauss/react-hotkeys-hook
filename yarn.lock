@@ -1532,10 +1532,10 @@
     mkdirp "^0.5.1"
     typescript "~3.4.0"
 
-"@pika/plugin-build-web@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.6.0.tgz#ce983eb990ab350ac396a3718fe0400c84b72c2d"
-  integrity sha512-TFbniVFqYcyN2ZKGe4/n/jIgAwDd82sGWhzJKm2n6stN536XC+RW6ewgAgTkz2zBdI0TfzOKib+SiJ8tZz6OxA==
+"@pika/plugin-build-web@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.6.1.tgz#dd5d1aef7c14a8862bfb71c834a23a656b3c5819"
+  integrity sha512-5yay6OntT2QzCnj3itS8A1dmFPf6o21PGOZY6LBdtaxtMeTQhxHFzGr7/yPwO+9X3+s9yFGDmPzeavU199JwPg==
   dependencies:
     "@types/node" "^10.12.18"
     rollup "^1.1.0"
