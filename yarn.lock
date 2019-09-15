@@ -1523,10 +1523,10 @@
     rollup "^1.1.0"
     rollup-plugin-babel "^4.3.0"
 
-"@pika/plugin-build-types@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-types/-/plugin-build-types-0.6.0.tgz#97a14fe7de85031114003cbc40b4aacea37eed69"
-  integrity sha512-Rpsii5bHNqFf+aJU3Z4PI2ZFBdWOMrWq7Nm5SAs0HETW/y6LdgBJ+dUrGEm0NI3wSUp8do4sqctuWPJjJY/Zng==
+"@pika/plugin-build-types@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-types/-/plugin-build-types-0.6.1.tgz#11f6ee70c10802092acf62b98ccb58dccc07f71d"
+  integrity sha512-3eM7JGsaZ0uE0RsDpFue4xYgRE+2UVE3yqJWSJAfQYQwNU6dlGjB7LTWSdHo3+0+YqL6/BD0o9Nb+7mpCSznOw==
   dependencies:
     execa "^2.0.0"
     mkdirp "^0.5.1"
