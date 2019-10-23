@@ -1577,10 +1577,10 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@pika/babel-plugin-esm-import-rewrite@^0.3.7":
-  version "0.3.16"
-  resolved "https://registry.yarnpkg.com/@pika/babel-plugin-esm-import-rewrite/-/babel-plugin-esm-import-rewrite-0.3.16.tgz#884aa5ca51f1727e0a932eca8602b6a99e0aa163"
-  integrity sha512-1CzhjFElpe4EkQqZzd/CKLLMj/tIluKb/bY7O76EqXkaEg+HU54ruvIKKMje5qq2cnHyRk1FeIq1dJz5JITjJQ==
+"@pika/babel-plugin-esm-import-rewrite@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@pika/babel-plugin-esm-import-rewrite/-/babel-plugin-esm-import-rewrite-0.6.1.tgz#6f62833cbd1d850f3fec315a5416b2c5d1cec6f9"
+  integrity sha512-B6CMCfc8EZT/0WUqPZJWf7LCXbqq4R41F5Xbifcy0HaMDxScoEW1zFPrYQLUs9+8B365JnKq3n+U6kMkFYT45w==
 
 "@pika/cli@latest":
   version "0.2.0"
@@ -1648,18 +1648,24 @@
     "@types/node" "^10.12.18"
     rollup "^1.1.0"
 
-"@pika/plugin-ts-standard-pkg@0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.6.1.tgz#1b9989daacd5670a89ec1108103019734b07d9de"
-  integrity sha512-STo94Vb7+eKxUg7JkoKib3Y2vgyID1ADCriiksAtLgns41R6rA1O0gk1rU8lovK2g0+RmoT8znJA3yFfYXlG4Q==
+"@pika/plugin-ts-standard-pkg@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.7.0.tgz#cedf01dfc82c03bb63ca6946a07629ef76dcb7f0"
+  integrity sha512-aeroYlTeXgtjFshkgKXfVIX3zen4cOMXqJLO/t46WnckTXtldckOP7ZnOC2G2wfS4/DeMNbqkW+hbMnyJir34g==
   dependencies:
+    "@pika/types" "^0.7.0"
     execa "^2.0.0"
-    standard-pkg "^0.4.0"
+    standard-pkg "^0.5.0"
 
 "@pika/types@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.6.0.tgz#eea0ed7db8c2593148a2e2b1bf4cfc25092a78dc"
   integrity sha512-/4ZSVQ94sseV8rCCzdKTpg4tOAL0++UZIaW2sCN4Qy087M/T3N0npgFxOAkLmyoYLs82NDXeq48W5TI1Ra5kNA==
+
+"@pika/types@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.7.0.tgz#b78890ffab94a340b366c59f3db84a809877a1f9"
+  integrity sha512-QFZSeMnLs6WUeNli8HU9pCoOjjxfwbix3qiydSY9qtHS0/lfW2yXU06jirfPaEKO0uYEU9TivwDROyeEGYnKXA==
 
 "@reach/router@^1.2.1":
   version "1.2.1"
@@ -9236,10 +9242,10 @@ stable@^0.1.8:
   resolved "https://registry.yarnpkg.com/stable/-/stable-0.1.8.tgz#836eb3c8382fe2936feaf544631017ce7d47a3cf"
   integrity sha512-ji9qxRnOVfcuLDySj9qzhGSEFVobyt1kIOSkj1qZzYLzq7Tos/oUUWvotUPQLlrsidqsK6tBH89Bc9kL5zHA6w==
 
-standard-pkg@^0.4.0:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/standard-pkg/-/standard-pkg-0.4.1.tgz#e1426418aca0844865a83b39b1e61549cca7fa27"
-  integrity sha512-gS1/ovMOXKUmiBdkqg+O7blazMffUi88vkNbzDrmhjZq8jp9N6/Ynl8lVD22Y8UTgiK8IUsKSoy97nsdZGlQow==
+standard-pkg@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/standard-pkg/-/standard-pkg-0.5.0.tgz#2fa2d858d5dbb99ce7aae7cea6e4bbeeaabc55d5"
+  integrity sha512-7w+8qU4hBMXeh5GmUTG39ODsqdaWrNZ8nq1gpPZu990DjuGVY6eCAhrcY+zFGc5OWlANqlF0XVArSU38J3HUUQ==
   dependencies:
     "@babel/core" "^7.2.2"
     "@babel/parser" "^7.1.5"
@@ -9247,7 +9253,7 @@ standard-pkg@^0.4.0:
     "@babel/plugin-syntax-import-meta" "^7.2.0"
     "@babel/preset-typescript" "^7.1.0"
     "@babel/traverse" "^7.1.5"
-    "@pika/babel-plugin-esm-import-rewrite" "^0.3.7"
+    "@pika/babel-plugin-esm-import-rewrite" "^0.6.1"
     "@types/minimist" "^1.2.0"
     chalk "^2.1.0"
     glob "^7.1.1"
