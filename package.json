@@ -59,7 +59,7 @@
     "@pika/plugin-build-node": "0.7.0",
     "@pika/plugin-build-types": "0.7.0",
     "@pika/plugin-build-web": "0.7.0",
-    "@pika/plugin-ts-standard-pkg": "0.7.0",
+    "@pika/plugin-ts-standard-pkg": "0.7.1",
     "@types/react": "16.9.9",
     "@types/react-dom": "16.9.2",
     "docz": "1.3.2",
