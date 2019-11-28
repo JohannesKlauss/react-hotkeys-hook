@@ -2740,12 +2740,12 @@
     rollup "^1.1.0"
     rollup-plugin-babel "^4.3.0"
 
-"@pika/plugin-build-types@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-types/-/plugin-build-types-0.7.1.tgz#4107a376c1f7c2663850b48d506649ff0882e54a"
-  integrity sha512-vkTWgnpFBpLs6SdLPFNx4GvjiJButxwV873Xz2MNt96pw3Do0JySP/AoKVg1Gq2ZKtA9ce2q/2SMs5tj3zb1sQ==
+"@pika/plugin-build-types@0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-types/-/plugin-build-types-0.8.1.tgz#bb9c709a374e8060c22b9853c382d4de3e371124"
+  integrity sha512-0QMRJh85TeinSgnpOkVBIy2RqhYx6CfKXELHEVl9glB1YMJnjlendzSSHUEBo4bXYkx0z2JGkv9IAtQyfwEdTQ==
   dependencies:
-    "@pika/types" "^0.7.1"
+    "@pika/types" "^0.8.1"
     execa "^2.0.0"
     mkdirp "^0.5.1"
     typescript "~3.4.0"
