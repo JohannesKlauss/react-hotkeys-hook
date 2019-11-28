@@ -2759,12 +2759,12 @@
     "@types/node" "^10.12.18"
     rollup "^1.1.0"
 
-"@pika/plugin-ts-standard-pkg@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.7.1.tgz#fb4bdd6f6b386d640b7a18254c99ad0d896926ac"
-  integrity sha512-xIeY1xw89/s0WQ3oskdXcuaCOQt1ECQ+IwYtv1cgVwJeWQXChTTXYO46Eoi3lTYQ2AZQ6bQN+VtrHy5Rd/YxbQ==
+"@pika/plugin-ts-standard-pkg@0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.8.1.tgz#a7bfc303a89e1c31512afe5fdaf1707a14303173"
+  integrity sha512-5uTdQECX4hlxDEx1O8po9oReGfgfYxNRnZixaeVkiSlTMMRXvoiumI2T28YKRc6V0qGecaHe96hcbkoSp6Tbbg==
   dependencies:
-    "@pika/types" "^0.7.1"
+    "@pika/types" "^0.8.1"
     execa "^2.0.0"
     standard-pkg "^0.5.0"
 
@@ -2777,6 +2777,11 @@
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.7.1.tgz#b875b4bb22c3949665e5f3e031634415e1ae0d8e"
   integrity sha512-K4jnvnPAXbW1XqUQN4wsAt0H73gbgsRCESWF/Y2ceM1eBA13BS0fxc4ph2yRFXZfvwm+NrLojO14USqwF6gmeA==
+
+"@pika/types@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.8.1.tgz#ac24b9a73e6712d638cbc124b6b1d6a1ade51bb0"
+  integrity sha512-xQNGUA9CAHmbI6tO9weu088pX3PbrRgYZs68FXAqkJXodNyEy7Ju8LU191MZOS6MZreA1PElPd2evsgQ6Wl/cA==
 
 "@reach/router@^1.2.1":
   version "1.2.1"
