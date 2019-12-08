@@ -40,8 +40,8 @@ This will listen to the `ctrl+k` keystroke. If you press it, the counter increme
 the counter will decrement by one.
 
 ### Important changes since 1.5.0!
-Due to the nature of how `useEffect` works, to prevent resetting the hotkeys handler during every render, before 1.5.0
-you had to memoise your callback yourself. Since this is tedious work and dependency arrays are a common pattern inside
+Due to the nature of how `useEffect` works and to prevent resetting the hotkeys handler during every render, before 1.5.0
+you had to memoise your callback yourself. Since this is tedious work and dependency arrays are a common pattern with
 React hooks, I decided to bring the memoisation inside the hook, so you don't have to deal with it. Please read the
 **Memoisation** section for more info on this.
 
@@ -67,10 +67,8 @@ const AddToBankComponent = () => {
 <Playground>
   {() => {
     const [amount, setAmount] = useState(0);
-
     useHotkeys('ctrl+a', () => setAmount(prevAmount => prevAmount + 100));
     useHotkeys('ctrl+d', () => setAmount(prevAmount => prevAmount - 100));
-
     return (
       <div>
         {amount >= 0 ? 'Add' : 'Remove'} {Math.abs(amount)} dollars {amount >= 0 ? 'from' : 'to'} my bank account.
@@ -87,6 +85,7 @@ Let's check out a slightly different example to see how memoisation effects your
 const AddToBankComponent = () => {
   const [amount, setAmount] = useState(0);
 
+  // Don't use this in production, won't work as expected.
   useHotkeys('n', () => setAmount(amount + 100), []);
 
   return (
@@ -100,9 +99,7 @@ const AddToBankComponent = () => {
 <Playground>
   {() => {
     const [amount, setAmount] = useState(0);
-
     useHotkeys('n', () => setAmount(amount + 100), []);
-
     return (
       <div>
         Add {Math.abs(amount)} dollars to my bank account.
@@ -127,6 +124,7 @@ the third parameter like so:
 const AddToBankComponent = () => {
   const [amount, setAmount] = useState(0);
 
+  // Works, but has performance and binding issues.
   useHotkeys('m', () => setAmount(amount + 100), [amount]);
 
   return (
@@ -140,9 +138,7 @@ const AddToBankComponent = () => {
 <Playground>
   {() => {
     const [amount, setAmount] = useState(0);
-
     useHotkeys('m', () => setAmount(amount + 100), [amount]);
-
     return (
       <div>
         Add {Math.abs(amount)} dollars to my bank account.
