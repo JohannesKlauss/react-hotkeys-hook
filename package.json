@@ -60,7 +60,7 @@
     "@pika/plugin-build-types": "0.8.1",
     "@pika/plugin-build-web": "0.8.1",
     "@pika/plugin-ts-standard-pkg": "0.8.1",
-    "@types/react": "16.9.16",
+    "@types/react": "16.9.19",
     "@types/react-dom": "16.9.4",
     "docz": "2.2.0",
     "emotion-theming": "10.0.19",
@@ -72,6 +72,6 @@
     "react": ">=16.8.1"
   },
   "resolutions": {
-    "@types/react": "16.9.16"
+    "@types/react": "16.9.19"
   }
 }
