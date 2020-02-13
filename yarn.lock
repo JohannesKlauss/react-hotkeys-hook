@@ -2010,12 +2010,12 @@
     mkdirp "^0.5.1"
     typescript "~3.4.0"
 
-"@pika/plugin-build-web@0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.8.1.tgz#ba519fcd29eed20c1d1091d4083d0be21aa6a5f3"
-  integrity sha512-mRs3kquDb2DS8y7URvMefsZUlz+uhO0n4ykutGmZ+6EslvW1ZjGefOiaQ0qiDDFHF4ir4jg4od7Vo3TU32DGcg==
+"@pika/plugin-build-web@0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-web/-/plugin-build-web-0.9.2.tgz#2a209aed1877eabf14dad1cf6cb05e53e519701d"
+  integrity sha512-HjN/3P5c5jVEaPo9ZSs+jn9osrNs3JW3ZgP11NSfS0QQEMIw+Ks+qXi5Aymp8WKLpoldtZw/z69+SrfqlNeZyg==
   dependencies:
-    "@pika/types" "^0.8.1"
+    "@pika/types" "^0.9.2"
     "@types/node" "^10.12.18"
     rollup "^1.1.0"
 
@@ -2037,6 +2037,11 @@
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.8.1.tgz#ac24b9a73e6712d638cbc124b6b1d6a1ade51bb0"
   integrity sha512-xQNGUA9CAHmbI6tO9weu088pX3PbrRgYZs68FXAqkJXodNyEy7Ju8LU191MZOS6MZreA1PElPd2evsgQ6Wl/cA==
+
+"@pika/types@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.9.2.tgz#60ad16afe1293878232e28937d9007340c59ff7c"
+  integrity sha512-AzZTkHtM0A67+xMVhmSeJDteSMS+RfXGuM+/oVbo1PGD19ic7fuimv5b0TW8dKoZuxpVxiwVAai+sFRSNmfI3g==
 
 "@reach/router@^1.2.1":
   version "1.2.1"
