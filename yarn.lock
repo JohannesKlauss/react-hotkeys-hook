@@ -1985,16 +1985,16 @@
     validate-npm-package-license "^3.0.4"
     yargs-parser "^13.1.1"
 
-"@pika/plugin-build-node@0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-node/-/plugin-build-node-0.8.1.tgz#fc71b6c3c81a15b32ffe22488dc5909b5713aaca"
-  integrity sha512-PzdxyJJZZPUAtUjWgO3c4EuHZmAFz5Jvvr6RU8Fflr1qqvfnvNLNlE9yhXvot3l7xMQORp+7/Fw0ZW84XMpzZA==
+"@pika/plugin-build-node@0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-node/-/plugin-build-node-0.9.2.tgz#4697072f385f38b025768036c99e5a653863d532"
+  integrity sha512-NJhnx5UdOKRz4+3eSienp3vlwUTFYDtz2xAKlswb1td0q5n4gkxZhXoImNzF9PfAaMOXIb+7ngaBNSDiHguTkw==
   dependencies:
     "@babel/core" "^7.0.0"
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
     "@babel/plugin-syntax-import-meta" "^7.2.0"
     "@babel/preset-env" "^7.2.3"
-    "@pika/types" "^0.8.1"
+    "@pika/types" "^0.9.2"
     babel-plugin-dynamic-import-node-babel-7 "^2.0.7"
     builtin-modules "^3.0.0"
     rollup "^1.1.0"
