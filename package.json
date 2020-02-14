@@ -54,7 +54,7 @@
     "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
     "@babel/preset-typescript": "7.8.3",
-    "@emotion/core": "10.0.22",
+    "@emotion/core": "10.0.27",
     "@pika/pack": "0.5.0",
     "@pika/plugin-build-node": "0.9.2",
     "@pika/plugin-build-types": "0.9.2",
@@ -63,7 +63,7 @@
     "@types/react": "16.9.19",
     "@types/react-dom": "16.9.5",
     "docz": "2.2.0",
-    "emotion-theming": "10.0.19",
+    "emotion-theming": "10.0.27",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "typescript": "3.7.5"
