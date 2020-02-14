@@ -2033,11 +2033,6 @@
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.6.0.tgz#eea0ed7db8c2593148a2e2b1bf4cfc25092a78dc"
   integrity sha512-/4ZSVQ94sseV8rCCzdKTpg4tOAL0++UZIaW2sCN4Qy087M/T3N0npgFxOAkLmyoYLs82NDXeq48W5TI1Ra5kNA==
 
-"@pika/types@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.8.1.tgz#ac24b9a73e6712d638cbc124b6b1d6a1ade51bb0"
-  integrity sha512-xQNGUA9CAHmbI6tO9weu088pX3PbrRgYZs68FXAqkJXodNyEy7Ju8LU191MZOS6MZreA1PElPd2evsgQ6Wl/cA==
-
 "@pika/types@^0.9.2":
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/@pika/types/-/types-0.9.2.tgz#60ad16afe1293878232e28937d9007340c59ff7c"
@@ -2216,10 +2211,10 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react-dom@16.9.4":
-  version "16.9.4"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.4.tgz#0b58df09a60961dcb77f62d4f1832427513420df"
-  integrity sha512-fya9xteU/n90tda0s+FtN5Ym4tbgxpq/hb/Af24dvs6uYnYn+fspaxw5USlw0R8apDNwxsqumdRoCoKitckQqw==
+"@types/react-dom@16.9.5":
+  version "16.9.5"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.5.tgz#5de610b04a35d07ffd8f44edad93a71032d9aaa7"
+  integrity sha512-BX6RQ8s9D+2/gDhxrj8OW+YD4R+8hj7FEM/OJHGNR0KipE1h1mSsf39YeyC81qafkq+N3rU3h3RFbLSwE5VqUg==
   dependencies:
     "@types/react" "*"
 
