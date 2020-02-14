@@ -2019,12 +2019,12 @@
     "@types/node" "^10.12.18"
     rollup "^1.1.0"
 
-"@pika/plugin-ts-standard-pkg@0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.8.1.tgz#a7bfc303a89e1c31512afe5fdaf1707a14303173"
-  integrity sha512-5uTdQECX4hlxDEx1O8po9oReGfgfYxNRnZixaeVkiSlTMMRXvoiumI2T28YKRc6V0qGecaHe96hcbkoSp6Tbbg==
+"@pika/plugin-ts-standard-pkg@0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-ts-standard-pkg/-/plugin-ts-standard-pkg-0.9.2.tgz#b440143be3535f9701625ca231d0eb612bd3db63"
+  integrity sha512-LwObacitvuILyXzdmbB1gyGtPjERxSF83omBHfoagsSUqgIf4FZDo9Z3v5VpI7Sq7mtIjQ7D3cjKv8r7JyyY5Q==
   dependencies:
-    "@pika/types" "^0.8.1"
+    "@pika/types" "^0.9.2"
     execa "^2.0.0"
     standard-pkg "^0.5.0"
 
