@@ -2000,15 +2000,15 @@
     rollup "^1.1.0"
     rollup-plugin-babel "^4.3.0"
 
-"@pika/plugin-build-types@0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@pika/plugin-build-types/-/plugin-build-types-0.8.1.tgz#bb9c709a374e8060c22b9853c382d4de3e371124"
-  integrity sha512-0QMRJh85TeinSgnpOkVBIy2RqhYx6CfKXELHEVl9glB1YMJnjlendzSSHUEBo4bXYkx0z2JGkv9IAtQyfwEdTQ==
+"@pika/plugin-build-types@0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@pika/plugin-build-types/-/plugin-build-types-0.9.2.tgz#4f1ddb868567f2af85b5dba60f7a6673ff224ac2"
+  integrity sha512-zV1TCcPvxFDyDafxAp3a8q5BQxT3rk4RweoKlZl5BdN5vksv6i76F7fglAHhN44a6wDuH9valrcT6FqYD/6SuQ==
   dependencies:
-    "@pika/types" "^0.8.1"
+    "@pika/types" "^0.9.2"
     execa "^2.0.0"
     mkdirp "^0.5.1"
-    typescript "~3.4.0"
+    typescript "^3.7.0"
 
 "@pika/plugin-build-web@0.9.2":
   version "0.9.2"
@@ -14133,10 +14133,10 @@ typescript@3.7.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.3.tgz#b36840668a16458a7025b9eabfad11b66ab85c69"
   integrity sha512-Mcr/Qk7hXqFBXMN7p7Lusj1ktCBydylfQM/FZCk5glCNQJrCUKPkMHdo9R0MTFWsC/4kPFvDS0fDPvukfCkFsw==
 
-typescript@~3.4.0:
-  version "3.4.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
-  integrity sha512-YycBxUb49UUhdNMU5aJ7z5Ej2XGmaIBL0x34vZ82fn3hGvD+bgrMrVDpatgz2f7YxUMJxMkbWxJZeAvDxVe7Vw==
+typescript@^3.7.0:
+  version "3.7.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.5.tgz#0692e21f65fd4108b9330238aac11dd2e177a1ae"
+  integrity sha512-/P5lkRXkWHNAbcJIiHPfRoKqyd7bsyCma1hZNUGfn20qm64T6ZBlrzprymeu918H+mB/0rIg2gGK/BXkhhYgBw==
 
 typography-breakpoint-constants@^0.16.19:
   version "0.16.19"
