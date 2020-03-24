@@ -8415,10 +8415,10 @@ hosted-git-info@^3.0.2:
   dependencies:
     lru-cache "^5.1.1"
 
-hotkeys-js@3.7.3:
-  version "3.7.3"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.7.3.tgz#f0c718166e844b3e52065d1b60cffaa6065b5183"
-  integrity sha512-CSaeVPAKEEYNexYR35znMJnCqoofk7oqG/AOOqWow1qDT0Yxy+g+Y8Hs/LhGlsZaSJ7973YN6/N41LAr3t30QQ==
+hotkeys-js@3.7.4:
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.7.4.tgz#81b8aa47865185a1d174abd04ed690b4d853bc37"
+  integrity sha512-WWGRwevLj+oZU+j31RX4qVK8bNV3vxnwBRVc+Qp99p2YGfiNFa+gZ+o4OnBJp3CZwggRuiJ8lDtQlsZy5BsInw==
 
 hpack.js@^2.1.6:
   version "2.1.6"
