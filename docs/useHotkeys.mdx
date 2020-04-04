@@ -69,10 +69,25 @@ for an overview.
 
 ### Parameters
 * `filter: (event: KeyboardEvent): boolean` is used to enable hotkeys inside input elements. Check out [hotkeys docs](https://github.com/jaywcjlove/hotkeys/#filter) for usage
+* `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`.
+**IMPORTANT!** When you provide a custom `filter` implementation function this parameter will be ignored.
 * `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
 to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
 * `keyup: boolean` Determine if you want to listen on the keyup event
 * `keydown: boolean` Determine if want to listen on the keydown event
+
+<Playground>
+  {() => {
+    const [amount, setAmount] = useState(0);
+    useHotkeys('ctrl+t', () => setAmount(amount => amount + 100), {enableOnTags: ['INPUT']});
+    return (
+      <div>
+        <input type="text"/>
+        Add {amount} dollars to my bank account.
+      </div>
+    );
+  }}
+</Playground>
 
 ## Memoisation
 
@@ -81,10 +96,10 @@ Let's check out a slightly different example to see how memoisation effects your
 <Playground>
   {() => {
     const [amount, setAmount] = useState(0);
-    useHotkeys('n', () => setAmount(amount + 100), []);
+    useHotkeys('n', () => setAmount(amount + 100));
     return (
       <div>
-        Add {Math.abs(amount)} dollars to my bank account.
+        Add {amount} dollars to my bank account.
       </div>
     );
   }}
@@ -106,10 +121,10 @@ the third parameter like so:
   {() => {
     const [amount, setAmount] = useState(0);
     // Works but has binding issues
-    useHotkeys('m', () => setAmount(amount + 100), [amount]);
+    useHotkeys('m', () => setAmount(amount + 100), {}, [amount]);
     return (
       <div>
-        Add {Math.abs(amount)} dollars to my bank account.
+        Add {amount} dollars to my bank account.
       </div>
     );
   }}
@@ -121,16 +136,14 @@ seem okay but can cause scoping problems and mess up the internals of our applic
 is that we do not execute everything all the time but wait for changes. To fix that we just have to use the callback
 approach for `setAmount` like in the very first example:
 
-```jsx
-const AddToBankComponent = () => {
-  const [amount, setAmount] = useState(0);
-
-  useHotkeys('m', () => setAmount(amount => amount + 100), []);
-
-  return (
-    <div>
-      Add {Math.abs(amount)} dollars to my bank account.
-    </div>
-  );
-};
-```
+<Playground>
+  {() => {
+    const [amount, setAmount] = useState(0);
+    useHotkeys('m', () => setAmount(amount => amount + 100));
+    return (
+      <div>
+        Add {amount} dollars to my bank account.
+      </div>
+    );
+  }}
+</Playground>

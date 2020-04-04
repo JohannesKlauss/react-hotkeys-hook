@@ -56,6 +56,7 @@ gets hit by the user. **Important:** Since version 1.5.0 this callback gets memo
 to do this anymore by yourself.
 - `options: Options = {}`
   - `filter: (event: KeyboardEvent): boolean` is used to enable hotkeys inside input elements. Check out [hotkeys docs](https://github.com/jaywcjlove/hotkeys/#filter) for usage
+  - * `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`. **IMPORTANT!** When you provide a custom `filter` implementation function this parameter will be ignored.
   - `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
     to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
   - `keyup: boolean` Determine if you want to listen on the keyup event
