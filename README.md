@@ -21,23 +21,6 @@ yarn add react-hotkeys-hook
 Make sure that you have at least version 16.8 of `react` and `react-dom` installed, or otherwise hooks won't work for you.
 
 ### Usage
-With TypeScript
-```typescript jsx
-import { useHotkeys } from 'react-hotkeys-hook';
-
-export const ExampleComponent: React.FC = () => {
-  const [count, setCount] = useState(0);
-  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1));
-
-  return (
-    <p>
-      Pressed {count} times.
-    </p>
-  );
-};
-```
-
-Or plain JS:
 ```js
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0);
@@ -58,10 +41,9 @@ listened to. When the component unmounts it will stop listening.
 ### Call Signature
 
 ```typescript
-useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, deps: any[] = [])
+useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: any[] = [])
 ```
 
-The `useHotkeys` hook follows the [hotkeys] call signature.
 The callback function takes the exact parameters as the callback function in the hotkeys package.
 See [hotkeys] documentation for more info or look into the typings file.
 
@@ -72,6 +54,12 @@ section on the hotkeys documentation for more info.
 - `callback: (event: KeyboardEvent, handler: HotkeysEvent) => void`: Gets executed when the defined keystroke
 gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
 to do this anymore by yourself.
+- `options: Options = {}`
+  - `filter: (event: KeyboardEvent): boolean` is used to enable hotkeys inside input elements. Check out [hotkeys docs](https://github.com/jaywcjlove/hotkeys/#filter) for usage
+  - `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
+    to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
+  - `keyup: boolean` Determine if you want to listen on the keyup event
+  - `keydown: boolean` Determine if want to listen on the keydown event
 - `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
 dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
 that will change over time, you should add this value to your deps array. Since most of the time your callback won't

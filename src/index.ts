@@ -5,8 +5,8 @@ type Options = {
   filter?: typeof hotkeys.filter;
   splitKey?: string;
   scope?: string;
-  keyUp?: boolean;
-  keyDown?: boolean;
+  keyup?: boolean;
+  keydown?: boolean;
 };
 
 export function useHotkeys(
