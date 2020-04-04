@@ -10,14 +10,11 @@ import { useHotkeys } from '../src';
 
 The `useHotkeys` hook follows the hotkeys call signature.
 
-The callback function takes the exact parameters as the callback function in the hotkeys package.
-See hotkeys documentation for more info or look into the typings file.
-
 When the component gets mounted into the DOM, it will listen for the keystroke. When the component will unmount, it
 stops listening for the keystroke.
 
 ```ts
-useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, deps: any[] = [])
+useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: any[] = [])
 ```
 
 ## Parameters
@@ -27,12 +24,15 @@ section on the hotkeys documentation for more info.
 * `callback: (event: KeyboardEvent, handler: HotkeysEvent) => void`: Gets executed when the defined keystroke
 gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
 to do this anymore by yourself.
+* `options: Options = {}` Pass options directly to the hotkeys package. See [Options](#options) section for more details.
 * `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
 dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
 that will change over time, you should add this value to your deps array. Since most of the time your callback won't
 depend on any unstable callbacks or changing values over time you can leave this value alone since it will be set to an
 empty array by default. See the [Memoisation](#memoisation) section to
 learn more and see an example where you have to set this array.
+
+**Breaking Change in 2.0**: Since version 2.0 the `options` and `deps` parameter switched positions.
 
 ## Example
 
@@ -43,25 +43,10 @@ the counter will decrement by one.
 Due to the nature of how `useEffect` works and to prevent resetting the hotkeys handler during every render, before 1.5.0
 you had to memoise your callback yourself. Since this is tedious work and dependency arrays are a common pattern with
 React hooks, I decided to bring the memoisation inside the hook, so you don't have to deal with it. Please read the
-**Memoisation** section for more info on this.
+[**Memoisation**](#memoisation) section for more info on this.
 
 ```js
 import { useHotkeys } from 'react-hotkeys-hook';
-```
-
-```jsx
-const AddToBankComponent = () => {
-  const [amount, setAmount] = useState(0);
-
-  useHotkeys('ctrl+a', () => setAmount(prevAmount => prevAmount + 100));
-  useHotkeys('ctrl+d', () => setAmount(prevAmount => prevAmount - 100));
-
-  return (
-    <div>
-      {amount >= 0 ? 'Add' : 'Remove'} {Math.abs(amount)} dollars {amount >= 0 ? 'from' : 'to'} my bank account.
-    </div>
-  );
-};
 ```
 
 <Playground>
@@ -77,24 +62,21 @@ const AddToBankComponent = () => {
   }}
 </Playground>
 
+## Options
+
+The options parameter is used to pass options directly to the hotkeys package. Check out the [hotkeys docs](https://github.com/jaywcjlove/hotkeys/#option)
+for an overview.
+
+### Parameters
+* `filter: (event: KeyboardEvent): boolean` is used to enable hotkeys inside input elements. Check out [hotkeys docs](https://github.com/jaywcjlove/hotkeys/#filter) for usage
+* `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
+to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
+* `keyup: boolean` Determine if you want to listen on the keyup event
+* `keydown: boolean` Determine if want to listen on the keydown event
+
 ## Memoisation
 
 Let's check out a slightly different example to see how memoisation effects your application.
-
-```jsx
-const AddToBankComponent = () => {
-  const [amount, setAmount] = useState(0);
-
-  // Don't use this in production, won't work as expected.
-  useHotkeys('n', () => setAmount(amount + 100), []);
-
-  return (
-    <div>
-      Add {Math.abs(amount)} dollars to my bank account.
-    </div>
-  );
-};
-```
 
 <Playground>
   {() => {
@@ -120,24 +102,10 @@ So our logic flow got stuck, tis not what we wanted.
 To fix this there are two approaches when using values that are retrieved by `useState`. You could define a dependency array as
 the third parameter like so:
 
-```jsx
-const AddToBankComponent = () => {
-  const [amount, setAmount] = useState(0);
-
-  // Works, but has performance and binding issues.
-  useHotkeys('m', () => setAmount(amount + 100), [amount]);
-
-  return (
-    <div>
-      Add {Math.abs(amount)} dollars to my bank account.
-    </div>
-  );
-};
-```
-
 <Playground>
   {() => {
     const [amount, setAmount] = useState(0);
+    // Works but has binding issues
     useHotkeys('m', () => setAmount(amount + 100), [amount]);
     return (
       <div>

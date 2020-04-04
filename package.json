@@ -64,6 +64,7 @@
     "@types/react-dom": "16.9.6",
     "docz": "2.3.0",
     "emotion-theming": "10.0.27",
+    "gatsby-plugin-emotion": "4.2.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "typescript": "3.8.3"
