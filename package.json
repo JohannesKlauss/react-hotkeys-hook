@@ -62,7 +62,7 @@
     "@pika/plugin-ts-standard-pkg": "0.9.2",
     "@types/react": "16.9.32",
     "@types/react-dom": "16.9.6",
-    "docz": "2.3.0",
+    "docz": "2.3.1",
     "emotion-theming": "10.0.27",
     "gatsby-plugin-emotion": "4.2.1",
     "react": "16.13.1",
