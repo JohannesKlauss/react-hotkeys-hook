@@ -76,19 +76,6 @@ to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen fo
 * `keyup: boolean` Determine if you want to listen on the keyup event
 * `keydown: boolean` Determine if want to listen on the keydown event
 
-<Playground>
-  {() => {
-    const [amount, setAmount] = useState(0);
-    useHotkeys('ctrl+t', () => setAmount(amount => amount + 100), {enableOnTags: ['INPUT']});
-    return (
-      <div>
-        <input type="text"/>
-        Add {amount} dollars to my bank account.
-      </div>
-    );
-  }}
-</Playground>
-
 ## Memoisation
 
 Let's check out a slightly different example to see how memoisation effects your application.
@@ -139,7 +126,7 @@ approach for `setAmount` like in the very first example:
 <Playground>
   {() => {
     const [amount, setAmount] = useState(0);
-    useHotkeys('m', () => setAmount(amount => amount + 100));
+    useHotkeys('l', () => setAmount(amount => amount + 100));
     return (
       <div>
         Add {amount} dollars to my bank account.

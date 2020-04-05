@@ -1,5 +1,5 @@
 import hotkeys, {KeyHandler} from "hotkeys-js";
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useMemo} from "react";
 
 type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
 
@@ -21,16 +21,14 @@ export function useHotkeys(
   const memoisedCallback = useCallback(callback, deps);
 
   useEffect(() => {
-    hotkeys.filter = ({target, srcElement}) => {
-      if (options.enableOnTags) {
+    if (options.enableOnTags) {
+      hotkeys.filter = ({target, srcElement}) => {
         // @ts-ignore
         const targetTagName = (target && target.tagName) || (srcElement && srcElement.tagName);
 
-        return Boolean(targetTagName && options.enableOnTags.includes(targetTagName as AvailableTags));
-      }
-
-      return false;
-    };
+        return Boolean(targetTagName && options.enableOnTags && options.enableOnTags.includes(targetTagName as AvailableTags));
+      };
+    }
 
     if (options.filter) hotkeys.filter = options.filter;
 
