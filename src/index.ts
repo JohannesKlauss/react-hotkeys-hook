@@ -3,7 +3,7 @@ import {useCallback, useEffect, useMemo} from "react";
 
 type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
 
-type Options = {
+export type Options = {
   filter?: typeof hotkeys.filter;
   enableOnTags?: AvailableTags[];
   splitKey?: string;
@@ -15,13 +15,13 @@ type Options = {
 export function useHotkeys(
   keys: string,
   callback: KeyHandler,
-  options: Options = {},
-  deps: any[] = [],
+  options?: Options,
+  deps?: any[],
 ) {
-  const memoisedCallback = useCallback(callback, deps);
+  const memoisedCallback = useCallback(callback, deps || []);
 
   useEffect(() => {
-    if (options.enableOnTags) {
+    if (options && options.enableOnTags) {
       hotkeys.filter = ({target, srcElement}) => {
         // @ts-ignore
         const targetTagName = (target && target.tagName) || (srcElement && srcElement.tagName);
@@ -30,9 +30,9 @@ export function useHotkeys(
       };
     }
 
-    if (options.filter) hotkeys.filter = options.filter;
+    if (options && options.filter) hotkeys.filter = options.filter;
 
-    hotkeys(keys, options, memoisedCallback);
+    hotkeys(keys, options || {}, memoisedCallback);
 
     return () => hotkeys.unbind(keys, memoisedCallback);
   }, [memoisedCallback, options]);
