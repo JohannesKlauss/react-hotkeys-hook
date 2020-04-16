@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useHotkeys} from "./index";
 import {act, renderHook} from "@testing-library/react-hooks";
-import {act as reactAct, fireEvent, render, waitFor} from "@testing-library/react";
+import {act as reactAct, fireEvent, render} from "@testing-library/react";
 
 function useWrapper(keys: string) {
   const [count, setCount] = useState(0);
