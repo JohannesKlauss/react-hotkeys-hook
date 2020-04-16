@@ -12,27 +12,32 @@ export type Options = {
   keydown?: boolean;
 };
 
-export function useHotkeys(
-  keys: string,
-  callback: KeyHandler,
-  options?: Options,
-  deps?: any[],
-) {
+export function useHotkeys(keys: string, callback: KeyHandler, options?: Options): void;
+export function useHotkeys(keys: string, callback: KeyHandler, deps?: any[]): void;
+export function useHotkeys(keys: string, callback: KeyHandler, options?: Options, deps?: any[]): void;
+export function useHotkeys(keys: string, callback: KeyHandler, options?: any[] | Options, deps?: any[]): void {
+  if (options instanceof Array) {
+    deps = options;
+    options = undefined;
+  }
+
+  const {enableOnTags, filter} = options || {};
+
   const memoisedCallback = useCallback(callback, deps || []);
 
   useEffect(() => {
-    if (options && options.enableOnTags) {
+    if (options && (options as Options).enableOnTags) {
       hotkeys.filter = ({target, srcElement}) => {
         // @ts-ignore
         const targetTagName = (target && target.tagName) || (srcElement && srcElement.tagName);
 
-        return Boolean(targetTagName && options.enableOnTags && options.enableOnTags.includes(targetTagName as AvailableTags));
+        return Boolean(targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags));
       };
     }
 
-    if (options && options.filter) hotkeys.filter = options.filter;
+    if (filter) hotkeys.filter = filter;
 
-    hotkeys(keys, options || {}, memoisedCallback);
+    hotkeys(keys, (options as Options) || {}, memoisedCallback);
 
     return () => hotkeys.unbind(keys, memoisedCallback);
   }, [memoisedCallback, options]);
