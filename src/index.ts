@@ -26,6 +26,9 @@ export function useHotkeys(keys: string, callback: KeyHandler, options?: any[] |
   const memoisedCallback = useCallback(callback, deps || []);
 
   useEffect(() => {
+    // default instance to avoid globally scoped filters, see #276
+    hotkeys.filter = () => Boolean(true)
+    
     if (options && (options as Options).enableOnTags) {
       hotkeys.filter = ({target, srcElement}) => {
         // @ts-ignore
