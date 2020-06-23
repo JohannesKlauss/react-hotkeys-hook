@@ -55,7 +55,7 @@
     ]
   },
   "dependencies": {
-    "hotkeys-js": "3.7.6"
+    "hotkeys-js": "3.8.1"
   },
   "devDependencies": {
     "@babel/core": "7.10.3",
