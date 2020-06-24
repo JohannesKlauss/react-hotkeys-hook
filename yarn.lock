@@ -3660,10 +3660,10 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@26.0.1":
-  version "26.0.1"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.1.tgz#78416d00499c5a9a839b937000483f7647a16cb9"
-  integrity sha512-KumByIAlAh/uczr7WjdKHs5cUWhwOeRnsfjI/T/tQP1xvVBSgnRPAZ8VZjp26pQmE79d+n7X1AuTUu0IWHrfWg==
+"@types/jest@26.0.2":
+  version "26.0.2"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.2.tgz#536dbf34e8dcb41ba4f5b3eeb2cad4e6d28a39d9"
+  integrity sha512-rJB5DZm6q6kILGvQVxMRXOteoMjvA10UlGDf7+hM6pcMiWQiTgxaPXKC+kYCTAdBe9y33O+n3WZ8dzvBKOTSmA==
   dependencies:
     jest-diff "^25.2.1"
     pretty-format "^25.2.1"
