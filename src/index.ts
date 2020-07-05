@@ -1,5 +1,6 @@
-import hotkeys, {KeyHandler} from "hotkeys-js";
-import {useCallback, useEffect, useMemo} from "react";
+import hotkeys, {HotkeysEvent, KeyHandler} from "hotkeys-js";
+import React, {useCallback, useEffect, useRef} from "react";
+import ReactDOM from 'react-dom';
 
 type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
 
@@ -12,10 +13,10 @@ export type Options = {
   keydown?: boolean;
 };
 
-export function useHotkeys(keys: string, callback: KeyHandler, options?: Options): void;
-export function useHotkeys(keys: string, callback: KeyHandler, deps?: any[]): void;
-export function useHotkeys(keys: string, callback: KeyHandler, options?: Options, deps?: any[]): void;
-export function useHotkeys(keys: string, callback: KeyHandler, options?: any[] | Options, deps?: any[]): void {
+export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: Options): React.MutableRefObject<T | null>;
+export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, deps?: any[]): React.MutableRefObject<T | null>;
+export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: Options, deps?: any[]): React.MutableRefObject<T | null>;
+export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: any[] | Options, deps?: any[]): React.MutableRefObject<T | null> {
   if (options instanceof Array) {
     deps = options;
     options = undefined;
@@ -23,7 +24,16 @@ export function useHotkeys(keys: string, callback: KeyHandler, options?: any[] |
 
   const {enableOnTags, filter} = options || {};
 
-  const memoisedCallback = useCallback(callback, deps || []);
+  const ref = useRef<T | null>(null);
+  const memoisedCallback = useCallback((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => {
+    if (ref.current === null || document.activeElement === ReactDOM.findDOMNode(ref.current)) {
+      callback(keyboardEvent, hotkeysEvent);
+
+      return true;
+    }
+
+    return false;
+  }, deps && deps.concat(ref) || [ref]);
 
   useEffect(() => {
     if (options && (options as Options).enableOnTags) {
@@ -41,4 +51,6 @@ export function useHotkeys(keys: string, callback: KeyHandler, options?: any[] |
 
     return () => hotkeys.unbind(keys, memoisedCallback);
   }, [memoisedCallback, options]);
+
+  return ref;
 }

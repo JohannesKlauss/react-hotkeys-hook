@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {useHotkeys} from "./index";
 import {act, renderHook} from "@testing-library/react-hooks";
 import {act as reactAct, fireEvent, render, waitFor} from "@testing-library/react";
@@ -48,7 +48,7 @@ function useSplitAndDeps() {
   return count;
 }
 
-const HotkeysOnInput = ({onPress, useTags}: { onPress: () => void, useTags?: boolean}) => {
+const HotkeysOnInput = ({onPress, useTags}: { onPress: () => void, useTags?: boolean }) => {
   useHotkeys('a', onPress, {enableOnTags: useTags ? ['INPUT'] : undefined});
 
   return (
@@ -155,26 +155,40 @@ test('useHotkeys should be enabled on given form tags', async () => {
 
   expect(input).not.toBe(null);
 
-  reactAct(() => {
-    fireEvent.keyDown(input!, {key: 'a', keyCode: 65});
-  });
+  fireEvent.keyDown(input!, {key: 'a', keyCode: 65});
 
   expect(onPress).toHaveBeenCalled();
 });
 
-/*test('useHotkeys should ignore form tags when not declared', async () => {
-  const onPress = jest.fn();
-  render(<HotkeysOnInput onPress={onPress}/>);
+const HotkeysWithRef = ({onPress}: { onPress: () => void }) => {
+  const ref = useHotkeys<HTMLDivElement>('a', onPress);
 
-  const input = document.querySelector('input');
+  return (
+    <section ref={ref}>
+      <input type="text" data-testid={'input'}/>
+    </section>
+  );
+};
 
-  expect(input).not.toBe(null);
+test('useHotkeys should only fire when element is focused if a ref is set.', async () => {
+  let called = false;
 
-  await waitFor(() => input!.focus());
+  const {container} =  render(<HotkeysWithRef onPress={() => called = true}/>);
 
-  reactAct(() => {
-    fireEvent.keyDown(input!, {key: 'a', keyCode: 65});
+  const section = container.querySelector('section');
+
+  expect(section).not.toBe(null);
+
+  act(() => {
+    fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
   });
 
-  expect(onPress).not.toHaveBeenCalled();
-});*/
+  expect(called).toBe(false);
+
+  reactAct(() => {
+    section!.focus()
+    fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(true);
+})

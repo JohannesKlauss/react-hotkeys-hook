@@ -85,7 +85,8 @@
     "typescript": "3.9.5"
   },
   "peerDependencies": {
-    "react": ">=16.8.1"
+    "react": ">=16.8.1",
+    "react-dom": ">=16.8.1"
   },
   "resolutions": {
     "@types/react": "16.9.41"
