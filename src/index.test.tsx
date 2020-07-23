@@ -164,7 +164,7 @@ const HotkeysWithRef = ({onPress}: { onPress: () => void }) => {
   const ref = useHotkeys<HTMLDivElement>('a', onPress);
 
   return (
-    <section ref={ref}>
+    <section ref={ref} tabIndex={0}>
       <input type="text" data-testid={'input'}/>
     </section>
   );
@@ -186,7 +186,10 @@ test('useHotkeys should only fire when element is focused if a ref is set.', asy
   expect(called).toBe(false);
 
   reactAct(() => {
-    section!.focus()
+    section!.focus();
+  });
+
+  act(() => {
     fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
   });
 
