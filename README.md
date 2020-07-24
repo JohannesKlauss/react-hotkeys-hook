@@ -75,7 +75,7 @@ The `useIsHotkeyPressed` hook just returns the `hotkeys.isPressed` function and 
 ```ts
 const isPressed = useIsHotkeyPressed();
 
-isPressed(13); // Returns true if Return key is pressed down.
+isPressed('return'); // Returns true if Return key is pressed down.
 ```
 
 ### Found an issue or have a feature request?
