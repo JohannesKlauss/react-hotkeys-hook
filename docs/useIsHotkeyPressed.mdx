@@ -1,0 +1,17 @@
+---
+name: useIsHotkeyPressed
+---
+
+import { Playground } from 'docz';
+import { useState } from 'react';
+import { useHotkeys } from '../src';
+
+# useIsHotkeyPressed
+
+The `useIsHotkeyPressed` hook just returns the `hotkeys.isPressed` function and works exactly the same.
+
+```ts
+const isPressed = useIsHotkeyPressed();
+
+isPressed(13); // Returns true if Return key is pressed down.
+```

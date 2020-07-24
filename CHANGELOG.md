@@ -1,3 +1,47 @@
+## [2.2.1] - 23-Jul-2020
+* Remove deprecated findDOMNode
+* Added useIsHotkeyPressed hook.
+
+## [2.2.0] - 23-Jul-2020
+* Return ref to scope hotkey
+* Fixed test for scopable ref feature
+
+## [2.1.4] - 30-Jun-2020
+* added updated readme to docz
+* Update README to reflect lack of filter scoping
+
+## [2.1.3] - 16-Apr-2020
+* Code cleanup
+* Overloaded function type, so that options does not have to be set when deps is used only.
+
+## [2.1.2] - 13-Apr-2020
+* Added tests
+
+## [2.1.1] - 05-Apr-2020
+* Fixed bug in 2.1.0 that every filter returns false that has no available tags given.
+
+## [2.1.0] - 04-Apr-2020
+* Added filter implementation
+
+## [2.0.1] - 04-Apr-2020
+* Update readme
+* Fixed Option Type
+
+## [2.0.0] - 04-Apr-2020
+* BC: Added more options Swapped deps and options param. Updated docz.
+
+## [1.6.1] - 27-Mar-2020
+* Directly use KeyHandler type from hotkeys-js
+
+## [1.6.0] - 09-Mar-2020
+* Add options parameter to useHotkeys hook
+
+## [1.5.4] - 09-Dec-2019
+* Updated docz.
+
+## [1.5.3] - 09-Sep-2019
+* make sure only memoisedCallback is unbound
+
 ## [1.5.2] - 24-Aug-2019
 * Update readme.
 * Bump hotkeys version to 3.7.1

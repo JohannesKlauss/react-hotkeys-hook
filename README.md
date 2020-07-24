@@ -68,6 +68,16 @@ depend on any unstable callbacks or changing values over time you can leave this
 empty array by default. See the [Memoisation](#memoisation) section to
 learn more and see an example where you have to set this array.
 
+### `useIsHotkeyPressed` hook
+
+The `useIsHotkeyPressed` hook just returns the `hotkeys.isPressed` function and works exactly the same.
+
+```ts
+const isPressed = useIsHotkeyPressed();
+
+isPressed(13); // Returns true if Return key is pressed down.
+```
+
 ### Found an issue or have a feature request?
 
 Open up an issue or pull request and participate.
