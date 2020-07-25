@@ -1,7 +1,7 @@
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import {useHotkeys} from "./index";
 import {act, renderHook} from "@testing-library/react-hooks";
-import {act as reactAct, fireEvent, render, waitFor} from "@testing-library/react";
+import {act as reactAct, fireEvent, render} from "@testing-library/react";
 
 function useWrapper(keys: string) {
   const [count, setCount] = useState(0);
@@ -55,6 +55,43 @@ const HotkeysOnInput = ({onPress, useTags}: { onPress: () => void, useTags?: boo
     <input type="text" data-testid={'input'}/>
   );
 };
+
+const HotkeysWithRef = ({onPress}: { onPress: () => void }) => {
+  const ref = useHotkeys<HTMLElement>('a', onPress);
+
+  return (
+    <section ref={ref} tabIndex={0}>
+      <input type="text" data-testid={'input'}/>
+    </section>
+  );
+};
+
+test('useHotkeys should only fire when element is focused if a ref is set.', async () => {
+  let called = false;
+
+  const {container} =  render(<HotkeysWithRef onPress={() => called = true}/>);
+
+  const section = container.querySelector('section');
+
+  expect(section).not.toBe(null);
+
+  reactAct(() => {
+    fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
+    fireEvent.keyUp(section!, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(false);
+
+  reactAct(() => {
+    section!.focus();
+  });
+
+  reactAct(() => {
+    fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(true);
+});
 
 test('useHotkeys should listen to key presses', () => {
   const {result} = renderHook(() => useWrapper('a'));
@@ -159,39 +196,3 @@ test('useHotkeys should be enabled on given form tags', async () => {
 
   expect(onPress).toHaveBeenCalled();
 });
-
-const HotkeysWithRef = ({onPress}: { onPress: () => void }) => {
-  const ref = useHotkeys<HTMLDivElement>('a', onPress);
-
-  return (
-    <section ref={ref} tabIndex={0}>
-      <input type="text" data-testid={'input'}/>
-    </section>
-  );
-};
-
-/*test('useHotkeys should only fire when element is focused if a ref is set.', async () => {
-  let called = false;
-
-  const {container} =  render(<HotkeysWithRef onPress={() => called = true}/>);
-
-  const section = container.querySelector('section');
-
-  expect(section).not.toBe(null);
-
-  act(() => {
-    fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
-  });
-
-  expect(called).toBe(false);
-
-  reactAct(() => {
-    section!.focus();
-  });
-
-  act(() => {
-    fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
-  });
-
-  expect(called).toBe(true);
-})*/
