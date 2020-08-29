@@ -79,7 +79,7 @@
     "emotion-theming": "10.0.27",
     "gatsby-plugin-emotion": "4.3.10",
     "jest": "26.4.2",
-    "np": "6.4.0",
+    "np": "6.5.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-test-renderer": "16.13.1",
