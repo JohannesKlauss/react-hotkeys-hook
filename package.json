@@ -3,10 +3,11 @@
   "version": "2.2.2",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "author": "Johannes Klauss",
-  "main": "../dist/index.js",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "module": "dist/react-hotkeys-hook.esm.js",
   "files": [
-    "../dist",
+    "dist",
     "src"
   ],
   "keywords": [
@@ -32,6 +33,9 @@
     "docz:build": "docz build",
     "version": "npm run build"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "babel": {
     "presets": [
       "@babel/preset-env",
@@ -45,11 +49,6 @@
       ".docz",
       "docs"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
   },
   "prettier": {
     "printWidth": 80,
@@ -76,7 +75,6 @@
     "docz": "2.3.1",
     "emotion-theming": "10.0.27",
     "gatsby-plugin-emotion": "4.3.10",
-    "husky": "4.2.5",
     "jest": "26.4.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
