@@ -27,7 +27,6 @@
     "build": "tsdx build",
     "test": "jest",
     "lint": "tsdx lint",
-    "prepare": "tsdx build",
     "publish": "np",
     "docz:dev": "docz dev",
     "docz:build": "docz build",
