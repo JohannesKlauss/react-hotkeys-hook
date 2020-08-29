@@ -1,6 +1,6 @@
 {
   "name": "react-hotkeys-hook",
-  "version": "2.3.0-1",
+  "version": "2.3.0-2",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "author": "Johannes Klauss",
   "main": "dist/index.js",
