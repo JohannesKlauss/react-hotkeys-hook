@@ -3,6 +3,12 @@
   "version": "2.2.2",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "author": "Johannes Klauss",
+  "main": "../dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "../dist",
+    "src"
+  ],
   "keywords": [
     "react",
     "hook",
@@ -17,9 +23,12 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "pika build",
+    "start": "tsdx watch",
+    "build": "tsdx build",
     "test": "jest",
-    "publish": "pika publish",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "publish": "np",
     "docz:dev": "docz dev",
     "docz:build": "docz build",
     "version": "npm run build"
@@ -38,21 +47,16 @@
       "docs"
     ]
   },
-  "@pika/pack": {
-    "pipeline": [
-      [
-        "@pika/plugin-ts-standard-pkg"
-      ],
-      [
-        "@pika/plugin-build-node"
-      ],
-      [
-        "@pika/plugin-build-web"
-      ],
-      [
-        "@pika/plugin-build-types"
-      ]
-    ]
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "dependencies": {
     "hotkeys-js": "3.8.1"
@@ -63,11 +67,6 @@
     "@babel/preset-react": "7.10.4",
     "@babel/preset-typescript": "7.10.4",
     "@emotion/core": "10.0.35",
-    "@pika/pack": "0.5.0",
-    "@pika/plugin-build-node": "0.9.2",
-    "@pika/plugin-build-types": "0.9.2",
-    "@pika/plugin-build-web": "0.9.2",
-    "@pika/plugin-ts-standard-pkg": "0.9.2",
     "@testing-library/react": "10.4.9",
     "@testing-library/react-hooks": "3.4.1",
     "@types/jest": "26.0.10",
@@ -78,11 +77,13 @@
     "docz": "2.3.1",
     "emotion-theming": "10.0.27",
     "gatsby-plugin-emotion": "4.3.10",
+    "husky": "4.2.5",
     "jest": "26.4.2",
-    "np": "6.5.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-test-renderer": "16.13.1",
+    "tsdx": "0.13.3",
+    "tslib": "2.0.1",
     "typescript": "4.0.2"
   },
   "peerDependencies": {

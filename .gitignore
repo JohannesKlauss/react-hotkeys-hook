@@ -1,8 +1,10 @@
 .idea
 .docz
 .npmrc
-pkg
+.DS_Store
 node_modules
+.cache
+dist
 
 # Logs
 logs
