@@ -60,8 +60,8 @@
     "hotkeys-js": "3.8.1"
   },
   "devDependencies": {
-    "@babel/core": "7.11.4",
-    "@babel/preset-env": "7.11.0",
+    "@babel/core": "7.11.5",
+    "@babel/preset-env": "7.11.5",
     "@babel/preset-react": "7.10.4",
     "@babel/preset-typescript": "7.10.4",
     "@emotion/core": "10.0.35",
