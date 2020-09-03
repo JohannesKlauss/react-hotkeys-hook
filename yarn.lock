@@ -2917,10 +2917,10 @@
     "@babel/runtime" "^7.5.4"
     "@types/testing-library__react-hooks" "^3.3.0"
 
-"@testing-library/react@11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-11.0.0.tgz#b8ab18752dbb09986925cda73da789c3cdbc4ff0"
-  integrity sha512-C3CL59UljaWe4f+/0vdfTKz54XPGod56egcdQLysowpJ/KUMyr5rhY2z+qRzbSlF73Soq3vHFGm+DTnl98s9fQ==
+"@testing-library/react@11.0.1":
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-11.0.1.tgz#6aa0b861cb5c72948d2c11fdb2f72840d17b53a6"
+  integrity sha512-dpN8pNLncmDX97NIVPjdpj4qYra7+ODk/JeWF4F+qaL7pU84YX7YVHK0pM4zbqTKKPypc0aoL8hrhJ31qYRmVA==
   dependencies:
     "@babel/runtime" "^7.11.2"
     "@testing-library/dom" "^7.23.0"
