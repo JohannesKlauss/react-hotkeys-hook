@@ -33,9 +33,6 @@
     "docz:build": "docz build",
     "version": "npm run build"
   },
-  "engines": {
-    "node": ">=12"
-  },
   "babel": {
     "presets": [
       "@babel/preset-env",
