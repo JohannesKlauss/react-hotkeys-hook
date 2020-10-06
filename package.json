@@ -65,7 +65,7 @@
     "@testing-library/react": "11.0.4",
     "@testing-library/react-hooks": "3.4.2",
     "@types/jest": "26.0.14",
-    "@types/react": "16.9.50",
+    "@types/react": "16.9.51",
     "@types/react-dom": "16.9.8",
     "@types/testing-library__react": "10.0.1",
     "@types/testing-library__react-hooks": "3.4.1",
@@ -85,6 +85,6 @@
     "react-dom": ">=16.8.1"
   },
   "resolutions": {
-    "@types/react": "16.9.50"
+    "@types/react": "16.9.51"
   }
 }
