@@ -56,6 +56,14 @@ const HotkeysOnInput = ({onPress, useTags}: { onPress: () => void, useTags?: boo
   );
 };
 
+const HotkeysOnKeyup = ({onPress, keyup, keydown}: { onPress: () => void, keyup?: boolean, keydown?: boolean }) => {
+  useHotkeys('a', onPress, {keyup, keydown});
+
+  return (
+    <input type="text" data-testid={'input'}/>
+  );
+};
+
 const HotkeysWithRef = ({onPress}: { onPress: () => void }) => {
   const ref = useHotkeys<HTMLElement>('a', onPress);
 
@@ -182,6 +190,60 @@ test('useHotkeys should use correctly assign options and deps argument when usin
   });
 
   expect(resultA.result.current).toBe(2);
+});
+
+test('useHotkeys should only trigger once if neither keyup nor keydown are set', () => {
+  let called = false;
+
+  render(<HotkeysOnKeyup onPress={() => called = true}/>);
+
+  reactAct(() => {
+    fireEvent.keyUp(document.body, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(false);
+
+  reactAct(() => {
+    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(true);
+});
+
+test('useHotkeys should only trigger once if keyup is set and keydown is not', () => {
+  let called = false;
+
+  render(<HotkeysOnKeyup onPress={() => called = true} keyup={true}/>);
+
+  reactAct(() => {
+    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(false);
+
+  reactAct(() => {
+    fireEvent.keyUp(document.body, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(true);
+});
+
+test('useHotkeys should trigger twice if keyup and keydown is set to true', () => {
+  let called = false;
+
+  render(<HotkeysOnKeyup onPress={() => called = true} keyup={true} keydown={true}/>);
+
+  reactAct(() => {
+    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(true);
+
+  reactAct(() => {
+    fireEvent.keyUp(document.body, {key: 'a', keyCode: 65});
+  });
+
+  expect(called).toBe(true);
 });
 
 test('useHotkeys should be enabled on given form tags', async () => {

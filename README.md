@@ -44,9 +44,6 @@ listened to. When the component unmounts it will stop listening.
 useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: any[] = [])
 ```
 
-The callback function takes the exact parameters as the callback function in the hotkeys package.
-See [hotkeys] documentation for more info or look into the typings file.
-
 ### Parameters
 - `keys: string`: Here you can set the key strokes you want the hook to listen to. You can use single or multiple keys,
 modifier combination, etc. See [this](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts)

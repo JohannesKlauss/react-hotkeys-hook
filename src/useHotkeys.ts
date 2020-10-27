@@ -20,8 +20,8 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     deps = options;
     options = undefined;
   }
-  const {enableOnTags, filter} = options || {};
 
+  const {enableOnTags, filter, keyup, keydown} = options || {};
   const ref = useRef<T | null>(null);
 
   const memoisedCallback = useCallback((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => {
@@ -44,6 +44,10 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     }
 
     if (filter) hotkeys.filter = filter;
+
+    if (keyup && keydown !== true) {
+      (options as Options).keydown = false;
+    }
 
     hotkeys(keys, (options as Options) || {}, memoisedCallback);
 
