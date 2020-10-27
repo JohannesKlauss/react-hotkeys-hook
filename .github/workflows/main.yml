@@ -2,21 +2,24 @@ name: CI
 on: [push]
 jobs:
   build:
-    runs-on: alpine-latest
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
 
     steps:
-      - name: Begin CI...
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        env:
-          CI: true
 
       - name: Lint
         run: yarn run lint
-        env:
-          CI: true
 
       - name: Test
         run: yarn run test --ci --coverage --maxWorkers=2
