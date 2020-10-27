@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import {useHotkeys} from "./index";
-import {act, renderHook} from "@testing-library/react-hooks";
-import {act as reactAct, fireEvent, render} from "@testing-library/react";
+import React, { useState } from 'react';
+import { useHotkeys } from './index';
+import { act, renderHook } from '@testing-library/react-hooks';
+import { act as reactAct, fireEvent, render } from '@testing-library/react';
 
 function useWrapper(keys: string) {
   const [count, setCount] = useState(0);
@@ -34,7 +34,7 @@ function useSplit() {
   const [count, setCount] = useState(0);
   const increment = () => setCount(count + 1);
 
-  useHotkeys('shift-a', increment, {splitKey: '-'},);
+  useHotkeys('shift-a', increment, { splitKey: '-' });
 
   return count;
 }
@@ -43,28 +43,28 @@ function useSplitAndDeps() {
   const [count, setCount] = useState(0);
   const increment = () => setCount(count + 1);
 
-  useHotkeys('shift-a', increment, {splitKey: '-'}, [count]);
+  useHotkeys('shift-a', increment, { splitKey: '-' }, [count]);
 
   return count;
 }
 
-const HotkeysOnInput = ({onPress, useTags}: { onPress: () => void, useTags?: boolean }) => {
-  useHotkeys('a', onPress, {enableOnTags: useTags ? ['INPUT'] : undefined});
+const HotkeysOnInput = ({ onPress, useTags }: { onPress: () => void, useTags?: boolean }) => {
+  useHotkeys('a', onPress, { enableOnTags: useTags ? ['INPUT'] : undefined });
 
   return (
     <input type="text" data-testid={'input'}/>
   );
 };
 
-const HotkeysOnKeyup = ({onPress, keyup, keydown}: { onPress: () => void, keyup?: boolean, keydown?: boolean }) => {
-  useHotkeys('a', onPress, {keyup, keydown});
+const HotkeysOnKeyup = ({ onPress, keyup, keydown }: { onPress: () => void, keyup?: boolean, keydown?: boolean }) => {
+  useHotkeys('a', onPress, { keyup, keydown });
 
   return (
     <input type="text" data-testid={'input'}/>
   );
 };
 
-const HotkeysWithRef = ({onPress}: { onPress: () => void }) => {
+const HotkeysWithRef = ({ onPress }: { onPress: () => void }) => {
   const ref = useHotkeys<HTMLElement>('a', onPress);
 
   return (
@@ -77,15 +77,15 @@ const HotkeysWithRef = ({onPress}: { onPress: () => void }) => {
 test('useHotkeys should only fire when element is focused if a ref is set.', async () => {
   let called = false;
 
-  const {container} =  render(<HotkeysWithRef onPress={() => called = true}/>);
+  const { container } = render(<HotkeysWithRef onPress={() => called = true}/>);
 
   const section = container.querySelector('section');
 
   expect(section).not.toBe(null);
 
   reactAct(() => {
-    fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
-    fireEvent.keyUp(section!, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(section!, { key: 'a', keyCode: 65 });
+    fireEvent.keyUp(section!, { key: 'a', keyCode: 65 });
   });
 
   expect(called).toBe(false);
@@ -95,19 +95,19 @@ test('useHotkeys should only fire when element is focused if a ref is set.', asy
   });
 
   reactAct(() => {
-    fireEvent.keyDown(section!, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(section!, { key: 'a', keyCode: 65 });
   });
 
   expect(called).toBe(true);
 });
 
 test('useHotkeys should listen to key presses', () => {
-  const {result} = renderHook(() => useWrapper('a'));
+  const { result } = renderHook(() => useWrapper('a'));
 
   expect(result.current).toBe(0);
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(result.current).toBe(1);
@@ -118,7 +118,7 @@ test('useHotkeys should listen to its own context', () => {
   const resultB = renderHook(() => useWrapper('b'));
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(resultA.result.current).toBe(1);
@@ -130,14 +130,14 @@ test('useHotkeys should rebuild callback after deps change', () => {
   const resultB = renderHook(() => useDeps(true));
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(resultA.result.current).toBe(1);
   expect(resultB.result.current).toBe(1);
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(resultA.result.current).toBe(1);
@@ -148,13 +148,13 @@ test('useHotkeys correctly assign deps when used as third argument and options b
   const resultA = renderHook(() => useDepsAsThird());
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(resultA.result.current).toBe(1);
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(resultA.result.current).toBe(2);
@@ -164,13 +164,13 @@ test('useHotkeys should use correct char to split combinations', () => {
   const resultA = renderHook(() => useSplit());
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65, shiftKey: true});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65, shiftKey: true });
   });
 
   expect(resultA.result.current).toBe(1);
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65, shiftKey: true});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65, shiftKey: true });
   });
 
   expect(resultA.result.current).toBe(1);
@@ -180,13 +180,13 @@ test('useHotkeys should use correctly assign options and deps argument when usin
   const resultA = renderHook(() => useSplitAndDeps());
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65, shiftKey: true});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65, shiftKey: true });
   });
 
   expect(resultA.result.current).toBe(1);
 
   act(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65, shiftKey: true});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65, shiftKey: true });
   });
 
   expect(resultA.result.current).toBe(2);
@@ -198,13 +198,13 @@ test('useHotkeys should only trigger once if neither keyup nor keydown are set',
   render(<HotkeysOnKeyup onPress={() => called = true}/>);
 
   reactAct(() => {
-    fireEvent.keyUp(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyUp(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(called).toBe(false);
 
   reactAct(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(called).toBe(true);
@@ -216,13 +216,13 @@ test('useHotkeys should only trigger once if keyup is set and keydown is not', (
   render(<HotkeysOnKeyup onPress={() => called = true} keyup={true}/>);
 
   reactAct(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(called).toBe(false);
 
   reactAct(() => {
-    fireEvent.keyUp(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyUp(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(called).toBe(true);
@@ -234,13 +234,13 @@ test('useHotkeys should trigger twice if keyup and keydown is set to true', () =
   render(<HotkeysOnKeyup onPress={() => called = true} keyup={true} keydown={true}/>);
 
   reactAct(() => {
-    fireEvent.keyDown(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(called).toBe(true);
 
   reactAct(() => {
-    fireEvent.keyUp(document.body, {key: 'a', keyCode: 65});
+    fireEvent.keyUp(document.body, { key: 'a', keyCode: 65 });
   });
 
   expect(called).toBe(true);
@@ -254,7 +254,7 @@ test('useHotkeys should be enabled on given form tags', async () => {
 
   expect(input).not.toBe(null);
 
-  fireEvent.keyDown(input!, {key: 'a', keyCode: 65});
+  fireEvent.keyDown(input!, { key: 'a', keyCode: 65 });
 
   expect(onPress).toHaveBeenCalled();
 });

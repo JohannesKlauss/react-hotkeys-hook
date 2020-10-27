@@ -18,9 +18,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Lint
-        run: yarn run lint
-
       - name: Test
         run: yarn run test --ci --coverage --maxWorkers=2
         env:

@@ -1,4 +1,4 @@
-import {useIsHotkeyPressed} from "./useIsHotkeyPressed";
-import {useHotkeys} from "./useHotkeys";
+import { useIsHotkeyPressed } from './useIsHotkeyPressed';
+import { useHotkeys } from './useHotkeys';
 
-export {useHotkeys, useIsHotkeyPressed};
+export { useHotkeys, useIsHotkeyPressed };

@@ -1,5 +1,5 @@
-import hotkeys, {HotkeysEvent, KeyHandler} from "hotkeys-js";
-import React, {useCallback, useEffect, useRef} from "react";
+import hotkeys, { HotkeysEvent, KeyHandler } from 'hotkeys-js';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
 
@@ -21,7 +21,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     options = undefined;
   }
 
-  const {enableOnTags, filter, keyup, keydown} = options || {};
+  const { enableOnTags, filter, keyup, keydown } = options || {};
   const ref = useRef<T | null>(null);
 
   const memoisedCallback = useCallback((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => {
@@ -35,7 +35,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
 
   useEffect(() => {
     if (options && (options as Options).enableOnTags) {
-      hotkeys.filter = ({target, srcElement}) => {
+      hotkeys.filter = ({ target, srcElement }) => {
         // @ts-ignore
         const targetTagName = (target && target.tagName) || (srcElement && srcElement.tagName);
 
