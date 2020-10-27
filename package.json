@@ -29,8 +29,7 @@
     "test": "jest",
     "publish": "np",
     "docz:dev": "docz dev",
-    "docz:build": "docz build",
-    "version": "npm run build"
+    "docz:build": "docz build"
   },
   "babel": {
     "presets": [
