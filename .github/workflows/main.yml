@@ -2,7 +2,7 @@ name: CI
 on: [push]
 jobs:
   build:
-    runs-on: node-alpine:latest
+    runs-on: alpine-latest
 
     steps:
       - name: Begin CI...
