@@ -59,7 +59,7 @@
     "@babel/preset-env": "7.12.1",
     "@babel/preset-react": "7.12.1",
     "@babel/preset-typescript": "7.12.1",
-    "@emotion/core": "10.0.35",
+    "@emotion/core": "10.1.0",
     "@testing-library/react": "11.1.0",
     "@testing-library/react-hooks": "3.4.2",
     "@types/jest": "26.0.15",
