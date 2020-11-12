@@ -70,7 +70,7 @@
     "docz": "2.3.1",
     "emotion-theming": "11.0.0",
     "eslint-plugin-prettier": "3.1.4",
-    "gatsby-plugin-emotion": "4.3.15",
+    "gatsby-plugin-emotion": "4.4.0",
     "jest": "26.6.3",
     "prettier": "2.1.2",
     "react": "17.0.1",
