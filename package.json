@@ -62,7 +62,7 @@
     "@emotion/core": "11.0.0",
     "@testing-library/react": "11.2.2",
     "@testing-library/react-hooks": "3.4.2",
-    "@types/jest": "26.0.18",
+    "@types/jest": "26.0.19",
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
     "@types/testing-library__react": "10.0.1",
