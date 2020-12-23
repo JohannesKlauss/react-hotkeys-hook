@@ -48,8 +48,25 @@ function useSplitAndDeps() {
   return count;
 }
 
+function useLocalFilter(filter: () => boolean) {
+  const [count, setCount] = useState(0);
+  const increment = () => setCount(count + 1);
+
+  useHotkeys('a', increment, {filter});
+
+  return count;
+}
+
 const HotkeysOnInput = ({ onPress, useTags }: { onPress: () => void, useTags?: boolean }) => {
   useHotkeys('a', onPress, { enableOnTags: useTags ? ['INPUT'] : undefined });
+
+  return (
+    <input type="text" data-testid={'input'}/>
+  );
+};
+
+const HotkeysFilteredOnInput = ({ onPress, useTags }: { onPress: () => void, useTags?: boolean }) => {
+  useHotkeys('a', onPress, { enableOnTags: useTags ? ['TEXTAREA'] : undefined });
 
   return (
     <input type="text" data-testid={'input'}/>
@@ -257,4 +274,32 @@ test('useHotkeys should be enabled on given form tags', async () => {
   fireEvent.keyDown(input!, { key: 'a', keyCode: 65 });
 
   expect(onPress).toHaveBeenCalled();
+});
+
+test('useHotkeys should not be enabled on given form tags when filter specifies different input field', async () => {
+  const onPress = jest.fn();
+  render(<HotkeysFilteredOnInput onPress={onPress} useTags={true}/>);
+
+  const input = document.querySelector('input');
+
+  expect(input).not.toBe(null);
+
+  fireEvent.keyDown(input!, { key: 'a', keyCode: 65 });
+
+  expect(onPress).toHaveBeenCalledTimes(0);
+});
+
+test('useHotkeys should use its own custom filter system instead of the global hotkeys one', () => {
+  const { result: result1 } = renderHook(() => useLocalFilter(() => false));
+  const { result: result2 } = renderHook(() => useLocalFilter(() => true));
+
+  expect(result1.current).toBe(0);
+  expect(result2.current).toBe(0);
+
+  act(() => {
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
+  });
+
+  expect(result1.current).toBe(0);
+  expect(result2.current).toBe(1);
 });

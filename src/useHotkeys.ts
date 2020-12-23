@@ -3,6 +3,16 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
 
+// We implement our own custom filter system.
+hotkeys.filter = () => true;
+
+const tagFilter = ({ target, srcElement }: KeyboardEvent, enableOnTags?: AvailableTags[]) => {
+  // @ts-ignore
+  const targetTagName = (target && target.tagName) || (srcElement && srcElement.tagName);
+
+  return Boolean(targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags));
+};
+
 export type Options = {
   filter?: typeof hotkeys.filter;
   enableOnTags?: AvailableTags[];
@@ -25,6 +35,14 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
   const ref = useRef<T | null>(null);
 
   const memoisedCallback = useCallback((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => {
+    if (filter && !filter(keyboardEvent)) {
+      return false;
+    }
+
+    if (options && (options as Options).enableOnTags && !tagFilter(keyboardEvent, (options as Options).enableOnTags)) {
+      return false;
+    }
+
     if (ref.current === null || document.activeElement === ref.current) {
       callback(keyboardEvent, hotkeysEvent);
       return true;
@@ -34,17 +52,6 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
   }, deps ? [ref, ...deps] : [ref]);
 
   useEffect(() => {
-    if (options && (options as Options).enableOnTags) {
-      hotkeys.filter = ({ target, srcElement }) => {
-        // @ts-ignore
-        const targetTagName = (target && target.tagName) || (srcElement && srcElement.tagName);
-
-        return Boolean(targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags));
-      };
-    }
-
-    if (filter) hotkeys.filter = filter;
-
     if (keyup && keydown !== true) {
       (options as Options).keydown = false;
     }
