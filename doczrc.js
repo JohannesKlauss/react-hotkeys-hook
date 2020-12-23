@@ -9,8 +9,6 @@ export default {
   hashRouter: true,
   typescript: true,
   themeConfig: {
-    colors: {
-      primary: '#000000',
-    },
+    initialColorMode: 'dark',
   },
 };

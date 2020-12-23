@@ -52,7 +52,9 @@ section on the hotkeys documentation for more info.
 gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
 to do this anymore by yourself.
 - `options: Options = {}`
-  - `filter: (event: KeyboardEvent): boolean` is used to enable hotkeys inside input elements. Check out [hotkeys docs](https://github.com/jaywcjlove/hotkeys/#filter) for usage. Due to constraints with the base library, `filter` is a global setting. As a result, it is currently not possible to have different filters for separate calls of `useHotkey`.
+  - * `filter: (event: KeyboardEvent): boolean` is used to filter if a callback gets triggered depending on the keyboard event.
+    **Breaking Change in `3.0.0`!** Prior to version `3.0.0` the filter settings was one global setting that applied to every
+    hook. Since `3.0.0` this behavior changed. The `filter` option is now locally scoped to each call of `useHotkeys`.
   - * `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`. **IMPORTANT!** When you provide a custom `filter` implementation function this parameter will be ignored. Similar to `filter`, setting this option will enable it globally.
   - `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
     to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`

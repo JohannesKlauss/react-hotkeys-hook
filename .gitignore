@@ -5,6 +5,7 @@
 node_modules
 .cache
 dist
+public
 
 # Logs
 logs
