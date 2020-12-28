@@ -289,6 +289,19 @@ test('useHotkeys should not be enabled on given form tags when filter specifies 
   expect(onPress).toHaveBeenCalledTimes(0);
 });
 
+test('useHotkeys should not be enabled on given form tags when tags is not set', async () => {
+  const onPress = jest.fn();
+  render(<HotkeysFilteredOnInput onPress={onPress} useTags={false}/>);
+
+  const input = document.querySelector('input');
+
+  expect(input).not.toBe(null);
+
+  fireEvent.keyDown(input!, { key: 'a', keyCode: 65 });
+
+  expect(onPress).toHaveBeenCalledTimes(0);
+});
+
 test('useHotkeys should use its own custom filter system instead of the global hotkeys one', () => {
   const { result: result1 } = renderHook(() => useLocalFilter(() => false));
   const { result: result2 } = renderHook(() => useLocalFilter(() => true));

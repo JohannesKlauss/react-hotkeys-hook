@@ -13,6 +13,10 @@ const tagFilter = ({ target, srcElement }: KeyboardEvent, enableOnTags?: Availab
   return Boolean(targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags));
 };
 
+const isKeyboardEventTriggeredByInput = (ev: KeyboardEvent) => {
+  return tagFilter(ev, ['INPUT', 'TEXTAREA', 'SELECT']);
+};
+
 export type Options = {
   filter?: typeof hotkeys.filter;
   enableOnTags?: AvailableTags[];
@@ -39,7 +43,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
       return false;
     }
 
-    if (options && (options as Options).enableOnTags && !tagFilter(keyboardEvent, (options as Options).enableOnTags)) {
+    if (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, (options as Options).enableOnTags)) {
       return false;
     }
 
