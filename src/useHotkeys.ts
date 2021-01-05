@@ -43,7 +43,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
       return false;
     }
 
-    if (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, (options as Options).enableOnTags)) {
+    if (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, (options as Options)?.enableOnTags)) {
       return false;
     }
 
