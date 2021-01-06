@@ -43,8 +43,8 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
       return false;
     }
 
-    if (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, (options as Options)?.enableOnTags)) {
-      return false;
+    if (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, enableOnTags)) {
+      return true;
     }
 
     if (ref.current === null || document.activeElement === ref.current) {
@@ -53,7 +53,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     }
 
     return false;
-  }, deps ? [ref, ...deps] : [ref]);
+  }, deps ? [ref, enableOnTags, filter, ...deps] : [ref, enableOnTags, filter]);
 
   useEffect(() => {
     if (keyup && keydown !== true) {
@@ -63,7 +63,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     hotkeys(keys, (options as Options) || {}, memoisedCallback);
 
     return () => hotkeys.unbind(keys, memoisedCallback);
-  }, [memoisedCallback, options, enableOnTags, filter, keys]);
+  }, [memoisedCallback, options, keys]);
 
   return ref;
 }
