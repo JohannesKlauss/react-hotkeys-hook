@@ -10370,10 +10370,10 @@ gatsby-plugin-compile-es6-packages@^2.0.0:
     "@babel/runtime" "^7.0.0"
     regex-escape "^3.4.8"
 
-gatsby-plugin-emotion@5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-emotion/-/gatsby-plugin-emotion-5.2.0.tgz#2a4083dff6c4128dcb655b2cedcd9943b6ef5789"
-  integrity sha512-Oq4DJJ6kQ2TyRB8xVi8FkxB4JTadynB+MCRjmUc7OeaHPfk+wEgu9GijxDb07D8vqBlIoJ7yXGbVgnDjRs6CgQ==
+gatsby-plugin-emotion@5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-emotion/-/gatsby-plugin-emotion-5.3.0.tgz#4f1a42ddd38f3d2620aa87b02d4b0e9a87efb38e"
+  integrity sha512-zDbEOb5MvL4ve1OTZCtgVuEJUoyBgqJBByPO+xq87TsuKPJyzE2aRD7mtCcwivh4Yo7KBl1X9bl3EiOm5m50IA==
   dependencies:
     "@babel/runtime" "^7.11.2"
     "@emotion/babel-preset-css-prop" "^11.0.0"
