@@ -52,7 +52,7 @@
     "trailingComma": "es5"
   },
   "dependencies": {
-    "hotkeys-js": "3.8.1"
+    "hotkeys-js": "3.8.2"
   },
   "devDependencies": {
     "@babel/core": "7.12.10",
