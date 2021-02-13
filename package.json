@@ -52,28 +52,28 @@
     "trailingComma": "es5"
   },
   "dependencies": {
-    "hotkeys-js": "3.8.1"
+    "hotkeys-js": "3.8.2"
   },
   "devDependencies": {
-    "@babel/core": "7.12.10",
-    "@babel/plugin-proposal-class-properties": "7.12.1",
-    "@babel/preset-env": "7.12.11",
-    "@babel/preset-react": "7.12.10",
-    "@babel/preset-typescript": "7.12.7",
-    "@testing-library/react": "11.2.2",
+    "@babel/core": "7.12.16",
+    "@babel/plugin-proposal-class-properties": "7.12.13",
+    "@babel/preset-env": "7.12.16",
+    "@babel/preset-react": "7.12.13",
+    "@babel/preset-typescript": "7.12.16",
+    "@testing-library/react": "11.2.5",
     "@testing-library/react-hooks": "3.4.2",
-    "@types/jest": "26.0.19",
-    "@types/react": "17.0.0",
-    "@types/react-dom": "17.0.0",
+    "@types/jest": "26.0.20",
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.1",
     "@types/testing-library__react": "10.0.1",
     "@types/testing-library__react-hooks": "3.4.1",
     "docz": "2.3.1",
     "eslint-plugin-prettier": "3.3.1",
-    "gatsby": "2.30.1",
-    "gatsby-plugin-emotion": "5.2.0",
-    "gatsby-plugin-sharp": "2.12.0",
+    "gatsby": "2.32.3",
+    "gatsby-plugin-emotion": "5.4.0",
+    "gatsby-plugin-sharp": "2.14.1",
     "gatsby-theme-docz": "2.3.1",
-    "gatsby-transformer-sharp": "2.10.0",
+    "gatsby-transformer-sharp": "2.12.0",
     "jest": "26.6.3",
     "prettier": "2.2.1",
     "react": "17.0.1",
@@ -81,13 +81,13 @@
     "react-test-renderer": "17.0.1",
     "tsdx": "0.14.1",
     "tslib": "2.1.0",
-    "typescript": "4.1.3"
+    "typescript": "4.1.5"
   },
   "peerDependencies": {
     "react": ">=16.8.1",
     "react-dom": ">=16.8.1"
   },
   "resolutions": {
-    "@types/react": "17.0.0"
+    "@types/react": "17.0.2"
   }
 }

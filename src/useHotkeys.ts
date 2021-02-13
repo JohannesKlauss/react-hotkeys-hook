@@ -19,6 +19,7 @@ const isKeyboardEventTriggeredByInput = (ev: KeyboardEvent) => {
 
 export type Options = {
   filter?: typeof hotkeys.filter;
+  filterPreventDefault?: boolean;
   enableOnTags?: AvailableTags[];
   splitKey?: string;
   scope?: string;
@@ -35,12 +36,12 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     options = undefined;
   }
 
-  const { enableOnTags, filter, keyup, keydown } = options || {};
+  const { enableOnTags, filter, keyup, keydown, filterPreventDefault = true } = options || {};
   const ref = useRef<T | null>(null);
 
   const memoisedCallback = useCallback((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => {
     if (filter && !filter(keyboardEvent)) {
-      return false;
+      return !filterPreventDefault;
     }
 
     if (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, enableOnTags)) {
