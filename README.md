@@ -93,6 +93,16 @@ on .mdx files, check out the docz documentation: https://www.docz.site/docs/writ
 
 * Johannes Klauss
 
+### Contributors
+
+* [bernatmv](https://github.com/bernatmv)
+* [wheeler](https://github.com/wheeler)
+* [louisrli](https://github.com/louisrli)
+* [jameschao](https://github.com/jameschao)
+* [hmafzal](https://github.com/hmafzal)
+* [godspeedelbow](https://github.com/godspeedelbow)
+* [JoshuaKGoldberg](https://github.com/JoshuaKGoldberg)
+
 ---
 
 MIT License.
