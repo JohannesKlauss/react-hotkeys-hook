@@ -52,10 +52,11 @@ section on the hotkeys documentation for more info.
 gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
 to do this anymore by yourself.
 - `options: Options = {}`
-  - * `filter: (event: KeyboardEvent): boolean` is used to filter if a callback gets triggered depending on the keyboard event.
+  - `filter: (event: KeyboardEvent): boolean` is used to filter if a callback gets triggered depending on the keyboard event.
     **Breaking Change in `3.0.0`!** Prior to version `3.0.0` the filter settings was one global setting that applied to every
     hook. Since `3.0.0` this behavior changed. The `filter` option is now locally scoped to each call of `useHotkeys`.
-  - * `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`.
+  - `filterPreventDefault: boolean` is used to prevent/allow the default browser behavior for the keystroke when the filter return false (default value: `true`)
+  - `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`.
   - `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
     to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
   - `keyup: boolean` Determine if you want to listen on the keyup event
