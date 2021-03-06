@@ -57,6 +57,15 @@ function useLocalFilter(filter: () => boolean) {
   return count;
 }
 
+function useEnabledFlag(enabled: boolean) {
+  const [count, setCount] = useState(0);
+  const increment = () => setCount(count + 1);
+
+  useHotkeys('a', increment, {enabled});
+
+  return count;
+}
+
 const HotkeysOnInput = ({ onPress, useTags }: { onPress: () => void, useTags?: boolean }) => {
   useHotkeys('a', onPress, { enableOnTags: useTags ? ['INPUT'] : undefined });
 
@@ -303,16 +312,41 @@ test('useHotkeys should not be enabled on given form tags when tags is not set',
 });
 
 test('useHotkeys should use its own custom filter system instead of the global hotkeys one', () => {
-  const { result: result1 } = renderHook(() => useLocalFilter(() => false));
-  const { result: result2 } = renderHook(() => useLocalFilter(() => true));
+  const { result, rerender } = renderHook((returnFilterVal: boolean = false) => useLocalFilter(() => returnFilterVal));
 
-  expect(result1.current).toBe(0);
-  expect(result2.current).toBe(0);
+  expect(result.current).toBe(0);
 
   act(() => {
     fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
   });
 
-  expect(result1.current).toBe(0);
-  expect(result2.current).toBe(1);
+  expect(result.current).toBe(0);
+
+  rerender(true);
+
+  act(() => {
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
+  });
+
+  expect(result.current).toBe(1);
+});
+
+test('useHotkeys should not be enabled when enabled flag is set to false', () => {
+  const { result, rerender } = renderHook((enabled: boolean = false) => useEnabledFlag(enabled));
+
+  expect(result.current).toBe(0);
+
+  act(() => {
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
+  });
+
+  expect(result.current).toBe(0);
+
+  rerender(true);
+
+  act(() => {
+    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
+  });
+
+  expect(result.current).toBe(1);
 });
