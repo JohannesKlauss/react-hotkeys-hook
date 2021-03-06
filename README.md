@@ -103,6 +103,7 @@ on .mdx files, check out the docz documentation: https://www.docz.site/docs/writ
 * [hmafzal](https://github.com/hmafzal)
 * [godspeedelbow](https://github.com/godspeedelbow)
 * [JoshuaKGoldberg](https://github.com/JoshuaKGoldberg)
+* [ggascoigne](https://github.com/ggascoigne)
 
 ---
 

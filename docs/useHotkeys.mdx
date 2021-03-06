@@ -75,6 +75,7 @@ hook. Since `3.0.0` this behavior changed. The `filter` option is now locally sc
 return false (default value: `true`)
 * `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA`
 and `SELECT`.
+* `enabled: boolean` is used to prevent installation of the hotkey when set to false (default value: `true`)
 * `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
 to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
 * `keyup: boolean` Determine if you want to listen on the keyup event
