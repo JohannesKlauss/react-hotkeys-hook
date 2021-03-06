@@ -61,6 +61,7 @@ to do this anymore by yourself.
     to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
   - `keyup: boolean` Determine if you want to listen on the keyup event
   - `keydown: boolean` Determine if want to listen on the keydown event
+  - `enabled: boolean` is used to prevent installation of the hotkey when set to false (default value: `true`)
 - `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
 dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
 that will change over time, you should add this value to your deps array. Since most of the time your callback won't

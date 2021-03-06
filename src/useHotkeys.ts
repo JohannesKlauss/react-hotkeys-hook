@@ -18,6 +18,7 @@ const isKeyboardEventTriggeredByInput = (ev: KeyboardEvent) => {
 };
 
 export type Options = {
+  enabled?: boolean;
   filter?: typeof hotkeys.filter;
   filterPreventDefault?: boolean;
   enableOnTags?: AvailableTags[];
@@ -36,7 +37,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     options = undefined;
   }
 
-  const { enableOnTags, filter, keyup, keydown, filterPreventDefault = true } = options || {};
+  const { enableOnTags, filter, keyup, keydown, filterPreventDefault = true, enabled = true } = options as Options || {};
   const ref = useRef<T | null>(null);
 
   const memoisedCallback = useCallback((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => {
@@ -57,6 +58,10 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
   }, deps ? [ref, enableOnTags, filter, ...deps] : [ref, enableOnTags, filter]);
 
   useEffect(() => {
+    if(!enabled) {
+      return
+    }
+
     if (keyup && keydown !== true) {
       (options as Options).keydown = false;
     }
