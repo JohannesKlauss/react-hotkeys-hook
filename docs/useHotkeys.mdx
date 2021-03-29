@@ -22,8 +22,7 @@ useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent)
 modifier combination, etc. See [this](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts)
 section on the hotkeys documentation for more info.
 * `callback: (event: KeyboardEvent, handler: HotkeysEvent) => void`: Gets executed when the defined keystroke
-gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
-to do this anymore by yourself.
+gets hit by the user.
 * `options: Options = {}` Pass options directly to the hotkeys package. See [Options](#options) section for more details.
 * `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
 dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
@@ -38,12 +37,6 @@ learn more and see an example where you have to set this array.
 
 This will listen to the `ctrl+k` keystroke. If you press it, the counter increments by one. If `ctrl+l` gets pressed,
 the counter will decrement by one.
-
-### Important changes since 1.5.0!
-Due to the nature of how `useEffect` works and to prevent resetting the hotkeys handler during every render, before 1.5.0
-you had to memoise your callback yourself. Since this is tedious work and dependency arrays are a common pattern with
-React hooks, I decided to bring the memoisation inside the hook, so you don't have to deal with it. Please read the
-[**Memoisation**](#memoisation) section for more info on this.
 
 ```js
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -71,7 +64,7 @@ for an overview.
 * `filter: (event: KeyboardEvent): boolean` is used to filter if a callback gets triggered depending on the keyboard event.
 **Breaking Change in `3.0.0`!** Prior to version `3.0.0` the filter settings was one global setting that applied to every
 hook. Since `3.0.0` this behavior changed. The `filter` option is now locally scoped to each call of `useHotkeys`.
-* `filterPreventDefault: boolean` is used to prevent/allow the default browser behavior for the keystroke when the filter 
+* `filterPreventDefault: boolean` is used to prevent/allow the default browser behavior for the keystroke when the filter
 return false (default value: `true`)
 * `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA`
 and `SELECT`.
@@ -136,6 +129,26 @@ approach for `setAmount` like in the very first example:
       <div>
         Add {amount} dollars to my bank account.
       </div>
+    );
+  }}
+</Playground>
+
+## `contentEditable` prop
+
+As of version 3.3 the `contentEditable` prop does work as intended. The hook will not trigger any hotkeys while the user
+edits the field content.
+
+<Playground>
+  {() => {
+    const [amount, setAmount] = useState(0);
+    useHotkeys('f', () => setAmount(prevAmount => prevAmount + 100));
+    return (
+      <>
+        <div>
+          {amount >= 0 ? 'Add' : 'Remove'} {Math.abs(amount)} dollars {amount >= 0 ? 'from' : 'to'} my bank account.
+        </div>
+        <div contentEditable={true}>Edit this text.</div>
+      </>
     );
   }}
 </Playground>

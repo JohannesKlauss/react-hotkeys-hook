@@ -39,6 +39,7 @@
     ]
   },
   "jest": {
+    "setupFilesAfterEnv": ["./setupTests.js"],
     "testPathIgnorePatterns": [
       "pkg",
       ".docz",

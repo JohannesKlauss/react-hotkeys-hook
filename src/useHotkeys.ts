@@ -6,11 +6,10 @@ type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
 // We implement our own custom filter system.
 hotkeys.filter = () => true;
 
-const tagFilter = ({ target, srcElement }: KeyboardEvent, enableOnTags?: AvailableTags[]) => {
-  // @ts-ignore
-  const targetTagName = (target && target.tagName) || (srcElement && srcElement.tagName);
+const tagFilter = ({ target }: KeyboardEvent, enableOnTags?: AvailableTags[]) => {
+  const targetTagName = target && (target as HTMLElement).tagName;
 
-  return Boolean(targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags));
+  return Boolean((targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags)));
 };
 
 const isKeyboardEventTriggeredByInput = (ev: KeyboardEvent) => {
@@ -37,7 +36,14 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     options = undefined;
   }
 
-  const { enableOnTags, filter, keyup, keydown, filterPreventDefault = true, enabled = true } = options as Options || {};
+  const {
+    enableOnTags,
+    filter,
+    keyup,
+    keydown,
+    filterPreventDefault = true,
+    enabled = true,
+  } = options as Options || {};
   const ref = useRef<T | null>(null);
 
   const memoisedCallback = useCallback((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => {
@@ -45,7 +51,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
       return !filterPreventDefault;
     }
 
-    if (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, enableOnTags)) {
+    if (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, enableOnTags) || (keyboardEvent.target as HTMLElement)?.isContentEditable) {
       return true;
     }
 
@@ -59,7 +65,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
 
   useEffect(() => {
     if (!enabled) {
-      return
+      return;
     }
 
     if (keyup && keydown !== true) {
