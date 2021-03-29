@@ -1,6 +1,6 @@
 {
   "name": "react-hotkeys-hook",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "author": "Johannes Klauss",
   "main": "dist/index.js",
@@ -39,7 +39,9 @@
     ]
   },
   "jest": {
-    "setupFilesAfterEnv": ["./setupTests.js"],
+    "setupFilesAfterEnv": [
+      "./setupTests.js"
+    ],
     "testPathIgnorePatterns": [
       "pkg",
       ".docz",
