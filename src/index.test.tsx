@@ -106,6 +106,10 @@ test('useHotkeys should use correctly assign options and deps argument when usin
   userEvent.keyboard('{Shift>}A{/Shift}');
 
   expect(callback).toHaveBeenCalledTimes(2);
+
+  userEvent.keyboard('{Shift>}A{/Shift}');
+
+  expect(callback).toHaveBeenCalledTimes(3);
 });
 
 test('useHotkeys should only trigger once if neither keyup nor keydown are set', () => {
