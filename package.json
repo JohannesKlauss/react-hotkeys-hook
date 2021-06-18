@@ -1,6 +1,6 @@
 {
   "name": "react-hotkeys-hook",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "author": "Johannes Klauss",
   "main": "dist/index.js",
@@ -83,8 +83,5 @@
   "peerDependencies": {
     "react": ">=16.8.1",
     "react-dom": ">=16.8.1"
-  },
-  "resolutions": {
-    "@types/react": "17.0.11"
   }
 }
