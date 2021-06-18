@@ -1,76 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHotkeys } from './index';
-import { act, renderHook } from '@testing-library/react-hooks';
-import { act as reactAct, fireEvent, render } from '@testing-library/react';
-
-function useWrapper(keys: string) {
-  const [count, setCount] = useState(0);
-  const increment = () => setCount((x) => x + 1);
-
-  useHotkeys(keys, increment);
-
-  return count;
-}
-
-function useDeps(setDeps: boolean) {
-  const [count, setCount] = useState(0);
-  const increment = () => setCount(count + 1);
-
-  useHotkeys('a', increment, {}, setDeps ? [count] : []);
-
-  return count;
-}
-
-function useDepsAsThird() {
-  const [count, setCount] = useState(0);
-  const increment = () => setCount(count + 1);
-
-  useHotkeys('a', increment, [count]);
-
-  return count;
-}
-
-function useSplit() {
-  const [count, setCount] = useState(0);
-  const increment = () => setCount(count + 1);
-
-  useHotkeys('shift-a', increment, { splitKey: '-' });
-
-  return count;
-}
-
-function useSplitAndDeps() {
-  const [count, setCount] = useState(0);
-  const increment = () => setCount(count + 1);
-
-  useHotkeys('shift-a', increment, { splitKey: '-' }, [count]);
-
-  return count;
-}
-
-function useLocalFilter(filter: () => boolean) {
-  const [count, setCount] = useState(0);
-  const increment = () => setCount(count + 1);
-
-  useHotkeys('a', increment, {filter});
-
-  return count;
-}
-
-function useEnabledFlag(enabled: boolean) {
-  const [count, setCount] = useState(0);
-  const increment = () => setCount(count + 1);
-
-  useHotkeys('a', increment, {enabled});
-
-  return count;
-}
+import { renderHook } from '@testing-library/react-hooks';
+import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 const HotkeysOnInput = ({ onPress, useTags }: { onPress: () => void, useTags?: boolean }) => {
   useHotkeys('a', onPress, { enableOnTags: useTags ? ['INPUT'] : undefined });
 
   return (
-    <input type="text" data-testid={'input'}/>
+    <input type='text' data-testid={'input'} />
   );
 };
 
@@ -78,7 +16,7 @@ const HotkeysFilteredOnInput = ({ onPress, useTags }: { onPress: () => void, use
   useHotkeys('a', onPress, { enableOnTags: useTags ? ['TEXTAREA'] : undefined });
 
   return (
-    <input type="text" data-testid={'input'}/>
+    <input type='text' data-testid={'input'} />
   );
 };
 
@@ -86,7 +24,7 @@ const HotkeysOnKeyup = ({ onPress, keyup, keydown }: { onPress: () => void, keyu
   useHotkeys('a', onPress, { keyup, keydown });
 
   return (
-    <input type="text" data-testid={'input'}/>
+    <input type='text' data-testid={'input'} />
   );
 };
 
@@ -94,259 +32,182 @@ const HotkeysWithRef = ({ onPress }: { onPress: () => void }) => {
   const ref = useHotkeys<HTMLElement>('a', onPress);
 
   return (
-    <section ref={ref} tabIndex={0}>
-      <input type="text" data-testid={'input'}/>
+    <section ref={ref} tabIndex={0} data-testid={'container'}>
+      <input type='text' data-testid={'input'} />
     </section>
   );
 };
 
-test('useHotkeys should only fire when element is focused if a ref is set.', async () => {
-  let called = false;
+test('useHotkeys should only fire when element is focused if a ref is set.', () => {
+  const onPress = jest.fn();
 
-  const { container } = render(<HotkeysWithRef onPress={() => called = true}/>);
+  render(<HotkeysWithRef onPress={onPress} />);
 
-  const section = container.querySelector('section');
+  userEvent.keyboard('A');
 
-  expect(section).not.toBe(null);
+  expect(onPress).not.toBeCalled();
 
-  reactAct(() => {
-    fireEvent.keyDown(section!, { key: 'a', keyCode: 65 });
-    fireEvent.keyUp(section!, { key: 'a', keyCode: 65 });
-  });
+  userEvent.click(screen.getByTestId('container'));
+  userEvent.keyboard('A');
 
-  expect(called).toBe(false);
-
-  reactAct(() => {
-    section!.focus();
-  });
-
-  reactAct(() => {
-    fireEvent.keyDown(section!, { key: 'a', keyCode: 65 });
-  });
-
-  expect(called).toBe(true);
+  expect(onPress).toBeCalled();
 });
 
 test('useHotkeys should listen to key presses', () => {
-  const { result } = renderHook(() => useWrapper('a'));
+  const callback = jest.fn();
 
-  expect(result.current).toBe(0);
+  renderHook(() => useHotkeys('a', callback));
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  userEvent.keyboard('A');
 
-  expect(result.current).toBe(1);
+  expect(callback).toHaveBeenCalledTimes(1);
 });
 
-test('useHotkeys should listen to its own context', () => {
-  const resultA = renderHook(() => useWrapper('a'));
-  const resultB = renderHook(() => useWrapper('b'));
+test('useHotkeys correctly assign deps when used as third argument and options being omitted', async () => {
+  let count = 0;
+  const callback = jest.fn();
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  renderHook(() => useHotkeys('a', () => callback(++count), [count]));
 
-  expect(resultA.result.current).toBe(1);
-  expect(resultB.result.current).toBe(0);
-});
+  userEvent.keyboard('A');
 
-test('useHotkeys should rebuild callback after deps change', () => {
-  const resultA = renderHook(() => useDeps(false));
-  const resultB = renderHook(() => useDeps(true));
+  expect(callback).toHaveBeenCalledTimes(1);
+  expect(callback.mock.calls[0][0]).toEqual(1);
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  userEvent.keyboard('A');
 
-  expect(resultA.result.current).toBe(1);
-  expect(resultB.result.current).toBe(1);
-
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
-
-  expect(resultA.result.current).toBe(1);
-  expect(resultB.result.current).toBe(2);
-});
-
-test('useHotkeys correctly assign deps when used as third argument and options being omitted', () => {
-  const resultA = renderHook(() => useDepsAsThird());
-
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
-
-  expect(resultA.result.current).toBe(1);
-
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
-
-  expect(resultA.result.current).toBe(2);
+  expect(callback).toHaveBeenCalledTimes(2);
+  expect(callback.mock.calls[1][0]).toEqual(2);
 });
 
 test('useHotkeys should use correct char to split combinations', () => {
-  const resultA = renderHook(() => useSplit());
+  const callback = jest.fn();
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65, shiftKey: true });
-  });
+  renderHook(() => useHotkeys('Shift-A', callback, { splitKey: '-' }));
 
-  expect(resultA.result.current).toBe(1);
+  userEvent.keyboard('{Shift>}A{/Shift}');
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65, shiftKey: true });
-  });
+  expect(callback).toHaveBeenCalledTimes(1);
 
-  expect(resultA.result.current).toBe(1);
+  userEvent.keyboard('{Shift>}A{/Shift}');
+
+  expect(callback).toHaveBeenCalledTimes(2);
 });
 
 test('useHotkeys should use correctly assign options and deps argument when using all four arguments', () => {
-  const resultA = renderHook(() => useSplitAndDeps());
+  const callback = jest.fn();
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65, shiftKey: true });
-  });
+  renderHook(() => useHotkeys('shift-a', callback, { splitKey: '-' }, []));
 
-  expect(resultA.result.current).toBe(1);
+  userEvent.keyboard('{Shift>}A{/Shift}');
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65, shiftKey: true });
-  });
+  expect(callback).toHaveBeenCalledTimes(1);
 
-  expect(resultA.result.current).toBe(2);
+  userEvent.keyboard('{Shift>}A{/Shift}');
+
+  expect(callback).toHaveBeenCalledTimes(2);
 });
 
 test('useHotkeys should only trigger once if neither keyup nor keydown are set', () => {
-  let called = false;
+  const onPress = jest.fn();
 
-  render(<HotkeysOnKeyup onPress={() => called = true}/>);
+  render(<HotkeysOnKeyup onPress={onPress} />);
 
-  reactAct(() => {
-    fireEvent.keyUp(document.body, { key: 'a', keyCode: 65 });
-  });
+  fireEvent.keyUp(document.body, { key: 'a', keyCode: 65 });
 
-  expect(called).toBe(false);
+  expect(onPress).not.toHaveBeenCalled();
 
-  reactAct(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
 
-  expect(called).toBe(true);
+  expect(onPress).toHaveBeenCalled();
 });
 
 test('useHotkeys should only trigger once if keyup is set and keydown is not', () => {
-  let called = false;
+  const onPress = jest.fn();
 
-  render(<HotkeysOnKeyup onPress={() => called = true} keyup={true}/>);
+  render(<HotkeysOnKeyup onPress={onPress} keyup={true} />);
 
-  reactAct(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
 
-  expect(called).toBe(false);
+  expect(onPress).not.toHaveBeenCalled();
 
-  reactAct(() => {
-    fireEvent.keyUp(document.body, { key: 'a', keyCode: 65 });
-  });
+  fireEvent.keyUp(document.body, { key: 'a', keyCode: 65 });
 
-  expect(called).toBe(true);
+  expect(onPress).toHaveBeenCalled();
 });
 
 test('useHotkeys should trigger twice if keyup and keydown is set to true', () => {
   let called = false;
 
-  render(<HotkeysOnKeyup onPress={() => called = true} keyup={true} keydown={true}/>);
+  render(<HotkeysOnKeyup onPress={() => called = true} keyup={true} keydown={true} />);
 
-  reactAct(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  userEvent.keyboard('A');
 
   expect(called).toBe(true);
 
-  reactAct(() => {
-    fireEvent.keyUp(document.body, { key: 'a', keyCode: 65 });
-  });
+  userEvent.keyboard('A');
 
   expect(called).toBe(true);
 });
 
 test('useHotkeys should be enabled on given form tags', async () => {
   const onPress = jest.fn();
-  render(<HotkeysOnInput onPress={onPress} useTags={true}/>);
+  render(<HotkeysOnInput onPress={onPress} useTags={true} />);
 
   const input = document.querySelector('input');
 
   expect(input).not.toBe(null);
 
-  fireEvent.keyDown(input!, { key: 'a', keyCode: 65 });
+  userEvent.keyboard('A');
 
   expect(onPress).toHaveBeenCalled();
 });
 
 test('useHotkeys should not be enabled on given form tags when filter specifies different input field', async () => {
   const onPress = jest.fn();
-  render(<HotkeysFilteredOnInput onPress={onPress} useTags={true}/>);
+  render(<HotkeysFilteredOnInput onPress={onPress} useTags={true} />);
 
-  const input = document.querySelector('input');
-
-  expect(input).not.toBe(null);
-
-  fireEvent.keyDown(input!, { key: 'a', keyCode: 65 });
+  userEvent.type(screen.getByRole('textbox'), 'A');
 
   expect(onPress).toHaveBeenCalledTimes(0);
 });
 
 test('useHotkeys should not be enabled on given form tags when tags is not set', async () => {
   const onPress = jest.fn();
-  render(<HotkeysFilteredOnInput onPress={onPress} useTags={false}/>);
+  render(<HotkeysFilteredOnInput onPress={onPress} useTags={false} />);
 
-  const input = document.querySelector('input');
-
-  expect(input).not.toBe(null);
-
-  fireEvent.keyDown(input!, { key: 'a', keyCode: 65 });
+  userEvent.type(screen.getByRole('textbox'), 'A');
 
   expect(onPress).toHaveBeenCalledTimes(0);
 });
 
 test('useHotkeys should use its own custom filter system instead of the global hotkeys one', () => {
-  const { result, rerender } = renderHook((returnFilterVal: boolean = false) => useLocalFilter(() => returnFilterVal));
+  const callback = jest.fn();
+  const { rerender } = renderHook((returnFilterVal: boolean = false) => useHotkeys('a', callback, { filter: () => returnFilterVal }));
 
-  expect(result.current).toBe(0);
+  userEvent.keyboard('A');
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
-
-  expect(result.current).toBe(0);
+  expect(callback).not.toHaveBeenCalled()
 
   rerender(true);
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  userEvent.keyboard('A');
 
-  expect(result.current).toBe(1);
+  expect(callback).toHaveBeenCalledTimes(1)
 });
 
 test('useHotkeys should not be enabled when enabled flag is set to false', () => {
-  const { result, rerender } = renderHook((enabled: boolean = false) => useEnabledFlag(enabled));
+  const callback = jest.fn();
 
-  expect(result.current).toBe(0);
+  const { rerender } = renderHook((enabled: boolean = false) => useHotkeys('a', callback, { enabled }));
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  userEvent.keyboard('A');
 
-  expect(result.current).toBe(0);
+  expect(callback).not.toHaveBeenCalled();
 
   rerender(true);
 
-  act(() => {
-    fireEvent.keyDown(document.body, { key: 'a', keyCode: 65 });
-  });
+  userEvent.keyboard('A');
 
-  expect(result.current).toBe(1);
+  expect(callback).toHaveBeenCalledTimes(1);
 });
