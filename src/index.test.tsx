@@ -191,13 +191,13 @@ test('useHotkeys should use its own custom filter system instead of the global h
 
   userEvent.keyboard('A');
 
-  expect(callback).not.toHaveBeenCalled()
+  expect(callback).not.toHaveBeenCalled();
 
   rerender(true);
 
   userEvent.keyboard('A');
 
-  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback).toHaveBeenCalledTimes(1);
 });
 
 test('useHotkeys should not be enabled when enabled flag is set to false', () => {

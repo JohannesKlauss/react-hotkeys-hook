@@ -46,7 +46,6 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     enabled = true,
     enableOnContentEditable = false,
   } = options as Options || {};
-
   const ref = useRef<T | null>(null);
 
   // The return value of this callback determines if the browsers default behavior is prevented.
@@ -83,9 +82,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
 
     hotkeys(keys, (options as Options) || {}, memoisedCallback);
 
-    return () => {
-      hotkeys.unbind(keys, memoisedCallback)
-    };
+    return () => hotkeys.unbind(keys, memoisedCallback);
   }, [memoisedCallback, keys, enabled]);
 
   return ref;
