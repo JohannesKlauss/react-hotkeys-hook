@@ -3,6 +3,7 @@ import { useHotkeys } from './index';
 import { renderHook } from '@testing-library/react-hooks';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import hotkeys from 'hotkeys-js';
 
 const HotkeysOnInput = ({ onPress, useTags }: { onPress: () => void, useTags?: boolean }) => {
   useHotkeys('a', onPress, { enableOnTags: useTags ? ['INPUT'] : undefined });
@@ -215,3 +216,15 @@ test('useHotkeys should not be enabled when enabled flag is set to false', () =>
 
   expect(callback).toHaveBeenCalledTimes(1);
 });
+
+test('useHotkeys should unbind the hotkey when enabled is set from true to false', () => {
+  hotkeys.unbind = jest.fn();
+
+  const { rerender } = renderHook((enabled: boolean = true) => useHotkeys('a', () => true, { enabled }));
+
+  expect(hotkeys.unbind).not.toHaveBeenCalled()
+
+  rerender(false);
+
+  expect(hotkeys.unbind).toHaveBeenCalledTimes(1)
+})
