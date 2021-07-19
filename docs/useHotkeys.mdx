@@ -45,8 +45,8 @@ import { useHotkeys } from 'react-hotkeys-hook';
 <Playground>
   {() => {
     const [amount, setAmount] = useState(0);
-    useHotkeys('ctrl+a', () => setAmount(prevAmount => prevAmount + 100));
-    useHotkeys('ctrl+d', () => setAmount(prevAmount => prevAmount - 100));
+    useHotkeys('ctrl+k', () => setAmount(prevAmount => prevAmount + 100));
+    useHotkeys('ctrl+l', () => setAmount(prevAmount => prevAmount - 100));
     return (
       <div>
         {amount >= 0 ? 'Add' : 'Remove'} {Math.abs(amount)} dollars {amount >= 0 ? 'from' : 'to'} my bank account.
