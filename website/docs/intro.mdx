@@ -1,0 +1,35 @@
+---
+sidebar_position: 1
+---
+
+# Quick Start
+
+To get you up and running, install the react-hotkeys-hook package.
+
+```shell
+npm i react-hotkeys-hook
+```
+
+or if you want to use yarn:
+
+```shell
+yarn add react-hotkeys-hook
+```
+
+> Note: React 16.8+ is required for Hooks.
+
+## Usage
+
+```jsx
+import { useHotkeys } from 'react-hotkeys-hook';
+
+export function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  useHotkeys('a', () => setCount(count => count + 1));
+
+  return (
+    <span>{count}</span>
+  );
+}
+```
