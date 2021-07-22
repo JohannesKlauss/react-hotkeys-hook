@@ -46,10 +46,10 @@ useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent)
 ### Parameters
 - `keys: string`: Here you can set the key strokes you want the hook to listen to. You can use single or multiple keys,
 modifier combination, etc. See [this](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts)
-section on the hotkeys documentation for more info.
+section on the hotkeys documentation for more info. [Here is a demo](https://jinno.io/app/22/keys?source=react-hotkeys-hook)
 - `callback: (event: KeyboardEvent, handler: HotkeysEvent) => void`: Gets executed when the defined keystroke
 gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
-to do this anymore by yourself.
+to do this anymore by yourself. [Here is a demo](https://jinno.io/app/22/callback?source=react-hotkeys-hook)
 - `options: Options = {}`
   - `filter: (event: KeyboardEvent): boolean` is used to filter if a callback gets triggered depending on the keyboard event.
     **Breaking Change in `3.0.0`!** Prior to version `3.0.0` the filter settings was one global setting that applied to every
