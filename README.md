@@ -55,7 +55,7 @@ to do this anymore by yourself. [Here is a demo](https://jinno.io/app/22/callbac
     **Breaking Change in `3.0.0`!** Prior to version `3.0.0` the filter settings was one global setting that applied to every
     hook. Since `3.0.0` this behavior changed. The `filter` option is now locally scoped to each call of `useHotkeys`. [Here is a demo](https://jinno.io/app/22/filter?source=react-hotkeys-hook)
   - `filterPreventDefault: boolean` is used to prevent/allow the default browser behavior for the keystroke when the filter return false (default value: `true`). [Here is a demo](https://jinno.io/app/22/filterPreventDefault?source=react-hotkeys-hook)
-  - `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`. [Here is a demo](https://jinno.io/app/22/enableOnTags?source=react-hotkeys-hook)
+  - `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`.
   - `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
     to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`. [Here is a demo](https://jinno.io/app/22/splitKey?source=react-hotkeys-hook)
   - `keyup: boolean` Determine if you want to listen on the keyup event. [Here is a demo](https://jinno.io/app/22/keyup?source=react-hotkeys-hook)
