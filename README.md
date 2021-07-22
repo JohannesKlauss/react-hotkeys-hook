@@ -53,14 +53,14 @@ to do this anymore by yourself. [Here is a demo](https://jinno.io/app/22/callbac
 - `options: Options = {}`
   - `filter: (event: KeyboardEvent): boolean` is used to filter if a callback gets triggered depending on the keyboard event.
     **Breaking Change in `3.0.0`!** Prior to version `3.0.0` the filter settings was one global setting that applied to every
-    hook. Since `3.0.0` this behavior changed. The `filter` option is now locally scoped to each call of `useHotkeys`.
-  - `filterPreventDefault: boolean` is used to prevent/allow the default browser behavior for the keystroke when the filter return false (default value: `true`)
-  - `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`.
+    hook. Since `3.0.0` this behavior changed. The `filter` option is now locally scoped to each call of `useHotkeys`. [Here is a demo](https://jinno.io/app/22/filter?source=react-hotkeys-hook)
+  - `filterPreventDefault: boolean` is used to prevent/allow the default browser behavior for the keystroke when the filter return false (default value: `true`). [Here is a demo](https://jinno.io/app/22/filterPreventDefault?source=react-hotkeys-hook)
+  - `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`. [Here is a demo](https://jinno.io/app/22/enableOnTags?source=react-hotkeys-hook)
   - `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
-    to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
-  - `keyup: boolean` Determine if you want to listen on the keyup event
-  - `keydown: boolean` Determine if want to listen on the keydown event
-  - `enabled: boolean` is used to prevent installation of the hotkey when set to false (default value: `true`)
+    to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`. [Here is a demo](https://jinno.io/app/22/splitKey?source=react-hotkeys-hook)
+  - `keyup: boolean` Determine if you want to listen on the keyup event. [Here is a demo](https://jinno.io/app/22/keyup?source=react-hotkeys-hook)
+  - `keydown: boolean` Determine if want to listen on the keydown event. [Here is a demo](https://jinno.io/app/22/keydown?source=react-hotkeys-hook)
+  - `enabled: boolean` is used to prevent installation of the hotkey when set to false (default value: `true`). [Here is a demo](https://jinno.io/app/22/enabled?source=react-hotkeys-hook)
 - `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
 dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
 that will change over time, you should add this value to your deps array. Since most of the time your callback won't
