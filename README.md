@@ -2,6 +2,11 @@
 React hook for using keyboard shortcuts in components.
 This is a hook version for the [hotkeys] package.
 
+## [Join the discussion for version 4!](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574)
+
+If you use this package please share your thoughts on how we can improve this hook with version 4.
+Please engage at the corresponding [Github issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574).
+
 ### Documentation and live example
 
 https://johannesklauss.github.io/react-hotkeys-hook/

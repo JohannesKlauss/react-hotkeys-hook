@@ -1,7 +1,8 @@
 {
   "name": "react-hotkeys-hook",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
+  "homepage": "https://johannesklauss.github.io/react-hotkeys-hook/",
   "author": "Johannes Klauss",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -58,9 +59,9 @@
     "hotkeys-js": "3.8.7"
   },
   "devDependencies": {
-    "@babel/core": "7.14.6",
+    "@babel/core": "7.14.8",
     "@babel/plugin-proposal-class-properties": "7.14.5",
-    "@babel/preset-env": "7.14.7",
+    "@babel/preset-env": "7.14.8",
     "@babel/preset-react": "7.14.5",
     "@babel/preset-typescript": "7.14.5",
     "@testing-library/react": "12.0.0",
