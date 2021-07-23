@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+
+# Quick Start
+
+To get you up and running, install the react-hotkeys-hook package.
+
+## Install
+
+<Tabs
+  defaultValue="yarn"
+  values={[
+    {label: 'Yarn', value: 'yarn'},
+    {label: 'NPM', value: 'npm'},
+  ]}>
+  <TabItem value="yarn">
+    <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
+  </TabItem>
+  <TabItem value="npm">
+    <CodeBlock className="language-shell">npm i react-hotkeys-hook --save</CodeBlock>
+  </TabItem>
+</Tabs>
+
+> Note: React 16.8+ is required to use Hooks.
+
+## Usage
+
+```jsx
+import { useHotkeys } from 'react-hotkeys-hook';
+
+export function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  useHotkeys('a', () => setCount(count => count + 1));
+
+  return (
+    <span>{count}</span>
+  );
+}
+```
