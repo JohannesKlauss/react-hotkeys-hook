@@ -23,3 +23,8 @@
   align-items: center;
   justify-content: center;
 }
+
+.heroProjectTagline {
+  font-size: 60px;
+  margin: 0;
+}

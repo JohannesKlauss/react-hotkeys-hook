@@ -24,6 +24,11 @@ module.exports = {
           label: 'Documentation',
         },
         {
+          to: 'blog',
+          label: 'Blog',
+          position: 'left'
+        },
+        {
           href: 'https://github.com/JohannesKlauss/react-hotkeys-hook',
           label: 'GitHub',
           position: 'right',
@@ -71,7 +76,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/JohannesKlauss/react-hotkeys-hook/edit/master/website/',
+            'https://github.com/JohannesKlauss/react-hotkeys-hook/edit/master/documentation/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
