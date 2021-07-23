@@ -251,6 +251,8 @@ useHotkeys('a', () => someCallback, {
 
 ## Return value
 
+### `React.MutableRef<T | null>`
+
 The `useHotkeys` hook returns a React ref. This ref by default holds the value of `null`. You can use this ref to only
 trigger the hotkeys if a specific element has been focused by the user.
 
@@ -265,7 +267,7 @@ function App() {
       <button style={{ padding: "30px", background: "aquamarine" }}>
         Focusing this area won't trigger the hotkey.
       </button>
-      <button ref={ref} style={{ padding: "30px", background: "crimson" }}>
+      <button style={{ padding: "30px", background: "crimson" }} ref={ref}>
         Focusing this area will trigger the hotkey.
       </button>
     </div>
@@ -291,12 +293,14 @@ function App() {
       <div style={{ padding: "30px", background: "aquamarine" }} tabIndex={0}>
         Focusing this area won't trigger the hotkey.
       </div>
-      <div ref={ref} style={{ padding: "30px", background: "crimson" }} tabIndex={0}>
+      <div style={{ padding: "30px", background: "crimson" }} ref={ref} tabIndex={0}>
         Focusing this area will trigger the hotkey.
       </div>
     </div>
   );
 }
 ```
+
+[![Edit beautiful-snow-zlorf](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/beautiful-snow-zlorf?fontsize=14&hidenavigation=1&theme=dark)
 
 :::
