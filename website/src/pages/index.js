@@ -21,7 +21,7 @@ function HomepageHeader() {
 
           <Link
             className="button button--primary button--lg"
-            to="/docs/use-hotkeys">
+            to="/docs/documentation/use-hotkeys">
             Documentation
           </Link>
         </div>
