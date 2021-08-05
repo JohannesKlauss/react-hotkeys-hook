@@ -12,7 +12,7 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'Johannes Klauss', // Usually your GitHub org/user name.
   projectName: 'react-hotkeys-hook', // Usually your repo name.
-  plugins: ['@docusaurus/theme-live-codeblock'],
+  themes: ['@docusaurus/theme-live-codeblock'],
   themeConfig: {
     navbar: {
       title: 'React Hotkeys Hook',

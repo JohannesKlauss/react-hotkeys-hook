@@ -4,129 +4,102 @@ sidebar_position: 2
 
 # useHotkeys
 
-Docusaurus supports **[Markdown](https://daringfireball.net/projects/markdown/syntax)** and a few **additional features**.
+:::tip You can edit all the code examples
+This documentation is using [react-live](https://react-live.netlify.app/), so you can edit the code above and
+immediately see the results of your changes.
+:::
 
-## Front Matter
+## Basic Usage
 
-Markdown documents have metadata at the top called [Front Matter](https://jekyllrb.com/docs/front-matter/):
+### Simple Hotkey
 
-```text title="my-doc.md"
-// highlight-start
----
-id: my-doc-id
-title: My document title
-description: My document description
-slug: /my-custom-url
----
-// highlight-end
+The most basic usage for the hook is to assign a hotkey you want to listen to and a callback to get executed once the user
+hits that key.
 
-## Markdown heading
+```jsx live
+function ExampleComponent() {
+  useHotkeys('a', () => alert('Key a was pressed'))
 
-Markdown text with [links](./hello.md)
-```
-
-## Links
-
-Regular Markdown links are supported, using url paths or relative file paths.
-
-```md
-Let's see how to [Create a page](/create-a-page).
-```
-
-```md
-Let's see how to [Create a page](./create-a-page.md).
-```
-
-**Result:** Let's see how to [Create a page](./create-a-page.md).
-
-## Code Blocks
-
-Markdown code blocks are supported with Syntax highlighting.
-
-    ```jsx title="src/components/HelloDocusaurus.js"
-    function HelloDocusaurus() {
-        return (
-            <h1>Hello, Docusaurus!</h1>
-        )
-    }
-    ```
-
-```jsx title="src/components/HelloDocusaurus.js"
-function HelloDocusaurus() {
-  return <h1>Hello, Docusaurus!</h1>;
+  return (
+    <span>Press the a key to see it work.</span>
+  )
 }
 ```
 
-## Admonitions
+> The hotkeys won't work if any of the Live Editors is focused.
 
-Docusaurus has a special syntax to create admonitions and callouts:
+***
 
-    :::tip My tip
+Inside the callback you can do whatever you like. One common use case is to alter some component state:
 
-    Use this awesome feature option
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('b', () => setCount(prevCount => prevCount + 1))
 
-    :::
-
-    :::danger Take care
-
-    This action is dangerous
-
-    :::
-
-:::tip My tip
-
-Use this awesome feature option
-
-:::
-
-:::danger Take care
-
-This action is dangerous
-
-:::
-
-## MDX and React Components
-
-[MDX](https://mdxjs.com/) can make your documentation more **interactive** and allows using any **React components inside Markdown**:
-
-```jsx
-export const Highlight = ({children, color}) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '20px',
-      color: '#fff',
-      padding: '10px',
-      cursor: 'pointer',
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`)
-    }}>
-    {children}
-  </span>
-);
-
-This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
-
-This is <Highlight color="#1877F2">Facebook blue</Highlight> !
+  return (
+    <span>Pressed the 'b' key {count} times.</span>
+  )
+}
 ```
 
-export const Highlight = ({children, color}) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '20px',
-      color: '#fff',
-      padding: '10px',
-      cursor: 'pointer',
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`);
-    }}>
-    {children}
-  </span>
-);
+`useHotkeys` will create the listener on component mount and destroy the listener once the component unmounts.
 
-This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
+### Keystrokes
 
-This is <Highlight color="#1877F2">Facebook blue</Highlight> !
+You can also listen to keystrokes, that is a combination of keys that the user has to hit in order to execute the callback.
+One example would be a Jira like UI that listens to the `Shift+C` keystroke to create a new ticket:
+
+```jsx live
+function CreateIssue() {
+  const [showIssueCreatorModal, setShowIssueCreatorModal] = useState(false)
+
+  useHotkeys('shift+c', () => setShowIssueCreatorModal(true))
+
+  return (
+    <>
+      {showIssueCreatorModal && <div>MODAL CONTENT</div>}
+      {!showIssueCreatorModal && <div>issue list</div>}
+    </>
+  )
+}
+```
+
+This is not restricted to a combination of two keys. You can also do things like `Ctrl+Shift+A+C` (maybe not the most
+intuitive keystroke for a user to memorize, though).
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('ctrl+shift+a+c', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Pressed the 'ctrl+shift+a+c' key {count} times.</span>
+  )
+}
+```
+
+:::note the hotkeys arguments is case-insensitive
+It doesn't matter if you listen for `CTRL+S`, `Ctrl+s`, `ctrl+S` or any other possible way of writing the keys in different
+cases. They all will listen to the user pressing the `ctrl` and the `s` key. This also means that upper case letters
+are treated as lower case letters. If you want to listen to the user pressing an upper case `S` letter, you'd have to listen
+to `shift+s`.
+:::
+
+### Multiple hotkeys
+
+You can also listen to multiple keystrokes and/or hotkeys and trigger the same callback. Combinations are separated by
+a comma sign:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('ctrl+shift+a, c, shift+c', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Received the combination {count} times.</span>
+  )
+}
+```
+
+## Advanced Usage

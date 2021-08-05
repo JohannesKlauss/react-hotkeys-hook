@@ -9,6 +9,7 @@ import GitHubButton from 'react-github-btn';
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
+
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className='container'>
@@ -53,7 +54,7 @@ export default function Home() {
           {`function MyComponent() {
   const [count, setCount] = useState(0);
 
-  useHotkeys('a', () => setCount(count => count + 1));
+  useHotkeys('a', () => setCount(prevCount => prevCount + 1));
 
   return (
     <span>{count}</span>
