@@ -49,6 +49,23 @@ module.exports = {
               label: 'useHotkeys',
               to: '/docs/documentation/use-hotkeys',
             },
+            {
+              label: 'isHotkeyPressed',
+              to: '/docs/documentation/is-hotkey-pressed',
+            },
+          ],
+        },
+        {
+          title: 'API',
+          items: [
+            {
+              label: 'useHotkeys',
+              to: '/docs/api/use-hotkeys',
+            },
+            {
+              label: 'isHotkeyPressed',
+              to: '/docs/api/is-hotkey-pressed',
+            },
           ],
         },
         {

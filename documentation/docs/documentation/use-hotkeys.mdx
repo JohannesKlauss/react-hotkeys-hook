@@ -4,16 +4,32 @@ sidebar_position: 2
 
 # useHotkeys
 
+This hook allows us to listen to hotkeys in a declarative way.
+
 :::tip You can edit all the code examples
-This documentation is using [react-live](https://react-live.netlify.app/), so you can edit the code above and
+This documentation is using [react-live](https://react-live.netlify.app/), so you can edit the code and
 immediately see the results of your changes.
 :::
 
 ## Basic Usage
 
+Import the `useHotkeys` hook from the package:
+
+```js
+import { useHotkeys } from 'react-hotkeys-hook';
+```
+
+or if you are using `require` style syntax:
+
+```js
+const { useHotkeys } = require('react-hotkeys-hook')
+// or
+const useHotkeys = require('react-hotkeys-hook').useHotkeys
+```
+
 ### Simple Hotkey
 
-The most basic usage for the hook is to assign a hotkey you want to listen to and a callback to get executed once the user
+The most basic usage for the hook is to assign a hotkey we want to listen to and a callback to get executed once the user
 hits that key.
 
 ```jsx live
@@ -26,11 +42,11 @@ function ExampleComponent() {
 }
 ```
 
-> The hotkeys won't work if any of the Live Editors is focused.
+> The hotkeys won't work if any of the Live Editor is focused.
 
 ***
 
-Inside the callback you can do whatever you like. One common use case is to alter some component state:
+Inside the callback we can do whatever we like. One common use case is to alter some component state:
 
 ```jsx live
 function ExampleComponent() {
@@ -80,9 +96,9 @@ function ExampleComponent() {
 ```
 
 :::note the hotkeys arguments is case-insensitive
-It doesn't matter if you listen for `CTRL+S`, `Ctrl+s`, `ctrl+S` or any other possible way of writing the keys in different
+It doesn't matter if we listen for `CTRL+S`, `Ctrl+s`, `ctrl+S` or any other possible way of writing the keys in different
 cases. They all will listen to the user pressing the `ctrl` and the `s` key. This also means that upper case letters
-are treated as lower case letters. If you want to listen to the user pressing an upper case `S` letter, you'd have to listen
+are treated as lower case letters. If we want to listen to the user pressing an upper case `S` letter, you'd have to listen
 to `shift+s`.
 :::
 

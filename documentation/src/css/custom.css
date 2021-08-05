@@ -67,6 +67,11 @@ html[data-theme=dark] {
   --ifm-color-danger-contrast-foreground: #ffebec;
 }
 
+blockquote {
+  border-left: 6px solid var(--ifm-color-primary-lighter);
+  color: var(--ifm-color-primary-lighter);
+}
+
 .alert {
   --ifm-code-background: var(--ifm-alert-background-color-highlight);
   --ifm-link-color: var(--ifm-alert-foreground-color);

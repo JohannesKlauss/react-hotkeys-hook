@@ -6,13 +6,15 @@
  */
 
 import React from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys, useIsHotkeyPressed, isHotkeyPressed } from 'react-hotkeys-hook';
 
 // Add react-live imports you need here
 const ReactLiveScope = {
   React,
   ...React,
   useHotkeys,
+  useIsHotkeyPressed,
+  isHotkeyPressed,
 };
 
 export default ReactLiveScope;

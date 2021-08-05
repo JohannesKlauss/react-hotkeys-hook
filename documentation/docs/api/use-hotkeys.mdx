@@ -8,7 +8,7 @@ import { useHotkeys } from "../../../src";
 
 # useHotkeys API
 
-Main function signature:
+Function signature:
 
 ```ts
 function useHotkeys<T extends Element>(
@@ -29,7 +29,7 @@ function useHotkeys<T extends Element>(
 keys: string
 ```
 
-Set the keystrokes you want the hook to listen to. You can use single or multiple keys,
+Set the keystrokes we want the hook to listen to. You can use single or multiple keys,
 modifier combinations, etc. See [this guide](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts) of the underlying
 hotkeys package for all possible shortcuts.
 
@@ -46,7 +46,7 @@ useHotkeys('ctrl+s, shift+w', () => alert('We\'re using modifiers now!'))
 ```
 
 :::info Using the alt modifier
-The alt modifier has its own special handling. To check if an altKey was pressed you need to listen to all keys and check
+The alt modifier has its own special handling. To check if an altKey was pressed we need to listen to all keys and check
 for the alt modifier in the event object:
 
 ```jsx
@@ -73,7 +73,7 @@ useHotkeys('w, a, s, d', () => alert('Player moved!'))
 
 :::tip Differentiating between multiple possible keys
 
-If you use a combination of possible keys that use the same hook, you can use `handler.key` to check which key the user
+If we use a combination of possible keys that use the same hook, we can use `handler.key` to check which key the user
 pressed.
 
 ```jsx
@@ -111,19 +111,19 @@ check out the [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Ke
 
 #### `handler`
 
-The `handler` holds information about the pressed key. In general, you should only need this object to handle you keyboard
+The `handler` holds information about the pressed key. In general, we should only need this object to handle our keyboard
 events.
 The most important property of the `handler` object is the `key` prop:
 
-* `key: string` - This will hold the pressed hit keystroke. So if you use multiple possible keystroke combinations for the same callback
-you can use this property to check which specific keystroke was pressed.
+* `key: string` - This will hold the pressed hit keystroke. So if we use multiple possible keystroke combinations for the same callback
+we can use this property to check which specific keystroke was pressed.
 
-> There are more properties attached to the handle that currently don't get populated with values. So you can safely ignore those.
+> There are more properties attached to the handle that currently don't get populated with values. So we can safely ignore those.
 
 :::info The callback gets memoised
 
-The callback you pass into the hook gets memoised, so every variable you reference inside the callback must be added to the
-dependencies array, otherwise you will get stale values. For more on memoisation in the context of React hooks see __###TODO_Add Link to Memoisation###__
+The callback we pass into the hook gets memoised, so every variable we reference inside the callback must be added to the
+dependencies array, otherwise we will get stale values. For more on memoisation in the context of React hooks see __###TODO_Add Link to Memoisation###__
 
 :::
 
@@ -144,6 +144,22 @@ const options = {
   splitKey: '+',
   keyup: true,
   keydown: false
+};
+```
+
+```ts
+// Type Definitions
+type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
+
+type Options = {
+  enabled?: boolean;
+  filter?: (event: KeyboardEvent) => boolean;
+  filterPreventDefault?: boolean;
+  enableOnTags?: AvailableTags[];
+  enableOnContentEditable?: boolean;
+  splitKey?: string;
+  keyup?: boolean;
+  keydown?: boolean;
 };
 ```
 
@@ -187,7 +203,7 @@ useHotkeys('command+s', someCallback, {
 enabledOnTags: string[] // default: undefined
 ```
 
-Normally you do not want a hotkey being triggered while a user types something into an input field. In some cases however
+Normally we do not want a hotkey being triggered while a user types something into an input field. In some cases however
 this might desirable. You can enable the callback trigger for an input tag using the following values:
 
 `INPUT`, `TEXTAREA`, `SELECT`
@@ -222,7 +238,7 @@ This problem will be addressed in the upcoming Version 4.
 keyup: boolean // default: false
 ```
 
-Set this to `true` if you want the hook to trigger your callback on the browsers `keyUp` event.
+Set this to `true` if we want the hook to trigger our callback on the browsers `keyUp` event.
 
 ##### `keydown`
 
@@ -230,13 +246,13 @@ Set this to `true` if you want the hook to trigger your callback on the browsers
 keydown: boolean // default: true
 ```
 
-Set this to `true` if you want the hook to trigger your callback on the browsers `keyDown` event. This is the default behavior.
+Set this to `true` if we want the hook to trigger our callback on the browsers `keyDown` event. This is the default behavior.
 
 :::info Setting `keydown` __and__ `keyup`
-If you set `keyup` to `true` and __don't__ set the `keydown` prop (leaving the default), React Hotkeys Hook will assume
-that you want to only listen to the browsers `keyUp` event.
+If we set `keyup` to `true` and __don't__ set the `keydown` prop (leaving the default), React Hotkeys Hook will assume
+that we want to only listen to the browsers `keyUp` event.
 
-If you in fact want the callback to get triggered by both events, you have to explicitly set both properties like so:
+If we in fact want the callback to get triggered by both events, we have to explicitly set both properties like so:
 
 ```js
 useHotkeys('a', () => someCallback, {
@@ -249,6 +265,16 @@ useHotkeys('a', () => someCallback, {
 
 ***
 
+### `deps`
+
+```ts
+deps: any[] // default: []
+```
+
+The dependency array lets we use the hook just like Reacts internal `useCallback` or `useMemo` hook. This where our
+dependencies of the callback live. If for example our callback actions depend on a referentially unstable value or a
+value that will change over time, we should add this value to our deps array. __###TODO_Add Link to Memoisation###__
+
 ## Return value
 
 ### `React.MutableRef<T | null>`
@@ -256,7 +282,7 @@ useHotkeys('a', () => someCallback, {
 The `useHotkeys` hook returns a React ref. This ref by default holds the value of `null`. You can use this ref to only
 trigger the hotkeys if a specific element has been focused by the user.
 
-```jsx
+```jsx live
 function App() {
   const [count, setCount] = useState(0);
   const ref = useHotkeys("s", () => setCount((prevCount) => prevCount + 1));
@@ -275,14 +301,12 @@ function App() {
 }
 ```
 
-[![Edit suspicious-taussig-g9bdd](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/suspicious-taussig-g9bdd?fontsize=14&hidenavigation=1&theme=dark)
-
 :::info Not every html tag is able to receive focus by default
 Elements that don't provide any native interactivity like `<div>`, `<span>`, `<p>`, etc. cannot receive a focus by default.
-If you want to use `<div>` tags instead of the `<button>` tags in the example above you have to provide a `tabIndex` prop
-to the tag, like so:
+If we want to use `<div>` tags instead of the `<button>` tags in the example above we have to provide a `tabIndex` prop
+to the tag. This way the focusing will work with all tags.
 
-```jsx
+```jsx live
 function App() {
   const [count, setCount] = useState(0);
   const ref = useHotkeys("s", () => setCount((prevCount) => prevCount + 1));
@@ -290,7 +314,7 @@ function App() {
   return (
     <div>
       <div style={{ padding: "30px" }}>Count: {count}</div>
-      <div style={{ padding: "30px", background: "aquamarine" }} tabIndex={0}>
+      <div style={{ padding: "30px", background: "black" }} tabIndex={0}>
         Focusing this area won't trigger the hotkey.
       </div>
       <div style={{ padding: "30px", background: "crimson" }} ref={ref} tabIndex={0}>
@@ -301,6 +325,30 @@ function App() {
 }
 ```
 
-[![Edit beautiful-snow-zlorf](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/beautiful-snow-zlorf?fontsize=14&hidenavigation=1&theme=dark)
-
 :::
+
+## Function signature overloads
+
+There is a common case where we want to pass dependencies to the hook but no options object. Normally we would need
+to write that out like this:
+
+```js
+useHotkeys('a', () => someDependency, undefined, [someDependency]);
+```
+
+To streamline this use case the hook accepts function overloads. With this
+we can pass a dependency array as the third argument instead of the fourth.
+
+```ts
+function useHotkeys<T extends Element>(
+  keys: string,
+  callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
+  deps: any[] = []
+): React.MutableRef<T | null>
+```
+
+So we are able to use the hook like this:
+
+```js
+useHotkeys('a', () => someDependency, [someDependency]);
+```

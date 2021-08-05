@@ -1,0 +1,26 @@
+---
+sidebar_position: 3
+title: useIsHotkeyPressed
+---
+
+# useIsHotkeyPressed API
+
+:::danger This hook is deprecated
+Please do not use this hook anymore since it will be removed in version 4. Instead please use the more direct approach by
+importing the [`isHotkeyPressed`](/docs/api/is-hotkey-pressed) function.
+:::
+
+Function signature:
+
+```ts
+function useIsHotkeyPressed(): (key: string | number) => boolean
+```
+
+This hook allows us to check on function execution if a specific key is pressed by the user.
+If a user presses a button we might want to check if a key is pressed down to execute an alternative action for that button.
+
+```jsx
+const isHotkeyPressed = useIsHotkeyPressed();
+
+const onClick = () => isHotkeyPressed('shift') ? setCount(count - 1) : setCount(count + 1);
+```
