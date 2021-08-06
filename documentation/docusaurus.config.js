@@ -72,8 +72,20 @@ module.exports = {
           title: 'More',
           items: [
             {
+              label: 'Recipes',
+              href: 'https://github.com/JohannesKlauss/react-hotkeys-hook',
+            },
+            {
+              label: 'FAQ',
+              href: 'https://github.com/JohannesKlauss/react-hotkeys-hook',
+            },
+            {
               label: 'GitHub',
               href: 'https://github.com/JohannesKlauss/react-hotkeys-hook',
+            },
+            {
+              label: 'StackOverflow',
+              href: 'https://stackoverflow.com/search?page=1&tab=Relevance&q=react-hotkeys-hook',
             },
           ],
         },

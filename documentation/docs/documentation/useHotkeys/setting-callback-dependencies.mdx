@@ -1,0 +1,61 @@
+---
+sidebar_position: 3
+title: "Callback Dependencies"
+---
+
+# Setting callback dependencies
+
+The callback we pass to `useHotkeys` gets memoised automatically to prevent unnecessary re-renders. This can lead to
+problems with [stale state](https://reactjs.org/docs/hooks-faq.html#why-am-i-seeing-stale-props-or-state-inside-my-function).
+To prevent those problems, the hook accepts a dependencies array, just like Reacts internal
+[`useEffect`](https://reactjs.org/docs/hooks-effect.html), [`useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) and
+[`useCallback`](https://reactjs.org/docs/hooks-reference.html#usecallback) hooks.
+
+> The general rule is to put every unstable reference used inside the callback into the dependency array.
+
+Let's change the second example up a bit to illustrate the problem. Just as a reminder, we build a simple counter
+component:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  const ref = useHotkeys('b', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span ref={ref} tabIndex={-1}>Pressed the 'b' key {count} times.</span>
+  )
+}
+```
+
+Remember, that we are using the `ref` to scope our hotkey to this specific component.
+
+Now, what if we change up the code just a bit?
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  const ref = useHotkeys('b', () => setCount(count + 1))
+
+  return (
+    <span ref={ref} tabIndex={-1}>Pressed the 'b' key {count} times.</span>
+  )
+}
+```
+
+While the first component works as expected, the second does not and stops increasing `count` once we pressed the `'b'`
+key. This is called stale state. We are referencing a variable that changes over time. Since our callback gets memoised
+inside `useHotkeys` hook, the variable `count` inside the callback will always hold the value of `0`.
+
+To solve this problem, we could either go to the previous example, but is specific to use state. What if we want reference
+something other than a state variable, like a `useMemo` result? We can use the dependency array for that!
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  const ref = useHotkeys('b', () => setCount(count + 1), [count])
+
+  return (
+    <span ref={ref} tabIndex={-1}>Pressed the 'b' key {count} times.</span>
+  )
+}
+```

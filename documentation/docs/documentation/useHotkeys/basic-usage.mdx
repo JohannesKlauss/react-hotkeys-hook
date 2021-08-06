@@ -1,17 +1,20 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
+title: "Basic Usage"
 ---
+
+import UnreferencedHotkeysNotice from '../../../src/components/UnreferencedHotkeysNotice';
 
 # useHotkeys
 
 This hook allows us to listen to hotkeys in a declarative way.
 
-:::tip You can edit all the code examples
-This documentation is using [react-live](https://react-live.netlify.app/), so you can edit the code and
+:::tip tip
+This documentation is using [react-live](https://react-live.netlify.app/), so you can edit the code of every example and
 immediately see the results of your changes.
 :::
 
-## Basic Usage
+# Basic Usage
 
 Import the `useHotkeys` hook from the package:
 
@@ -27,7 +30,7 @@ const { useHotkeys } = require('react-hotkeys-hook')
 const useHotkeys = require('react-hotkeys-hook').useHotkeys
 ```
 
-### Simple Hotkey
+## Simple Hotkey
 
 The most basic usage for the hook is to assign a hotkey we want to listen to and a callback to get executed once the user
 hits that key.
@@ -61,7 +64,27 @@ function ExampleComponent() {
 
 `useHotkeys` will create the listener on component mount and destroy the listener once the component unmounts.
 
-### Keystrokes
+***
+
+## Multiple hotkeys per component
+
+Since `useHotkeys` is a hook, we can use it in one component as much as we like:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('q', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('w', () => setCount(prevCount => prevCount - 1))
+
+  return (
+    <span>The count is {count}.</span>
+  )
+}
+```
+
+***
+
+## Keystrokes
 
 You can also listen to keystrokes, that is a combination of keys that the user has to hit in order to execute the callback.
 One example would be a Jira like UI that listens to the `Shift+C` keystroke to create a new ticket:
@@ -102,7 +125,9 @@ are treated as lower case letters. If we want to listen to the user pressing an 
 to `shift+s`.
 :::
 
-### Multiple hotkeys
+***
+
+## Multiple hotkeys
 
 You can also listen to multiple keystrokes and/or hotkeys and trigger the same callback. Combinations are separated by
 a comma sign:
@@ -110,7 +135,7 @@ a comma sign:
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+shift+a, c, shift+c', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('ctrl+shift+a+c, c, shift+c', () => setCount(prevCount => prevCount + 1))
 
   return (
     <span>Received the combination {count} times.</span>
@@ -118,4 +143,4 @@ function ExampleComponent() {
 }
 ```
 
-## Advanced Usage
+<UnreferencedHotkeysNotice hotkeyCombination={'ctrl+shift+a+c, shift+c'}/>

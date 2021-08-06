@@ -1,0 +1,10 @@
+---
+sidebar_position: 4
+title: "Disable Hotkeys"
+---
+
+# Disable Hotkeys with the `enabled` flag
+
+We are now able to register our hotkeys, scope them to the component (or part of a component) and prevent stale state
+inside our callback. But our hotkeys are always active. If the component has received focus, it will always trigger. However,
+sometimes we want to dynamically decide if the hotkey should even be enabled.

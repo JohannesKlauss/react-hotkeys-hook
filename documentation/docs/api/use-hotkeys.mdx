@@ -123,7 +123,8 @@ we can use this property to check which specific keystroke was pressed.
 :::info The callback gets memoised
 
 The callback we pass into the hook gets memoised, so every variable we reference inside the callback must be added to the
-dependencies array, otherwise we will get stale values. For more on memoisation in the context of React hooks see __###TODO_Add Link to Memoisation###__
+dependencies array, otherwise we will get stale values. For more on memoisation in the context of React hooks read
+[this nice article](https://medium.com/@sdolidze/react-hooks-memoization-99a9a91c8853).
 
 :::
 
@@ -190,10 +191,10 @@ inside the browser.
 
 ```js
 useHotkeys('command+s', someCallback, {
-  filterPreventDefault: () => false,
   // This will allow the browser to show the save page dialog.
   // Setting it to true will prevent that.
-  filter: false
+  filterPreventDefault: false,
+  filter: () => false
 });
 ```
 
@@ -273,7 +274,9 @@ deps: any[] // default: []
 
 The dependency array lets we use the hook just like Reacts internal `useCallback` or `useMemo` hook. This where our
 dependencies of the callback live. If for example our callback actions depend on a referentially unstable value or a
-value that will change over time, we should add this value to our deps array. __###TODO_Add Link to Memoisation###__
+value that will change over time, we should add this value to our deps array. Check out the
+[documentation part](http://localhost:3000/react-hotkeys-hook/docs/documentation/use-hotkeys#setting-callback-dependencies)
+for examples.
 
 ## Return value
 

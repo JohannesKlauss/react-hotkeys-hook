@@ -32,19 +32,20 @@ The fastest way to get you going.
 
 ```jsx
 import { useHotkeys } from 'react-hotkeys-hook';
+```
 
-export function MyComponent() {
+```jsx live
+function MyComponent() {
   const [count, setCount] = useState(0);
 
   useHotkeys('a', () => setCount(count => count + 1));
 
   return (
-    <span>{count}</span>
+    <span>Pressed 'a' key {count} times.</span>
   );
 }
 ```
 
 :::note Out of the box support for TypeScript
 `react-hotkeys-hook` is written in TypeScript, so we don't have to install any additional typings.
-
 :::

@@ -7,6 +7,8 @@
 
 /* You can override the default Infima variables here. */
 :root {
+  --ifm-hr-border-color: #474748;
+
   --ifm-color-primary: #9e768f;
   --ifm-color-primary-dark: #916782;
   --ifm-color-primary-darker: #89617a;
@@ -16,7 +18,9 @@
   --ifm-color-primary-lightest: #c0a6b7;
   --ifm-code-font-size: 95%;
 
-  --ifm-color-secondary-contrast-background: #fdfdfe;
+  --ifm-font-color-base: #cdcecf;
+
+  --ifm-color-secondary-contrast-background: var(--ifm-font-color-base);
   --ifm-color-secondary-contrast-foreground: #474748;
   --ifm-color-success-dark: #009400;
   --ifm-color-success-darker: #008b00;
@@ -24,7 +28,7 @@
   --ifm-color-success-light: #26b226;
   --ifm-color-success-lighter: #4dbf4d;
   --ifm-color-success-lightest: #80d280;
-  --ifm-color-success-contrast-background: #e6f6e6;
+  --ifm-color-success-contrast-background: var(--ifm-font-color-base);
   --ifm-color-success-contrast-foreground: #003100;
   --ifm-color-info-dark: #4cb3d4;
   --ifm-color-info-darker: #47a9c9;
@@ -32,7 +36,7 @@
   --ifm-color-info-light: #6ecfef;
   --ifm-color-info-lighter: #87d8f2;
   --ifm-color-info-lightest: #aae3f6;
-  --ifm-color-info-contrast-background: #eef9fd;
+  --ifm-color-info-contrast-background: var(--ifm-font-color-base);
   --ifm-color-info-contrast-foreground: #193c47;
   --ifm-color-warning-dark: #e6a700;
   --ifm-color-warning-darker: #d99e00;
@@ -40,7 +44,7 @@
   --ifm-color-warning-light: #ffc426;
   --ifm-color-warning-lighter: #ffcf4d;
   --ifm-color-warning-lightest: #ffdd80;
-  --ifm-color-warning-contrast-background: #fff8e6;
+  --ifm-color-warning-contrast-background: var(--ifm-font-color-base);
   --ifm-color-warning-contrast-foreground: #4d3800;
   --ifm-color-danger-dark: #e13238;
   --ifm-color-danger-darker: #d53035;
@@ -48,7 +52,7 @@
   --ifm-color-danger-light: #fb565b;
   --ifm-color-danger-lighter: #fb7478;
   --ifm-color-danger-lightest: #fd9c9f;
-  --ifm-color-danger-contrast-background: #ffebec;
+  --ifm-color-danger-contrast-background: var(--ifm-font-color-base);
   --ifm-color-danger-contrast-foreground: #4b1113;
   --ifm-alert-border-left-width: 5px;
   --ifm-alert-border-width: 0;
@@ -56,15 +60,15 @@
 
 html[data-theme=dark] {
   --ifm-color-secondary-contrast-background: #474748;
-  --ifm-color-secondary-contrast-foreground: #fdfdfe;
+  --ifm-color-secondary-contrast-foreground: var(--ifm-font-color-base);
   --ifm-color-success-contrast-background: #003100;
-  --ifm-color-success-contrast-foreground: #e6f6e6;
+  --ifm-color-success-contrast-foreground: var(--ifm-font-color-base);
   --ifm-color-info-contrast-background: #193c47;
-  --ifm-color-info-contrast-foreground: #eef9fd;
+  --ifm-color-info-contrast-foreground: var(--ifm-font-color-base);
   --ifm-color-warning-contrast-background: #4d3800;
-  --ifm-color-warning-contrast-foreground: #fff8e6;
+  --ifm-color-warning-contrast-foreground: var(--ifm-font-color-base);
   --ifm-color-danger-contrast-background: #4b1113;
-  --ifm-color-danger-contrast-foreground: #ffebec;
+  --ifm-color-danger-contrast-foreground: var(--ifm-font-color-base);
 }
 
 blockquote {
