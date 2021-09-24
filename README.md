@@ -7,9 +7,9 @@ This is a hook version for the [hotkeys] package.
 If you use this package please share your thoughts on how we can improve this hook with version 4.
 Please engage at the corresponding [Github issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574).
 
-### Documentation and live example
+## [Documentation & Live Examples](https://react-hotkeys-hook.vercel.app/)
 
-https://johannesklauss.github.io/react-hotkeys-hook/
+## [Support](https://github.com/JohannesKlauss/react-hotkeys-hook/discussions)
 
 ### Installation
 
