@@ -4,7 +4,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'React Hotkeys Hook',
-  tagline: 'use declarative hotkeys',
+  tagline: 'Use hotkeys in a declarative way',
   url: 'https://johannesklauss.github.io',
   baseUrl: '/react-hotkeys-hook/',
   onBrokenLinks: 'throw',
@@ -71,6 +71,10 @@ module.exports = {
         {
           title: 'More',
           items: [
+            {
+              label: 'Support',
+              href: 'https://github.com/JohannesKlauss/react-hotkeys-hook/discussions',
+            },
             {
               label: 'Recipes',
               href: 'https://github.com/JohannesKlauss/react-hotkeys-hook',

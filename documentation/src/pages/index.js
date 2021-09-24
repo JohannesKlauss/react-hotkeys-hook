@@ -5,7 +5,6 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
 import CodeBlock from '@docusaurus/theme-live-codeblock/src/theme/CodeBlock';
-import GitHubButton from 'react-github-btn';
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -23,19 +22,14 @@ function HomepageHeader() {
           </Link>
 
           <Link
-            className='button button--primary button--lg margin-horiz--md'
+            className='button button--info button--lg margin-horiz--md margin-right--lg'
             to='/docs/documentation/installation'>
             Documentation
           </Link>
 
-          <GitHubButton
-            href='https://github.com/johannesklauss/react-hotkeys-hook'
-            data-color-scheme='no-preference: light; light: light; dark: dark;' data-size='large'
-            data-show-count='true'
-            aria-label='Star johannesklauss/react-hotkeys-hook on GitHub'
-          >
-            Star
-          </GitHubButton>
+          <iframe className="indexCtasGitHubButton_5nVI"
+                  src="https://ghbtns.com/github-btn.html?user=JohannesKlauss&amp;repo=react-hotkeys-hook&amp;type=star&amp;count=true&amp;size=large"
+                  width="160" height="30" title="GitHub Stars"></iframe>
         </div>
       </div>
     </header>
@@ -46,21 +40,79 @@ export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title={`${siteConfig.title}`}
       description='Description will go into a meta tag in <head />'>
       <HomepageHeader />
-      <main className={'padding-horiz--xl margin-horiz--xl'}>
-        <CodeBlock className={'language-jsx'}>
-          {`function MyComponent() {
+      <main className={clsx('padding-horiz--xl margin-vert--lg', styles.fullWidth)}>
+        <div className={'container'}>
+          <div className={'row margin-vert--xl'}>
+            <div className={'col col-6'}>
+              <h1 className={styles.rightAlign}>Easy to use</h1>
+              <p className={styles.rightAlign}>Use just one hook to bind your hotkeys to a component.</p>
+            </div>
+            <div className={'col col-6'}>
+              <CodeBlock className={'language-jsx'}>
+                {`function MyComponent() {
   const [count, setCount] = useState(0);
 
-  useHotkeys('a', () => setCount(prevCount => prevCount + 1));
+  useHotkeys('a', () => setCount(prevCount =>
+    prevCount + 1
+  ));
 
   return (
     <span>{count}</span>
   );
 }`}
-        </CodeBlock>
+              </CodeBlock>
+            </div>
+          </div>
+
+          <div className={'row margin-vert--xl'}>
+            <div className={'col col-6'}>
+              <CodeBlock className={'language-jsx'}>
+                {`function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  const ref = useHotkeys('a', () => setCount(prevCount =>
+    prevCount + 1
+  ));
+
+  return (
+    <span ref={ref}>{count}</span>
+  );
+}`}
+              </CodeBlock>
+
+            </div>
+            <div className={'col col-6'}>
+              <h1>Dead simple component scoping</h1>
+              <p>With the usage of a returned ref you can easily scope your hotkey callback to your component.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className={'row margin-vert--xl'}>
+          <div className={'col col-6'}>
+            <h1 className={styles.rightAlign}>Modifier support and combinations</h1>
+            <p className={styles.rightAlign}>Use any modifier you want. You can also combine multiple hotkey combinations to trigger the same callback</p>
+          </div>
+          <div className={'col col-6'}>
+            <CodeBlock className={'language-jsx'}>
+              {`function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  useHotkeys('ctrl+a, shift+x', () => setCount(prevCount =>
+    prevCount + 1
+  ));
+
+  return (
+    <span>{count}</span>
+  );
+}`}
+            </CodeBlock>
+          </div>
+        </div>
+
       </main>
     </Layout>
   );

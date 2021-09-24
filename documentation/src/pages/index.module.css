@@ -6,6 +6,8 @@
  */
 
 .heroBanner {
+  background-color: var(--ifm-font-color-contrast);
+  color: var(--ifm-font-color-base);
   padding: 4rem 0;
   text-align: center;
   position: relative;
@@ -27,4 +29,12 @@
 .heroProjectTagline {
   font-size: 60px;
   margin: 0;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.rightAlign {
+  text-align: right;
 }

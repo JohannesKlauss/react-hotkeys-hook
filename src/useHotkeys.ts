@@ -72,6 +72,8 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
 
   useEffect(() => {
     if (!enabled) {
+      hotkeys.unbind(keys, memoisedCallback);
+
       return;
     }
 

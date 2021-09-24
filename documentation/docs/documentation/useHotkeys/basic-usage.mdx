@@ -144,3 +144,56 @@ function ExampleComponent() {
 ```
 
 <UnreferencedHotkeysNotice hotkeyCombination={'ctrl+shift+a+c, shift+c'}/>
+
+***
+
+## Modifiers & Special keys
+
+`useHotkeys` supports the following modifiers:
+
+* `shift`
+* `option`
+* `alt`
+* `ctrl` or `control`
+* `command` or `cmd`
+
+`cmd` and `command` as well as `ctrl` and `control` can be used synonymously.
+
+```jsx
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys(
+    'ctrl+shift+a+c, c, shift+c, alt+n, option+n, ctrl+d, command+d, control+d, cmd+d',
+    () => setCount(prevCount => prevCount + 1)
+  )
+
+  return (
+    <span>Received the combination {count} times.</span>
+  )
+}
+```
+
+:::info macOS and Windows/Linux compatability
+`alt` and `option` are not identical! To ensure compatability between different operating systems, you need to understand
+that i.e. the `alt` modifier won't
+work with macOS. You need to use `option`. Also most shortcuts on Windows and Linux based systems that start with the
+`ctrl` modifier start with `command` on macOS. This is likely to change in version 4 with the goal of unifying at least `alt` and
+`option`.
+:::
+
+***
+
+There are also special keys like arrows, return, space bar, etc. that have their own name that can be used:
+
+* `backspace`
+* `tab`
+* `clear`
+* `enter` or `return`
+* `esc` or `escape`
+* `space`
+* `up`, `down`, `left`, `right`
+* `home`
+* `end`
+* `pageup`, `pagedown`
+* `del` or `delete`
+* `f1`, `f2` ... `f19`
