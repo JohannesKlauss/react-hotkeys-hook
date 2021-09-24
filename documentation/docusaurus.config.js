@@ -47,7 +47,7 @@ module.exports = {
             },
             {
               label: 'useHotkeys',
-              to: '/docs/documentation/use-hotkeys',
+              to: '/docs/documentation/useHotkeys/basic-usage',
             },
             {
               label: 'isHotkeyPressed',
