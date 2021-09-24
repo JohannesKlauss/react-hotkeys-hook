@@ -6933,10 +6933,10 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-hotkeys-hook@3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-3.4.0.tgz#4d8a81e58eb7ec0d3f6e4fbc4cb0f7830fb6c2aa"
-  integrity sha512-TFtMNb9ALuL3uvtqGpaehwCeua3uYCrG3dKUqd+hEI2UgbVU94ifA1AEeemXSF6K81llPDX1RZvp7teUEQzAPA==
+react-hotkeys-hook@3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-3.4.1.tgz#af611b0086468b7cf64f1677d1f8bc1047e4c3d5"
+  integrity sha512-lZbVRAsAXrE6povXT81BYd5WMT+JFGOU9Mx4qT830AelRDKoVWQa76yyk7nMgK++O6DfZShYp06rppf+8HkeeQ==
   dependencies:
     hotkeys-js "3.8.7"
 
