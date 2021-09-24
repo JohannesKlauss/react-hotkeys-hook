@@ -6,7 +6,7 @@ module.exports = {
   title: 'React Hotkeys Hook',
   tagline: 'Use hotkeys in a declarative way',
   url: 'https://johannesklauss.github.io',
-  baseUrl: '/react-hotkeys-hook/',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
