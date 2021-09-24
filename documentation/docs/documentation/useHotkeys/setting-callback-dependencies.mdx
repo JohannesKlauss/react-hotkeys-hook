@@ -69,6 +69,6 @@ function ExampleComponent() {
 }
 ```
 
-If you remove the dependency array from `useHotkeys` you will notice that again the callback execution _seems_ to stop
+If we remove the dependency array from `useHotkeys` you will notice that again the callback execution _seems_ to stop
 after the first key press. But as we learned this is all due to stale state. The callback gets executed properly, just
 the referenced value is an old one.

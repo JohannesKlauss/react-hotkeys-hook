@@ -10,8 +10,8 @@ import UnreferencedHotkeysNotice from '../../../src/components/UnreferencedHotke
 This hook allows us to listen to hotkeys in a declarative way.
 
 :::tip tip
-This documentation is using [react-live](https://react-live.netlify.app/), so you can edit the code of every example and
-immediately see the results of your changes.
+This documentation is using [react-live](https://react-live.netlify.app/), so we can edit the code of every example and
+immediately see the results of our changes.
 :::
 
 # Basic Usage
@@ -86,7 +86,7 @@ function ExampleComponent() {
 
 ## Keystrokes
 
-You can also listen to keystrokes, that is a combination of keys that the user has to hit in order to execute the callback.
+We can also listen to keystrokes, that is a combination of keys that the user has to hit in order to execute the callback.
 One example would be a Jira like UI that listens to the `Shift+C` keystroke to create a new ticket:
 
 ```jsx live
@@ -104,7 +104,7 @@ function CreateIssue() {
 }
 ```
 
-This is not restricted to a combination of two keys. You can also do things like `Ctrl+Shift+A+C` (maybe not the most
+This is not restricted to a combination of two keys. We can also do things like `Ctrl+Shift+A+C` (maybe not the most
 intuitive keystroke for a user to memorize, though).
 
 ```jsx live
@@ -121,7 +121,7 @@ function ExampleComponent() {
 :::note the hotkeys arguments is case-insensitive
 It doesn't matter if we listen for `CTRL+S`, `Ctrl+s`, `ctrl+S` or any other possible way of writing the keys in different
 cases. They all will listen to the user pressing the `ctrl` and the `s` key. This also means that upper case letters
-are treated as lower case letters. If we want to listen to the user pressing an upper case `S` letter, you'd have to listen
+are treated as lower case letters. If we want to listen to the user pressing an upper case `S` letter, we'd have to listen
 to `shift+s`.
 :::
 
@@ -129,7 +129,7 @@ to `shift+s`.
 
 ## Multiple hotkeys
 
-You can also listen to multiple keystrokes and/or hotkeys and trigger the same callback. Combinations are separated by
+We can also listen to multiple keystrokes and/or hotkeys and trigger the same callback. Combinations are separated by
 a comma sign:
 
 ```jsx live
@@ -174,9 +174,9 @@ function ExampleComponent() {
 ```
 
 :::info macOS and Windows/Linux compatability
-`alt` and `option` are not identical! To ensure compatability between different operating systems, you need to understand
+`alt` and `option` are not identical! To ensure compatability between different operating systems, we need to understand
 that i.e. the `alt` modifier won't
-work with macOS. You need to use `option`. Also most shortcuts on Windows and Linux based systems that start with the
+work with macOS. We need to use `option`. Also, most shortcuts on Windows and Linux based systems that start with the
 `ctrl` modifier start with `command` on macOS. This is likely to change in version 4 with the goal of unifying at least `alt` and
 `option`.
 :::

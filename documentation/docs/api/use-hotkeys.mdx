@@ -29,7 +29,7 @@ function useHotkeys<T extends Element>(
 keys: string
 ```
 
-Set the keystrokes we want the hook to listen to. You can use single or multiple keys,
+Set the keystrokes we want the hook to listen to. We can use single or multiple keys,
 modifier combinations, etc. See [this guide](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts) of the underlying
 hotkeys package for all possible shortcuts.
 
@@ -132,7 +132,7 @@ dependencies array, otherwise we will get stale values. For more on memoisation 
 
 ### `options`
 
-You can extensively configure how the hook behaves by passing it an `options` object. Below are all properties that the
+We can extensively configure how the hook behaves by passing it an `options` object. Below are all properties that the
 object takes.
 
 ```js
@@ -205,7 +205,7 @@ enabledOnTags: string[] // default: undefined
 ```
 
 Normally we do not want a hotkey being triggered while a user types something into an input field. In some cases however
-this might desirable. You can enable the callback trigger for an input tag using the following values:
+this might desirable. We can enable the callback trigger for an input tag using the following values:
 
 `INPUT`, `TEXTAREA`, `SELECT`
 
@@ -282,7 +282,7 @@ for examples.
 
 ### `React.MutableRef<T | null>`
 
-The `useHotkeys` hook returns a React ref. This ref by default holds the value of `null`. You can use this ref to only
+The `useHotkeys` hook returns a React ref. This ref by default holds the value of `null`. We can use this ref to only
 trigger the hotkeys if a specific element has been focused by the user.
 
 ```jsx live

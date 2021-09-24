@@ -82,7 +82,7 @@ render(
 )
 ```
 
-As you can see only if the button receives focus the hotkey is enabled. We also added second component that
+As we can see only if the button receives focus the hotkey is enabled. We also added second component that
 listens to the same hotkey but only triggers if an assigned component receives focus.
 
 We successfully scoped our duplicate global hotkeys to their own components. This practise isn't restricted to duplicate
@@ -111,7 +111,7 @@ function SecondScopedHotkey() {
 ```
 
 :::info Important
-To ensure that you don't accidentally break sequential keyboard navigation of your page elements, we recommend to always
+To ensure that we don't accidentally break sequential keyboard navigation of your page elements, we recommend to always
 set the `tabIndex` prop to `-1`. This way the element is not reachable via keyboard navigation. For more information on
 this topic, check out the [MDN page](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex).
 :::
