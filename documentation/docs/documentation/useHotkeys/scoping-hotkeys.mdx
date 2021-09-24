@@ -82,20 +82,20 @@ render(
 )
 ```
 
-As we can see only if the button receives focus the hotkey is enabled. We also added second component that
+As we can see only if the button receives focus the hotkey gets enabled. We also added a second component that
 listens to the same hotkey but only triggers if an assigned component receives focus.
 
-We successfully scoped our duplicate global hotkeys to their own components. This practise isn't restricted to duplicate
+We successfully scoped our duplicate global hotkey to their own components. This practice isn't restricted to duplicate
 hotkeys, we can use this technique to scope any hotkey we like.
 
 ***
 
-## Scoping with non-focus components
+## Scoping with non-focusable components
 
 Receiving focus on a button to enable a hotkey in a real world application is not very useful. Instead, we generally would
-programmatically set the focus to a modal or let the user click on an area which then receives the focus and enables
+like to set the focus to a modal or let the user click on an area which then receives the focus and enables
 its attached hotkeys. However, tags like `<div>`, `<section>`, `<span>`, etc. cannot receive focus by default. To let them
-receive focus we have to use the `tabIndex` prop:
+receive focus we have to use the `tabIndex` attribute:
 
 ```jsx live
 function SecondScopedHotkey() {

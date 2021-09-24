@@ -17,6 +17,14 @@ html[data-theme='light'] {
   --ifm-color-primary-light: #0d8996;
   --ifm-color-primary-lighter: #0e909c;
   --ifm-color-primary-lightest: #10a2b1;
+
+  --ifm-alert-background-color-highlight: rgba(235,237,240,0.15);
+
+  --ifm-color-secondary-contrast-background: #fdfdfe;
+  --ifm-color-success-contrast-background: #e6f6e6;
+  --ifm-color-info-contrast-background: #eef9fd;
+  --ifm-color-warning-contrast-background: #fff8e6;
+  --ifm-color-danger-contrast-background: #ffebec;
 }
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {

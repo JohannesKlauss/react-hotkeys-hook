@@ -7,7 +7,8 @@ import UnreferencedHotkeysNotice from '../../../src/components/UnreferencedHotke
 
 # useHotkeys
 
-This hook allows us to listen to hotkeys in a declarative way.
+This hook allows us to listen to hotkeys in a declarative way and execute a callback function once the user pressed down
+the given hotkey.
 
 :::tip tip
 This documentation is using [react-live](https://react-live.netlify.app/), so we can edit the code of every example and
@@ -22,7 +23,7 @@ Import the `useHotkeys` hook from the package:
 import { useHotkeys } from 'react-hotkeys-hook';
 ```
 
-or if you are using `require` style syntax:
+or when using `require` style syntax:
 
 ```js
 const { useHotkeys } = require('react-hotkeys-hook')
@@ -45,7 +46,7 @@ function ExampleComponent() {
 }
 ```
 
-> The hotkeys won't work if any of the Live Editor is focused.
+> The hotkeys won't work if any of the Live Editor windows are focused.
 
 ***
 
@@ -86,7 +87,7 @@ function ExampleComponent() {
 
 ## Keystrokes
 
-We can also listen to keystrokes, that is a combination of keys that the user has to hit in order to execute the callback.
+We can also listen to keystrokes. That is a combination of keys that the user has to hit in order to execute the callback.
 One example would be a Jira like UI that listens to the `Shift+C` keystroke to create a new ticket:
 
 ```jsx live
@@ -118,10 +119,10 @@ function ExampleComponent() {
 }
 ```
 
-:::note the hotkeys arguments is case-insensitive
+:::note the keys argument is case-insensitive
 It doesn't matter if we listen for `CTRL+S`, `Ctrl+s`, `ctrl+S` or any other possible way of writing the keys in different
 cases. They all will listen to the user pressing the `ctrl` and the `s` key. This also means that upper case letters
-are treated as lower case letters. If we want to listen to the user pressing an upper case `S` letter, we'd have to listen
+are treated as lower case letters. If we want to listen to the user pressing the upper case letter `S`, we'd have to listen
 to `shift+s`.
 :::
 
@@ -149,7 +150,7 @@ function ExampleComponent() {
 
 ## Modifiers & Special keys
 
-`useHotkeys` supports the following modifiers:
+Of course, we also want to leverage more complex keystrokes. `useHotkeys` supports the following modifiers:
 
 * `shift`
 * `option`
@@ -157,7 +158,15 @@ function ExampleComponent() {
 * `ctrl` or `control`
 * `command` or `cmd`
 
-`cmd` and `command` as well as `ctrl` and `control` can be used synonymously.
+`cmd`/`command` as well as `ctrl`/`control` can be used synonymously.
+
+:::caution macOS and Windows/Linux compatability
+`alt` and `option` are not identical! To ensure compatability between different operating systems, we need to understand
+that i.e. the `alt` modifier won't
+work with macOS. We need to use `option`. Also, most shortcuts on Windows and Linux based systems that start with the
+`ctrl` modifier, while they start with `command` on macOS. This is likely to change in version 4 with the goal of unifying at least `alt` and
+`option`.
+:::
 
 ```jsx
 function ExampleComponent() {
@@ -172,14 +181,6 @@ function ExampleComponent() {
   )
 }
 ```
-
-:::info macOS and Windows/Linux compatability
-`alt` and `option` are not identical! To ensure compatability between different operating systems, we need to understand
-that i.e. the `alt` modifier won't
-work with macOS. We need to use `option`. Also, most shortcuts on Windows and Linux based systems that start with the
-`ctrl` modifier start with `command` on macOS. This is likely to change in version 4 with the goal of unifying at least `alt` and
-`option`.
-:::
 
 ***
 

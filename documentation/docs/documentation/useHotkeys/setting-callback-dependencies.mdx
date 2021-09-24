@@ -8,7 +8,7 @@ title: "Callback Dependencies"
 The callback we pass to `useHotkeys` gets memoised automatically inside the useHotkeys hook to prevent unnecessary re-renders.
 This can lead to
 problems with [stale state](https://reactjs.org/docs/hooks-faq.html#why-am-i-seeing-stale-props-or-state-inside-my-function).
-To prevent those problems, the hook accepts a dependencies array, just like Reacts internal
+To prevent those problems, the hook accepts a dependencies array just like Reacts internal
 [`useEffect`](https://reactjs.org/docs/hooks-effect.html), [`useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) and
 [`useCallback`](https://reactjs.org/docs/hooks-reference.html#usecallback) hooks.
 
@@ -50,7 +50,7 @@ function ExampleComponent() {
 
 While the first component works as expected, the second does not and stops increasing `count` once we pressed the `'b'`
 key. This is called stale state. We are referencing a variable that changes over time. Since our callback gets memoised
-inside `useHotkeys` hook, the variable `count` inside the callback will always hold the value of `0`.
+inside `useHotkeys` hook, the variable `count` inside the callback will always hold its initial value of `0`.
 
 To solve this problem, we could go back to the previous example. But that solution is specific to the `useState` hook.
 What if we want reference

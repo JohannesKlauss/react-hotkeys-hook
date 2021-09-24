@@ -115,7 +115,7 @@ The `handler` holds information about the pressed key. In general, we should onl
 events.
 The most important property of the `handler` object is the `key` prop:
 
-* `key: string` - This will hold the pressed hit keystroke. So if we use multiple possible keystroke combinations for the same callback
+* `key: string` - This will hold the pressed keystroke. So if we use multiple possible keystroke combinations for the same callback
 we can use this property to check which specific keystroke was pressed.
 
 > There are more properties attached to the handle that currently don't get populated with values. So we can safely ignore those.
@@ -317,7 +317,7 @@ function App() {
   return (
     <div>
       <div style={{ padding: "30px" }}>Count: {count}</div>
-      <div style={{ padding: "30px", background: "black" }} tabIndex={0}>
+      <div style={{ padding: "30px", background: "cyan" }} tabIndex={0}>
         Focusing this area won't trigger the hotkey.
       </div>
       <div style={{ padding: "30px", background: "crimson" }} ref={ref} tabIndex={0}>
