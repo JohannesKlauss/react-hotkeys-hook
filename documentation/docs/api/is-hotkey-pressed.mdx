@@ -1,0 +1,44 @@
+---
+sidebar_position: 2
+title: isHotkeyPressed
+---
+
+# isHotkeyPressed API
+
+Function signature:
+
+```ts
+function isHotkeyPressed(key: string | number): boolean
+```
+
+This function allows us to check if a specific key is pressed by the user.
+
+```jsx
+const isHotkeyPressed = useIsHotkeyPressed();
+
+const onClick = () => isHotkeyPressed('shift') ? setCount(count - 1) : setCount(count + 1);
+```
+
+***
+
+## Arguments
+
+### key
+
+```ts
+key: string | number
+```
+
+The key we want to listen to. This can be a string (like `'a'`, `'shift'`) or a keycode number like `13` for the `return/enter` key
+or `65` for the `a` key.
+
+:::info Multiple keys are not supported
+Currently this function can only check for one key at a time. So something like `isHotkeyPressed('shift, a, c')` won't work.
+This might change in version 4.
+:::
+
+## Return value
+
+### boolean
+
+The function returns `true` if the key is currently pressed down, otherwise it will return `false`.

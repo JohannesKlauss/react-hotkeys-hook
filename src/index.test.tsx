@@ -226,5 +226,5 @@ test('useHotkeys should unbind the hotkey when enabled is set from true to false
 
   rerender(false);
 
-  expect(hotkeys.unbind).toHaveBeenCalledTimes(1)
+  expect(hotkeys.unbind).toHaveBeenCalledTimes(2)
 })
