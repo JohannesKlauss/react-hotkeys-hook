@@ -100,6 +100,10 @@ module.exports = {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
     },
+    googleAnalytics: {
+      trackingID: 'G-7WHC83DL0G',
+      anonymizeIP: true,
+    },
   },
   presets: [
     [
