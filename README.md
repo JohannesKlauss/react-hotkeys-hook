@@ -2,16 +2,19 @@
 React hook for using keyboard shortcuts in components.
 This is a hook version for the [hotkeys] package.
 
+## Documentation & Live Examples
+
+* [Quick Start](https://react-hotkeys-hook.vercel.app/docs/intro)
+* [Documentation](https://react-hotkeys-hook.vercel.app/docs/documentation/installation)
+* [API](https://react-hotkeys-hook.vercel.app/docs/api/use-hotkeys)
+
+
 ## [Join the discussion for version 4!](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574)
 
 If you use this package please share your thoughts on how we can improve this hook with version 4.
 Please engage at the corresponding [Github issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574).
 
-## [Documentation & Live Examples](https://react-hotkeys-hook.vercel.app/)
-
-## [Support](https://github.com/JohannesKlauss/react-hotkeys-hook/discussions)
-
-### Installation
+## Installation
 
 ```shell
 npm install react-hotkeys-hook
@@ -25,7 +28,7 @@ yarn add react-hotkeys-hook
 
 Make sure that you have at least version 16.8 of `react` and `react-dom` installed, or otherwise hooks won't work for you.
 
-### Usage
+## Usage
 ```js
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0);
@@ -74,32 +77,39 @@ depend on any unstable callbacks or changing values over time you can leave this
 empty array by default. See the [Memoisation](#memoisation) section to
 learn more and see an example where you have to set this array.
 
-### `useIsHotkeyPressed` hook
+### `isHotkeyPressed` function
 
-The `useIsHotkeyPressed` hook just returns the `hotkeys.isPressed` function and works exactly the same.
+This function allows us to check if the user is currently pressing down a key.
 
 ```ts
-const isPressed = useIsHotkeyPressed();
+import { isHotkeyPressed } from 'react-hotkeys-hook';
 
-isPressed('return'); // Returns true if Return key is pressed down.
+isHotkeyPressed('return'); // Returns true if Return key is pressed down.
 ```
 
-### Found an issue or have a feature request?
+## Support
 
-Open up an issue or pull request and participate.
+* Ask your question in the [Github Discussions]([Support](https://github.com/JohannesKlauss/react-hotkeys-hook/discussions))
+* Ask your question on [StackOverflow](https://stackoverflow.com/search?page=1&tab=Relevance&q=react-hotkeys-hook)
 
-### Local Development
+If you'd like to support me, please buy me a ko-fi:
 
-Checkout this repo, run `yarn` or `npm i` and then run the `docz:dev` script.
-You can use the `docs/useHotkeys.mdx` to test the behavior of the hook. It directly imports the
-`src/index.ts` file and transpiles it automatically. So you don't have to worry about. For more info
-on .mdx files, check out the docz documentation: https://www.docz.site/docs/writing-mdx
+![alt text](https://ucbab0164bf5c81e2a9872c53fa1.previews.dropboxusercontent.com/p/thumb/ABTE4xGDxskgsqIuOARP8_ePPukYVVLKu8I7pKjNIf9u7aJmZcTeCXXCVyQsHkviVu_5aHZWlDRVoxO_o6gEDyTngS6wyWdoRdFqzANOEgUGj5ZcREIMy33x6DKDJkg1CORDq74mJPPBmkUnIph9OKWswrc2zY3sKeNBbBbbE2Xadfy78mWAQCtRXuvwrwV-mDjxsvxrcOZo73i-9J1u2p2QYjeP7jGPCqNnuavI-18SF65Kq6KFBEyhJQ1WtqJzmEWT92alq24aQlizVSt9w10_ouccdemRwhPaSLaFvyAETrFo9gGQe21ocMjTzT9tTb7ctWZBkIi6zVvy8EKfKsTE8nB7O3tbNd2_uQrVnd-kLg/p.png?fv_content=true&size_mode=5 "Buy me a Ko-Fi")
 
-### Authors
+## Found an issue or have a feature request?
+
+Open up an [issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/new)
+or [pull request](https://github.com/JohannesKlauss/react-hotkeys-hook/compare) and participate.
+
+## Local Development
+
+Checkout this repo, run `yarn` or `npm i` and then run the `test` script to test the behavior of the hook.
+
+## Authors
 
 * Johannes Klauss
 
-### Contributors
+## Contributors
 
 * [bernatmv](https://github.com/bernatmv)
 * [wheeler](https://github.com/wheeler)
