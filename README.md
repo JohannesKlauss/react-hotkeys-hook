@@ -8,7 +8,6 @@ This is a hook version for the [hotkeys] package.
 * [Documentation](https://react-hotkeys-hook.vercel.app/docs/documentation/installation)
 * [API](https://react-hotkeys-hook.vercel.app/docs/api/use-hotkeys)
 
-
 ## [Join the discussion for version 4!](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574)
 
 If you use this package please share your thoughts on how we can improve this hook with version 4.
