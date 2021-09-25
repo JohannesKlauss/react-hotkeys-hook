@@ -1,0 +1,200 @@
+---
+sidebar_position: 1
+title: "Basic Usage"
+---
+
+import UnreferencedHotkeysNotice from '../../../src/components/UnreferencedHotkeysNotice';
+
+# useHotkeys
+
+This hook allows us to listen to hotkeys in a declarative way and execute a callback function once the user pressed down
+the given hotkey.
+
+:::tip tip
+This documentation is using [react-live](https://react-live.netlify.app/), so we can edit the code of every example and
+immediately see the results of our changes.
+:::
+
+# Basic Usage
+
+Import the `useHotkeys` hook from the package:
+
+```js
+import { useHotkeys } from 'react-hotkeys-hook';
+```
+
+or when using `require` style syntax:
+
+```js
+const { useHotkeys } = require('react-hotkeys-hook')
+// or
+const useHotkeys = require('react-hotkeys-hook').useHotkeys
+```
+
+## Simple Hotkey
+
+The most basic usage for the hook is to assign a hotkey we want to listen to and a callback to get executed once the user
+hits that key.
+
+```jsx live
+function ExampleComponent() {
+  useHotkeys('a', () => alert('Key a was pressed'))
+
+  return (
+    <span>Press the a key to see it work.</span>
+  )
+}
+```
+
+> The hotkeys won't work if any of the Live Editor windows are focused.
+
+***
+
+Inside the callback we can do whatever we like. One common use case is to alter some component state:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('b', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Pressed the 'b' key {count} times.</span>
+  )
+}
+```
+
+`useHotkeys` will create the listener on component mount and destroy the listener once the component unmounts.
+
+***
+
+## Multiple hotkeys per component
+
+Since `useHotkeys` is a hook, we can use it in one component as much as we like:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('q', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('w', () => setCount(prevCount => prevCount - 1))
+
+  return (
+    <span>The count is {count}.</span>
+  )
+}
+```
+
+***
+
+## Keystrokes
+
+We can also listen to keystrokes. That is a combination of keys that the user has to hit in order to execute the callback.
+One example would be a Jira like UI that listens to the `Shift+C` keystroke to create a new ticket:
+
+```jsx live
+function CreateIssue() {
+  const [showIssueCreatorModal, setShowIssueCreatorModal] = useState(false)
+
+  useHotkeys('shift+c', () => setShowIssueCreatorModal(true))
+
+  return (
+    <>
+      {showIssueCreatorModal && <div>MODAL CONTENT</div>}
+      {!showIssueCreatorModal && <div>issue list</div>}
+    </>
+  )
+}
+```
+
+This is not restricted to a combination of two keys. We can also do things like `Ctrl+Shift+A+C` (maybe not the most
+intuitive keystroke for a user to memorize, though).
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('ctrl+shift+a+c', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Pressed the 'ctrl+shift+a+c' key {count} times.</span>
+  )
+}
+```
+
+:::note the keys argument is case-insensitive
+It doesn't matter if we listen for `CTRL+S`, `Ctrl+s`, `ctrl+S` or any other possible way of writing the keys in different
+cases. They all will listen to the user pressing the `ctrl` and the `s` key. This also means that upper case letters
+are treated as lower case letters. If we want to listen to the user pressing the upper case letter `S`, we'd have to listen
+to `shift+s`.
+:::
+
+***
+
+## Multiple hotkeys
+
+We can also listen to multiple keystrokes and/or hotkeys and trigger the same callback. Combinations are separated by
+a comma sign:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('ctrl+shift+a+c, c, shift+c', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Received the combination {count} times.</span>
+  )
+}
+```
+
+<UnreferencedHotkeysNotice hotkeyCombination={'ctrl+shift+a+c, shift+c'}/>
+
+***
+
+## Modifiers & Special keys
+
+Of course, we also want to leverage more complex keystrokes. `useHotkeys` supports the following modifiers:
+
+* `shift`
+* `option`
+* `alt`
+* `ctrl` or `control`
+* `command` or `cmd`
+
+`cmd`/`command` as well as `ctrl`/`control` can be used synonymously.
+
+:::caution macOS and Windows/Linux compatability
+`alt` and `option` are not identical! To ensure compatability between different operating systems, we need to understand
+that i.e. the `alt` modifier won't
+work with macOS. We need to use `option`. Also, most shortcuts on Windows and Linux based systems that start with the
+`ctrl` modifier, while they start with `command` on macOS. This is likely to change in version 4 with the goal of unifying at least `alt` and
+`option`.
+:::
+
+```jsx
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys(
+    'ctrl+shift+a+c, c, shift+c, alt+n, option+n, ctrl+d, command+d, control+d, cmd+d',
+    () => setCount(prevCount => prevCount + 1)
+  )
+
+  return (
+    <span>Received the combination {count} times.</span>
+  )
+}
+```
+
+***
+
+There are also special keys like arrows, return, space bar, etc. that have their own name that can be used:
+
+* `backspace`
+* `tab`
+* `clear`
+* `enter` or `return`
+* `esc` or `escape`
+* `space`
+* `up`, `down`, `left`, `right`
+* `home`
+* `end`
+* `pageup`, `pagedown`
+* `del` or `delete`
+* `f1`, `f2` ... `f19`

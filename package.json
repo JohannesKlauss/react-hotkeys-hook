@@ -1,7 +1,8 @@
 {
   "name": "react-hotkeys-hook",
-  "version": "3.3.1",
+  "version": "3.4.1",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
+  "homepage": "https://johannesklauss.github.io/react-hotkeys-hook/",
   "author": "Johannes Klauss",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -27,9 +28,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "jest",
-    "publish": "np",
-    "docz:dev": "docz dev",
-    "docz:build": "docz build"
+    "publish": "np"
   },
   "babel": {
     "presets": [
@@ -55,37 +54,32 @@
     "trailingComma": "es5"
   },
   "dependencies": {
-    "hotkeys-js": "3.8.3"
+    "hotkeys-js": "3.8.7"
   },
   "devDependencies": {
-    "@babel/core": "7.13.16",
-    "@babel/plugin-proposal-class-properties": "7.13.0",
-    "@babel/preset-env": "7.13.15",
-    "@babel/preset-react": "7.13.13",
-    "@babel/preset-typescript": "7.13.0",
-    "@testing-library/react": "11.2.6",
-    "@testing-library/react-hooks": "5.1.2",
-    "@types/jest": "26.0.22",
-    "@types/react": "17.0.3",
-    "@types/react-dom": "17.0.3",
-    "@types/testing-library__react": "10.0.1",
-    "@types/testing-library__react-hooks": "3.4.1",
-    "docz": "2.3.1",
-    "eslint-plugin-prettier": "3.4.0",
+    "@babel/core": "7.15.5",
+    "@babel/plugin-proposal-class-properties": "7.14.5",
+    "@babel/preset-env": "7.15.6",
+    "@babel/preset-react": "7.14.5",
+    "@babel/preset-typescript": "7.15.0",
+    "@testing-library/react": "12.1.0",
+    "@testing-library/react-hooks": "7.0.2",
+    "@testing-library/user-event": "13.2.1",
+    "@types/jest": "27.0.1",
+    "@types/react": "17.0.24",
+    "@types/react-dom": "17.0.9",
+    "eslint-plugin-prettier": "4.0.0",
     "jest": "26.6.3",
-    "prettier": "2.2.1",
+    "prettier": "2.4.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-test-renderer": "17.0.2",
     "tsdx": "0.14.1",
-    "tslib": "2.2.0",
-    "typescript": "4.2.4"
+    "tslib": "2.3.1",
+    "typescript": "4.4.3"
   },
   "peerDependencies": {
     "react": ">=16.8.1",
     "react-dom": ">=16.8.1"
-  },
-  "resolutions": {
-    "@types/react": "17.0.3"
   }
 }

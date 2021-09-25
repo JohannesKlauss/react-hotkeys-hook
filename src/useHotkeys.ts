@@ -72,6 +72,8 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
 
   useEffect(() => {
     if (!enabled) {
+      hotkeys.unbind(keys, memoisedCallback);
+
       return;
     }
 
@@ -83,7 +85,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     hotkeys(keys, (options as Options) || {}, memoisedCallback);
 
     return () => hotkeys.unbind(keys, memoisedCallback);
-  }, [memoisedCallback, options, keys, enabled]);
+  }, [memoisedCallback, keys, enabled]);
 
   return ref;
 }

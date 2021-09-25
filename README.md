@@ -2,9 +2,14 @@
 React hook for using keyboard shortcuts in components.
 This is a hook version for the [hotkeys] package.
 
-### Documentation and live example
+## [Join the discussion for version 4!](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574)
 
-https://johannesklauss.github.io/react-hotkeys-hook/
+If you use this package please share your thoughts on how we can improve this hook with version 4.
+Please engage at the corresponding [Github issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574).
+
+## [Documentation & Live Examples](https://react-hotkeys-hook.vercel.app/)
+
+## [Support](https://github.com/JohannesKlauss/react-hotkeys-hook/discussions)
 
 ### Installation
 
