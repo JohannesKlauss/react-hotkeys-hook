@@ -1,5 +1,5 @@
 import hotkeys, { HotkeysEvent, KeyHandler } from 'hotkeys-js';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { DependencyList, useCallback, useEffect, useRef } from 'react';
 
 type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
 
@@ -29,11 +29,11 @@ export type Options = {
 };
 
 export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: Options): React.MutableRefObject<T | null>;
-export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, deps?: any[]): React.MutableRefObject<T | null>;
-export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: Options, deps?: any[]): React.MutableRefObject<T | null>;
-export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: any[] | Options, deps?: any[]): React.MutableRefObject<T | null> {
+export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, dependencies?: DependencyList): React.MutableRefObject<T | null>;
+export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: Options, dependencies?: DependencyList): React.MutableRefObject<T | null>;
+export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: DependencyList | Options, dependencies?: DependencyList): React.MutableRefObject<T | null> {
   if (options instanceof Array) {
-    deps = options;
+    dependencies = options;
     options = undefined;
   }
 
@@ -68,7 +68,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     }
 
     return false;
-  }, deps ? [ref, enableOnTags, filter, ...deps] : [ref, enableOnTags, filter]);
+  }, dependencies ? [ref, enableOnTags, filter, ...dependencies] : [ref, enableOnTags, filter]);
 
   useEffect(() => {
     if (!enabled) {

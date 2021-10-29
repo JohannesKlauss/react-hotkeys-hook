@@ -64,7 +64,7 @@ test('useHotkeys should listen to key presses', () => {
   expect(callback).toHaveBeenCalledTimes(1);
 });
 
-test('useHotkeys correctly assign deps when used as third argument and options being omitted', async () => {
+test('useHotkeys correctly assign dependencies when used as third argument and options being omitted', async () => {
   let count = 0;
   const callback = jest.fn();
 
@@ -95,7 +95,7 @@ test('useHotkeys should use correct char to split combinations', () => {
   expect(callback).toHaveBeenCalledTimes(2);
 });
 
-test('useHotkeys should use correctly assign options and deps argument when using all four arguments', () => {
+test('useHotkeys should use correctly assign options and dependencies argument when using all four arguments', () => {
   const callback = jest.fn();
 
   renderHook(() => useHotkeys('shift-a', callback, { splitKey: '-' }, []));

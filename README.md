@@ -48,7 +48,7 @@ listened to. When the component unmounts it will stop listening.
 ### Call Signature
 
 ```typescript
-useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: any[] = [])
+useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, dependencies: DependencyList = [])
 ```
 
 ### Parameters
@@ -69,9 +69,9 @@ to do this anymore by yourself.
   - `keyup: boolean` Determine if you want to listen on the keyup event
   - `keydown: boolean` Determine if want to listen on the keydown event
   - `enabled: boolean` is used to prevent installation of the hotkey when set to false (default value: `true`)
-- `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
+- `dependencies: DependencyList = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
 dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
-that will change over time, you should add this value to your deps array. Since most of the time your callback won't
+that will change over time, you should add this value to your dependencies array. Since most of the time your callback won't
 depend on any unstable callbacks or changing values over time you can leave this value alone since it will be set to an
 empty array by default. See the [Memoisation](#memoisation) section to
 learn more and see an example where you have to set this array.

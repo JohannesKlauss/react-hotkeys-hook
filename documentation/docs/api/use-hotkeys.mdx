@@ -15,7 +15,7 @@ function useHotkeys<T extends Element>(
   keys: string,
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
   options: Options = {},
-  deps: any[] = []
+  dependencies: DependencyList = []
 ): React.MutableRef<T | null>
 ```
 
@@ -266,15 +266,15 @@ useHotkeys('a', () => someCallback, {
 
 ***
 
-### `deps`
+### `dependencies`
 
 ```ts
-deps: any[] // default: []
+dependencies: DependencyList // default: []
 ```
 
 The dependency array lets we use the hook just like Reacts internal `useCallback` or `useMemo` hook. This where our
 dependencies of the callback live. If for example our callback actions depend on a referentially unstable value or a
-value that will change over time, we should add this value to our deps array. Check out the
+value that will change over time, we should add this value to our dependencies array. Check out the
 [documentation part](/docs/documentation/useHotkeys/setting-callback-dependencies)
 for examples.
 
@@ -346,7 +346,7 @@ we can pass a dependency array as the third argument instead of the fourth.
 function useHotkeys<T extends Element>(
   keys: string,
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
-  deps: any[] = []
+  dependencies: DependencyList = []
 ): React.MutableRef<T | null>
 ```
 

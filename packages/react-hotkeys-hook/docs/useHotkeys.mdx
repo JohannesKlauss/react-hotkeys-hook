@@ -14,7 +14,7 @@ When the component gets mounted into the DOM, it will listen for the keystroke. 
 stops listening for the keystroke.
 
 ```ts
-useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: any[] = [])
+useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, dependencies: DependencyList = [])
 ```
 
 ## Parameters
@@ -24,14 +24,14 @@ section on the hotkeys documentation for more info.
 * `callback: (event: KeyboardEvent, handler: HotkeysEvent) => void`: Gets executed when the defined keystroke
 gets hit by the user.
 * `options: Options = {}` Pass options directly to the hotkeys package. See [Options](#options) section for more details.
-* `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
+* `dependencies: DependencyList = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
 dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
-that will change over time, you should add this value to your deps array. Since most of the time your callback won't
+that will change over time, you should add this value to your dependencies array. Since most of the time your callback won't
 depend on any unstable callbacks or changing values over time you can leave this value alone since it will be set to an
 empty array by default. See the [Memoisation](#memoisation) section to
 learn more and see an example where you have to set this array.
 
-**Note**: The `options` and `deps` parameter are switched in versions < 2.
+**Note**: The `options` and `dependencies` parameter are switched in versions < 2.
 
 ## Example
 
