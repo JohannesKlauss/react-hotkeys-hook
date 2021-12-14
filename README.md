@@ -93,7 +93,7 @@ isHotkeyPressed('return'); // Returns true if Return key is pressed down.
 
 If you'd like to support me, please buy me a ko-fi:
 
-[![alt text](https://ucbab0164bf5c81e2a9872c53fa1.previews.dropboxusercontent.com/p/thumb/ABTE4xGDxskgsqIuOARP8_ePPukYVVLKu8I7pKjNIf9u7aJmZcTeCXXCVyQsHkviVu_5aHZWlDRVoxO_o6gEDyTngS6wyWdoRdFqzANOEgUGj5ZcREIMy33x6DKDJkg1CORDq74mJPPBmkUnIph9OKWswrc2zY3sKeNBbBbbE2Xadfy78mWAQCtRXuvwrwV-mDjxsvxrcOZo73i-9J1u2p2QYjeP7jGPCqNnuavI-18SF65Kq6KFBEyhJQ1WtqJzmEWT92alq24aQlizVSt9w10_ouccdemRwhPaSLaFvyAETrFo9gGQe21ocMjTzT9tTb7ctWZBkIi6zVvy8EKfKsTE8nB7O3tbNd2_uQrVnd-kLg/p.png?fv_content=true&size_mode=5 "Buy me a Ko-Fi")](https://ko-fi.com/thegoodcode#checkoutModal)
+[<img src="https://cdn.ko-fi.com/cdn/kofi5.png?v=3">](https://ko-fi.com/U7U05CEWG)
 
 ## Found an issue or have a feature request?
 
