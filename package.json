@@ -57,11 +57,11 @@
     "hotkeys-js": "3.8.7"
   },
   "devDependencies": {
-    "@babel/core": "7.16.0",
-    "@babel/plugin-proposal-class-properties": "7.16.0",
-    "@babel/preset-env": "7.16.4",
-    "@babel/preset-react": "7.16.0",
-    "@babel/preset-typescript": "7.16.0",
+    "@babel/core": "7.16.5",
+    "@babel/plugin-proposal-class-properties": "7.16.5",
+    "@babel/preset-env": "7.16.5",
+    "@babel/preset-react": "7.16.5",
+    "@babel/preset-typescript": "7.16.5",
     "@testing-library/react": "12.1.2",
     "@testing-library/react-hooks": "7.0.2",
     "@testing-library/user-event": "13.5.0",
