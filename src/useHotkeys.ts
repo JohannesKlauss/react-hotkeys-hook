@@ -68,7 +68,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     }
 
     return false;
-  }, deps ? [ref, enableOnTags, filter, ...deps] : [ref, enableOnTags, filter]);
+  }, [ref, enableOnTags, filter, callback, ...(deps || [])]);
 
   useEffect(() => {
     if (!enabled) {
