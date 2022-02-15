@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { useHotkeys } from '../src/index'
 import { HotkeyCallback, Keys, Options } from '../src/types'
 import { DependencyList, MutableRefObject } from 'react'
+import { fireEvent } from '@testing-library/react'
 
 type HookParameters = {
   keys: Keys
@@ -231,27 +232,124 @@ test('should bind the event and trigger if enabled is set to true', () => {
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test.skip('should bind the event and execute the callback if enabled is set to a function and returns true', () => {})
+test('should bind the event and execute the callback if enabled is set to a function and returns true', () => {
+  const callback = jest.fn()
 
-test.skip('should bind the event and not execute the callback if enabled is set to a function and returns false', () => {})
+  const { rerender } = renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    initialProps: {
+      keys: 'a',
+      options: {
+        enabled: () => true,
+      },
+    },
+  })
 
-test.skip('should return a ref', () => {})
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  rerender({
+    keys: 'a',
+    options: {
+      enabled: () => false,
+    },
+  })
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  rerender({
+    keys: 'a',
+    options: {
+      enabled: () => true,
+    },
+  })
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+})
+
+test('should return a ref', () => {
+  const callback = jest.fn()
+
+  const { result } = renderHook(() => useHotkeys('a', callback))
+
+  expect(result.current).toBeDefined()
+})
 
 test.skip('should only trigger when the element is focused if a ref is set', () => {})
 
 test.skip('should allow * as a wildcard', () => {})
 
-test.skip('should allow f keys with f1-f16', () => {})
+test('should listen to function keys f1-f16', () => {
+  const callback = jest.fn()
 
-test.skip('should allow named keys like arrow keys, delete, space, enter, backspace, etc.', () => {})
+  renderHook(() => useHotkeys('f1, f16', callback))
+
+  userEvent.keyboard('{f1}')
+  userEvent.keyboard('{f16}')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+})
+
+test('should allow named keys like arrow keys, delete, space, enter, backspace, etc.', () => {
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('up, down, left, right, delete, space, enter, backspace', callback))
+
+  userEvent.keyboard('{up}')
+  userEvent.keyboard('{down}')
+  userEvent.keyboard('{left}')
+  userEvent.keyboard('{right}')
+  userEvent.keyboard('{delete}')
+  userEvent.keyboard('{space}')
+  userEvent.keyboard('{enter}')
+  userEvent.keyboard('{backspace}')
+
+  expect(callback).toHaveBeenCalledTimes(7)
+})
 
 test.skip('should trigger when used in portals', () => {})
 
-test.skip('should parse options and dependencies correctly no matter there position', () => {})
+test('should parse options and dependencies correctly no matter their position', () => {
+  const callback = jest.fn()
 
-test.skip('should pass keyboard event to callback', () => {})
+  renderHook(() => useHotkeys('a', callback, [true], { enabled: true }))
 
-test.skip('should pass hotkeys event to callback', () => {})
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  renderHook(() => useHotkeys('b', callback, { enabled: true }, [true]))
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+
+  renderHook(() => useHotkeys('c', callback, [true], { enabled: false }))
+
+  userEvent.keyboard('C')
+
+  renderHook(() => useHotkeys('d', callback, { enabled: false }, [true]))
+
+  userEvent.keyboard('D')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+
+})
+
+test('should pass keyboard event and hotkey object to callback', () => {
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('a', callback))
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), { key: 'a', shift: false, ctrl: false, alt: false, meta: false, mod: false })
+})
 
 test.skip('should reflect preventDefault option when set', () => {})
 

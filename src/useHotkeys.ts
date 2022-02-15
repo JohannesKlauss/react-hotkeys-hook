@@ -65,7 +65,7 @@ export default function useHotkeys<T extends Element>(
       document.addEventListener('keyup', listener)
     }
 
-    if (_options?.keydown === true && (_options?.keydown !== undefined || _options?.keyup !== true)) {
+    if ((_options?.keydown === undefined && _options?.keyup !== true) || _options?.keydown) {
       console.log('add keydown listener')
       document.addEventListener('keydown', listener)
     }
