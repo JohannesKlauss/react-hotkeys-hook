@@ -1,91 +1,80 @@
-import hotkeys, { HotkeysEvent, KeyHandler } from 'hotkeys-js';
-import React, { useCallback, useEffect, useRef } from 'react';
+import { HotkeyCallback, Keys, OptionsOrDependencyArray, RefType } from './types'
+import { useCallback, useEffect, useRef } from 'react'
+import { parseHotkey, parseKeysHookInput } from './parseHotkeys'
+import {
+  isHotkeyEnabled,
+  isHotkeyEnabledOnTag,
+  isHotkeyMatchingKeyboardEvent,
+  isKeyboardEventTriggeredByInput,
+  possiblyPreventDefault,
+} from './validators'
 
-type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
+export default function useHotkeys<T extends Element>(
+  keys: Keys,
+  callback: HotkeyCallback,
+  options?: OptionsOrDependencyArray,
+  dependencies?: OptionsOrDependencyArray
+) {
+  const ref = useRef<RefType<T>>(null)
 
-// We implement our own custom filter system.
-hotkeys.filter = () => true;
+  const _options = !(options instanceof Array) ? options : !(dependencies instanceof Array) ? dependencies : undefined
+  const _deps = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
 
-const tagFilter = ({ target }: KeyboardEvent, enableOnTags?: AvailableTags[]) => {
-  const targetTagName = target && (target as HTMLElement).tagName;
-
-  return Boolean((targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags)));
-};
-
-const isKeyboardEventTriggeredByInput = (ev: KeyboardEvent) => {
-  return tagFilter(ev, ['INPUT', 'TEXTAREA', 'SELECT']);
-};
-
-export type Options = {
-  enabled?: boolean; // Main setting that determines if the hotkey is enabled or not. (Default: true)
-  filter?: typeof hotkeys.filter; // A filter function returning whether the callback should get triggered or not. (Default: undefined)
-  filterPreventDefault?: boolean; // Prevent default browser behavior if the filter function returns false. (Default: true)
-  enableOnTags?: AvailableTags[]; // Enable hotkeys on a list of tags. (Default: [])
-  enableOnContentEditable?: boolean; // Enable hotkeys on tags with contentEditable props. (Default: false)
-  splitKey?: string; // Character to split keys in hotkeys combinations. (Default +)
-  scope?: string; // Scope. Currently not doing anything.
-  keyup?: boolean; // Trigger on keyup event? (Default: undefined)
-  keydown?: boolean; // Trigger on keydown event? (Default: true)
-};
-
-export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: Options): React.MutableRefObject<T | null>;
-export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, deps?: any[]): React.MutableRefObject<T | null>;
-export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: Options, deps?: any[]): React.MutableRefObject<T | null>;
-export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler, options?: any[] | Options, deps?: any[]): React.MutableRefObject<T | null> {
-  if (options instanceof Array) {
-    deps = options;
-    options = undefined;
-  }
-
-  const {
-    enableOnTags,
-    filter,
-    keyup,
-    keydown,
-    filterPreventDefault = true,
-    enabled = true,
-    enableOnContentEditable = false,
-  } = options as Options || {};
-  const ref = useRef<T | null>(null);
-
-  // The return value of this callback determines if the browsers default behavior is prevented.
-  const memoisedCallback = useCallback((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => {
-    if (filter && !filter(keyboardEvent)) {
-      return !filterPreventDefault;
-    }
-
-    // Check whether the hotkeys was triggered inside an input and that input is enabled or if it was triggered by a content editable tag and it is enabled.
-    if (
-      (isKeyboardEventTriggeredByInput(keyboardEvent) && !tagFilter(keyboardEvent, enableOnTags))
-      || ((keyboardEvent.target as HTMLElement)?.isContentEditable && !enableOnContentEditable)
-    ) {
-      return true;
-    }
-
-    if (ref.current === null || document.activeElement === ref.current) {
-      callback(keyboardEvent, hotkeysEvent);
-      return true;
-    }
-
-    return false;
-  }, deps ? [ref, enableOnTags, filter, ...deps] : [ref, enableOnTags, filter]);
+  const cb = useCallback(callback, [..._deps])
 
   useEffect(() => {
-    if (!enabled) {
-      hotkeys.unbind(keys, memoisedCallback);
+    console.log('run effect')
 
-      return;
+    if (_options?.enabled === false) {
+      console.log('disabled')
+
+      return
     }
 
-    // In this case keydown is likely undefined, so we set it to false, since hotkeys needs the `keydown` key to have a value.
-    if (keyup && keydown !== true) {
-      (options as Options).keydown = false;
+    const listener = (e: KeyboardEvent) => {
+      console.log('listener', e)
+
+      if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, _options?.enableOnTags)) {
+        console.log('return because of tag')
+
+        return
+      }
+
+      parseKeysHookInput(keys, _options?.splitKey).forEach((key) => {
+        const hotkey = parseHotkey(key, _options?.combinationKey)
+
+        if (isHotkeyMatchingKeyboardEvent(e, hotkey)) {
+          possiblyPreventDefault(e, hotkey, _options?.preventDefault)
+
+          if (!isHotkeyEnabled(e, hotkey, _options?.enabled)) {
+            console.log('return because of enabled')
+            return
+          }
+
+          console.log('trigger callback')
+
+          cb(e, hotkey)
+        } else {
+          console.log('did not match key')
+        }
+      })
     }
 
-    hotkeys(keys, (options as Options) || {}, memoisedCallback);
+    if (_options?.keyup) {
+      console.log('add keyup listener')
+      document.addEventListener('keyup', listener)
+    }
 
-    return () => hotkeys.unbind(keys, memoisedCallback);
-  }, [memoisedCallback, keys, enabled]);
+    if (_options?.keydown === true && (_options?.keydown !== undefined || _options?.keyup !== true)) {
+      console.log('add keydown listener')
+      document.addEventListener('keydown', listener)
+    }
 
-  return ref;
+    return () => {
+      document.removeEventListener('keydown', listener)
+      document.removeEventListener('keyup', listener)
+    }
+  }, [keys, cb, _options])
+
+  return ref
 }
