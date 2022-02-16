@@ -44,7 +44,8 @@
     "trailingComma": "es5"
   },
   "dependencies": {
-    "hotkeys-js": "3.8.7"
+    "hotkeys-js": "3.8.7",
+    "invariant": "^2.2.4"
   },
   "devDependencies": {
     "@babel/core": "7.17.2",
@@ -52,6 +53,7 @@
     "@babel/preset-env": "7.16.11",
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
+    "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "12.1.2",
     "@testing-library/react-hooks": "7.0.2",
     "@testing-library/user-event": "13.5.0",

@@ -5,9 +5,10 @@ import {
   isHotkeyEnabled,
   isHotkeyEnabledOnTag,
   isHotkeyMatchingKeyboardEvent,
-  isKeyboardEventTriggeredByInput,
+  isKeyboardEventTriggeredByInput, isScopeActive,
   possiblyPreventDefault,
 } from './validators'
+import { useHotkeysContext } from './HotkeyProvider'
 
 export default function useHotkeys<T extends Element>(
   keys: Keys,
@@ -21,11 +22,12 @@ export default function useHotkeys<T extends Element>(
   const _deps = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
 
   const cb = useCallback(callback, [..._deps])
+  const ctx = useHotkeysContext()
 
   useEffect(() => {
     console.log('run effect')
 
-    if (_options?.enabled === false) {
+    if (_options?.enabled === false || !isScopeActive(ctx.activeScopes, _options?.scopes)) {
       console.log('disabled')
 
       return
@@ -40,6 +42,8 @@ export default function useHotkeys<T extends Element>(
         return
       }
 
+      console.log('check for hotkey for input', e.key)
+
       parseKeysHookInput(keys, _options?.splitKey).forEach((key) => {
         const hotkey = parseHotkey(key, _options?.combinationKey)
 
@@ -51,11 +55,11 @@ export default function useHotkeys<T extends Element>(
             return
           }
 
-          console.log('trigger callback')
+          console.log('trigger callback for', key)
 
           cb(e, hotkey)
         } else {
-          console.log('did not match key')
+          console.log('did not match key', key)
         }
       })
     }

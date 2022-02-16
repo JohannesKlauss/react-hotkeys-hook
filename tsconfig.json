@@ -3,9 +3,9 @@
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "node",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "strict": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"]
+  "include": ["src", "./setupTests.ts"]
 }

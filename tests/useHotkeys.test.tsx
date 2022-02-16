@@ -2,8 +2,14 @@ import { renderHook } from '@testing-library/react-hooks'
 import userEvent from '@testing-library/user-event'
 import { useHotkeys } from '../src/index'
 import { HotkeyCallback, Keys, Options } from '../src/types'
-import { DependencyList, MutableRefObject } from 'react'
-import { fireEvent } from '@testing-library/react'
+import { DependencyList, MutableRefObject, ReactNode } from 'react'
+import { HotkeysProvider } from '../src/HotkeyProvider'
+import { createEvent, fireEvent } from '@testing-library/react'
+
+const wrapper =
+  (initialScopes: string[]) =>
+  ({ children }: { children?: ReactNode }) =>
+    <HotkeysProvider initialActiveScopes={initialScopes}>{children}</HotkeysProvider>
 
 type HookParameters = {
   keys: Keys
@@ -12,13 +18,153 @@ type HookParameters = {
   dependencies?: DependencyList
 }
 
-test.skip('should work without a wrapped context provider when not using scopes', () => {})
+test('should work without a wrapped context provider when not using scopes', () => {
+  const callback = jest.fn()
 
-test.skip('should throw a warning when trying to set a scope without a wrapped provider', () => {})
+  renderHook(() => useHotkeys('a', callback))
 
-test.skip('should respect enabled and disabled scopes', () => {})
+  userEvent.keyboard('A')
 
-test.skip('scope should take precedence over enabled flag/function', () => {})
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should log a warning when trying to set a scope without a wrapped provider', () => {
+  console.warn = jest.fn()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('a', callback, { scopes: 'foo' }))
+
+  expect(console.warn).toHaveBeenCalledWith(
+    'A hotkey has a set scopes options, although no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
+  )
+  expect(callback).not.toHaveBeenCalled()
+})
+
+test('should call hotkey when scopes are set but activatedScopes includes wildcard scope', () => {
+  const callback = jest.fn()
+
+  const render = (initialScopes: string[] = []) =>
+    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+      wrapper: wrapper(initialScopes),
+      initialProps: {
+        keys: 'a',
+        options: { scopes: 'foo' },
+      },
+    })
+
+  render()
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalled()
+})
+
+test('should not call hotkey when scopes are set but activatedScopes does not include set scope', () => {
+  const callback = jest.fn()
+
+  const render = (initialScopes: string[] = []) =>
+    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+      wrapper: wrapper(initialScopes),
+      initialProps: {
+        keys: 'a',
+        options: { scopes: 'foo' },
+      },
+    })
+
+  render(['bar'])
+
+  userEvent.keyboard('A')
+
+  expect(callback).not.toHaveBeenCalled()
+})
+
+test('should call hotkey when scopes are set and activatedScopes does include some set scopes', () => {
+  const callback = jest.fn()
+
+  const render = (initialScopes: string[] = []) =>
+    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+      wrapper: wrapper(initialScopes),
+      initialProps: {
+        keys: 'a',
+        options: { scopes: 'foo' },
+      },
+    })
+
+  render(['foo'])
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalled()
+})
+
+test('should handle multiple scopes', () => {
+  const callback = jest.fn()
+
+  const render = (initialScopes: string[] = []) =>
+    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+      wrapper: wrapper(initialScopes),
+      initialProps: {
+        keys: 'a',
+        options: { scopes: ['foo', 'bar'] },
+      },
+    })
+
+  render(['baz', 'bar'])
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalled()
+})
+
+test('should update call behavior when set scopes change', () => {
+  const callback = jest.fn()
+
+  const render = (initialScopes: string[] = []) =>
+    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+      wrapper: wrapper(initialScopes),
+      initialProps: {
+        keys: 'a',
+        options: { scopes: 'foo' },
+      },
+    })
+
+  const { rerender } = render(['foo'])
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalled()
+
+  rerender({ keys: 'a', options: { scopes: 'bar' } })
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('scope should take precedence over enabled flag/function', () => {
+  const callback = jest.fn()
+
+  const render = (initialScopes: string[] = []) =>
+    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+      wrapper: wrapper(initialScopes),
+      initialProps: {
+        keys: 'a',
+        options: { scopes: 'bar', enabled: true },
+      },
+    })
+
+  const {rerender} = render(['foo'])
+
+  userEvent.keyboard('A')
+
+  expect(callback).not.toHaveBeenCalled()
+
+  rerender({ keys: 'a', options: { scopes: 'foo', enabled: true } })
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalled()
+})
 
 test('should listen to key presses', () => {
   const callback = jest.fn()
@@ -154,7 +300,7 @@ test('should listen to + if the combinationKey is set to something different the
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test.skip('should default to keydown if neither keyup nor keydown is passed', () => {
+test('should default to keydown if neither keyup nor keydown is passed', () => {
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('shift', callback))
@@ -294,17 +440,16 @@ test('should listen to function keys f1-f16', () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should allow named keys like arrow keys, delete, space, enter, backspace, etc.', () => {
+test('should allow named keys like arrow keys, space, enter, backspace, etc.', () => {
   const callback = jest.fn()
 
-  renderHook(() => useHotkeys('up, down, left, right, delete, space, enter, backspace', callback))
+  renderHook(() => useHotkeys('arrowUp, arrowDown, arrowLeft, arrowRight, space, enter, backspace', callback))
 
-  userEvent.keyboard('{up}')
-  userEvent.keyboard('{down}')
-  userEvent.keyboard('{left}')
-  userEvent.keyboard('{right}')
-  userEvent.keyboard('{delete}')
-  userEvent.keyboard('{space}')
+  userEvent.keyboard('{arrowUp}')
+  userEvent.keyboard('{arrowDown}')
+  userEvent.keyboard('{arrowLeft}')
+  userEvent.keyboard('{arrowRight}')
+  userEvent.keyboard('[Space]')
   userEvent.keyboard('{enter}')
   userEvent.keyboard('{backspace}')
 
@@ -337,7 +482,6 @@ test('should parse options and dependencies correctly no matter their position',
   userEvent.keyboard('D')
 
   expect(callback).toHaveBeenCalledTimes(2)
-
 })
 
 test('should pass keyboard event and hotkey object to callback', () => {
@@ -348,9 +492,96 @@ test('should pass keyboard event and hotkey object to callback', () => {
   userEvent.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), { key: 'a', shift: false, ctrl: false, alt: false, meta: false, mod: false })
+  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+    key: 'a',
+    shift: false,
+    ctrl: false,
+    alt: false,
+    meta: false,
+    mod: false,
+  })
 })
 
-test.skip('should reflect preventDefault option when set', () => {})
+test('should reflect preventDefault option when set', () => {
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('a', callback, { preventDefault: true }))
+
+  const keyDownEvent = createEvent.keyDown(document, {
+    key: 'A',
+    code: 'KeyA'
+  })
+
+  fireEvent(document, keyDownEvent)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(keyDownEvent.defaultPrevented).toBe(true)
+})
+
+test('should not prevent default behavior when preventDefault option is not set', () => {
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('a', callback))
+
+  const keyDownEvent = createEvent.keyDown(document, {
+    key: 'A',
+    code: 'KeyA'
+  })
+
+  fireEvent(document, keyDownEvent)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(keyDownEvent.defaultPrevented).toBe(false)
+})
+
+test('should prevent default behavior if preventDefault option is set to a function that returns true', () => {
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('a', callback, { preventDefault: () => true }))
+
+  const keyDownEvent = createEvent.keyDown(document, {
+    key: 'A',
+    code: 'KeyA'
+  })
+
+  fireEvent(document, keyDownEvent)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(keyDownEvent.defaultPrevented).toBe(true)
+})
+
+test('should not prevent default behavior if preventDefault option is set to a function that returns false', () => {
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('a', callback, { preventDefault: () => false }))
+
+  const keyDownEvent = createEvent.keyDown(document, {
+    key: 'A',
+    code: 'KeyA'
+  })
+
+  fireEvent(document, keyDownEvent)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(keyDownEvent.defaultPrevented).toBe(false)
+})
+
+test('should call preventDefault option function with hotkey and keyboard event', () => {
+  const preventDefault = jest.fn()
+
+  renderHook(() => useHotkeys('a', () => {}, { preventDefault}))
+
+  userEvent.keyboard('A')
+
+  expect(preventDefault).toHaveBeenCalledTimes(1)
+  expect(preventDefault).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+    key: 'a',
+    shift: false,
+    ctrl: false,
+    alt: false,
+    meta: false,
+    mod: false,
+  })
+})
 
 test.skip('should trigger on editable content tags if enableOnContentEditable is set to true', () => {})
