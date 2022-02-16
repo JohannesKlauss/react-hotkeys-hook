@@ -1,22 +1,24 @@
 import { HotkeyCallback, Keys, OptionsOrDependencyArray, RefType } from './types'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useLayoutEffect, useRef } from 'react'
 import { parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
   isHotkeyEnabled,
   isHotkeyEnabledOnTag,
   isHotkeyMatchingKeyboardEvent,
-  isKeyboardEventTriggeredByInput, isScopeActive,
-  possiblyPreventDefault,
+  isKeyboardEventTriggeredByInput,
+  isScopeActive,
+  maybePreventDefault,
 } from './validators'
-import { useHotkeysContext } from './HotkeyProvider'
+import { useHotkeysContext } from './HotkeysProvider'
 
-export default function useHotkeys<T extends Element>(
+export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
   options?: OptionsOrDependencyArray,
   dependencies?: OptionsOrDependencyArray
 ) {
   const ref = useRef<RefType<T>>(null)
+  const { current: pressedDownKeys } = useRef<Set<string>>(new Set())
 
   const _options = !(options instanceof Array) ? options : !(dependencies instanceof Array) ? dependencies : undefined
   const _deps = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
@@ -24,59 +26,63 @@ export default function useHotkeys<T extends Element>(
   const cb = useCallback(callback, [..._deps])
   const ctx = useHotkeysContext()
 
-  useEffect(() => {
-    console.log('run effect')
-
+  useLayoutEffect(() => {
     if (_options?.enabled === false || !isScopeActive(ctx.activeScopes, _options?.scopes)) {
-      console.log('disabled')
-
       return
     }
 
     const listener = (e: KeyboardEvent) => {
-      console.log('listener', e)
-
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, _options?.enableOnTags)) {
-        console.log('return because of tag')
-
         return
       }
 
-      console.log('check for hotkey for input', e.key)
+      if (ref.current !== null && document.activeElement !== ref.current) {
+        return
+      }
+
+      console.log('isContentEditable', ((e.target as HTMLElement)?.isContentEditable))
+
+      if (((e.target as HTMLElement)?.isContentEditable && !_options?.enableOnContentEditable)) {
+        return
+      }
 
       parseKeysHookInput(keys, _options?.splitKey).forEach((key) => {
         const hotkey = parseHotkey(key, _options?.combinationKey)
 
-        if (isHotkeyMatchingKeyboardEvent(e, hotkey)) {
-          possiblyPreventDefault(e, hotkey, _options?.preventDefault)
+        if (isHotkeyMatchingKeyboardEvent(e, hotkey, pressedDownKeys) || hotkey.keys?.includes('*')) {
+          maybePreventDefault(e, hotkey, _options?.preventDefault)
 
           if (!isHotkeyEnabled(e, hotkey, _options?.enabled)) {
-            console.log('return because of enabled')
             return
           }
 
-          console.log('trigger callback for', key)
-
           cb(e, hotkey)
-        } else {
-          console.log('did not match key', key)
         }
       })
     }
 
-    if (_options?.keyup) {
-      console.log('add keyup listener')
-      document.addEventListener('keyup', listener)
+    const handleKeyDown = (event: KeyboardEvent) => {
+      pressedDownKeys.add(event.key.toLowerCase())
+
+      if ((_options?.keydown === undefined && _options?.keyup !== true) || _options?.keydown) {
+        listener(event)
+      }
     }
 
-    if ((_options?.keydown === undefined && _options?.keyup !== true) || _options?.keydown) {
-      console.log('add keydown listener')
-      document.addEventListener('keydown', listener)
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (_options?.keyup) {
+        listener(event)
+      }
+
+      pressedDownKeys.delete(event.key.toLowerCase())
     }
+
+    document.addEventListener('keyup', handleKeyUp)
+    document.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      document.removeEventListener('keydown', listener)
-      document.removeEventListener('keyup', listener)
+      document.removeEventListener('keyup', handleKeyUp)
+      document.removeEventListener('keydown', handleKeyDown)
     }
   }, [keys, cb, _options])
 

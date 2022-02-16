@@ -24,10 +24,10 @@ export function parseHotkey(hotkey: string, combinationKey: string = '+'): Hotke
     mod: keys.includes('mod'),
   }
 
-  const key = keys.find((k) => !reservedModifierKeywords.includes(k))
+  const singleCharKeys = keys.filter((k) => !reservedModifierKeywords.includes(k))
 
   return {
     ...modifiers,
-    key,
+    keys: singleCharKeys,
   }
 }

@@ -1,6 +1,6 @@
 import { FormTags, Hotkey, Scopes, Trigger } from './types'
 
-export function possiblyPreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
+export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
     e.preventDefault()
   }
@@ -40,40 +40,45 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
   return activeScopes.some(scope => scopes.includes(scope)) || activeScopes.includes('*')
 }
 
-export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey): boolean => {
-  const { alt, ctrl, meta, mod, shift, key } = hotkey
-  const { altKey, ctrlKey, metaKey, shiftKey, key: pressedKey, code } = e
+export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, pressedDownKeys: Set<string>): boolean => {
+  const { alt, ctrl, meta, mod, shift, keys } = hotkey
+  const { altKey, ctrlKey, metaKey, shiftKey, key: pressedKeyUppercase, code } = e
 
   const keyCode = code.toLowerCase().replace('key', '')
+  const pressedKey = pressedKeyUppercase.toLowerCase()
 
-  if (altKey !== alt) {
+  if (altKey !== alt && pressedKey !== 'alt') {
     return false
   }
 
-  if (shiftKey !== shift) {
+  if (shiftKey !== shift && pressedKey !== 'shift') {
     return false
   }
 
-  // Mod is a special character that is checking for meta on macOS and ctrl on other platforms
+  // Mod is a special key name that is checking for meta on macOS and ctrl on other platforms
   if (mod) {
     if (!metaKey && !ctrlKey) {
       return false
     }
   } else {
-    if (metaKey !== meta) {
+    if (metaKey !== meta && keyCode !== 'meta') {
       return false
     }
 
-    if (ctrlKey !== ctrl) {
+    if (ctrlKey !== ctrl && keyCode !== 'ctrl') {
       return false
     }
   }
 
   // All modifiers are correct, now check the key
   // If the key is set we check for the key
-  if (key && (key.toLowerCase() === pressedKey.toLowerCase() || keyCode === key.toLowerCase())) {
+  if (keys && keys.length === 1 && (keys.includes(pressedKey) || keys.includes(keyCode))) {
     return true
-  } else if (!key) {
+  } else if (keys) {
+    // Check if all keys are present in pressedDownKeys set
+    return keys.every(key => pressedDownKeys.has(key))
+  }
+  else if (!keys) {
     // If the key is not set, we only listen for modifiers, that check went alright, so we return true
     return true
   }

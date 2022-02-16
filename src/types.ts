@@ -15,7 +15,7 @@ export type KeyboardModifiers = {
 }
 
 export type Hotkey = KeyboardModifiers & {
-  key?: string
+  keys?: string[]
   scopes?: Scopes
 }
 

@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import { HotkeysProvider, useHotkeysContext } from '../src/HotkeyProvider'
+import { HotkeysProvider, useHotkeysContext } from '../src/HotkeysProvider'
 import { act, renderHook } from '@testing-library/react-hooks'
 import { ReactNode } from 'react'
 
