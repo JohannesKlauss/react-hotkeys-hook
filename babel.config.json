@@ -7,10 +7,10 @@
           "node": "current"
         }
       }
-    ]
+    ],
+    "@babel/preset-typescript"
   ],
   "plugins": [
-    "@babel/plugin-proposal-class-properties",
-    "@babel/preset-typescript"
+    "@babel/plugin-proposal-class-properties"
   ]
 }
