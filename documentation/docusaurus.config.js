@@ -100,10 +100,6 @@ module.exports = {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
     },
-    gtag: {
-      trackingID: 'G-7WHC83DL0G',
-      anonymizeIP: true,
-    },
   },
   presets: [
     [
@@ -117,6 +113,10 @@ module.exports = {
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
+        },
+        gtag: {
+          trackingID: 'G-7WHC83DL0G',
+          anonymizeIP: true,
         },
       },
     ],
