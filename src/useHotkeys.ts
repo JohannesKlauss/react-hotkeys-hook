@@ -20,6 +20,7 @@ export type Options = {
   enabled?: boolean; // Main setting that determines if the hotkey is enabled or not. (Default: true)
   filter?: typeof hotkeys.filter; // A filter function returning whether the callback should get triggered or not. (Default: undefined)
   filterPreventDefault?: boolean; // Prevent default browser behavior if the filter function returns false. (Default: true)
+  alwaysNotPreventDefault?: boolean; // Callback function returns always true. (Default: undefined)
   enableOnTags?: AvailableTags[]; // Enable hotkeys on a list of tags. (Default: [])
   enableOnContentEditable?: boolean; // Enable hotkeys on tags with contentEditable props. (Default: false)
   splitKey?: string; // Character to split keys in hotkeys combinations. (Default +)
@@ -43,6 +44,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
     keyup,
     keydown,
     filterPreventDefault = true,
+    alwaysNotPreventDefault,
     enabled = true,
     enableOnContentEditable = false,
   } = options as Options || {};
@@ -64,6 +66,10 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
 
     if (ref.current === null || document.activeElement === ref.current) {
       callback(keyboardEvent, hotkeysEvent);
+      return true;
+    }
+
+    if (alwaysNotPreventDefault) {
       return true;
     }
 
