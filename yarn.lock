@@ -2610,14 +2610,7 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
 
-"@types/react-dom@18.0.3":
-  version "18.0.3"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.3.tgz#a022ea08c75a476fe5e96b675c3e673363853831"
-  integrity sha512-1RRW9kst+67gveJRYPxGmVy8eVJ05O43hg77G2j5m76/RFJtMbcfAs2viQ2UNsvvDg8F7OfQZx8qQcl6ymygaQ==
-  dependencies:
-    "@types/react" "*"
-
-"@types/react-dom@^18.0.0":
+"@types/react-dom@18.0.3", "@types/react-dom@^18.0.0":
   version "18.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.3.tgz#a022ea08c75a476fe5e96b675c3e673363853831"
   integrity sha512-1RRW9kst+67gveJRYPxGmVy8eVJ05O43hg77G2j5m76/RFJtMbcfAs2viQ2UNsvvDg8F7OfQZx8qQcl6ymygaQ==
@@ -4703,10 +4696,10 @@ hosted-git-info@^2.1.4:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz#dffc0bf9a21c02209090f2aa69429e1414daf3f9"
   integrity sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==
 
-hotkeys-js@3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.9.0.tgz#f8d3c3c163fd14ec70a0931b68c12c5c8428d185"
-  integrity sha512-nnZ6Kbitubo52W40/lrEDr5r9gSCNHl1utn/fB/hEHsg+6mjyiBqjwBAfXsX/MMuvxuoI3YwMYAJFT0DvR4VHg==
+hotkeys-js@3.9.1:
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.9.1.tgz#c31744b30f15489c5c35f30dbe550b9ec24b0ab8"
+  integrity sha512-yOUKETG400MA6scRemob0FdnOQ7uxTbM3vBzfv6XflMqKQZjtEreemPoJVLiJvnKvAVTBdKu2swXdQCvN/hpkA==
 
 html-encoding-sniffer@^1.0.2:
   version "1.0.2"
