@@ -8,7 +8,7 @@ import { createEvent, fireEvent, render } from '@testing-library/react'
 const wrapper =
   (initialScopes: string[]) =>
   ({ children }: { children?: ReactNode }) =>
-    <HotkeysProvider initialActiveScopes={initialScopes}>{children}</HotkeysProvider>
+    <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
 
 type HookParameters = {
   keys: Keys
@@ -833,4 +833,14 @@ test('should call preventDefault option function with hotkey and keyboard event'
     meta: false,
     mod: false,
   })
+})
+
+test('Should listen to space key', () => {
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('space', callback))
+
+  userEvent.keyboard(' ')
+
+  expect(callback).toHaveBeenCalledTimes(1)
 })

@@ -9,55 +9,49 @@ type HotkeysContextType = {
   deactivateScope: (scope: string) => void
 }
 
-const HotkeysContext = createContext<HotkeysContextType | undefined>(undefined)
+// The context is only needed for special features like global scoping, so we use a graceful default fallback
+const HotkeysContext = createContext<HotkeysContextType>({
+  hotkeys: [],
+  activeScopes: [],
+  toggleScope: () => {},
+  activateScope: () => {},
+  deactivateScope: () => {},
+})
 
 interface Props {
-  initialActiveScopes?: string[]
+  initiallyActiveScopes?: string[]
   children: ReactNode
 }
 
 export const useHotkeysContext = () => {
-  const context = useContext(HotkeysContext)
-
-  // The context is only needed for special features like global scoping, so we don't throw an error if it's not defined
-  if (context === undefined) {
-    return {
-      hotkeys: [],
-      activeScopes: [],
-      toggleScope: () => {},
-      activateScope: () => {},
-      deactivateScope: () => {},
-    }
-  }
-
-  return context
+  return useContext(HotkeysContext)
 }
 
-export const HotkeysProvider = ({initialActiveScopes = ['*'], children}: Props) => {
-  const [activeScopes, setActiveScopes] = useState(initialActiveScopes?.length > 0 ? initialActiveScopes : ['*'])
+export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props) => {
+  const [internalActiveScopes, setInternalActiveScopes] = useState(initiallyActiveScopes?.length > 0 ? initiallyActiveScopes : ['*'])
 
-  const isAllActive = useMemo(() => activeScopes.includes('*'), [activeScopes])
+  const isAllActive = useMemo(() => internalActiveScopes.includes('*'), [internalActiveScopes])
 
   const activateScope = (scope: string) => {
     if (isAllActive) {
-      setActiveScopes([scope])
+      setInternalActiveScopes([scope])
     } else {
-      setActiveScopes([...activeScopes, scope])
+      setInternalActiveScopes([...internalActiveScopes, scope])
     }
   }
 
   const deactivateScope = (scope: string) => {
-    const scopes = activeScopes.filter(s => s !== scope)
+    const scopes = internalActiveScopes.filter(s => s !== scope)
 
     if (scopes.length === 0) {
-      setActiveScopes(['*'])
+      setInternalActiveScopes(['*'])
     } else {
-      setActiveScopes(scopes)
+      setInternalActiveScopes(scopes)
     }
   }
 
   const toggleScope = (scope: string) => {
-    if (activeScopes.includes(scope)) {
+    if (internalActiveScopes.includes(scope)) {
       deactivateScope(scope)
     } else {
       activateScope(scope)
@@ -65,7 +59,7 @@ export const HotkeysProvider = ({initialActiveScopes = ['*'], children}: Props) 
   }
 
   return (
-    <HotkeysContext.Provider value={{activeScopes, hotkeys: [], activateScope, deactivateScope, toggleScope}}>
+    <HotkeysContext.Provider value={{activeScopes: internalActiveScopes, hotkeys: [], activateScope, deactivateScope, toggleScope}}>
       {children}
     </HotkeysContext.Provider>
   )

@@ -40,8 +40,6 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      console.log('isContentEditable', ((e.target as HTMLElement)?.isContentEditable))
-
       if (((e.target as HTMLElement)?.isContentEditable && !_options?.enableOnContentEditable)) {
         return
       }

@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import { HotkeysProvider, useHotkeysContext } from '../src/HotkeysProvider'
+import { HotkeysProvider, useHotkeysContext } from '../src'
 import { act, renderHook } from '@testing-library/react-hooks'
 import { ReactNode } from 'react'
 
@@ -22,7 +22,7 @@ test('should default to wildcard scope', () => {
 })
 
 test('should default to wildcard scope if empty array is provided as initialActiveScopes', () => {
-  const wrapper = ({ children }: {children: ReactNode}) => <HotkeysProvider initialActiveScopes={[]}>{children}</HotkeysProvider>
+  const wrapper = ({ children }: {children: ReactNode}) => <HotkeysProvider initiallyActiveScopes={[]}>{children}</HotkeysProvider>
   const { result } = renderHook(() => useHotkeysContext(), {
     wrapper,
   })
@@ -148,7 +148,7 @@ test('should keep wildcard scope active when all is the only active scope and ge
 })
 
 test('should return initially set scopes', () => {
-  const wrapper = ({ children }: {children: ReactNode}) => <HotkeysProvider initialActiveScopes={['foo', 'bar']}>{children}</HotkeysProvider>
+  const wrapper = ({ children }: {children: ReactNode}) => <HotkeysProvider initiallyActiveScopes={['foo', 'bar']}>{children}</HotkeysProvider>
   const { result } = renderHook(() => useHotkeysContext(), {
     wrapper,
   })
