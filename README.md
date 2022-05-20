@@ -37,7 +37,7 @@ A React hook for using keyboard shortcuts in components.
 ## Quick Start
 
 ```jsx harmony
-import { useHotkeys } from 'react-use-hotkeys-hook'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0)
