@@ -7,6 +7,6 @@ module.exports = {
   testPathIgnorePatterns: [
     "/node_modules/",
     "/dist/",
-    "/documentation/"
+    "/_old_documentation/"
   ]
 };

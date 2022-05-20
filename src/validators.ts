@@ -15,19 +15,23 @@ export function isHotkeyEnabled(e: KeyboardEvent, hotkey: Hotkey, enabled?: Trig
 }
 
 export function isKeyboardEventTriggeredByInput(ev: KeyboardEvent): boolean {
-  return isHotkeyEnabledOnTag(ev, ['INPUT', 'TEXTAREA', 'SELECT'])
+  return isHotkeyEnabledOnTag(ev, ['input', 'textarea', 'select'])
 }
 
-export function isHotkeyEnabledOnTag({ target }: KeyboardEvent, enabledOnTags?: FormTags[]): boolean {
+export function isHotkeyEnabledOnTag({ target }: KeyboardEvent, enabledOnTags: FormTags[] | boolean = false): boolean {
   const targetTagName = target && (target as HTMLElement).tagName
 
-  return Boolean(targetTagName && enabledOnTags && enabledOnTags.includes(targetTagName as FormTags))
+  if (enabledOnTags instanceof Array) {
+    return Boolean(targetTagName && enabledOnTags && enabledOnTags.some(tag => tag.toLowerCase() === targetTagName.toLowerCase()))
+  }
+
+  return Boolean(targetTagName && enabledOnTags && enabledOnTags === true)
 }
 
 export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
   if (activeScopes.length === 0 && scopes) {
     console.warn(
-      'A hotkey has a set scopes options, although no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
+      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
     )
 
     return true

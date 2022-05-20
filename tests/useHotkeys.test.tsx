@@ -34,7 +34,7 @@ test('should log a warning when trying to set a scope without a wrapped provider
   renderHook(() => useHotkeys('a', callback, { scopes: 'foo' }))
 
   expect(console.warn).toHaveBeenCalledWith(
-    'A hotkey has a set scopes options, although no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
+    'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
   )
   expect(callback).not.toHaveBeenCalled()
 })
@@ -408,13 +408,55 @@ test('should be disabled on form tags by default', () => {
 
 test('should be enabled on given form tags', () => {
   const callback = jest.fn()
-  const Component = ({ cb, enableOnTags }: { cb: HotkeyCallback; enableOnTags?: FormTags[] }) => {
-    useHotkeys<HTMLDivElement>('a', cb, { enableOnTags })
+  const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
 
     return <input type={'text'} data-testid={'form-tag'} />
   }
 
-  const { getByTestId } = render(<Component cb={callback} enableOnTags={['INPUT']} />)
+  const { getByTestId } = render(<Component cb={callback} enableOnFormTags={['INPUT']} />)
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  userEvent.click(getByTestId('form-tag'))
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+  expect(getByTestId('form-tag')).toHaveValue('A')
+})
+
+test('should ignore case of form tags', () => {
+  const callback = jest.fn()
+  const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
+
+    return <input type={'text'} data-testid={'form-tag'} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} enableOnFormTags={['input']} />)
+
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  userEvent.click(getByTestId('form-tag'))
+  userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+  expect(getByTestId('form-tag')).toHaveValue('A')
+})
+
+test('enabledOnTags should accept boolean', () => {
+  const callback = jest.fn()
+  const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] | boolean }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
+
+    return <input type={'text'} data-testid={'form-tag'} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} enableOnFormTags />)
 
   userEvent.keyboard('A')
 
@@ -429,13 +471,13 @@ test('should be enabled on given form tags', () => {
 
 test('should prevent pressed down key propagate to input field when preventDefault is set to true and form tag is enabled', () => {
   const callback = jest.fn()
-  const Component = ({ cb, enableOnTags }: { cb: HotkeyCallback; enableOnTags?: FormTags[] }) => {
-    useHotkeys<HTMLDivElement>('a', cb, { enableOnTags, preventDefault: true })
+  const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags, preventDefault: true })
 
     return <input type={'text'} data-testid={'form-tag'} />
   }
 
-  const { getByTestId } = render(<Component cb={callback} enableOnTags={['INPUT']} />)
+  const { getByTestId } = render(<Component cb={callback} enableOnFormTags={['INPUT']} />)
 
   userEvent.keyboard('A')
 
@@ -450,8 +492,8 @@ test('should prevent pressed down key propagate to input field when preventDefau
 
 test('should be disabled on all other tags by default', () => {
   const callback = jest.fn()
-  const Component = ({ cb, enableOnTags }: { cb: HotkeyCallback; enableOnTags?: FormTags[] }) => {
-    useHotkeys<HTMLDivElement>('a', cb, { enableOnTags })
+  const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
 
     return (
       <>
@@ -461,7 +503,7 @@ test('should be disabled on all other tags by default', () => {
     )
   }
 
-  const { getByTestId } = render(<Component cb={callback} enableOnTags={['TEXTAREA']} />)
+  const { getByTestId } = render(<Component cb={callback} enableOnFormTags={['TEXTAREA']} />)
 
   userEvent.click(getByTestId('form-tag'))
   userEvent.keyboard('A')

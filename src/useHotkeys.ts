@@ -10,12 +10,13 @@ import {
   maybePreventDefault,
 } from './validators'
 import { useHotkeysContext } from './HotkeysProvider'
+import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
 
 export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
   options?: OptionsOrDependencyArray,
-  dependencies?: OptionsOrDependencyArray
+  dependencies?: OptionsOrDependencyArray,
 ) {
   const ref = useRef<RefType<T>>(null)
   const { current: pressedDownKeys } = useRef<Set<string>>(new Set())
@@ -26,13 +27,15 @@ export default function useHotkeys<T extends HTMLElement>(
   const cb = useCallback(callback, [..._deps])
   const ctx = useHotkeysContext()
 
+  const proxy = useBoundHotkeysProxy()
+
   useLayoutEffect(() => {
     if (_options?.enabled === false || !isScopeActive(ctx.activeScopes, _options?.scopes)) {
       return
     }
 
     const listener = (e: KeyboardEvent) => {
-      if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, _options?.enableOnTags)) {
+      if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, _options?.enableOnFormTags)) {
         return
       }
 
@@ -75,12 +78,24 @@ export default function useHotkeys<T extends HTMLElement>(
       pressedDownKeys.delete(event.key.toLowerCase())
     }
 
-    document.addEventListener('keyup', handleKeyUp)
-    document.addEventListener('keydown', handleKeyDown)
+    // @ts-ignore
+    (ref.current || document).addEventListener('keyup', handleKeyUp);
+    // @ts-ignore
+    (ref.current || document).addEventListener('keydown', handleKeyDown)
+
+    if (proxy) {
+      parseKeysHookInput(keys, _options?.splitKey).forEach((key) => proxy.addHotkey(parseHotkey(key, _options?.combinationKey)))
+    }
 
     return () => {
-      document.removeEventListener('keyup', handleKeyUp)
-      document.removeEventListener('keydown', handleKeyDown)
+      // @ts-ignore
+      (ref.current || document).removeEventListener('keyup', handleKeyUp);
+      // @ts-ignore
+      (ref.current || document).removeEventListener('keydown', handleKeyDown)
+
+      if (proxy) {
+        parseKeysHookInput(keys, _options?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, _options?.combinationKey)))
+      }
     }
   }, [keys, cb, _options])
 

@@ -156,6 +156,8 @@ test('should return initially set scopes', () => {
   expect(result.current.activeScopes).toEqual(['foo', 'bar'])
 })
 
-test.skip('should return currently active hotkeys', () => {})
+test.skip('should return all bound hotkeys', () => {
+
+})
 
 test.skip('should return all bound hotkeys', () => {})
