@@ -8,8 +8,10 @@ hotkeys.filter = () => true;
 
 const tagFilter = ({ target }: KeyboardEvent, enableOnTags?: AvailableTags[]) => {
   const targetTagName = target && (target as HTMLElement).tagName;
-
-  return Boolean((targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags)));
+  const enableHotkeys =
+          !!(target && (target as HTMLInputElement).dataset.enableHotkeys) ||
+          !!(target && (target as HTMLInputElement)?.parentElement?.dataset.enableHotkeys)
+  return Boolean(enableHotkeys || (targetTagName && enableOnTags && enableOnTags.includes(targetTagName as AvailableTags)));
 };
 
 const isKeyboardEventTriggeredByInput = (ev: KeyboardEvent) => {
