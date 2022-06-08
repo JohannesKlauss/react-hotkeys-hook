@@ -62,7 +62,7 @@
     "@babel/preset-env": "7.17.10",
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
-    "@testing-library/react": "13.2.0",
+    "@testing-library/react": "13.3.0",
     "@testing-library/react-hooks": "8.0.0",
     "@testing-library/user-event": "13.5.0",
     "@types/jest": "27.5.1",
