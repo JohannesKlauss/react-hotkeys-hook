@@ -62,7 +62,7 @@ export function useHotkeys<T extends Element>(keys: string, callback: KeyHandler
       return true;
     }
 
-    if (ref.current === null || document.activeElement === ref.current) {
+    if (ref.current === null || document.activeElement === ref.current || ref.current?.contains(document.activeElement)) {
       callback(keyboardEvent, hotkeysEvent);
       return true;
     }
