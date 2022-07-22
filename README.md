@@ -1,6 +1,59 @@
-# react-hotkeys-hook
-React hook for using keyboard shortcuts in components.
-This is a hook version for the [hotkeys] package.
+<hr>
+<div align="center">
+  <h1 align="center">
+    useHotkeys(key, handler)
+  </h1>
+</div>
+
+<p align="center">
+  <a href="https://bundlephobia.com/result?p=react-hotkeys-hook">
+    <img alt="Bundlephobia" src="https://img.shields.io/bundlephobia/minzip/react-hotkeys-hook?style=for-the-badge&labelColor=24292e">
+  </a>
+  <a aria-label="Types" href="https://www.npmjs.com/package/react-hotkeys-hook">
+    <img alt="Types" src="https://img.shields.io/npm/types/react-use-system-color-mode?style=for-the-badge&labelColor=24292e">
+  </a>
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/react-hotkeys-hook">
+    <img alt="NPM Version" src="https://img.shields.io/npm/v/react-hotkeys-hook?style=for-the-badge&labelColor=24292e">
+  </a>
+  <a aria-label="License" href="https://jaredlunde.mit-license.org/">
+    <img alt="MIT License" src="https://img.shields.io/npm/l/react-hotkeys-hook?style=for-the-badge&labelColor=24292e">
+  </a>
+</p>
+
+<p align="center">
+  <a aria-label="Sponsored by Spaceteams" href="https://spaceteams.de">
+    <img alt="Sponsored by Spaceteams" src="https://raw.githubusercontent.com/spaceteams/badges/main/sponsored-by-spaceteams.svg">
+  </a>
+</p>
+
+<pre align="center">npm i react-hotkeys-hook</pre>
+
+<p align="center">
+A React hook for using keyboard shortcuts in components.
+</p>
+
+<hr>
+
+## Quick Start
+
+```jsx harmony
+import { useHotkeys } from 'react-hotkeys-hook'
+
+export const ExampleComponent = () => {
+  const [count, setCount] = useState(0)
+  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <p>
+      Pressed {count} times.
+    </p>
+  )
+}
+```
+
+The hook takes care of all the binding and unbinding for you.
+As soon as the component mounts into the DOM, the key stroke will be
+listened to. When the component unmounts it will stop listening.
 
 ## Documentation & Live Examples
 
@@ -13,39 +66,9 @@ This is a hook version for the [hotkeys] package.
 If you use this package please share your thoughts on how we can improve this hook with version 4.
 Please engage at the corresponding [Github issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574).
 
-## Installation
+## API
 
-```shell
-npm install react-hotkeys-hook
-```
-
-or
-
-```shell
-yarn add react-hotkeys-hook
-```
-
-Make sure that you have at least version 16.8 of `react` and `react-dom` installed, or otherwise hooks won't work for you.
-
-## Usage
-```js
-export const ExampleComponent = () => {
-  const [count, setCount] = useState(0);
-  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1));
-    
-  return (
-    <p>
-      Pressed {count} times.
-    </p>
-  );
-};
-```
-
-The hook takes care of all the binding and unbinding for you.
-As soon as the component mounts into the DOM, the key stroke will be
-listened to. When the component unmounts it will stop listening.
-
-### Call Signature
+### useHotkeys()
 
 ```typescript
 useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: any[] = [])
@@ -53,11 +76,11 @@ useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent)
 
 ### Parameters
 - `keys: string`: Here you can set the key strokes you want the hook to listen to. You can use single or multiple keys,
-modifier combination, etc. See [this](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts)
-section on the hotkeys documentation for more info.
+  modifier combination, etc. See [this](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts)
+  section on the hotkeys documentation for more info.
 - `callback: (event: KeyboardEvent, handler: HotkeysEvent) => void`: Gets executed when the defined keystroke
-gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
-to do this anymore by yourself.
+  gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
+  to do this anymore by yourself.
 - `options: Options = {}`
   - `filter: (event: KeyboardEvent): boolean` is used to filter if a callback gets triggered depending on the keyboard event.
     **Breaking Change in `3.0.0`!** Prior to version `3.0.0` the filter settings was one global setting that applied to every
@@ -70,30 +93,26 @@ to do this anymore by yourself.
   - `keydown: boolean` Determine if want to listen on the keydown event
   - `enabled: boolean` is used to prevent installation of the hotkey when set to false (default value: `true`)
 - `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
-dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
-that will change over time, you should add this value to your deps array. Since most of the time your callback won't
-depend on any unstable callbacks or changing values over time you can leave this value alone since it will be set to an
-empty array by default. See the [Memoisation](#memoisation) section to
-learn more and see an example where you have to set this array.
+  dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
+  that will change over time, you should add this value to your deps array. Since most of the time your callback won't
+  depend on any unstable callbacks or changing values over time you can leave this value alone since it will be set to an
+  empty array by default. See the [Memoisation](#memoisation) section to
+  learn more and see an example where you have to set this array.
 
 ### `isHotkeyPressed` function
 
 This function allows us to check if the user is currently pressing down a key.
 
 ```ts
-import { isHotkeyPressed } from 'react-hotkeys-hook';
+import { isHotkeyPressed } from 'react-hotkeys-hook'
 
-isHotkeyPressed('return'); // Returns true if Return key is pressed down.
+isHotkeyPressed('return') // Returns true if Return key is pressed down.
 ```
 
 ## Support
 
 * Ask your question in the [Github Discussions]([Support](https://github.com/JohannesKlauss/react-hotkeys-hook/discussions))
 * Ask your question on [StackOverflow](https://stackoverflow.com/search?page=1&tab=Relevance&q=react-hotkeys-hook)
-
-If you'd like to support me, please buy me a ko-fi:
-
-[<img src="https://cdn.ko-fi.com/cdn/kofi5.png?v=3">](https://ko-fi.com/U7U05CEWG)
 
 ## Found an issue or have a feature request?
 
@@ -104,9 +123,23 @@ or [pull request](https://github.com/JohannesKlauss/react-hotkeys-hook/compare) 
 
 Checkout this repo, run `yarn` or `npm i` and then run the `test` script to test the behavior of the hook.
 
-## Authors
+## Contributing
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-* Johannes Klauss
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Contact
+
+Johannes Klauss - [@JohannesKlauss](https://github.com/JohannesKlauss) - klauss.johannes@gmail.com
+
+Project Link: [https://github.com/JohannesKlauss/react-hotkeys-hook](https://github.com/JohannesKlauss/react-use-system-color-mode)
 
 ## Contributors
 
@@ -118,11 +151,3 @@ Checkout this repo, run `yarn` or `npm i` and then run the `test` script to test
 * [godspeedelbow](https://github.com/godspeedelbow)
 * [JoshuaKGoldberg](https://github.com/JoshuaKGoldberg)
 * [ggascoigne](https://github.com/ggascoigne)
-
----
-
-MIT License.
-
----
-
-[hotkeys]: https://github.com/jaywcjlove/hotkeys
