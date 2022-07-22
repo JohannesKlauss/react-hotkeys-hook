@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook, WrapperComponent } from '@testing-library/react-hooks'
 import userEvent from '@testing-library/user-event'
 import { useHotkeys, HotkeysProvider } from '../src'
 import { FormTags, HotkeyCallback, Keys, Options } from '../src/types'
@@ -6,7 +6,7 @@ import { DependencyList, MutableRefObject, ReactNode } from 'react'
 import { createEvent, fireEvent, render } from '@testing-library/react'
 
 const wrapper =
-  (initialScopes: string[]) =>
+  (initialScopes: string[]): WrapperComponent<any> =>
   ({ children }: { children?: ReactNode }) =>
     <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
 
@@ -198,7 +198,7 @@ test('should listen to multiple hotkeys', () => {
 
   expect(callback).toHaveBeenCalledTimes(2)
 
-  userEvent.keyboard('C')
+  //userEvent.keyboard('C')
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
