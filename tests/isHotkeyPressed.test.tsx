@@ -1,39 +1,130 @@
-import '../src/test'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { isHotkeyPressed } from '../src/isHotkeyPressed'
 
 const renderStub = () => render(<div />)
 
-test('should return true if hotkey is currently pressed down', () => {
+beforeEach(() => {
+  window.document.dispatchEvent(new Event("DOMContentLoaded", {
+    bubbles: true,
+    cancelable: true
+  }))
+})
+
+test('should return true if hotkey is currently pressed down', async () => {
+  const user = userEvent.setup()
+
   renderStub()
 
-  userEvent.keyboard.press('a')
+  await user.keyboard('{A>}')
+
+  expect(isHotkeyPressed('A')).toBe(true)
+  expect(isHotkeyPressed('a')).toBe(true)
 })
 
-test.skip('should return false if hotkey is not pressed down', () => {
+test('should return false if hotkey is not pressed down', async () => {
+  const user = userEvent.setup()
 
+  renderStub()
+
+  await user.keyboard('{A>}')
+
+  expect(isHotkeyPressed('a')).toBe(true)
+
+  await user.keyboard('{/A}')
+
+  expect(isHotkeyPressed('a')).toBe(false)
 })
 
-test.skip('should take modifiers into account', () => {
+test.skip('should take modifiers into account', async () => {
+  const user = userEvent.setup()
 
+  renderStub()
+
+  await user.keyboard('{Shift>}{Control>}{Alt>}{Meta>}')
+
+  expect(isHotkeyPressed('shift')).toBe(true)
+  expect(isHotkeyPressed('ctrl')).toBe(true)
+  expect(isHotkeyPressed('alt')).toBe(true)
+  expect(isHotkeyPressed('meta')).toBe(true)
 })
 
-test.skip('should support multiple hotkeys', () => {
+test('should support multiple hotkeys', async () => {
+  const user = userEvent.setup()
 
+  renderStub()
+
+  await user.keyboard('{B>}{A>}')
+
+  expect(isHotkeyPressed('a')).toBe(true)
+  expect(isHotkeyPressed('b')).toBe(true)
+  expect(isHotkeyPressed(['b', 'a'])).toBe(true)
+
+  await user.keyboard('{/B}')
+
+  expect(isHotkeyPressed('a')).toBe(true)
+  expect(isHotkeyPressed('b')).toBe(false)
+  expect(isHotkeyPressed(['b', 'a'])).toBe(false)
 })
 
-test.skip('should support multiple hotkeys with modifiers', () => {
+test('should support multiple hotkeys with modifiers', async () => {
+  const user = userEvent.setup()
 
+  renderStub()
+
+  await user.keyboard('{Shift>}{A>}')
+
+  expect(isHotkeyPressed('a')).toBe(true)
+  expect(isHotkeyPressed('shift')).toBe(true)
+  expect(isHotkeyPressed(['shift', 'a'])).toBe(true)
+
+  await user.keyboard('{/Shift}')
+
+  expect(isHotkeyPressed('a')).toBe(true)
+  expect(isHotkeyPressed('shift')).toBe(false)
+  expect(isHotkeyPressed(['shift', 'a'])).toBe(false)
 })
 
-test.skip('should only trigger once if multiple hotkeys are pressed', () => {
+test('should use , as splitKey as default', async () => {
+  const user = userEvent.setup()
 
+  renderStub()
+
+  await user.keyboard('{B>}{A>}')
+
+  expect(isHotkeyPressed('a')).toBe(true)
+  expect(isHotkeyPressed('b')).toBe(true)
+  expect(isHotkeyPressed('  a, b  ')).toBe(true)
+  expect(isHotkeyPressed(['a', 'b'])).toBe(true)
+
+  await user.keyboard('{/B}')
+
+  expect(isHotkeyPressed('a')).toBe(true)
+  expect(isHotkeyPressed('b')).toBe(false)
+  expect(isHotkeyPressed('  a, b  ')).toBe(false)
+  expect(isHotkeyPressed(['a', 'b'])).toBe(false)
 })
 
-test.skip('should use , as splitKey as default', () => {
+test('should respect the splitKey option', async () => {
+  const user = userEvent.setup()
 
-})
+  renderStub()
 
-test.skip('should respect the splitKey option', () => {
+  await user.keyboard('{B>}{,>}')
 
+  expect(isHotkeyPressed(',')).toBe(false)
+  expect(isHotkeyPressed(',', '+')).toBe(true)
+  expect(isHotkeyPressed('b')).toBe(true)
+  expect(isHotkeyPressed('b, a')).toBe(false)
+  expect(isHotkeyPressed('ba,', 'a')).toBe(true)
+  expect(isHotkeyPressed(['b', ','])).toBe(true)
+
+  await user.keyboard('{/B}')
+
+  expect(isHotkeyPressed(',')).toBe(false)
+  expect(isHotkeyPressed(',', '+')).toBe(true)
+  expect(isHotkeyPressed('b')).toBe(false)
+  expect(isHotkeyPressed('b, a')).toBe(false)
+  expect(isHotkeyPressed('ba,', 'a')).toBe(false)
+  expect(isHotkeyPressed(['b', ','])).toBe(false)
 })

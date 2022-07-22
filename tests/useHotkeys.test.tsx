@@ -17,17 +17,19 @@ type HookParameters = {
   dependencies?: DependencyList
 }
 
-test('should work without a wrapped context provider when not using scopes', () => {
+test('should work without a wrapped context provider when not using scopes', async () => {
+  const user = userEvent.setup()
+
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should log a warning when trying to set a scope without a wrapped provider', () => {
+test('should log a warning when trying to set a scope without a wrapped provider', async () => {
   console.warn = jest.fn()
   const callback = jest.fn()
 
@@ -39,7 +41,8 @@ test('should log a warning when trying to set a scope without a wrapped provider
   expect(callback).not.toHaveBeenCalled()
 })
 
-test('should call hotkey when scopes are set but activatedScopes includes wildcard scope', () => {
+test('should call hotkey when scopes are set but activatedScopes includes wildcard scope', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
@@ -53,12 +56,13 @@ test('should call hotkey when scopes are set but activatedScopes includes wildca
 
   render()
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalled()
 })
 
-test('should not call hotkey when scopes are set but activatedScopes does not include set scope', () => {
+test('should not call hotkey when scopes are set but activatedScopes does not include set scope', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
@@ -72,12 +76,13 @@ test('should not call hotkey when scopes are set but activatedScopes does not in
 
   render(['bar'])
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).not.toHaveBeenCalled()
 })
 
-test('should call hotkey when scopes are set and activatedScopes does include some set scopes', () => {
+test('should call hotkey when scopes are set and activatedScopes does include some set scopes', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
@@ -91,12 +96,13 @@ test('should call hotkey when scopes are set and activatedScopes does include so
 
   render(['foo'])
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalled()
 })
 
-test('should handle multiple scopes', () => {
+test('should handle multiple scopes', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
@@ -110,12 +116,13 @@ test('should handle multiple scopes', () => {
 
   render(['baz', 'bar'])
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalled()
 })
 
-test('should update call behavior when set scopes change', () => {
+test('should update call behavior when set scopes change', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
@@ -129,7 +136,7 @@ test('should update call behavior when set scopes change', () => {
 
   const { rerender } = render(['foo'])
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalled()
 
@@ -140,7 +147,8 @@ test('should update call behavior when set scopes change', () => {
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('scope should take precedence over enabled flag/function', () => {
+test('scope should take precedence over enabled flag/function', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
@@ -154,56 +162,61 @@ test('scope should take precedence over enabled flag/function', () => {
 
   const { rerender } = render(['foo'])
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).not.toHaveBeenCalled()
 
   rerender({ keys: 'a', options: { scopes: 'foo', enabled: true } })
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalled()
 })
 
-test('should listen to key presses', () => {
+test('should listen to key presses', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should ignore unregistered key events', () => {
+test('should ignore unregistered key events', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback))
 
-  userEvent.keyboard('B')
+  await user.keyboard('B')
 
   expect(callback).not.toHaveBeenCalled()
 })
 
-test('should listen to multiple hotkeys', () => {
+test('should listen to multiple hotkeys', async () => {
+  const user = userEvent.setup()
+
   const callback = jest.fn()
 
   renderHook(() => useHotkeys(['a', 'b'], callback))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  userEvent.keyboard('B')
+  await user.keyboard('B')
 
   expect(callback).toHaveBeenCalledTimes(2)
 
-  //userEvent.keyboard('C')
+  await user.keyboard('C')
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should be able to parse first argument as string or array', () => {
+test('should be able to parse first argument as string or array', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const { rerender } = renderHook<HookParameters, void>(({ keys }) => useHotkeys(keys, callback), {
@@ -212,18 +225,19 @@ test('should be able to parse first argument as string or array', () => {
     },
   })
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
   rerender({ keys: ['a', 'b'] })
 
-  userEvent.keyboard('B')
+  await user.keyboard('B')
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should listen to combinations with modifiers', () => {
+test('should listen to combinations with modifiers', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const { rerender } = renderHook<HookParameters, void>(({ keys }) => useHotkeys(keys, callback), {
@@ -232,65 +246,69 @@ test('should listen to combinations with modifiers', () => {
     },
   })
 
-  userEvent.keyboard('{ctrl}A{/ctrl}')
+  await user.keyboard('{Control>}A{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
   rerender({ keys: 'ctrl+shift+a' })
 
-  userEvent.keyboard('{ctrl}A{/ctrl}')
-  userEvent.keyboard('{ctrl}{shift>}A{/shift}{/ctrl}')
+  await user.keyboard('{Control}A{/Control}')
+  await user.keyboard('{Control>}{Shift>}A{/Shift}{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(2)
 
   rerender({ keys: 'ctrl+shift+alt+a' })
 
-  userEvent.keyboard('{ctrl}{alt}{shift}A{/shift}{/alt}{/ctrl}')
+  await user.keyboard('{Control>}{Alt>}{Shift>}A{/Shift}{/Alt}{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(3)
 })
 
-test('should not trigger when combinations are incomplete', () => {
+test('should not trigger when combinations are incomplete', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys(['ctrl+a'], callback))
 
-  userEvent.keyboard('{ctrl}')
+  await user.keyboard('{Control}')
 
   expect(callback).not.toHaveBeenCalled()
 })
 
-test('should trigger on combinations without modifiers', () => {
+test('should trigger on combinations without modifiers', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a+b+c', callback))
 
-  userEvent.keyboard('{A>}{B>}C{/B}{/A}')
+  await user.keyboard('{A>}{B>}C{/B}{/A}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  userEvent.keyboard('{A>}B{/A}')
+  await user.keyboard('{A>}B{/A}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should listen to multiple combinations with modifiers', () => {
+test('should listen to multiple combinations with modifiers', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const { rerender } = renderHook(() => useHotkeys('ctrl+shift+a, alt+b', callback))
 
-  userEvent.keyboard('{ctrl}{shift}A{/shift}{/ctrl}')
+  await user.keyboard('{Control>}{Shift>}A{/Shift}{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
   rerender(() => useHotkeys('ctrl+shift+alt+a', callback))
 
-  userEvent.keyboard('{alt}B{/alt}')
+  await user.keyboard('{Alt>}B{/Alt}')
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should reflect set splitKey character', () => {
+test('should reflect set splitKey character', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const { rerender } = renderHook<HookParameters, MutableRefObject<HTMLElement | null>>(
@@ -300,92 +318,99 @@ test('should reflect set splitKey character', () => {
     }
   )
 
-  userEvent.keyboard('A')
-  userEvent.keyboard('B')
+  await user.keyboard('A')
+  await user.keyboard('B')
 
   expect(callback).toHaveBeenCalledTimes(2)
 
   rerender({ keys: 'f. shift+g', options: { splitKey: '.' } })
 
-  userEvent.keyboard('F')
-  userEvent.keyboard('{shift}G{/shift}')
+  await user.keyboard('F')
+  await user.keyboard('{Shift>}G{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(4)
 })
 
-test('should listen to + if the combinationKey is set to something different then +', () => {
+test('should listen to + if the combinationKey is set to something different then +', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('shift-+', callback, { combinationKey: '-' }))
 
-  userEvent.keyboard('{shift}+{/shift}')
+  await user.keyboard('{Shift>}+{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should default to keydown if neither keyup nor keydown is passed', () => {
+test('should default to keydown if neither keyup nor keydown is passed', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('shift', callback))
 
-  userEvent.keyboard('{shift>}')
+  await user.keyboard('{Shift>}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should not listen to keyup if keydown is passed', () => {
+test('should not listen to keyup if keydown is passed', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('shift', callback, { keydown: true }))
 
-  userEvent.keyboard('{shift>}')
+  await user.keyboard('{Shift>}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  userEvent.keyboard('{/shift}')
+  await user.keyboard('{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should not listen to keydown if keyup is passed', () => {
+test('should not listen to keydown if keyup is passed', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback, { keyup: true }))
 
-  userEvent.keyboard('{A>}')
+  await user.keyboard('{A>}')
 
   expect(callback).toHaveBeenCalledTimes(0)
 
-  userEvent.keyboard('{A>}{/A}')
+  await user.keyboard('{/A}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should trigger on named keys when keyup is set to true', () => {
+test('should trigger on named keys when keyup is set to true', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('shift', callback, { keyup: true }))
 
-  userEvent.keyboard('{Shift>}')
+  await user.keyboard('{Shift>}')
 
   expect(callback).toHaveBeenCalledTimes(0)
 
-  userEvent.keyboard('{Shift>}{/Shift}')
+  await user.keyboard('{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should trigger twice if keyup and keydown are passed', () => {
+test('should trigger twice if keyup and keydown are passed', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('A', callback, { keyup: true, keydown: true }))
 
-  userEvent.keyboard('{A}')
+  await user.keyboard('{A}')
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should be disabled on form tags by default', () => {
+test('should be disabled on form tags by default', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
   const Component = ({ cb }: { cb: HotkeyCallback }) => {
     useHotkeys<HTMLDivElement>('a', cb)
@@ -395,18 +420,19 @@ test('should be disabled on form tags by default', () => {
 
   const { getByTestId } = render(<Component cb={callback} />)
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  userEvent.click(getByTestId('form-tag'))
-  userEvent.keyboard('A')
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
-test('should be enabled on given form tags', () => {
+test('should be enabled on given form tags', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
   const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
     useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
@@ -416,18 +442,19 @@ test('should be enabled on given form tags', () => {
 
   const { getByTestId } = render(<Component cb={callback} enableOnFormTags={['INPUT']} />)
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  userEvent.click(getByTestId('form-tag'))
-  userEvent.keyboard('A')
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
-test('should ignore case of form tags', () => {
+test('should ignore case of form tags', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
   const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
     useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
@@ -437,18 +464,19 @@ test('should ignore case of form tags', () => {
 
   const { getByTestId } = render(<Component cb={callback} enableOnFormTags={['input']} />)
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  userEvent.click(getByTestId('form-tag'))
-  userEvent.keyboard('A')
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
-test('enabledOnTags should accept boolean', () => {
+test('enabledOnTags should accept boolean', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
   const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] | boolean }) => {
     useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
@@ -458,18 +486,19 @@ test('enabledOnTags should accept boolean', () => {
 
   const { getByTestId } = render(<Component cb={callback} enableOnFormTags />)
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  userEvent.click(getByTestId('form-tag'))
-  userEvent.keyboard('A')
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
-test('should prevent pressed down key propagate to input field when preventDefault is set to true and form tag is enabled', () => {
+test('should prevent pressed down key propagate to input field when preventDefault is set to true and form tag is enabled', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
   const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
     useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags, preventDefault: true })
@@ -479,18 +508,19 @@ test('should prevent pressed down key propagate to input field when preventDefau
 
   const { getByTestId } = render(<Component cb={callback} enableOnFormTags={['INPUT']} />)
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  userEvent.click(getByTestId('form-tag'))
-  userEvent.keyboard('A')
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(getByTestId('form-tag')).toHaveValue('')
 })
 
-test('should be disabled on all other tags by default', () => {
+test('should be disabled on all other tags by default', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
   const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
     useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
@@ -505,34 +535,37 @@ test('should be disabled on all other tags by default', () => {
 
   const { getByTestId } = render(<Component cb={callback} enableOnFormTags={['TEXTAREA']} />)
 
-  userEvent.click(getByTestId('form-tag'))
-  userEvent.keyboard('A')
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
 
   expect(callback).not.toHaveBeenCalled()
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
-test('should not bind the event if enabled is set to false', () => {
+test('should not bind the event if enabled is set to false', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback, { enabled: false }))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(0)
 })
 
-test('should bind the event and trigger if enabled is set to true', () => {
+test('should bind the event and trigger if enabled is set to true', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback, { enabled: true }))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should bind the event and execute the callback if enabled is set to a function and returns true', () => {
+test('should bind the event and execute the callback if enabled is set to a function and returns true', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const { rerender } = renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
@@ -544,7 +577,7 @@ test('should bind the event and execute the callback if enabled is set to a func
     },
   })
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
@@ -555,7 +588,7 @@ test('should bind the event and execute the callback if enabled is set to a func
     },
   })
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
@@ -566,12 +599,12 @@ test('should bind the event and execute the callback if enabled is set to a func
     },
   })
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should return a ref', () => {
+test('should return a ref', async () => {
   const callback = jest.fn()
 
   const { result } = renderHook(() => useHotkeys('a', callback))
@@ -579,7 +612,8 @@ test('should return a ref', () => {
   expect(result.current).toBeDefined()
 })
 
-test('should only trigger when the element is focused if a ref is set', () => {
+test('should only trigger when the element is focused if a ref is set', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   const Component = ({ cb }: { cb: HotkeyCallback }) => {
@@ -594,87 +628,92 @@ test('should only trigger when the element is focused if a ref is set', () => {
 
   const { getByTestId } = render(<Component cb={callback} />)
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).not.toHaveBeenCalled()
 
-  userEvent.click(getByTestId('div'))
-  userEvent.keyboard('A')
+  await user.click(getByTestId('div'))
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should allow * as a wildcard', () => {
+test('should allow * as a wildcard', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('*', callback))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should listen to function keys f1-f16', () => {
+test('should listen to function keys f1-f16', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('f1, f16', callback))
 
-  userEvent.keyboard('{f1}')
-  userEvent.keyboard('{f16}')
+  await user.keyboard('{f1}')
+  await user.keyboard('{f16}')
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should allow named keys like arrow keys, space, enter, backspace, etc.', () => {
+test('should allow named keys like arrow keys, space, enter, backspace, etc.', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('arrowUp, arrowDown, arrowLeft, arrowRight, space, enter, backspace', callback))
 
-  userEvent.keyboard('{arrowUp}')
-  userEvent.keyboard('{arrowDown}')
-  userEvent.keyboard('{arrowLeft}')
-  userEvent.keyboard('{arrowRight}')
-  userEvent.keyboard('[Space]')
-  userEvent.keyboard('{enter}')
-  userEvent.keyboard('{backspace}')
+  await user.keyboard('{arrowUp}')
+  await user.keyboard('{arrowDown}')
+  await user.keyboard('{arrowLeft}')
+  await user.keyboard('{arrowRight}')
+  await user.keyboard('[Space]')
+  await user.keyboard('{enter}')
+  await user.keyboard('{backspace}')
 
   expect(callback).toHaveBeenCalledTimes(7)
 })
 
-test.skip('should trigger when used in portals', () => {})
+test.skip('should trigger when used in portals', async () => {})
 
-test('should parse options and dependencies correctly no matter their position', () => {
+test('should parse options and dependencies correctly no matter their position', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback, [true], { enabled: true }))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
   renderHook(() => useHotkeys('b', callback, { enabled: true }, [true]))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(2)
 
   renderHook(() => useHotkeys('c', callback, [true], { enabled: false }))
 
-  userEvent.keyboard('C')
+  await user.keyboard('C')
 
   renderHook(() => useHotkeys('d', callback, { enabled: false }, [true]))
 
-  userEvent.keyboard('D')
+  await user.keyboard('D')
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should pass keyboard event and hotkey object to callback', () => {
+test('should pass keyboard event and hotkey object to callback', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -687,12 +726,13 @@ test('should pass keyboard event and hotkey object to callback', () => {
   })
 })
 
-test('should set shift to true in hotkey object if listening to shift', () => {
+test('should set shift to true in hotkey object if listening to shift', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('shift+a', callback))
 
-  userEvent.keyboard('{Shift>}A{/Shift}')
+  await user.keyboard('{Shift>}A{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -705,12 +745,13 @@ test('should set shift to true in hotkey object if listening to shift', () => {
   })
 })
 
-test('should set ctrl to true in hotkey object if listening to ctrl', () => {
+test('should set ctrl to true in hotkey object if listening to ctrl', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('ctrl+a', callback))
 
-  userEvent.keyboard('{Control>}A{/Control}')
+  await user.keyboard('{Control>}A{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -723,12 +764,13 @@ test('should set ctrl to true in hotkey object if listening to ctrl', () => {
   })
 })
 
-test('should set alt to true in hotkey object if listening to alt', () => {
+test('should set alt to true in hotkey object if listening to alt', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('alt+a', callback))
 
-  userEvent.keyboard('{Alt>}A{/Alt}')
+  await user.keyboard('{Alt>}A{/Alt}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -741,12 +783,13 @@ test('should set alt to true in hotkey object if listening to alt', () => {
   })
 })
 
-test('should set meta to true in hotkey object if listening to meta', () => {
+test('should set meta to true in hotkey object if listening to meta', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('meta+a', callback))
 
-  userEvent.keyboard('{Meta>}A{/Meta}')
+  await user.keyboard('{Meta>}A{/Meta}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -759,12 +802,13 @@ test('should set meta to true in hotkey object if listening to meta', () => {
   })
 })
 
-test('should set mod to true in hotkey object if listening to mod', () => {
+test('should set mod to true in hotkey object if listening to mod', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('mod+a', callback))
 
-  userEvent.keyboard('{Meta>}A{/Meta}')
+  await user.keyboard('{Meta>}A{/Meta}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -777,12 +821,13 @@ test('should set mod to true in hotkey object if listening to mod', () => {
   })
 })
 
-test('should set multiple modifiers to true in hotkey object if listening to multiple mofidiers', () => {
+test('should set multiple modifiers to true in hotkey object if listening to multiple mofidiers', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('mod+shift+a', callback))
 
-  userEvent.keyboard('{Meta>}{Shift>}A{/Shift}{/Meta}')
+  await user.keyboard('{Meta>}{Shift>}A{/Shift}{/Meta}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -795,7 +840,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
   })
 })
 
-test('should reflect preventDefault option when set', () => {
+test('should reflect preventDefault option when set', async () => {
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback, { preventDefault: true }))
@@ -811,7 +856,7 @@ test('should reflect preventDefault option when set', () => {
   expect(keyDownEvent.defaultPrevented).toBe(true)
 })
 
-test('should not prevent default behavior when preventDefault option is not set', () => {
+test('should not prevent default behavior when preventDefault option is not set', async () => {
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback))
@@ -827,7 +872,7 @@ test('should not prevent default behavior when preventDefault option is not set'
   expect(keyDownEvent.defaultPrevented).toBe(false)
 })
 
-test('should prevent default behavior if preventDefault option is set to a function that returns true', () => {
+test('should prevent default behavior if preventDefault option is set to a function that returns true', async () => {
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback, { preventDefault: () => true }))
@@ -843,7 +888,7 @@ test('should prevent default behavior if preventDefault option is set to a funct
   expect(keyDownEvent.defaultPrevented).toBe(true)
 })
 
-test('should not prevent default behavior if preventDefault option is set to a function that returns false', () => {
+test('should not prevent default behavior if preventDefault option is set to a function that returns false', async () => {
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('a', callback, { preventDefault: () => false }))
@@ -859,12 +904,13 @@ test('should not prevent default behavior if preventDefault option is set to a f
   expect(keyDownEvent.defaultPrevented).toBe(false)
 })
 
-test('should call preventDefault option function with hotkey and keyboard event', () => {
+test('should call preventDefault option function with hotkey and keyboard event', async () => {
+  const user = userEvent.setup()
   const preventDefault = jest.fn()
 
-  renderHook(() => useHotkeys('a', () => {}, { preventDefault }))
+  renderHook(() => useHotkeys('a', async () => {}, { preventDefault }))
 
-  userEvent.keyboard('A')
+  await user.keyboard('A')
 
   expect(preventDefault).toHaveBeenCalledTimes(1)
   expect(preventDefault).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -877,12 +923,13 @@ test('should call preventDefault option function with hotkey and keyboard event'
   })
 })
 
-test('Should listen to space key', () => {
+test('Should listen to space key', async () => {
+  const user = userEvent.setup()
   const callback = jest.fn()
 
   renderHook(() => useHotkeys('space', callback))
 
-  userEvent.keyboard(' ')
+  await user.keyboard(' ')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })

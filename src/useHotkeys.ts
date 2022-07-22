@@ -50,11 +50,7 @@ export default function useHotkeys<T extends HTMLElement>(
       parseKeysHookInput(keys, _options?.splitKey).forEach((key) => {
         const hotkey = parseHotkey(key, _options?.combinationKey)
 
-        console.log('pressedDownKeys', pressedDownKeys)
-
         if (isHotkeyMatchingKeyboardEvent(e, hotkey, pressedDownKeys) || hotkey.keys?.includes('*')) {
-          console.log('match', hotkey)
-
           maybePreventDefault(e, hotkey, _options?.preventDefault)
 
           if (!isHotkeyEnabled(e, hotkey, _options?.enabled)) {
@@ -69,16 +65,12 @@ export default function useHotkeys<T extends HTMLElement>(
     const handleKeyDown = (event: KeyboardEvent) => {
       pressedDownKeys.add(event.key.toLowerCase())
 
-      console.log('keydown', event.key.toLowerCase(), pressedDownKeys)
-
       if ((_options?.keydown === undefined && _options?.keyup !== true) || _options?.keydown) {
         listener(event)
       }
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
-      console.log('keyup', event.key.toLowerCase(), pressedDownKeys)
-
       pressedDownKeys.delete(event.key.toLowerCase())
 
       if (_options?.keyup) {
