@@ -151,3 +151,4 @@ Project Link: [https://github.com/JohannesKlauss/react-hotkeys-hook](https://git
 * [godspeedelbow](https://github.com/godspeedelbow)
 * [JoshuaKGoldberg](https://github.com/JoshuaKGoldberg)
 * [ggascoigne](https://github.com/ggascoigne)
+* [paullexen](https://github.com/paullexen)
