@@ -638,6 +638,29 @@ test('should only trigger when the element is focused if a ref is set', async ()
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test.skip('should preventDefault and stop propagation when ref is not focused', async () => {
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    const ref = useHotkeys<HTMLDivElement>('a', cb)
+
+    return (
+      <div ref={ref}>
+        <span>Example text</span>
+      </div>
+    )
+  }
+
+  render(<Component cb={jest.fn()} />)
+
+  const keyDownEvent = createEvent.keyDown(document, {
+    key: 'A',
+    code: 'KeyA',
+  })
+
+  fireEvent(document, keyDownEvent)
+
+  expect(keyDownEvent.defaultPrevented).toBe(true)
+})
+
 test('should allow * as a wildcard', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
@@ -838,6 +861,21 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
     meta: false,
     mod: true,
   })
+})
+
+test('should stop propagation when enabled function resolves to false', async () => {
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('a', callback, { enabled: () => false }))
+
+  const keyDownEvent = createEvent.keyDown(document, {
+    key: 'A',
+    code: 'KeyA',
+  })
+
+  fireEvent(document, keyDownEvent)
+
+  expect(keyDownEvent.defaultPrevented).toBe(true)
 })
 
 test('should reflect preventDefault option when set', async () => {

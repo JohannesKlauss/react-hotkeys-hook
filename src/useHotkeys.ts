@@ -12,6 +12,12 @@ import {
 import { useHotkeysContext } from './HotkeysProvider'
 import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
 
+const stopPropagation = (e: KeyboardEvent): void => {
+  e.stopPropagation()
+  e.preventDefault()
+  e.stopImmediatePropagation()
+}
+
 export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
@@ -40,6 +46,8 @@ export default function useHotkeys<T extends HTMLElement>(
       }
 
       if (ref.current !== null && document.activeElement !== ref.current && !ref.current.contains(document.activeElement)) {
+        stopPropagation(e)
+
         return
       }
 
@@ -54,6 +62,8 @@ export default function useHotkeys<T extends HTMLElement>(
           maybePreventDefault(e, hotkey, _options?.preventDefault)
 
           if (!isHotkeyEnabled(e, hotkey, _options?.enabled)) {
+            stopPropagation(e)
+
             return
           }
 

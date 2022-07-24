@@ -34,7 +34,7 @@ export type Options = {
   scopes?: Scopes // Scope
   keyup?: boolean // Trigger on keyup event? (Default: undefined)
   keydown?: boolean // Trigger on keydown event? (Default: true)
-  preventDefault?: Trigger // Prevent default browser behavior? (Default: true)
+  preventDefault?: Trigger // Prevent default browser behavior? (Default: false)
   description?: string // Use this option to describe what the hotkey does. (Default: undefined)
 }
 

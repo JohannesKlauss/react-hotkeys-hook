@@ -13,7 +13,7 @@ type HotkeysContextType = {
 // The context is only needed for special features like global scoping, so we use a graceful default fallback
 const HotkeysContext = createContext<HotkeysContextType>({
   hotkeys: [],
-  activeScopes: [], // This array has to be empty to check if the provider is set or not
+  activeScopes: [], // This array has to be empty instead of containing '*' as default, to check if the provider is set or not
   toggleScope: () => {},
   activateScope: () => {},
   deactivateScope: () => {},
