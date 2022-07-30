@@ -2,7 +2,7 @@ import { Hotkey } from './types'
 import { createContext, ReactNode, useMemo, useState, useContext } from 'react'
 import BoundHotkeysProxyProviderProvider from './BoundHotkeysProxyProvider'
 
-type HotkeysContextType = {
+export type HotkeysContextType = {
   hotkeys: ReadonlyArray<Hotkey>
   activeScopes: string[]
   toggleScope: (scope: string) => void

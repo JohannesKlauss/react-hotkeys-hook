@@ -11,6 +11,7 @@ import {
 } from './validators'
 import { useHotkeysContext } from './HotkeysProvider'
 import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
+import useDeepEqualMemo from './useDeepEqualMemo'
 
 const stopPropagation = (e: KeyboardEvent): void => {
   e.stopPropagation()
@@ -31,17 +32,18 @@ export default function useHotkeys<T extends HTMLElement>(
   const _deps = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
 
   const cb = useCallback(callback, [..._deps])
-  const ctx = useHotkeysContext()
+  const memoisedOptions = useDeepEqualMemo(_options)
 
+  const { activeScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
   useLayoutEffect(() => {
-    if (_options?.enabled === false || !isScopeActive(ctx.activeScopes, _options?.scopes)) {
+    if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
       return
     }
 
     const listener = (e: KeyboardEvent) => {
-      if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, _options?.enableOnFormTags)) {
+      if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
         return
       }
 
@@ -51,17 +53,17 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      if (((e.target as HTMLElement)?.isContentEditable && !_options?.enableOnContentEditable)) {
+      if (((e.target as HTMLElement)?.isContentEditable && !memoisedOptions?.enableOnContentEditable)) {
         return
       }
 
-      parseKeysHookInput(keys, _options?.splitKey).forEach((key) => {
-        const hotkey = parseHotkey(key, _options?.combinationKey)
+      parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => {
+        const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
         if (isHotkeyMatchingKeyboardEvent(e, hotkey, pressedDownKeys) || hotkey.keys?.includes('*')) {
-          maybePreventDefault(e, hotkey, _options?.preventDefault)
+          maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
 
-          if (!isHotkeyEnabled(e, hotkey, _options?.enabled)) {
+          if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
             stopPropagation(e)
 
             return
@@ -75,7 +77,7 @@ export default function useHotkeys<T extends HTMLElement>(
     const handleKeyDown = (event: KeyboardEvent) => {
       pressedDownKeys.add(event.key.toLowerCase())
 
-      if ((_options?.keydown === undefined && _options?.keyup !== true) || _options?.keydown) {
+      if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
         listener(event)
       }
     }
@@ -83,7 +85,7 @@ export default function useHotkeys<T extends HTMLElement>(
     const handleKeyUp = (event: KeyboardEvent) => {
       pressedDownKeys.delete(event.key.toLowerCase())
 
-      if (_options?.keyup) {
+      if (memoisedOptions?.keyup) {
         listener(event)
       }
     }
@@ -94,7 +96,7 @@ export default function useHotkeys<T extends HTMLElement>(
     (ref.current || document).addEventListener('keydown', handleKeyDown)
 
     if (proxy) {
-      parseKeysHookInput(keys, _options?.splitKey).forEach((key) => proxy.addHotkey(parseHotkey(key, _options?.combinationKey)))
+      parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
     }
 
     return () => {
@@ -104,10 +106,10 @@ export default function useHotkeys<T extends HTMLElement>(
       (ref.current || document).removeEventListener('keydown', handleKeyDown)
 
       if (proxy) {
-        parseKeysHookInput(keys, _options?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, _options?.combinationKey)))
+        parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
       }
     }
-  }, [keys, cb, _options])
+  }, [keys, cb, memoisedOptions, activeScopes])
 
   return ref
 }
