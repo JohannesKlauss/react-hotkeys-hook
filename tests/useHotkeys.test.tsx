@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { useHotkeys, HotkeysProvider } from '../src'
 import { FormTags, HotkeyCallback, Keys, Options } from '../src/types'
 import { DependencyList, MutableRefObject, ReactNode } from 'react'
-import { createEvent, fireEvent, render } from '@testing-library/react'
+import { createEvent, fireEvent, render, screen } from '@testing-library/react'
 
 const wrapper =
   (initialScopes: string[]): WrapperComponent<any> =>
@@ -639,26 +639,33 @@ test('should only trigger when the element is focused if a ref is set', async ()
 })
 
 test.skip('should preventDefault and stop propagation when ref is not focused', async () => {
+  const callback = jest.fn()
+
   const Component = ({ cb }: { cb: HotkeyCallback }) => {
     const ref = useHotkeys<HTMLDivElement>('a', cb)
 
     return (
-      <div ref={ref}>
-        <span>Example text</span>
+      <div tabIndex={-1} data-testid={'div'}>
+        <div ref={ref} tabIndex={-1} data-testid={'ref'}>
+          <span>Example text</span>
+        </div>
       </div>
     )
   }
 
   render(<Component cb={jest.fn()} />)
 
-  const keyDownEvent = createEvent.keyDown(document, {
-    key: 'A',
-    code: 'KeyA',
-  })
+  await userEvent.click(screen.getByTestId('div'))
 
-  fireEvent(document, keyDownEvent)
+  await userEvent.keyboard('A')
 
-  expect(keyDownEvent.defaultPrevented).toBe(true)
+  expect(callback).not.toHaveBeenCalled()
+
+  await userEvent.click(screen.getByTestId('ref'))
+
+  await userEvent.keyboard('A')
+
+  expect(callback).toHaveBeenCalled()
 })
 
 test('should allow * as a wildcard', async () => {
