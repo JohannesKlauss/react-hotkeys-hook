@@ -36,8 +36,7 @@ function ExampleComponent() {
 ```
 
 This is useful to programmatically decide (depending on some internal state of our app or user input) if the hotkey
-should be active or not. `enabled` takes a `Trigger` type, so it can either be a boolean or a function that returns a boolean.
-See the documentation for the [enabled](/api/use-hotkeys#enabled) option for more information.
+should be active or not.
 
 :::info Tip
 If we use the returned `ref` of the callback to scope our hotkey to a specific sub-tree of our component, note that
@@ -48,20 +47,23 @@ this will automatically activate or deactivate our hotkey depending on which par
 
 ## Prevent default browser behavior
 
-Some hotkeys like `meta + s` are already assigned to a browser function, in this case saving a website to
+Some hotkeys like `ctrl + s` are already assigned to a browser function, in this case saving a website to
 the users local disk. Sometimes we want to override these hotkeys to implement our own functionality. Maybe we want to
 build a text editor or some other user based creation tool that needs a save shortcut to save the current progress. It
-would be silly to introduce a new shortcut for saving the users progress, since every user knows that `meta + s` is the
+would be silly to introduce a new shortcut for saving the users progress, since every user knows that `ctrl + s` is the
 universal shortcut for saving.
 
-To prevent the default browser behavior, we can just set `preventDefault` to true in our options:
+Our callback receives the browsers native event object, so we can just prevent the default behavior there and set up our
+own custom handler:
 
 ```jsx live
 function ExampleComponent() {
-  useHotkeys('meta+s', () => {
+  useHotkeys('cmd+s, ctrl+s', (e) => {
+    e.preventDefault()
+
     alert('We saved your progress!')
     // ... set up our own saving dialog.
-  }, { preventDefault: true })
+  })
 
   return (
     <div>
@@ -84,13 +86,15 @@ Additionally `cmd + shift + w` (closing all tabs of the current window), `cmd + 
 
 ### Disable callback execution
 
-In the first section we set `enabled` to `false` to disable our hotkey. Internally this will also unbind our event listeners
-from the DOM. To keep the event listeners but not execute the callback, we can give `enabled` a function that returns `false`.
+In addition to completely unbinding the hotkey, we can also disable the execution of the callback with setting the `filter`
+option. The `filter` key takes a function that is expected to return a boolean value to indicate if the callback should
+get executed or not.
+In this scenario the hotkey is still active, but the callback won't be called if the filter function returns false.
 
 ```jsx live
 function ExampleComponent() {
   useHotkeys('option+b', () => alert('Callback got executed'), {
-    enabled: (event, hotkeysEvent) => {
+    filter: e => {
       return true;
     }
   })
@@ -103,13 +107,16 @@ function ExampleComponent() {
 }
 ```
 
-We can combine both the `enabled` and `preventDefault` options.
+With the `filter` option in mind we can slightly change our save routine override from above:
 
 ```jsx
 function ExampleComponent() {
-  useHotkeys('meta+s', () => alert('We saved your progress!'), {
-    enabled: () => false,
-    preventDefault: true,
+  useHotkeys('cmd+s, ctrl+s', () => alert('We saved your progress!'), {
+    filter: e => {
+      e.preventDefault()
+
+      return true
+    }
   })
 
   return (
@@ -122,10 +129,40 @@ function ExampleComponent() {
 
 This might be preferred if we want to build a custom hook on top of `useHotkeys` that always prevents the default behavior.
 
-:::info Notice the different behavior for the enabled option
-If `enabled` is set to `false` the internal browser event will not trigger at all, therefore no browser behavior will happen.
-If we set `enabled` to `() => false` our callback still won't get executed, but the event will trigger and therefore potential
-browser behavior will happen.
+***
+
+### Disable default behavior when callback execution is blocked
+
+The above example is sufficient for simple logic to determine whether the callback should be executed.
+However, we might come across a scenario where the `filter` function returns `false` so our callback does not get triggered. Maybe
+the logic which determines if the callback should be executed is pretty complex, and we don't want to determine inside the
+`filter` whether the browser should prevent its default behavior. To simplify this we can use the `filterPreventDefault`
+option:
+
+```jsx
+function ExampleComponent() {
+  useHotkeys('cmd+s, ctrl+s', () => alert('We saved your progress!'), {
+    filter: e => {
+      // .... some logic to deduce if the callback should get triggered or not
+
+      // If no logic applies, don't trigger the callback
+      return false
+    },
+    filterPreventDefault: true,
+  })
+
+  return (
+    <div>
+      <p>Press cmd+s (or ctrl+s for non mac) to open custom save dialog.</p>
+    </div>
+  )
+}
+```
+
+This will cause the browser to prevent opening its page saving dialog even though our callback has not been triggered.
+
+:::warning Changes for version 4
+Currently the return values of `filter` and `filterPreventDefault` are counterintuitive. This will change in version 4.
 :::
 
 ***
@@ -139,17 +176,17 @@ the best`. Same with keystrokes that start with `shift + ...` since this normall
 So it is good, that `useHotkeys` is smart enough to back off during focused form fields. However, sometimes you still
 want hotkeys to be enabled even when the user is focusing on an input field. There might be again the need so save
 the users progress. Our previous example would not trigger if the user is focusing a form field. Instead, we have to
-enable the hotkey on certain form fields. We can use the `enableOnFormTags` option for that which takes an array of form tags:
+enable the hotkey on certain form fields. We can use the `enableOnTags` option for that which takes an array of form tags:
 
 ```jsx
 function ExampleComponent() {
-  useHotkeys('meta+s', (e) => {
+  useHotkeys('cmd+s, ctrl+s', (e) => {
     e.preventDefault()
 
     alert('We saved your progress!')
     // ... set up our own saving dialog.
   }, {
-    enableOnFormTags: ['input', 'select', 'textarea']
+    enableOnTags: ['INPUT', 'SELECT', 'TEXTAREA']
   })
 
   return (
@@ -161,8 +198,12 @@ function ExampleComponent() {
 ```
 
 We tell `useHotkeys` that the given keystrokes should be listened to and the callback executed even when the user is currently
-focusing an input, select or textarea field. To enable the hotkey on any input tag, set the `enabledOnFormTags`
-option to `true`.
+focusing an input, select or textarea field.
+
+:::info case-sensitive
+Note that the values in the array are case-sensitive. `input` won't work while `INPUT` will. This likey to change in
+version 4.
+:::
 
 ***
 
@@ -176,7 +217,7 @@ an option for that:
 
 ```jsx live
 function ExampleComponent() {
-  useHotkeys('meta+b', () => alert('Hotkeys are still working'), {
+  useHotkeys('cmd+b', () => alert('Hotkeys are still working'), {
     enableOnContentEditable: true,
   })
 
@@ -187,3 +228,8 @@ function ExampleComponent() {
   )
 }
 ```
+
+:::info
+Before version `3.3.0`, using a tag with `contentEditable` set to true would not prevent any hotkeys from triggering.
+Be sure to update to at least `3.4.0` to leverage this feature.
+:::

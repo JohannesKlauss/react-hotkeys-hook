@@ -16,6 +16,7 @@ export function parseHotkey(hotkey: string, combinationKey: string = '+'): Hotke
     .split(combinationKey)
     .map(k => k.trim())
     .map(k => k === 'esc' ? 'escape' : k)
+    .map(k => k === 'return' ? 'enter' : k)
 
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),

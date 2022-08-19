@@ -18,7 +18,7 @@ module.exports = {
       title: 'React Hotkeys Hook',
       items: [
         {
-          type: 'doc',
+          type: 'docsVersion',
           docId: 'intro',
           position: 'left',
           label: 'Documentation',
@@ -27,6 +27,11 @@ module.exports = {
           to: 'blog',
           label: 'Blog',
           position: 'left'
+        },
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownActiveClassDisabled: true,
         },
         {
           href: 'https://github.com/JohannesKlauss/react-hotkeys-hook',
@@ -110,6 +115,7 @@ module.exports = {
           // Please change this to your repo.
           editUrl:
             'https://github.com/JohannesKlauss/react-hotkeys-hook/edit/master/documentation/',
+          //disableVersioning: true,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

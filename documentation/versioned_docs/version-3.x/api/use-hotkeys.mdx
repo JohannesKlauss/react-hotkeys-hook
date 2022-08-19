@@ -12,7 +12,7 @@ Function signature:
 
 ```ts
 function useHotkeys<T extends Element>(
-  keys: string | string[],
+  keys: string,
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
   options: Options = {},
   deps: any[] = []
@@ -26,11 +26,12 @@ function useHotkeys<T extends Element>(
 ### `keys`
 
 ```ts
-keys: string | string[]
+keys: string
 ```
 
 Set the keystrokes we want the hook to listen to. We can use single or multiple keys,
-modifier combinations, arrow keys, function keys, etc.
+modifier combinations, etc. See [this guide](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts) of the underlying
+hotkeys package for all possible shortcuts.
 
 #### Listening to all keys
 
@@ -43,6 +44,20 @@ useHotkeys('*', (_, handler) => alert(handler.key))
 ```jsx
 useHotkeys('ctrl+s, shift+w', () => alert('We\'re using modifiers now!'))
 ```
+
+:::info Using the alt modifier
+The alt modifier has its own special handling. To check if an altKey was pressed we need to listen to all keys and check
+for the alt modifier in the event object:
+
+```jsx
+useHotkeys('*', e => {
+  console.log('Pressed alt modifier', e.altKey);
+  console.log('Pressed key', e.key)
+})
+```
+
+This will change in the upcoming v4.
+:::
 
 #### Using F keys
 
@@ -77,23 +92,6 @@ useHotkeys('ctrl+a, shift+b, r, f', (_, handler) => {
 ```
 
 :::
-
-This can also be an array:
-
-```jsx
-useHotkeys(['ctrl+a', 'shift+b', 'r', 'f'], (_, handler) => {
-  switch (handler.key) {
-    case 'ctrl+a': alert('You pressed ctrl+a!');
-      break;
-    case 'ctrl+b': alert('You pressed ctrl+b!');
-      break;
-    case 'r': alert('You pressed r!');
-      break;
-    case 'f': alert('You pressed f!');
-      break;
-  }
-})
-```
 
 ***
 
@@ -140,35 +138,29 @@ object takes.
 ```js
 // Default values
 const options = {
+  filter: undefined,
+  filterPreventDefault: true,
+  enableOnTags: [],
   enabled: true,
-  enabledOnFormTags: false,
-  enableOnContentEditable: false,
-  combinationKey: '+',
-  splitKey: ',',
-  scopes: '*',
+  splitKey: '+',
   keyup: undefined,
-  keydown: true,
-  preventDefault: false,
-  description: undefined
+  keydown: true
 };
 ```
 
 ```ts
 // Type Definitions
-type Trigger = boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean)
-type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT';
+type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
 
 type Options = {
-  enabled?: Trigger
-  enableOnFormTags?: FormTags[] | boolean
-  enableOnContentEditable?: boolean
-  combinationKey?: string
-  splitKey?: string
-  scopes?: string | string[]
-  keyup?: boolean
-  keydown?: boolean
-  preventDefault?: Trigger
-  description?: string
+  enabled?: boolean;
+  filter?: (event: KeyboardEvent) => boolean;
+  filterPreventDefault?: boolean;
+  enableOnTags?: AvailableTags[];
+  enableOnContentEditable?: boolean;
+  splitKey?: string;
+  keyup?: boolean;
+  keydown?: boolean;
 };
 ```
 
