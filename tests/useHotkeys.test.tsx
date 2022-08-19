@@ -17,6 +17,18 @@ type HookParameters = {
   dependencies?: DependencyList
 }
 
+test('should listen to esc modifier for escape key', async () => {
+  const user = userEvent.setup()
+
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('esc', callback))
+
+  await user.keyboard('{Escape}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should work without a wrapped context provider when not using scopes', async () => {
   const user = userEvent.setup()
 

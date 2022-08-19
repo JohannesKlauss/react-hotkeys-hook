@@ -14,7 +14,8 @@ export function parseHotkey(hotkey: string, combinationKey: string = '+'): Hotke
   const keys = hotkey
     .toLocaleLowerCase()
     .split(combinationKey)
-    .map((k) => k.trim())
+    .map(k => k.trim())
+    .map(k => k === 'esc' ? 'escape' : k)
 
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),
