@@ -143,12 +143,6 @@ Project Link: [https://github.com/JohannesKlauss/react-hotkeys-hook](https://git
 
 ## Contributors
 
-* [bernatmv](https://github.com/bernatmv)
-* [wheeler](https://github.com/wheeler)
-* [louisrli](https://github.com/louisrli)
-* [jameschao](https://github.com/jameschao)
-* [hmafzal](https://github.com/hmafzal)
-* [godspeedelbow](https://github.com/godspeedelbow)
-* [JoshuaKGoldberg](https://github.com/JoshuaKGoldberg)
-* [ggascoigne](https://github.com/ggascoigne)
-* [paullexen](https://github.com/paullexen)
+<a href="https://github.com/johannesklauss/react-hotkeys-hook/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=johannesklauss/react-hotkeys-hook" />
+</a>
