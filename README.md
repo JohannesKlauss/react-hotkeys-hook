@@ -41,7 +41,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('ctrl+k', () => setCount(count + 1), [count])
 
   return (
     <p>
