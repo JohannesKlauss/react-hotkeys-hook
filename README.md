@@ -139,7 +139,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Johannes Klauss - [@JohannesKlauss](https://github.com/JohannesKlauss) - klauss.johannes@gmail.com
 
-Project Link: [https://github.com/JohannesKlauss/react-hotkeys-hook](https://github.com/JohannesKlauss/react-use-system-color-mode)
+Project Link: [https://github.com/JohannesKlauss/react-hotkeys-hook](https://github.com/JohannesKlauss/react-hotkeys-hook)
 
 ## Contributors
 
