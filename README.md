@@ -10,7 +10,7 @@
     <img alt="Bundlephobia" src="https://img.shields.io/bundlephobia/minzip/react-hotkeys-hook?style=for-the-badge&labelColor=24292e">
   </a>
   <a aria-label="Types" href="https://www.npmjs.com/package/react-hotkeys-hook">
-    <img alt="Types" src="https://img.shields.io/npm/types/react-use-system-color-mode?style=for-the-badge&labelColor=24292e">
+    <img alt="Types" src="https://img.shields.io/npm/types/react-hotkeys-hook?style=for-the-badge&labelColor=24292e">
   </a>
   <a aria-label="NPM version" href="https://www.npmjs.com/package/react-hotkeys-hook">
     <img alt="NPM Version" src="https://img.shields.io/npm/v/react-hotkeys-hook?style=for-the-badge&labelColor=24292e">
@@ -43,7 +43,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('ctrl+k', () => setCount(count + 1), [count])
 
   return (
     <p>
@@ -212,15 +212,10 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Johannes Klauss - [@JohannesKlauss](https://github.com/JohannesKlauss) - klauss.johannes@gmail.com
 
-Project Link: [https://github.com/JohannesKlauss/react-hotkeys-hook](https://github.com/JohannesKlauss/react-use-system-color-mode)
+Project Link: [https://github.com/JohannesKlauss/react-hotkeys-hook](https://github.com/JohannesKlauss/react-hotkeys-hook)
 
 ## Contributors
 
-* [bernatmv](https://github.com/bernatmv)
-* [wheeler](https://github.com/wheeler)
-* [louisrli](https://github.com/louisrli)
-* [jameschao](https://github.com/jameschao)
-* [hmafzal](https://github.com/hmafzal)
-* [godspeedelbow](https://github.com/godspeedelbow)
-* [JoshuaKGoldberg](https://github.com/JoshuaKGoldberg)
-* [ggascoigne](https://github.com/ggascoigne)
+<a href="https://github.com/johannesklauss/react-hotkeys-hook/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=johannesklauss/react-hotkeys-hook" />
+</a>
