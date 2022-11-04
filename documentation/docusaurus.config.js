@@ -115,7 +115,13 @@ module.exports = {
           // Please change this to your repo.
           editUrl:
             'https://github.com/JohannesKlauss/react-hotkeys-hook/edit/master/documentation/',
-          //disableVersioning: true,
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: '4.0',
+              path: '4.0',
+            },
+          },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
