@@ -1,8 +1,5 @@
-import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { isHotkeyPressed } from '../src/isHotkeyPressed'
-
-const renderStub = () => render(<div />)
 
 beforeEach(() => {
   window.document.dispatchEvent(new Event("DOMContentLoaded", {
@@ -14,8 +11,6 @@ beforeEach(() => {
 test('should return true if hotkey is currently pressed down', async () => {
   const user = userEvent.setup()
 
-  renderStub()
-
   await user.keyboard('{A>}')
 
   expect(isHotkeyPressed('A')).toBe(true)
@@ -24,8 +19,6 @@ test('should return true if hotkey is currently pressed down', async () => {
 
 test('should return false if hotkey is not pressed down', async () => {
   const user = userEvent.setup()
-
-  renderStub()
 
   await user.keyboard('{A>}')
 
@@ -39,8 +32,6 @@ test('should return false if hotkey is not pressed down', async () => {
 test.skip('should take modifiers into account', async () => {
   const user = userEvent.setup()
 
-  renderStub()
-
   await user.keyboard('{Shift>}{Control>}{Alt>}{Meta>}')
 
   expect(isHotkeyPressed('shift')).toBe(true)
@@ -51,8 +42,6 @@ test.skip('should take modifiers into account', async () => {
 
 test('should support multiple hotkeys', async () => {
   const user = userEvent.setup()
-
-  renderStub()
 
   await user.keyboard('{B>}{A>}')
 
@@ -70,8 +59,6 @@ test('should support multiple hotkeys', async () => {
 test('should support multiple hotkeys with modifiers', async () => {
   const user = userEvent.setup()
 
-  renderStub()
-
   await user.keyboard('{Shift>}{A>}')
 
   expect(isHotkeyPressed('a')).toBe(true)
@@ -87,8 +74,6 @@ test('should support multiple hotkeys with modifiers', async () => {
 
 test('should use , as splitKey as default', async () => {
   const user = userEvent.setup()
-
-  renderStub()
 
   await user.keyboard('{B>}{A>}')
 
@@ -107,8 +92,6 @@ test('should use , as splitKey as default', async () => {
 
 test.skip('should respect the splitKey option', async () => {
   const user = userEvent.setup()
-
-  renderStub()
 
   await user.keyboard('{B>}{,>}')
 
