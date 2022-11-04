@@ -1,7 +1,12 @@
-import { useIsHotkeyPressed } from './useIsHotkeyPressed';
-import { useHotkeys, Options } from './useHotkeys';
-import hotkeys from 'hotkeys-js';
+import useHotkeys from './useHotkeys'
+import type { Options } from './types'
+import { HotkeysProvider, useHotkeysContext } from './HotkeysProvider'
+import { isHotkeyPressed } from './isHotkeyPressed'
 
-const isHotkeyPressed = hotkeys.isPressed;
-
-export { useHotkeys, useIsHotkeyPressed, isHotkeyPressed, Options };
+export {
+  useHotkeys,
+  useHotkeysContext,
+  isHotkeyPressed,
+  HotkeysProvider,
+  Options,
+}

@@ -8,7 +8,7 @@ title: isHotkeyPressed
 Function signature:
 
 ```ts
-function isHotkeyPressed(key: string | number): boolean
+function isHotkeyPressed(key: string | string[], splitKey: string = ','): boolean
 ```
 
 This function allows us to check if a specific key is pressed by the user.
@@ -26,19 +26,22 @@ const onClick = () => isHotkeyPressed('shift') ? setCount(count - 1) : setCount(
 ### key
 
 ```ts
-key: string | number
+key: string | string[]
 ```
 
-The key we want to listen to. This can be a string (like `'a'`, `'shift'`) or a keycode number like `13` for the `return/enter` key
-or `65` for the `a` key.
+The key we want to listen to. This can be a string (like `'a'`, `'shift+a'`) or an array of strings (like `['a', 'shift+a']`).
 
-:::info Multiple keys are not supported
-Currently this function can only check for one key at a time. So something like `isHotkeyPressed('shift, a, c')` won't work.
-This might change in version 4.
-:::
+### splitKey
+
+```ts
+key: string = ','
+```
+
+We can combine to check for multiple keys in one string by separating them with a comma (`,`). We can change
+this by passing a different key.
 
 ## Return value
 
 ### boolean
 
-The function returns `true` if the key is currently pressed down, otherwise it will return `false`.
+The function returns `true` if the key or keystroke is currently pressed down, otherwise it will return `false`.

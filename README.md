@@ -1,7 +1,7 @@
 <hr>
 <div align="center">
   <h1 align="center">
-    useHotkeys(key, handler)
+    useHotkeys(keys, callback)
   </h1>
 </div>
 
@@ -29,12 +29,14 @@
 <pre align="center">npm i react-hotkeys-hook</pre>
 
 <p align="center">
-A React hook for using keyboard shortcuts in components.
+A React hook for using keyboard shortcuts in components in a declarative way.
 </p>
 
 <hr>
 
 ## Quick Start
+
+The easiest way to use the hook.
 
 ```jsx harmony
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -51,9 +53,72 @@ export const ExampleComponent = () => {
 }
 ```
 
-The hook takes care of all the binding and unbinding for you.
-As soon as the component mounts into the DOM, the key stroke will be
-listened to. When the component unmounts it will stop listening.
+### Scopes
+
+Scopes allow you to group hotkeys together. You can use scopes to prevent hotkeys from colliding with each other.
+
+```jsx harmony
+const App = () => {
+  return (
+    <HotkeysProvider initiallyActiveScopes={['settings']}>
+      <ExampleComponent />
+    </HotkeysProvider>
+  )
+}
+
+export const ExampleComponent = () => {
+  const [count, setCount] = useState(0)
+  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1), { scopes: ['settings'] })
+
+  return (
+    <p>
+      Pressed {count} times.
+    </p>
+  )
+}
+```
+
+#### Changing a scope's active state
+
+You can change the active state of a scope using the `deactivateScope`, `activateScope` and `toggleScope` functions
+returned by the `useHotkeysContext()` hook. Note that you have to have your app wrapped in a `<HotkeysProvider>` component.
+
+```jsx harmony
+const App = () => {
+  return (
+          <HotkeysProvider initiallyActiveScopes={['settings']}>
+            <ExampleComponent />
+          </HotkeysProvider>
+  )
+}
+
+export const ExampleComponent = () => {
+  const { toggleScope } = useHotkeysContext()
+
+  return (
+    <button onClick={() => toggleScope('settings')}>
+      Change scope active state
+    </button>
+  )
+}
+```
+
+### Focus trap
+
+This will only trigger the hotkey if the component is focused.
+
+```tsx harmony
+export const ExampleComponent = () => {
+  const [count, setCount] = useState(0)
+  const ref = useHotkeys<HTMLParagraphElement>('ctrl+k', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <p tabIndex={-1} ref={ref}>
+      Pressed {count} times.
+    </p>
+  )
+}
+```
 
 ## Documentation & Live Examples
 
@@ -61,52 +126,60 @@ listened to. When the component unmounts it will stop listening.
 * [Documentation](https://react-hotkeys-hook.vercel.app/docs/documentation/installation)
 * [API](https://react-hotkeys-hook.vercel.app/docs/api/use-hotkeys)
 
-## [Join the discussion for version 4!](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574)
-
-If you use this package please share your thoughts on how we can improve this hook with version 4.
-Please engage at the corresponding [Github issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/574).
-
 ## API
 
-### useHotkeys()
+### useHotkeys(keys, callback)
 
 ```typescript
-useHotkeys(keys: string, callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: any[] = [])
+useHotkeys(keys: string | string[], callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: DependencyList = [])
 ```
 
-### Parameters
-- `keys: string`: Here you can set the key strokes you want the hook to listen to. You can use single or multiple keys,
-  modifier combination, etc. See [this](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts)
-  section on the hotkeys documentation for more info.
-- `callback: (event: KeyboardEvent, handler: HotkeysEvent) => void`: Gets executed when the defined keystroke
-  gets hit by the user. **Important:** Since version 1.5.0 this callback gets memoised inside the hook. So you don't have
-  to do this anymore by yourself.
-- `options: Options = {}`
-  - `filter: (event: KeyboardEvent): boolean` is used to filter if a callback gets triggered depending on the keyboard event.
-    **Breaking Change in `3.0.0`!** Prior to version `3.0.0` the filter settings was one global setting that applied to every
-    hook. Since `3.0.0` this behavior changed. The `filter` option is now locally scoped to each call of `useHotkeys`.
-  - `filterPreventDefault: boolean` is used to prevent/allow the default browser behavior for the keystroke when the filter return false (default value: `true`)
-  - `enableOnTags: string[]` is used to enable listening to hotkeys in form fields. Available values are `INPUT`, `TEXTAREA` and `SELECT`.
-  - `splitKey: string` is used to change the splitting character inside the keys argument. Default is `+`, but if you want
-    to listen to the `+` character, you can set `splitKey` to i.e. `-` and listen for `ctrl-+`
-  - `keyup: boolean` Determine if you want to listen on the keyup event
-  - `keydown: boolean` Determine if want to listen on the keydown event
-  - `enabled: boolean` is used to prevent installation of the hotkey when set to false (default value: `true`)
-- `deps: any[] = []`: The dependency array that gets appended to the memoisation of the callback. Here you define the inner
-  dependencies of your callback. If for example your callback actions depend on a referentially unstable value or a value
-  that will change over time, you should add this value to your deps array. Since most of the time your callback won't
-  depend on any unstable callbacks or changing values over time you can leave this value alone since it will be set to an
-  empty array by default. See the [Memoisation](#memoisation) section to
-  learn more and see an example where you have to set this array.
+| Parameter     | Type                                                    | Required? | Default value | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|---------------|---------------------------------------------------------|-----------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `keys`        | `string` or `string[]`                                  | required  | -             | set the hotkeys you want the hook to listen to. You can use single or multiple keys, modifier combinations, etc. This will either be a string or an array of strings. To separate multiple keys, use a colon. This split key value can be overridden with the `splitKey` option.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `callback`    | `(event: KeyboardEvent, handler: HotkeysEvent) => void` | required  | -             | This is the callback function that will be called when the hotkey is pressed. The callback will receive the browsers native `KeyboardEvent` and the libraries `HotkeysEvent`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `options`     | `Options`                                               | optional  | `{}`          | Object to modify the behavior of the hook. Default options are given below.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `dependencies` | `DependencyList`                                         | optional  | `[]`           | The given callback will always be memoised inside the hook. So if you reference any outside variables, you need to set them here for the callback to get updated (Much like `useCallback` works in React). |
 
-### `isHotkeyPressed` function
+### Options
+
+All options are optional and have a default value which you can override to change the behavior of the hook.
+
+| Option                   | Type                                                                                 | Default value | Description                                                                                                                                                                                                                                                                                                                                                                             |
+|--------------------------|--------------------------------------------------------------------------------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `enabled`                | `boolean` or `(keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean` | `true`        | This option determines whether the hotkey is active or not. It can take a boolean (for example a flag from a state outside) or a function which gets executed once the hotkey is pressed. If the function returns `false` the hotkey won't get executed and all browser events are prevented.                                                                                           |
+| `enableOnFormTags`       | `boolean` or `FormTags[]`                                                            | `false`       | By default hotkeys are not registered if a focus focuses on an input field. This will prevent accidental triggering of hotkeys when the user is typing. If you want to enable hotkeys, use this option. Setting it to true will enable on all form tags, otherwise you can give an array of form tags to enable the hotkey on (possible options are: `['input', 'textarea', 'select']`) |
+| `enableOnContentEditable` | `boolean`                                                                            | `false`       | Set this option to enable hotkeys on tags that have set the `contentEditable` prop to `true`                                                                                                                                                                                                                                                                                            |
+| `combinationKey`         | `string`                                                                             | `+`           | Character to indicate keystrokes like `shift+c`. You might want to change this if you want to listen to the `+` character like `ctrl-+`.                                                                                                                                                                                                                                                |
+| `splitKey`               | `string`                                                                             | `,`           | Character to separate different keystrokes like `ctrl+a, ctrl+b`.                                                                                                                                                                                                                                                                                                                       |
+| `scopes`                 | `string` or `string[]`                                                               | `*`           | With scopes you can group hotkeys together. The default scope is the wildcard `*` which matches all hotkeys. Use the `<HotkeysProvider>` component to change active scopes.                                                                                                                                                                                                             |
+| `keyup`                  | `boolean`                                                                            | `false`       | Determines whether to listen to the browsers `keyup` event for triggering the callback.                                                                                                                                                                                                                                                                                                 |
+| `keydown`                | `boolean`                                                                            | `true`        | Determines whether to listen to the browsers `keydown` event for triggering the callback. If you set both `keyup`and `keydown` to true, the callback will trigger on both events.                                                                                                                                                                                                       |
+| `preventDefault`         | `boolean` or `(keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean` | `false`       | Set this to a `true` if you want the hook to prevent the browsers default behavior on certain keystrokes like `meta+s` to save a page. NOTE: Certain keystrokes are not preventable, like `meta+w` to close a tab in chrome.                                                                                                                                                            |
+| `description`             | `string`                                                                              | `undefined`    | Use this option to describe what the hotkey does. this is helpful if you want to display a list of active hotkeys to the user.                                                                                                                                                                                                                                                          |
+
+
+#### Overloads
+
+The hooks call signature is very flexible. For example if you don't need to set any special options you can use the dependency
+array as your third parameter:
+
+`useHotkeys('ctrl+k', () => console.log(counter + 1), [counter])`
+
+### `isHotkeyPressed(keys: string | string[], splitKey?: string = ',')`
 
 This function allows us to check if the user is currently pressing down a key.
 
 ```ts
 import { isHotkeyPressed } from 'react-hotkeys-hook'
 
-isHotkeyPressed('return') // Returns true if Return key is pressed down.
+isHotkeyPressed('esc') // Returns true if Escape key is pressed down.
+```
+
+You can also check for multiple keys at the same time:
+
+```ts
+isHotkeyPressed(['esc', 'ctrl+s']) // Returns true if Escape or Ctrl+S are pressed down.
 ```
 
 ## Support
@@ -124,7 +197,7 @@ or [pull request](https://github.com/JohannesKlauss/react-hotkeys-hook/compare) 
 Checkout this repo, run `yarn` or `npm i` and then run the `test` script to test the behavior of the hook.
 
 ## Contributing
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)

@@ -4,7 +4,7 @@ title: useHotkeys
 ---
 
 import { useState } from "react";
-import { useHotkeys } from "../../../src";
+import { useHotkeys } from "react-hotkeys-hook";
 
 # useHotkeys API
 
@@ -12,7 +12,7 @@ Function signature:
 
 ```ts
 function useHotkeys<T extends Element>(
-  keys: string,
+  keys: string | string[],
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
   options: Options = {},
   deps: any[] = []
@@ -26,12 +26,11 @@ function useHotkeys<T extends Element>(
 ### `keys`
 
 ```ts
-keys: string
+keys: string | string[]
 ```
 
 Set the keystrokes we want the hook to listen to. We can use single or multiple keys,
-modifier combinations, etc. See [this guide](https://github.com/jaywcjlove/hotkeys/#defining-shortcuts) of the underlying
-hotkeys package for all possible shortcuts.
+modifier combinations, arrow keys, function keys, etc.
 
 #### Listening to all keys
 
@@ -44,20 +43,6 @@ useHotkeys('*', (_, handler) => alert(handler.key))
 ```jsx
 useHotkeys('ctrl+s, shift+w', () => alert('We\'re using modifiers now!'))
 ```
-
-:::info Using the alt modifier
-The alt modifier has its own special handling. To check if an altKey was pressed we need to listen to all keys and check
-for the alt modifier in the event object:
-
-```jsx
-useHotkeys('*', e => {
-  console.log('Pressed alt modifier', e.altKey);
-  console.log('Pressed key', e.key)
-})
-```
-
-This will change in the upcoming v4.
-:::
 
 #### Using F keys
 
@@ -92,6 +77,23 @@ useHotkeys('ctrl+a, shift+b, r, f', (_, handler) => {
 ```
 
 :::
+
+This can also be an array:
+
+```jsx
+useHotkeys(['ctrl+a', 'shift+b', 'r', 'f'], (_, handler) => {
+  switch (handler.key) {
+    case 'ctrl+a': alert('You pressed ctrl+a!');
+      break;
+    case 'ctrl+b': alert('You pressed ctrl+b!');
+      break;
+    case 'r': alert('You pressed r!');
+      break;
+    case 'f': alert('You pressed f!');
+      break;
+  }
+})
+```
 
 ***
 
@@ -138,29 +140,35 @@ object takes.
 ```js
 // Default values
 const options = {
-  filter: undefined,
-  filterPreventDefault: true,
-  enableOnTags: [],
   enabled: true,
-  splitKey: '+',
+  enabledOnFormTags: false,
+  enableOnContentEditable: false,
+  combinationKey: '+',
+  splitKey: ',',
+  scopes: '*',
   keyup: undefined,
-  keydown: true
+  keydown: true,
+  preventDefault: false,
+  description: undefined
 };
 ```
 
 ```ts
 // Type Definitions
-type AvailableTags = 'INPUT' | 'TEXTAREA' | 'SELECT';
+type Trigger = boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean)
+type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT';
 
 type Options = {
-  enabled?: boolean;
-  filter?: (event: KeyboardEvent) => boolean;
-  filterPreventDefault?: boolean;
-  enableOnTags?: AvailableTags[];
-  enableOnContentEditable?: boolean;
-  splitKey?: string;
-  keyup?: boolean;
-  keydown?: boolean;
+  enabled?: Trigger
+  enableOnFormTags?: FormTags[] | boolean
+  enableOnContentEditable?: boolean
+  combinationKey?: string
+  splitKey?: string
+  scopes?: string | string[]
+  keyup?: boolean
+  keydown?: boolean
+  preventDefault?: Trigger
+  description?: string
 };
 ```
 
@@ -226,12 +234,12 @@ splitKey: string // default: "+"
 Specifies the key that is used to combine multiple hotkeys into keystrokes. The default value is `+`, so `shift+a` triggers
 when the user presses the "shift" key __and__ the "a" key.
 
-:::danger Using "+" as a target key
-Setting the `splitKey` to `-` to listen to a keystroke like `+` or `shift-+` doesn't work. There is a bug in the implementation
-of the underlying hotkeys package that React Hotkeys Hook leverages. See [this issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/544)
-and [this issue](https://github.com/jaywcjlove/hotkeys/issues/270).
-This problem will be addressed in the upcoming Version 4.
-:::
+##### `scopes`
+
+To group your hotkeys into different scopes, you can pass a string or an array of strings to the `scopes` property. This
+way you can easily enable or disable a group of hotkeys at once. More on this in the
+[Grouping Hotkeys together](/docs/documentation/hotkeys-provider) section.
+By default all hotkeys are assigned to the wildcard `*` scope.
 
 ##### `keyup`
 
@@ -293,7 +301,7 @@ function App() {
   return (
     <div>
       <div style={{ padding: "30px" }}>Count: {count}</div>
-      <button style={{ padding: "30px", background: "aquamarine" }}>
+      <button style={{ padding: "30px", background: "teal" }}>
         Focusing this area won't trigger the hotkey.
       </button>
       <button style={{ padding: "30px", background: "crimson" }} ref={ref}>
@@ -317,7 +325,7 @@ function App() {
   return (
     <div>
       <div style={{ padding: "30px" }}>Count: {count}</div>
-      <div style={{ padding: "30px", background: "cyan" }} tabIndex={0}>
+      <div style={{ padding: "30px", background: "teal" }} tabIndex={0}>
         Focusing this area won't trigger the hotkey.
       </div>
       <div style={{ padding: "30px", background: "crimson" }} ref={ref} tabIndex={0}>

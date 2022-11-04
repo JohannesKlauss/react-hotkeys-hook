@@ -1,12 +1,12 @@
 {
   "name": "react-hotkeys-hook",
-  "version": "3.4.7",
+  "version": "4.0.0-7",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "homepage": "https://johannesklauss.github.io/react-hotkeys-hook/",
   "author": "Johannes Klauss",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "module": "dist/react-hotkeys-hook.esm.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
   "files": [
     "dist",
     "src"
@@ -25,8 +25,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "node ./esbuild.js && tsc --project tsconfig.build.json",
     "test": "jest",
     "publish": "np"
   },
@@ -37,48 +36,43 @@
       "@babel/preset-react"
     ]
   },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "./setupTests.js"
-    ],
-    "testPathIgnorePatterns": [
-      "pkg",
-      ".docz",
-      "docs"
-    ]
-  },
   "prettier": {
-    "printWidth": 80,
-    "semi": true,
+    "printWidth": 120,
+    "semi": false,
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "dependencies": {
-    "hotkeys-js": "3.10.0"
-  },
   "devDependencies": {
-    "@babel/core": "7.19.6",
+    "@babel/core": "7.18.9",
     "@babel/plugin-proposal-class-properties": "7.18.6",
-    "@babel/preset-env": "7.19.4",
+    "@babel/plugin-transform-react-jsx": "7.18.6",
+    "@babel/preset-env": "7.18.9",
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
-    "@testing-library/react": "13.4.0",
+    "@testing-library/jest-dom": "5.16.4",
+    "@testing-library/react": "13.3.0",
     "@testing-library/react-hooks": "8.0.1",
-    "@testing-library/user-event": "13.5.0",
-    "@types/jest": "27.5.2",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.8",
+    "@testing-library/user-event": "14.3.0",
+    "@types/jest": "28.1.6",
+    "@types/lodash": "^4.14.182",
+    "@types/react": "18.0.15",
+    "@types/react-dom": "18.0.6",
+    "esbuild": "0.14.49",
     "eslint-plugin-prettier": "4.2.1",
-    "jest": "26.6.3",
+    "jest": "28.1.3",
+    "jest-environment-jsdom": "28.1.3",
     "prettier": "2.7.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-test-renderer": "18.2.0",
-    "tsdx": "0.14.1",
-    "tslib": "2.4.1",
-    "typescript": "4.8.4"
+    "tslib": "2.4.0",
+    "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "lodash": "4.17.11"
   },
   "peerDependencies": {
+    "lodash": ">=4.17.0",
     "react": ">=16.8.1",
     "react-dom": ">=16.8.1"
   }

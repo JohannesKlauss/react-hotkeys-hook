@@ -6,34 +6,34 @@
  */
 
 .heroBanner {
-  color: var(--ifm-font-color-base);
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+    padding: 4rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
 @media screen and (max-width: 966px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+    .heroBanner {
+        padding: 2rem;
+    }
 }
 
 .buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
 }
 
 .heroProjectTagline {
-  font-size: 60px;
-  margin: 0;
+    font-size: 60px;
+    margin: 0;
 }
 
 .fullWidth {
-  width: 100%;
+    width: 100%;
 }
 
 .rightAlign {
-  text-align: right;
+    text-align: right;
 }

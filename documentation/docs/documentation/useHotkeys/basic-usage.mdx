@@ -3,8 +3,6 @@ sidebar_position: 1
 title: "Basic Usage"
 ---
 
-import UnreferencedHotkeysNotice from '../../../src/components/UnreferencedHotkeysNotice';
-
 # useHotkeys
 
 This hook allows us to listen to hotkeys in a declarative way and execute a callback function once the user pressed down
@@ -46,7 +44,7 @@ function ExampleComponent() {
 }
 ```
 
-> The hotkeys won't work if any of the Live Editor windows are focused.
+> To make the hotkeys work, you have to focus the rendered output of the Live Editor.
 
 ***
 
@@ -144,7 +142,12 @@ function ExampleComponent() {
 }
 ```
 
-<UnreferencedHotkeysNotice hotkeyCombination={'ctrl+shift+a+c, shift+c'}/>
+You can also use an array as first arguments: `useHotkeys(['ctrl+shift+a+c', 'c', 'shift+c'], ....`
+
+:::info Noticed something?
+We used the `ctrl+shift+a+c` and `shift+c` combination two times for two components on this page.
+Since we pressed down one hotkey already the example above started at the count of one. Hotkeys are attached
+globally if we don't use its return value.
 
 ***
 
@@ -153,26 +156,19 @@ function ExampleComponent() {
 Of course, we also want to leverage more complex keystrokes. `useHotkeys` supports the following modifiers:
 
 * `shift`
-* `option`
 * `alt`
-* `ctrl` or `control`
-* `command` or `cmd`
+* `ctrl`
+* `meta`
 
-`cmd`/`command` as well as `ctrl`/`control` can be used synonymously.
-
-:::caution macOS and Windows/Linux compatability
-`alt` and `option` are not identical! To ensure compatability between different operating systems, we need to understand
-that i.e. the `alt` modifier won't
-work with macOS. We need to use `option`. Also, most shortcuts on Windows and Linux based systems that start with the
-`ctrl` modifier, while they start with `command` on macOS. This is likely to change in version 4 with the goal of unifying at least `alt` and
-`option`.
+:::info macOS and Windows/Linux compatability
+Since version 4 `alt` and `option` are identical. The `meta` key is the same as `cmd` on macOS and `ctrl` on Windows/Linux.
 :::
 
 ```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   useHotkeys(
-    'ctrl+shift+a+c, c, shift+c, alt+n, option+n, ctrl+d, command+d, control+d, cmd+d',
+    'ctrl+shift+a+c, c, shift+c, alt+n, ctrl+d, meta+d',
     () => setCount(prevCount => prevCount + 1)
   )
 
@@ -193,8 +189,6 @@ There are also special keys like arrows, return, space bar, etc. that have their
 * `esc` or `escape`
 * `space`
 * `up`, `down`, `left`, `right`
-* `home`
-* `end`
 * `pageup`, `pagedown`
 * `del` or `delete`
 * `f1`, `f2` ... `f19`
@@ -202,8 +196,8 @@ There are also special keys like arrows, return, space bar, etc. that have their
 :::caution Warning
 Please be aware that there are some hotkeys that we cannot override, because they would interfere with a safe browsing
 experience for the user. These depend on the browser.
-For example in Chrome, most notably those are `cmd + w` which closes a tab, `cmd + n` for opening a new window and `cmd + t` to open a new tab.
-Additionally `cmd + shift + w` (closing all tabs of the current window), `cmd + shift + n` (opening incognito window) and
-`cmd + shift + t` (reopen the last closed tab) cannot be overridden.
-`cmd + up + 1..9` on the other hand focuses the corresponding tab of the active window and also cannot be overridden.
+For example in Chrome, most notably those are `meta + w` which closes a tab, `meta + n` for opening a new window and `meta + t` to open a new tab.
+Additionally `meta + shift + w` (closing all tabs of the current window), `meta + shift + n` (opening incognito window) and
+`meta + shift + t` (reopen the last closed tab) cannot be overridden.
+`meta + up + 1..9` on the other hand focuses the corresponding tab of the active window and also cannot be overridden.
 :::
