@@ -17,7 +17,7 @@ To prevent those problems, the hook accepts a dependencies array just like React
 Let's change the second example up a bit to illustrate the problem of stale state. Just as a reminder, we build a simple counter
 component:
 
-```jsx live
+```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   const ref = useHotkeys('b', () => setCount(prevCount => prevCount + 1))
@@ -37,7 +37,7 @@ we add the `tabIndex={-1}` prop, since `<span>` tags cannot receive focus by def
 
 Now, what if we change up the callback execution just a bit?
 
-```jsx live
+```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   const ref = useHotkeys('b', () => setCount(count + 1))
@@ -56,7 +56,7 @@ To solve this problem, we could go back to the previous example. But that soluti
 What if we want reference
 something other than a state variable, like a `useMemo` result? We can use the dependency array for that!
 
-```jsx live
+```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   const squaredCount = useMemo(() => count * 2, [count])

@@ -17,7 +17,7 @@ There are multiple ways to disable a hotkey. Let's go through all of them.
 
 Using the `enabled` flag in the options object, we can dynamically tell `useHotkeys` if the hotkey should be active or not.
 
-```jsx live
+```jsx
 function ExampleComponent() {
   const [enabled, setEnabled] = useState(false)
   const [count, setCount] = useState(0)
@@ -56,7 +56,7 @@ universal shortcut for saving.
 Our callback receives the browsers native event object, so we can just prevent the default behavior there and set up our
 own custom handler:
 
-```jsx live
+```jsx
 function ExampleComponent() {
   useHotkeys('cmd+s, ctrl+s', (e) => {
     e.preventDefault()
@@ -91,7 +91,7 @@ option. The `filter` key takes a function that is expected to return a boolean v
 get executed or not.
 In this scenario the hotkey is still active, but the callback won't be called if the filter function returns false.
 
-```jsx live
+```jsx
 function ExampleComponent() {
   useHotkeys('option+b', () => alert('Callback got executed'), {
     filter: e => {
@@ -215,7 +215,7 @@ allows users to edit text even though it is not part of an input field. For exam
 tags content. A good example for this might be the editor on [medium.com](https://medium.com). `useHotkeys` provides
 an option for that:
 
-```jsx live
+```jsx
 function ExampleComponent() {
   useHotkeys('cmd+b', () => alert('Hotkeys are still working'), {
     enableOnContentEditable: true,

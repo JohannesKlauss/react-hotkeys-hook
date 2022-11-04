@@ -12,7 +12,7 @@ If we press down one of the keystroke it will trigger both components. Why is th
 Hotkeys are attached globally, so there is no default scoping mechanism for them to only trigger if the component is
 focused. To emphasize the issue, check out these two components:
 
-```jsx live noInline
+```jsx noInline
 function UnscopedHotkey() {
   const [count, setCount] = useState(0)
   useHotkeys('c', () => setCount(prevCount => prevCount + 1))
@@ -44,7 +44,7 @@ and their assigned hotkeys? The answer is [`Refs`](https://reactjs.org/docs/refs
 a mutable React reference that we can attach to any component that takes a ref. This way we
 can tell the hook which element should receive the users focus before it triggers the callback.
 
-```jsx live noInline
+```jsx noInline
 function ScopedHotkey() {
   const [count, setCount] = useState(0)
   const ref = useHotkeys('shift+a', () => setCount(prevCount => prevCount + 1))
@@ -97,7 +97,7 @@ like to set the focus to a modal or let the user click on an area which then rec
 its attached hotkeys. However, tags like `<div>`, `<section>`, `<span>`, etc. cannot receive focus by default. To let them
 receive focus we have to use the `tabIndex` attribute:
 
-```jsx live
+```jsx
 function SecondScopedHotkey() {
   const [count, setCount] = useState(0)
   const ref = useHotkeys('shift+a', () => setCount(prevCount => prevCount + 1))
@@ -122,7 +122,7 @@ this topic, check out the [MDN page](https://developer.mozilla.org/en-US/docs/We
 
 This of course also works with nesting components:
 
-```jsx live noInline
+```jsx noInline
 function NestedScopedHotkey() {
   const [count, setCount] = useState(0)
   const ref = useHotkeys('shift+a', () => setCount(prevCount => prevCount + 1))

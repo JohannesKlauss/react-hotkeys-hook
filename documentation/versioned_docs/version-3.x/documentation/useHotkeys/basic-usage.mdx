@@ -36,7 +36,7 @@ const useHotkeys = require('react-hotkeys-hook').useHotkeys
 The most basic usage for the hook is to assign a hotkey we want to listen to and a callback to get executed once the user
 hits that key.
 
-```jsx live
+```jsx
 function ExampleComponent() {
   useHotkeys('a', () => alert('Key a was pressed'))
 
@@ -52,7 +52,7 @@ function ExampleComponent() {
 
 Inside the callback we can do whatever we like. One common use case is to alter some component state:
 
-```jsx live
+```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   useHotkeys('b', () => setCount(prevCount => prevCount + 1))
@@ -71,7 +71,7 @@ function ExampleComponent() {
 
 Since `useHotkeys` is a hook, we can use it in one component as much as we like:
 
-```jsx live
+```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   useHotkeys('q', () => setCount(prevCount => prevCount + 1))
@@ -90,7 +90,7 @@ function ExampleComponent() {
 We can also listen to keystrokes. That is a combination of keys that the user has to hit in order to execute the callback.
 One example would be a Jira like UI that listens to the `Shift+C` keystroke to create a new ticket:
 
-```jsx live
+```jsx
 function CreateIssue() {
   const [showIssueCreatorModal, setShowIssueCreatorModal] = useState(false)
 
@@ -108,7 +108,7 @@ function CreateIssue() {
 This is not restricted to a combination of two keys. We can also do things like `Ctrl+Shift+A+C` (maybe not the most
 intuitive keystroke for a user to memorize, though).
 
-```jsx live
+```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   useHotkeys('ctrl+shift+a+c', () => setCount(prevCount => prevCount + 1))
@@ -133,7 +133,7 @@ to `shift+s`.
 We can also listen to multiple keystrokes and/or hotkeys and trigger the same callback. Combinations are separated by
 a comma sign:
 
-```jsx live
+```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   useHotkeys('ctrl+shift+a+c, c, shift+c', () => setCount(prevCount => prevCount + 1))
