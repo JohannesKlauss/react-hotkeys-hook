@@ -7,8 +7,8 @@ import { createEvent, fireEvent, render, screen } from '@testing-library/react'
 
 const wrapper =
   (initialScopes: string[]): WrapperComponent<any> =>
-  ({ children }: { children?: ReactNode }) =>
-    <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
+    ({ children }: { children?: ReactNode }) =>
+      <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
 
 type HookParameters = {
   keys: Keys
@@ -48,7 +48,7 @@ test('should log a warning when trying to set a scope without a wrapped provider
   renderHook(() => useHotkeys('a', callback, { scopes: 'foo' }))
 
   expect(console.warn).toHaveBeenCalledWith(
-    'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
+    'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
   )
   expect(callback).not.toHaveBeenCalled()
 })
@@ -327,7 +327,7 @@ test('should reflect set splitKey character', async () => {
     ({ keys, options }) => useHotkeys(keys, callback, options),
     {
       initialProps: { keys: 'a, b', options: undefined },
-    }
+    },
   )
 
   await user.keyboard('A')
@@ -720,7 +720,8 @@ test('should allow named keys like arrow keys, space, enter, backspace, etc.', a
   expect(callback).toHaveBeenCalledTimes(7)
 })
 
-test.skip('should trigger when used in portals', async () => {})
+test.skip('should trigger when used in portals', async () => {
+})
 
 test('should parse options and dependencies correctly no matter their position', async () => {
   const user = userEvent.setup()
@@ -965,7 +966,8 @@ test('should call preventDefault option function with hotkey and keyboard event'
   const user = userEvent.setup()
   const preventDefault = jest.fn()
 
-  renderHook(() => useHotkeys('a', async () => {}, { preventDefault }))
+  renderHook(() => useHotkeys('a', async () => {
+  }, { preventDefault }))
 
   await user.keyboard('A')
 
@@ -987,6 +989,24 @@ test('Should listen to space key', async () => {
   renderHook(() => useHotkeys('space', callback))
 
   await user.keyboard(' ')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test.each([
+  ['esc', 'Escape'],
+  ['return', 'Enter'],
+  ['left', 'ArrowLeft'],
+  ['up', 'ArrowUp'],
+  ['right', 'ArrowRight'],
+  ['down', 'ArrowDown']
+])('Should map key %s to %s', async (hotkey, keyboardKey) => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys(hotkey, callback))
+
+  await user.keyboard(`{${keyboardKey}}`)
 
   expect(callback).toHaveBeenCalledTimes(1)
 })

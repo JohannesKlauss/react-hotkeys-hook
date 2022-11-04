@@ -2,6 +2,15 @@ import { Hotkey, KeyboardModifiers, Keys } from './types'
 
 const reservedModifierKeywords = ['ctrl', 'shift', 'alt', 'meta', 'mod']
 
+const mappedKeys: Record<string, string> = {
+  esc: 'escape',
+  return: 'enter',
+  left: 'arrowleft',
+  up: 'arrowup',
+  right: 'arrowright',
+  down: 'arrowdown',
+}
+
 export function parseKeysHookInput(keys: Keys, splitKey: string = ','): string[] {
   if (typeof keys === 'string') {
     return keys.split(splitKey)
@@ -15,8 +24,7 @@ export function parseHotkey(hotkey: string, combinationKey: string = '+'): Hotke
     .toLocaleLowerCase()
     .split(combinationKey)
     .map(k => k.trim())
-    .map(k => k === 'esc' ? 'escape' : k)
-    .map(k => k === 'return' ? 'enter' : k)
+    .map(k => mappedKeys[k] || k)
 
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),
