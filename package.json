@@ -69,7 +69,7 @@
     "typescript": "4.7.4"
   },
   "dependencies": {
-    "lodash": "4.17.11"
+    "lodash": "4.17.21"
   },
   "peerDependencies": {
     "lodash": ">=4.17.0",
