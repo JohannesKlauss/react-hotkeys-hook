@@ -45,6 +45,8 @@ function MyComponent() {
 By default all hotkeys are in the `*` (wildcard) scope. This means that they will be active regardless of where you are in your application.
 Wrapping your app with the `<HotkeysProvider>` component will enable the wildcard scope by default.
 
+If you set a scope on a hotkey, it will **not** be part of the wildcard scope anymore.
+
 ## Activating and deactivating scopes
 
 You can enable and disable scopes by using the `useHotkeysContext` hook.
@@ -69,4 +71,26 @@ You can also toggle scopes by using the `toggleScope` function.
 :::tip Get currently active scopes
 If your app is highly dynamic and you want to know which scopes are currently active, you can get an array of string via
 `enabledScopes` from the context.
+:::
+
+## Set initially active scopes
+
+You can set the initially active scopes by passing an array of strings to the `initialScopes` prop of the `HotkeysProvider`.
+
+```jsx
+import { HotkeysProvider } from 'react-hotkeys-hook';
+
+function App() {
+  return (
+    <HotkeysProvider initialScopes={['scopeA']}>
+      <div>
+        <h1>My App</h1>
+      </div>
+    </HotkeysProvider>
+  )
+}
+```
+
+:::info Wildcard scope when using `initialScopes`
+If you set the `initialScopes` prop, the wildcard scope will not be active by default. You would have to set `['scopeA', '*']`.
 :::
