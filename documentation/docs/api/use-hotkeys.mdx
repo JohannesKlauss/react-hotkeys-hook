@@ -234,12 +234,12 @@ splitKey: string // default: "+"
 Specifies the key that is used to combine multiple hotkeys into keystrokes. The default value is `+`, so `shift+a` triggers
 when the user presses the "shift" key __and__ the "a" key.
 
-:::danger Using "+" as a target key
-Setting the `splitKey` to `-` to listen to a keystroke like `+` or `shift-+` doesn't work. There is a bug in the implementation
-of the underlying hotkeys package that React Hotkeys Hook leverages. See [this issue](https://github.com/JohannesKlauss/react-hotkeys-hook/issues/544)
-and [this issue](https://github.com/jaywcjlove/hotkeys/issues/270).
-This problem will be addressed in the upcoming Version 4.
-:::
+##### `scopes`
+
+To group your hotkeys into different scopes, you can pass a string or an array of strings to the `scopes` property. This
+way you can easily enable or disable a group of hotkeys at once. More on this in the
+[Grouping Hotkeys together](/docs/documentation/hotkeys-provider) section.
+By default all hotkeys are assigned to the wildcard `*` scope.
 
 ##### `keyup`
 

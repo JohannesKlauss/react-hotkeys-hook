@@ -1,0 +1,72 @@
+---
+sidebar_position: 4
+title: "Grouping Hotkeys together"
+---
+
+# `HotkeysProvider`
+
+The `HotkeysProvider` component is a wrapper component that allows you to group hotkeys together.
+This is useful if you want to disable a group of hotkeys in a certain part of your application.
+
+In order to use the grouping feature, you need to wrap your application with the `HotkeysProvider` component.
+
+```jsx
+import { HotkeysProvider } from 'react-hotkeys-hook';
+
+function App() {
+  return (
+    <HotkeysProvider>
+      <div>
+        <h1>My App</h1>
+      </div>
+    </HotkeysProvider>
+  )
+}
+```
+
+Grouping works by passing setting the scope option of a hotkey.
+
+```jsx
+import { useHotkeys } from 'react-hotkeys-hook';
+
+function MyComponent() {
+  useHotkeys('ctrl+a', () => console.log('ctrl+a'), { scopes: 'scopeA' })
+  useHotkeys('ctrl+b', () => console.log('ctrl+b'), { scopes: 'scopeB' })
+  useHotkeys('ctrl+c', () => console.log('ctrl+c'), { scopes: 'scopeA' })
+
+  return (
+    <div>
+      <h1>My App</h1>
+    </div>
+  )
+}
+```
+
+By default all hotkeys are in the `*` (wildcard) scope. This means that they will be active regardless of where you are in your application.
+Wrapping your app with the `<HotkeysProvider>` component will enable the wildcard scope by default.
+
+## Activating and deactivating scopes
+
+You can enable and disable scopes by using the `useHotkeysContext` hook.
+
+```jsx
+import { useHotkeysContext } from 'react-hotkeys-hook';
+
+function MyComponent() {
+  const { enableScope, disableScope } = useHotkeysContext();
+
+  return (
+    <div>
+      <button onClick={() => enableScope('scopeA')}>Enable scope A</button>
+      <button onClick={() => disableScope('scopeA')}>Disable scope A</button>
+    </div>
+  )
+}
+```
+
+You can also toggle scopes by using the `toggleScope` function.
+
+:::tip Get currently active scopes
+If your app is highly dynamic and you want to know which scopes are currently active, you can get an array of string via
+`activeScopes` from the context.
+:::

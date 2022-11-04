@@ -4,19 +4,19 @@ import BoundHotkeysProxyProviderProvider from './BoundHotkeysProxyProvider'
 
 export type HotkeysContextType = {
   hotkeys: ReadonlyArray<Hotkey>
-  activeScopes: string[]
+  enabledScopes: string[]
   toggleScope: (scope: string) => void
-  activateScope: (scope: string) => void
-  deactivateScope: (scope: string) => void
+  enableScope: (scope: string) => void
+  disableScope: (scope: string) => void
 }
 
 // The context is only needed for special features like global scoping, so we use a graceful default fallback
 const HotkeysContext = createContext<HotkeysContextType>({
   hotkeys: [],
-  activeScopes: [], // This array has to be empty instead of containing '*' as default, to check if the provider is set or not
+  enabledScopes: [], // This array has to be empty instead of containing '*' as default, to check if the provider is set or not
   toggleScope: () => {},
-  activateScope: () => {},
-  deactivateScope: () => {},
+  enableScope: () => {},
+  disableScope: () => {},
 })
 
 export const useHotkeysContext = () => {
@@ -34,7 +34,7 @@ export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props
 
   const isAllActive = useMemo(() => internalActiveScopes.includes('*'), [internalActiveScopes])
 
-  const activateScope = (scope: string) => {
+  const enableScope = (scope: string) => {
     if (isAllActive) {
       setInternalActiveScopes([scope])
     } else {
@@ -42,7 +42,7 @@ export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props
     }
   }
 
-  const deactivateScope = (scope: string) => {
+  const disableScope = (scope: string) => {
     const scopes = internalActiveScopes.filter(s => s !== scope)
 
     if (scopes.length === 0) {
@@ -54,9 +54,9 @@ export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props
 
   const toggleScope = (scope: string) => {
     if (internalActiveScopes.includes(scope)) {
-      deactivateScope(scope)
+      disableScope(scope)
     } else {
-      activateScope(scope)
+      enableScope(scope)
     }
   }
 
@@ -69,7 +69,7 @@ export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props
   }
 
   return (
-    <HotkeysContext.Provider value={{activeScopes: internalActiveScopes, hotkeys: boundHotkeys, activateScope, deactivateScope, toggleScope}}>
+    <HotkeysContext.Provider value={{enabledScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope}}>
       <BoundHotkeysProxyProviderProvider addHotkey={addBoundHotkey} removeHotkey={removeBoundHotkey}>
         {children}
       </BoundHotkeysProxyProviderProvider>

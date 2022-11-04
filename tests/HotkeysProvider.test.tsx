@@ -19,7 +19,7 @@ test('should default to wildcard scope', () => {
     wrapper: HotkeysProvider,
   })
 
-  expect(result.current.activeScopes).toEqual(['*'])
+  expect(result.current.enabledScopes).toEqual(['*'])
 })
 
 test('should default to wildcard scope if empty array is provided as initialActiveScopes', () => {
@@ -29,7 +29,7 @@ test('should default to wildcard scope if empty array is provided as initialActi
     wrapper,
   })
 
-  expect(result.current.activeScopes).toEqual(['*'])
+  expect(result.current.enabledScopes).toEqual(['*'])
 })
 
 test('should return active scopes and scope modifying functions', () => {
@@ -37,9 +37,9 @@ test('should return active scopes and scope modifying functions', () => {
     wrapper: HotkeysProvider,
   })
 
-  expect(result.current.activeScopes).toEqual(['*'])
-  expect(result.current.activateScope).toBeInstanceOf(Function)
-  expect(result.current.deactivateScope).toBeInstanceOf(Function)
+  expect(result.current.enabledScopes).toEqual(['*'])
+  expect(result.current.enableScope).toBeInstanceOf(Function)
+  expect(result.current.disableScope).toBeInstanceOf(Function)
   expect(result.current.toggleScope).toBeInstanceOf(Function)
 })
 
@@ -49,10 +49,10 @@ test('should activate scope by calling activateScope', () => {
   })
 
   act(() => {
-    result.current.activateScope('foo')
+    result.current.enableScope('foo')
   })
 
-  expect(result.current.activeScopes).toEqual(['foo'])
+  expect(result.current.enabledScopes).toEqual(['foo'])
 })
 
 test('should reactivate wildcard scope if all other scopes are deactivated', () => {
@@ -61,16 +61,16 @@ test('should reactivate wildcard scope if all other scopes are deactivated', () 
   })
 
   act(() => {
-    result.current.activateScope('foo')
+    result.current.enableScope('foo')
   })
 
-  expect(result.current.activeScopes).toEqual(['foo'])
+  expect(result.current.enabledScopes).toEqual(['foo'])
 
   act(() => {
-    result.current.deactivateScope('foo')
+    result.current.disableScope('foo')
   })
 
-  expect(result.current.activeScopes).toEqual(['*'])
+  expect(result.current.enabledScopes).toEqual(['*'])
 })
 
 test('should return multiple scopes if different scopes are activated', () => {
@@ -79,16 +79,16 @@ test('should return multiple scopes if different scopes are activated', () => {
   })
 
   act(() => {
-    result.current.activateScope('foo')
+    result.current.enableScope('foo')
   })
 
-  expect(result.current.activeScopes).toEqual(['foo'])
+  expect(result.current.enabledScopes).toEqual(['foo'])
 
   act(() => {
-    result.current.activateScope('bar')
+    result.current.enableScope('bar')
   })
 
-  expect(result.current.activeScopes).toEqual(['foo', 'bar'])
+  expect(result.current.enabledScopes).toEqual(['foo', 'bar'])
 })
 
 test('should deactivate scope by calling deactivateScope', () => {
@@ -97,20 +97,20 @@ test('should deactivate scope by calling deactivateScope', () => {
   })
 
   act(() => {
-    result.current.activateScope('foo')
+    result.current.enableScope('foo')
   })
 
   act(() => {
-    result.current.activateScope('bar')
+    result.current.enableScope('bar')
   })
 
-  expect(result.current.activeScopes).toEqual(['foo', 'bar'])
+  expect(result.current.enabledScopes).toEqual(['foo', 'bar'])
 
   act(() => {
-    result.current.deactivateScope('foo')
+    result.current.disableScope('foo')
   })
 
-  expect(result.current.activeScopes).toEqual(['bar'])
+  expect(result.current.enabledScopes).toEqual(['bar'])
 })
 
 test('should toggle scope by calling toggleScope', () => {
@@ -119,22 +119,22 @@ test('should toggle scope by calling toggleScope', () => {
   })
 
   act(() => {
-    result.current.activateScope('foo')
+    result.current.enableScope('foo')
   })
 
-  expect(result.current.activeScopes).toEqual(['foo'])
+  expect(result.current.enabledScopes).toEqual(['foo'])
 
   act(() => {
     result.current.toggleScope('foo')
   })
 
-  expect(result.current.activeScopes).toEqual(['*'])
+  expect(result.current.enabledScopes).toEqual(['*'])
 
   act(() => {
     result.current.toggleScope('foo')
   })
 
-  expect(result.current.activeScopes).toEqual(['foo'])
+  expect(result.current.enabledScopes).toEqual(['foo'])
 })
 
 test('should keep wildcard scope active when all is the only active scope and gets deactivated', () => {
@@ -143,10 +143,10 @@ test('should keep wildcard scope active when all is the only active scope and ge
   })
 
   act(() => {
-    result.current.deactivateScope('*')
+    result.current.disableScope('*')
   })
 
-  expect(result.current.activeScopes).toEqual(['*'])
+  expect(result.current.enabledScopes).toEqual(['*'])
 })
 
 test('should return initially set scopes', () => {
@@ -156,7 +156,7 @@ test('should return initially set scopes', () => {
     wrapper,
   })
 
-  expect(result.current.activeScopes).toEqual(['foo', 'bar'])
+  expect(result.current.enabledScopes).toEqual(['foo', 'bar'])
 })
 
 test('should return all bound hotkeys', () => {

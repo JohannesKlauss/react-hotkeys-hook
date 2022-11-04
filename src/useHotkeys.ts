@@ -34,11 +34,11 @@ export default function useHotkeys<T extends HTMLElement>(
   const cb = useCallback(callback, [..._deps])
   const memoisedOptions = useDeepEqualMemo(_options)
 
-  const { activeScopes } = useHotkeysContext()
+  const { enabledScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
   useLayoutEffect(() => {
-    if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
+    if (memoisedOptions?.enabled === false || !isScopeActive(enabledScopes, memoisedOptions?.scopes)) {
       return
     }
 
@@ -117,7 +117,7 @@ export default function useHotkeys<T extends HTMLElement>(
         parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
       }
     }
-  }, [keys, cb, memoisedOptions, activeScopes])
+  }, [keys, cb, memoisedOptions, enabledScopes])
 
   return ref
 }
