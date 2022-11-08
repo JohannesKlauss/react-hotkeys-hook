@@ -7,8 +7,8 @@ esbuild
     bundle: true,
     sourcemap: true,
     minify: true,
-    splitting: true,
-    format: 'esm',
+    splitting: false,
+    format: 'cjs',
     target: ['esnext'],
     external: ['react', 'react-dom'],
   })
