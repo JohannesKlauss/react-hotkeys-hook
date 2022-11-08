@@ -6,7 +6,6 @@
   "author": "Johannes Klauss",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "module": "dist/index.js",
   "files": [
     "dist",
     "src"
