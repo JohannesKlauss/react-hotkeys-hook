@@ -39,13 +39,15 @@ export function removeFromCurrentlyPressedKeys(key: string | string[]): void {
 }
 
 (() => {
-  window.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('keydown', e => {
-      pushToCurrentlyPressedKeys(e.key)
-    })
+  if (typeof window !== 'undefined') {
+    window.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('keydown', e => {
+        pushToCurrentlyPressedKeys(e.key)
+      })
 
-    document.addEventListener('keyup', e => {
-      removeFromCurrentlyPressedKeys(e.key)
+      document.addEventListener('keyup', e => {
+        removeFromCurrentlyPressedKeys(e.key)
+      })
     })
-  })
+  }
 })()
