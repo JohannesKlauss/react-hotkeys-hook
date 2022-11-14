@@ -3,10 +3,10 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "strict": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
   "include": ["src", "./setupTests.ts"]
 }

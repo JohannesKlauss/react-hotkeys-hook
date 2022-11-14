@@ -1,5 +1,5 @@
 import { HotkeyCallback, Keys, OptionsOrDependencyArray, RefType } from './types'
-import { useCallback, useLayoutEffect, useRef } from 'react'
+import { useCallback, useLayoutEffect, useEffect, useRef } from 'react'
 import { parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -19,6 +19,8 @@ const stopPropagation = (e: KeyboardEvent): void => {
   e.stopImmediatePropagation()
 }
 
+const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
@@ -37,7 +39,7 @@ export default function useHotkeys<T extends HTMLElement>(
   const { enabledScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
-  useLayoutEffect(() => {
+  useSafeLayoutEffect(() => {
     if (memoisedOptions?.enabled === false || !isScopeActive(enabledScopes, memoisedOptions?.scopes)) {
       return
     }

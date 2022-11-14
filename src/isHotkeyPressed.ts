@@ -1,6 +1,6 @@
 import { Hotkey } from './types'
 import { parseHotkey } from './parseHotkeys'
-import isEqual from 'lodash/isEqual'
+import isEqual from 'lodash.isequal'
 
 const currentlyPressedKeys: Set<Hotkey> = new Set<Hotkey>()
 
