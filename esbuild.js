@@ -1,29 +1,27 @@
 const esbuild = require('esbuild')
 
+const baseConfig = {
+  entryPoints: ['src/index.ts'],
+  bundle: true,
+  minify: true,
+  sourcemap: true,
+  splitting: false,
+  target: ['esnext'],
+  external: ['react', 'react-dom', 'lodash'],
+}
+
 esbuild
   .build({
-      entryPoints: ['./src/index.ts'],
-      outfile: 'dist/index.cjs',
-      bundle: true,
-      sourcemap: true,
-      minify: false,
-      splitting: false,
-      format: 'cjs',
-      target: ['esnext'],
-      external: ['react', 'react-dom', 'lodash'],
+    ...baseConfig,
+    outfile: 'dist/index.cjs',
+    format: 'cjs',
   })
   .catch(() => process.exit(1))
 
 esbuild
   .build({
-      entryPoints: ['./src/index.ts'],
-      outfile: 'dist/index.mjs',
-      bundle: true,
-      sourcemap: true,
-      minify: false,
-      splitting: false,
-      format: 'esm',
-      target: ['esnext'],
-      external: ['react', 'react-dom', 'lodash'],
+    ...baseConfig,
+    outfile: 'dist/index.mjs',
+    format: 'esm',
   })
   .catch(() => process.exit(1))
