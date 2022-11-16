@@ -7,7 +7,7 @@ const baseConfig = {
   sourcemap: true,
   splitting: false,
   target: ['esnext'],
-  external: ['react', 'react-dom', 'lodash.isequal'],
+  external: ['react', 'react-dom'],
 }
 
 esbuild
