@@ -1,10 +1,10 @@
 import { useRef } from 'react'
-import isEqual from 'lodash.isEqual'
+import deepEqual from './deepEqual'
 
 export default function useDeepEqualMemo<T>(value: T) {
   const ref = useRef<T | undefined>(undefined)
 
-  if (!isEqual(ref.current, value)) {
+  if (!deepEqual(ref.current, value)) {
     ref.current = value
   }
 
