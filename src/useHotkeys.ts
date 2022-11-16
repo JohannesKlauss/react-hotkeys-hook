@@ -1,5 +1,5 @@
-import { HotkeyCallback, Keys, OptionsOrDependencyArray, RefType } from './types'
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { HotkeyCallback, Keys, Options, OptionsOrDependencyArray, RefType } from './types'
+import { DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -30,8 +30,8 @@ export default function useHotkeys<T extends HTMLElement>(
   const ref = useRef<RefType<T>>(null)
   const { current: pressedDownKeys } = useRef<Set<string>>(new Set())
 
-  const _options = !(options instanceof Array) ? options : !(dependencies instanceof Array) ? dependencies : undefined
-  const _deps = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
+  const _options: Options | undefined = !(options instanceof Array) ? (options as Options) : !(dependencies instanceof Array) ? (dependencies as Options) : undefined
+  const _deps: DependencyList = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
 
   const cb = useCallback(callback, [..._deps])
   const memoisedOptions = useDeepEqualMemo(_options)
