@@ -1,6 +1,6 @@
 import { Hotkey } from './types'
 import { parseHotkey } from './parseHotkeys'
-import isEqual from 'lodash/isEqual'
+import deepEqual from './deepEqual'
 
 const currentlyPressedKeys: Set<Hotkey> = new Set<Hotkey>()
 
@@ -11,7 +11,7 @@ export function isHotkeyPressed(key: string | string[], splitKey: string = ','):
     const parsedHotkey = parseHotkey(hotkey)
 
     for (const pressedHotkey of currentlyPressedKeys) {
-      if (isEqual(parsedHotkey, pressedHotkey)) {
+      if (deepEqual(parsedHotkey, pressedHotkey)) {
         return true
       }
     }
