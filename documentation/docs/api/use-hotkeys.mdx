@@ -58,15 +58,15 @@ useHotkeys('w, a, s, d', () => alert('Player moved!'))
 
 :::tip Differentiating between multiple possible keys
 
-If we use a combination of possible keys that use the same hook, we can use `handler.key` to check which key the user
+If we use a combination of possible keys that use the same hook, we can use `handler.keys` to check which key the user
 pressed.
 
 ```jsx
 useHotkeys('ctrl+a, shift+b, r, f', (_, handler) => {
-  switch (handler.key) {
-    case 'ctrl+a': alert('You pressed ctrl+a!');
+  switch (handler.keys.join('')) {
+    case 'a': alert('You pressed ctrl+a!');
       break;
-    case 'ctrl+b': alert('You pressed ctrl+b!');
+    case 'b': alert('You pressed ctrl+b!');
       break;
     case 'r': alert('You pressed r!');
       break;
@@ -82,10 +82,10 @@ This can also be an array:
 
 ```jsx
 useHotkeys(['ctrl+a', 'shift+b', 'r', 'f'], (_, handler) => {
-  switch (handler.key) {
-    case 'ctrl+a': alert('You pressed ctrl+a!');
+  switch (handler.keys.join('')) {
+    case 'a': alert('You pressed ctrl+a!');
       break;
-    case 'ctrl+b': alert('You pressed ctrl+b!');
+    case 'b': alert('You pressed ctrl+b!');
       break;
     case 'r': alert('You pressed r!');
       break;
@@ -115,9 +115,9 @@ check out the [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Ke
 
 The `handler` holds information about the pressed key. In general, we should only need this object to handle our keyboard
 events.
-The most important property of the `handler` object is the `key` prop:
+The most important property of the `handler` object is the `keys` prop:
 
-* `key: string` - This will hold the pressed keystroke. So if we use multiple possible keystroke combinations for the same callback
+* `keys: string[]` - This will hold the pressed keystroke. So if we use multiple possible keystroke combinations for the same callback
 we can use this property to check which specific keystroke was pressed.
 
 > There are more properties attached to the handle that currently don't get populated with values. So we can safely ignore those.
