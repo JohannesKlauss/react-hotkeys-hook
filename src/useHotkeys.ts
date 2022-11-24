@@ -28,7 +28,6 @@ export default function useHotkeys<T extends HTMLElement>(
   dependencies?: OptionsOrDependencyArray,
 ) {
   const ref = useRef<RefType<T>>(null)
-  const { current: pressedDownKeys } = useRef<Set<string>>(new Set())
 
   const _options: Options | undefined = !(options instanceof Array) ? (options as Options) : !(dependencies instanceof Array) ? (dependencies as Options) : undefined
   const _deps: DependencyList = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
@@ -40,6 +39,8 @@ export default function useHotkeys<T extends HTMLElement>(
   const proxy = useBoundHotkeysProxy()
 
   useSafeLayoutEffect(() => {
+    const pressedDownKeys = new Set<string>();
+
     if (memoisedOptions?.enabled === false || !isScopeActive(enabledScopes, memoisedOptions?.scopes)) {
       return
     }
