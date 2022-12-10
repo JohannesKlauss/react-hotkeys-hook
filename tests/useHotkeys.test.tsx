@@ -1010,3 +1010,33 @@ test.each([
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
+
+test.each(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])(`Should listen to number key %s`, async (key) => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys(`shift+${key}`, callback))
+
+  await user.keyboard(`{Shift>}${key}{/Shift}`)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should not call callback if meta is held down but other key not present in combination is pressed', async() => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys(`meta+z`, callback))
+
+  await user.keyboard(`{Meta>}Z`)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('Z')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+
+  await user.keyboard('F{/Meta}')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+})

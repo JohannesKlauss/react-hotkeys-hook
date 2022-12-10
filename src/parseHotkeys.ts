@@ -9,6 +9,15 @@ const mappedKeys: Record<string, string> = {
   up: 'arrowup',
   right: 'arrowright',
   down: 'arrowdown',
+  '1': 'digit1',
+  '2': 'digit2',
+  '3': 'digit3',
+  '4': 'digit4',
+  '5': 'digit5',
+  '6': 'digit6',
+  '7': 'digit7',
+  '8': 'digit8',
+  '9': 'digit9',
 }
 
 export function parseKeysHookInput(keys: Keys, splitKey: string = ','): string[] {

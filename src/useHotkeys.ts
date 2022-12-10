@@ -21,6 +21,8 @@ const stopPropagation = (e: KeyboardEvent): void => {
 
 const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
+const pressedDownKeys = new Set<string>()
+
 export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
@@ -39,8 +41,6 @@ export default function useHotkeys<T extends HTMLElement>(
   const proxy = useBoundHotkeysProxy()
 
   useSafeLayoutEffect(() => {
-    const pressedDownKeys = new Set<string>();
-
     if (memoisedOptions?.enabled === false || !isScopeActive(enabledScopes, memoisedOptions?.scopes)) {
       return
     }
@@ -52,7 +52,6 @@ export default function useHotkeys<T extends HTMLElement>(
 
       // TODO: SINCE THE EVENT IS NOW ATTACHED TO THE REF, THE ACTIVE ELEMENT CAN NEVER BE INSIDE THE REF. THE HOTKEY ONLY TRIGGERS IF THE
       // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WONT TRIGGER THE HOTKEY.
-
       if (ref.current !== null && document.activeElement !== ref.current && !ref.current.contains(document.activeElement)) {
         stopPropagation(e)
 
