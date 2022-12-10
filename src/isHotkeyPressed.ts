@@ -42,10 +42,20 @@ export function removeFromCurrentlyPressedKeys(key: string | string[]): void {
   if (typeof window !== 'undefined') {
     window.addEventListener('DOMContentLoaded', () => {
       document.addEventListener('keydown', e => {
+        if (e.key === undefined) {
+          // Synthetic event (e.g., Chrome autofill).  Ignore.
+          return
+        }
+
         pushToCurrentlyPressedKeys(e.key)
       })
 
       document.addEventListener('keyup', e => {
+        if (e.key === undefined) {
+          // Synthetic event (e.g., Chrome autofill).  Ignore.
+          return
+        }
+
         removeFromCurrentlyPressedKeys(e.key)
       })
     })

@@ -81,6 +81,11 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === undefined) {
+        // Synthetic event (e.g., Chrome autofill).  Ignore.
+        return
+      }
+
       pressedDownKeys.add(event.key.toLowerCase())
 
       if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
@@ -89,6 +94,11 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.key === undefined) {
+        // Synthetic event (e.g., Chrome autofill).  Ignore.
+        return
+      }
+
       if (event.key.toLowerCase() !== 'meta') {
         pressedDownKeys.delete(event.key.toLowerCase())
       } else {
