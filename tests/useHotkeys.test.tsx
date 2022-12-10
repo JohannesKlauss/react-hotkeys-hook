@@ -254,24 +254,24 @@ test('should listen to combinations with modifiers', async () => {
 
   const { rerender } = renderHook<HookParameters, void>(({ keys }) => useHotkeys(keys, callback), {
     initialProps: {
-      keys: 'ctrl+a',
+      keys: 'meta+a',
     },
   })
 
-  await user.keyboard('{Control>}A{/Control}')
+  await user.keyboard('{Meta>}A{/Meta}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  rerender({ keys: 'ctrl+shift+a' })
+  rerender({ keys: 'meta+shift+a' })
 
-  await user.keyboard('{Control}A{/Control}')
-  await user.keyboard('{Control>}{Shift>}A{/Shift}{/Control}')
+  await user.keyboard('{Meta}A{/Meta}')
+  await user.keyboard('{Meta>}{Shift>}A{/Shift}{/Meta}')
 
   expect(callback).toHaveBeenCalledTimes(2)
 
-  rerender({ keys: 'ctrl+shift+alt+a' })
+  rerender({ keys: 'meta+shift+alt+a' })
 
-  await user.keyboard('{Control>}{Alt>}{Shift>}A{/Shift}{/Alt}{/Control}')
+  await user.keyboard('{Meta>}{Alt>}{Shift>}A{/Shift}{/Alt}{/Meta}')
 
   expect(callback).toHaveBeenCalledTimes(3)
 })
@@ -280,9 +280,9 @@ test('should not trigger when combinations are incomplete', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  renderHook(() => useHotkeys(['ctrl+a'], callback))
+  renderHook(() => useHotkeys(['meta+a'], callback))
 
-  await user.keyboard('{Control}')
+  await user.keyboard('{Meta}')
 
   expect(callback).not.toHaveBeenCalled()
 })
@@ -306,13 +306,13 @@ test('should listen to multiple combinations with modifiers', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  const { rerender } = renderHook(() => useHotkeys('ctrl+shift+a, alt+b', callback))
+  const { rerender } = renderHook(() => useHotkeys('meta+shift+a, alt+b', callback))
 
-  await user.keyboard('{Control>}{Shift>}A{/Shift}{/Control}')
+  await user.keyboard('{Meta>}{Shift>}A{/Shift}{/Meta}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
-  rerender(() => useHotkeys('ctrl+shift+alt+a', callback))
+  rerender(() => useHotkeys('meta+shift+alt+a', callback))
 
   await user.keyboard('{Alt>}B{/Alt}')
 
@@ -762,7 +762,6 @@ test('should pass keyboard event and hotkey object to callback', async () => {
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
-    ctrl: false,
     alt: false,
     meta: false,
     mod: false,
@@ -781,28 +780,26 @@ test('should set shift to true in hotkey object if listening to shift', async ()
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: true,
-    ctrl: false,
     alt: false,
     meta: false,
     mod: false,
   })
 })
 
-test('should set ctrl to true in hotkey object if listening to ctrl', async () => {
+test('should set meta to true in hotkey object if listening to meta', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  renderHook(() => useHotkeys('ctrl+a', callback))
+  renderHook(() => useHotkeys('meta+a', callback))
 
-  await user.keyboard('{Control>}A{/Control}')
+  await user.keyboard('{Meta>}A{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
-    ctrl: true,
     alt: false,
-    meta: false,
+    meta: true,
     mod: false,
   })
 })
@@ -819,7 +816,6 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
-    ctrl: false,
     alt: true,
     meta: false,
     mod: false,
@@ -838,7 +834,6 @@ test('should set meta to true in hotkey object if listening to meta', async () =
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
-    ctrl: false,
     alt: false,
     meta: true,
     mod: false,
@@ -857,7 +852,6 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
-    ctrl: false,
     alt: false,
     meta: false,
     mod: true,
@@ -876,7 +870,6 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: true,
-    ctrl: false,
     alt: false,
     meta: false,
     mod: true,
@@ -975,7 +968,6 @@ test('should call preventDefault option function with hotkey and keyboard event'
   expect(preventDefault).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
-    ctrl: false,
     alt: false,
     meta: false,
     mod: false,
