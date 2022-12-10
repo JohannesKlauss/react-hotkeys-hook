@@ -45,7 +45,7 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
 }
 
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, pressedDownKeys: Set<string>): boolean => {
-  const { alt, ctrl, meta, mod, shift, keys } = hotkey
+  const { alt, meta, mod, shift, keys } = hotkey
   const { altKey, ctrlKey, metaKey, shiftKey, key: pressedKeyUppercase, code } = e
 
   const keyCode = code.toLowerCase().replace('key', '')
@@ -65,11 +65,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
       return false
     }
   } else {
-    if (metaKey !== meta && keyCode !== 'meta') {
-      return false
-    }
-
-    if (ctrlKey !== ctrl && keyCode !== 'ctrl') {
+    if (metaKey !== meta && ctrlKey !== meta && keyCode !== 'meta' && keyCode !== 'ctrl') {
       return false
     }
   }

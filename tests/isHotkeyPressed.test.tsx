@@ -32,10 +32,9 @@ test('should return false if hotkey is not pressed down', async () => {
 test.skip('should take modifiers into account', async () => {
   const user = userEvent.setup()
 
-  await user.keyboard('{Shift>}{Control>}{Alt>}{Meta>}')
+  await user.keyboard('{Shift>}{Alt>}{Meta>}')
 
   expect(isHotkeyPressed('shift')).toBe(true)
-  expect(isHotkeyPressed('ctrl')).toBe(true)
   expect(isHotkeyPressed('alt')).toBe(true)
   expect(isHotkeyPressed('meta')).toBe(true)
 })
