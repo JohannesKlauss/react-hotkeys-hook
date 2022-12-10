@@ -65,7 +65,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
       return false
     }
   } else {
-    if (metaKey !== meta && ctrlKey !== meta && keyCode !== 'meta') {
+    if (metaKey !== meta && ctrlKey !== meta && keyCode !== 'meta' && keyCode !== 'ctrl') {
       return false
     }
   }
