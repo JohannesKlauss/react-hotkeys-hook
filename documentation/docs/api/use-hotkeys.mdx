@@ -194,11 +194,11 @@ therefore prevents the execution of the callback. `true` is the default value, s
 execution, the browser won't proceed with its default behavior. Setting this to `false` will allow the browser to proceed
 with the default behavior.
 
-A good example for this behavior is the override of `command+s`, which normally triggers a save page dialog
+A good example for this behavior is the override of `meta+s`, which normally triggers a save page dialog
 inside the browser.
 
 ```js
-useHotkeys('command+s', someCallback, {
+useHotkeys('meta+s', someCallback, {
   // This will allow the browser to show the save page dialog.
   // Setting it to true will prevent that.
   filterPreventDefault: false,
