@@ -51,7 +51,7 @@ export default function useHotkeys<T extends HTMLElement>(
       }
 
       // TODO: SINCE THE EVENT IS NOW ATTACHED TO THE REF, THE ACTIVE ELEMENT CAN NEVER BE INSIDE THE REF. THE HOTKEY ONLY TRIGGERS IF THE
-      // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WONT TRIGGER THE HOTKEY.
+      // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WON'T TRIGGER THE HOTKEY.
       if (ref.current !== null && document.activeElement !== ref.current && !ref.current.contains(document.activeElement)) {
         stopPropagation(e)
 
