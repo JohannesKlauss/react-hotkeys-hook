@@ -1,6 +1,7 @@
 import { Hotkey } from './types'
-import { createContext, ReactNode, useMemo, useState, useContext } from 'react'
+import { createContext, ReactNode, useState, useContext, useCallback } from 'react'
 import BoundHotkeysProxyProviderProvider from './BoundHotkeysProxyProvider'
+import deepEqual from './deepEqual'
 
 export type HotkeysContextType = {
   hotkeys: ReadonlyArray<Hotkey>
@@ -32,41 +33,51 @@ export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props
   const [internalActiveScopes, setInternalActiveScopes] = useState(initiallyActiveScopes?.length > 0 ? initiallyActiveScopes : ['*'])
   const [boundHotkeys, setBoundHotkeys] = useState<Hotkey[]>([]);
 
-  const isAllActive = useMemo(() => internalActiveScopes.includes('*'), [internalActiveScopes])
+  const enableScope = useCallback((scope: string) => {
+    setInternalActiveScopes((prev) => {
+      if (prev.includes('*')) {
+        return [scope]
+      }
 
-  const enableScope = (scope: string) => {
-    if (isAllActive) {
-      setInternalActiveScopes([scope])
-    } else {
-      setInternalActiveScopes(Array.from(new Set([...internalActiveScopes, scope])))
-    }
-  }
+      return Array.from(new Set([...prev, scope]))
+    })
+  }, [])
 
-  const disableScope = (scope: string) => {
-    const scopes = internalActiveScopes.filter(s => s !== scope)
+  const disableScope = useCallback((scope: string) => {
+    setInternalActiveScopes((prev) => {
+      if (prev.filter(s => s !== scope).length === 0) {
+        return ['*']
+      } else {
+        return prev.filter(s => s !== scope)
+      }
+    })
+  }, [])
 
-    if (scopes.length === 0) {
-      setInternalActiveScopes(['*'])
-    } else {
-      setInternalActiveScopes(scopes)
-    }
-  }
+  const toggleScope = useCallback((scope: string) => {
+    setInternalActiveScopes((prev) => {
+      if (prev.includes(scope)) {
+        if (prev.filter(s => s !== scope).length === 0) {
+          return ['*']
+        } else {
+          return prev.filter(s => s !== scope)
+        }
+      } else {
+        if (prev.includes('*')) {
+          return [scope]
+        }
 
-  const toggleScope = (scope: string) => {
-    if (internalActiveScopes.includes(scope)) {
-      disableScope(scope)
-    } else {
-      enableScope(scope)
-    }
-  }
+        return Array.from(new Set([...prev, scope]))
+      }
+    })
+  }, [])
 
-  const addBoundHotkey = (hotkey: Hotkey) => {
-    setBoundHotkeys([...boundHotkeys, hotkey])
-  }
+  const addBoundHotkey = useCallback((hotkey: Hotkey) => {
+    setBoundHotkeys((prev) => [...prev, hotkey])
+  }, [])
 
-  const removeBoundHotkey = (hotkey: Hotkey) => {
-    setBoundHotkeys(boundHotkeys.filter(h => h.keys !== hotkey.keys))
-  }
+  const removeBoundHotkey = useCallback((hotkey: Hotkey) => {
+    setBoundHotkeys((prev) => prev.filter(h => !deepEqual(h, hotkey)))
+  }, [])
 
   return (
     <HotkeysContext.Provider value={{enabledScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope}}>

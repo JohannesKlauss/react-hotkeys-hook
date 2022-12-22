@@ -182,8 +182,14 @@ test('should update bound hotkeys when useHotkeys changes its scopes', () => {
     return useHotkeysContext()
   }
 
-  const wrapper = ({ children }: { children: ReactNode }) => <HotkeysProvider
-    initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
+  const wrapper = ({ children }: { children: ReactNode }) => {
+    return (
+      <HotkeysProvider initiallyActiveScopes={['foo']}>
+        {children}
+      </HotkeysProvider>
+    )
+  }
+
   const { result, rerender } = renderHook<{ scopes: string[] }, HotkeysContextType>(({ scopes }) => useIntegratedHotkeys(scopes), {
     // @ts-ignore
     wrapper,
