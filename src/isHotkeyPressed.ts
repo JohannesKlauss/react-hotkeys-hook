@@ -37,21 +37,23 @@ function removeFromCurrentlyPressedKeys(key: string): void {
 }
 
 (() => {
-  document.addEventListener('keydown', e => {
-    if (e.key === undefined) {
-      // Synthetic event (e.g., Chrome autofill).  Ignore.
-      return
-    }
+  if (typeof document !== 'undefined') {
+    document.addEventListener('keydown', e => {
+      if (e.key === undefined) {
+        // Synthetic event (e.g., Chrome autofill).  Ignore.
+        return
+      }
 
-    pushToCurrentlyPressedKeys(mapKey(e.code))
-  })
+      pushToCurrentlyPressedKeys(mapKey(e.code))
+    })
 
-  document.addEventListener('keyup', e => {
-    if (e.key === undefined) {
-      // Synthetic event (e.g., Chrome autofill).  Ignore.
-      return
-    }
+    document.addEventListener('keyup', e => {
+      if (e.key === undefined) {
+        // Synthetic event (e.g., Chrome autofill).  Ignore.
+        return
+      }
 
-    removeFromCurrentlyPressedKeys(mapKey(e.code))
-  })
+      removeFromCurrentlyPressedKeys(mapKey(e.code))
+    })
+  }
 })()
