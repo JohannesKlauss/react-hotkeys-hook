@@ -353,7 +353,7 @@ test('should listen to + if the combinationKey is set to something different the
 
   renderHook(() => useHotkeys('shift-+', callback, { combinationKey: '-' }))
 
-  await user.keyboard('{Shift>}+{/Shift}')
+  await user.keyboard('{Shift>}{BracketRight}{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })

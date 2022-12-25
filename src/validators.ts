@@ -1,5 +1,6 @@
 import { FormTags, Hotkey, Scopes, Trigger } from './types'
 import { isHotkeyPressed } from './isHotkeyPressed'
+import { mapKey } from './parseHotkeys'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -54,13 +55,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey):
   const metaKey = isHotkeyPressed('meta')
   const ctrlKey = isHotkeyPressed('ctrl')
 
-  const keyCode = code
-    .toLowerCase()
-    .replace('key', '')
-    .replace('digit', '')
-    .replace('numpad', '')
-    .replace('arrow', '')
-
+  const keyCode = mapKey(code)
   const pressedKey = pressedKeyUppercase.toLowerCase()
 
   if (altKey !== alt && pressedKey !== 'alt') {

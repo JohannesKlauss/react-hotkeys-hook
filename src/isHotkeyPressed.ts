@@ -1,4 +1,4 @@
-import { isHotkeyModifier } from './parseHotkeys'
+import { isHotkeyModifier, mapKey } from './parseHotkeys'
 
 const currentlyPressedKeys: Set<string> = new Set<string>()
 
@@ -43,7 +43,7 @@ function removeFromCurrentlyPressedKeys(key: string): void {
       return
     }
 
-    pushToCurrentlyPressedKeys(e.key.toLowerCase())
+    pushToCurrentlyPressedKeys(mapKey(e.code))
   })
 
   document.addEventListener('keyup', e => {
@@ -52,6 +52,6 @@ function removeFromCurrentlyPressedKeys(key: string): void {
       return
     }
 
-    removeFromCurrentlyPressedKeys(e.key.toLowerCase())
+    removeFromCurrentlyPressedKeys(mapKey(e.code))
   })
 })()
