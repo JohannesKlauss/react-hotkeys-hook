@@ -11,6 +11,9 @@ export default function useRecordHotkeys() {
       return
     }
 
+    event.preventDefault()
+    event.stopPropagation()
+
     setKeys(prev => {
       const newKeys = new Set(prev)
 
@@ -20,16 +23,6 @@ export default function useRecordHotkeys() {
     })
   }, [])
 
-  const start = useCallback(() => {
-    setKeys(new Set<string>())
-
-    if (typeof document !== 'undefined') {
-      document.addEventListener('keydown', handler)
-
-      setIsRecording(true)
-    }
-  }, [handler])
-
   const stop = useCallback(() => {
     if (typeof document !== 'undefined') {
       document.removeEventListener('keydown', handler)
@@ -37,6 +30,18 @@ export default function useRecordHotkeys() {
       setIsRecording(false)
     }
   }, [handler])
+
+  const start = useCallback(() => {
+    setKeys(new Set<string>())
+
+    if (typeof document !== 'undefined') {
+      stop()
+
+      document.addEventListener('keydown', handler)
+
+      setIsRecording(true)
+    }
+  }, [handler, stop])
 
   return [keys, { start, stop, isRecording }] as const
 }
