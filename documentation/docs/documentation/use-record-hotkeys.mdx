@@ -1,0 +1,54 @@
+---
+sidebar_position: 3
+title: "useRecordHotkeys"
+---
+
+# useRecordHotkeys
+
+This hook allows you to record a hotkey stroke by the user. This is useful if you want the user to define their custom
+keystroke for your application.
+
+## Basic Usage
+
+Import the `useRecordHotkeys` hook from the package:
+
+```js
+import { useRecordHotkeys } from 'react-hotkeys-hook';
+```
+
+or if you are using `require` style syntax:
+
+```js
+const { useRecordHotkeys } = require('react-hotkeys-hook')
+// or
+const useRecordHotkeys = require('react-hotkeys-hook').useRecordHotkeys
+```
+
+***
+
+### Record hotkeys
+
+In order to record a hotkey, you need to call the `useRecordHotkeys` hook. This hook returns an array similar to the `useState`
+hook, but the second argument has some extra properties.
+
+```jsx live
+function ExampleComponent() {
+  const [keys, { start, stop, isRecording }] = useRecordHotkeys()
+
+  return (
+    <div>
+      <p>Is recording: {isRecording ? 'yes' : 'no'}</p>
+      <p>Recorded keys: {Array.from(keys).join(' + ')}</p>
+      <br />
+      <button onClick={start}>Record</button>
+      <button onClick={stop}>Stop</button>
+    </div>
+  )
+}
+```
+
+:::info
+Note that the returned value of the recorded keys is a `Set` object. This is because every key gets recorded only once.
+Implementation wise it is easier to use a `Set` than an array, but you can convert it to an array if you want or need to,
+like we are in the example above.
+:::

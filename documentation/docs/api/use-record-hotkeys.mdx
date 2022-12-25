@@ -1,0 +1,36 @@
+---
+sidebar_position: 3
+title: useRecordHotkeys
+---
+
+# useRecordHotkeys API
+
+Function signature:
+
+```ts
+function useRecordHotkeys(): [Set<string>, { start: () => void, stop: () => void, isRecording: boolean }]
+```
+
+***
+
+## Return value
+
+```ts
+const [keys, { start, stop, isRecording }] = useRecordHotkeys()
+```
+
+### `keys`
+
+A `Set` of the keys that have been pressed.
+
+### `start`
+
+A function that starts recording the keys that are pressed. Only works in the browser.
+
+### `stop`
+
+A function that stops recording the keys that are pressed. Only works in the browser.
+
+### `isRecording`
+
+A boolean that indicates whether the recording is in progress or not.
