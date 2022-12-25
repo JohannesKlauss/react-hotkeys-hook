@@ -11,6 +11,9 @@ export default function useRecordHotkeys() {
       return
     }
 
+    event.preventDefault()
+    event.stopPropagation()
+
     setKeys(prev => {
       const newKeys = new Set(prev)
 
