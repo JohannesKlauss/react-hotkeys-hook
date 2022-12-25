@@ -87,8 +87,6 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      console.log('keydown', event.key)
-
       if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
         listener(event)
       }
