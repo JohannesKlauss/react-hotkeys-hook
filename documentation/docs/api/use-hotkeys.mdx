@@ -149,7 +149,8 @@ const options = {
   keyup: undefined,
   keydown: true,
   preventDefault: false,
-  description: undefined
+  description: undefined,
+  document: undefined
 };
 ```
 
@@ -169,6 +170,7 @@ type Options = {
   keydown?: boolean
   preventDefault?: Trigger
   description?: string
+  document?: Document
 };
 ```
 
@@ -271,6 +273,31 @@ useHotkeys('a', () => someCallback, {
 ```
 
 :::
+
+##### `document`
+
+if your react app uses iframes, you can pass the `document` object of the iframe to the hook. This way the hook will bind
+the hotkeys to the iframe instead of the main document.
+
+```js
+import FrameComponent from 'react-frame-component'
+
+const InsideFrameComponent = () => {
+  const { document } = useFrame()
+
+  useHotkeys("s", () => console.log("I am triggered inside an iframe"), { document })
+
+  return <div>....</div>
+}
+
+function App() {
+  return (
+    <FrameComponent>
+      <InsideFrameComponent/>
+    </FrameComponent>
+  )
+}
+```
 
 ***
 

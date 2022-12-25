@@ -1,6 +1,6 @@
 import { HotkeyCallback, Keys, Options, OptionsOrDependencyArray, RefType } from './types'
 import { DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import { parseHotkey, parseKeysHookInput } from './parseHotkeys'
+import { mapKey, parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
   isHotkeyEnabled,
   isHotkeyEnabledOnTag,
@@ -12,6 +12,7 @@ import {
 import { useHotkeysContext } from './HotkeysProvider'
 import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
 import useDeepEqualMemo from './useDeepEqualMemo'
+import { pushToCurrentlyPressedKeys, removeFromCurrentlyPressedKeys } from './isHotkeyPressed'
 
 const stopPropagation = (e: KeyboardEvent): void => {
   e.stopPropagation()
@@ -87,6 +88,8 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
+      pushToCurrentlyPressedKeys(mapKey(event.code))
+
       if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
         listener(event)
       }
@@ -98,6 +101,8 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
+      removeFromCurrentlyPressedKeys(mapKey(event.code))
+
       hasTriggeredRef.current = false
 
       if (memoisedOptions?.keyup) {
@@ -106,9 +111,9 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     // @ts-ignore
-    (ref.current || document).addEventListener('keyup', handleKeyUp);
+    (ref.current || _options?.document || document).addEventListener('keyup', handleKeyUp);
     // @ts-ignore
-    (ref.current || document).addEventListener('keydown', handleKeyDown)
+    (ref.current || _options?.document || document).addEventListener('keydown', handleKeyDown)
 
     if (proxy) {
       parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
@@ -116,9 +121,9 @@ export default function useHotkeys<T extends HTMLElement>(
 
     return () => {
       // @ts-ignore
-      (ref.current || document).removeEventListener('keyup', handleKeyUp);
+      (ref.current || _options?.document || document).removeEventListener('keyup', handleKeyUp);
       // @ts-ignore
-      (ref.current || document).removeEventListener('keydown', handleKeyDown)
+      (ref.current || _options?.document || document).removeEventListener('keydown', handleKeyDown)
 
       if (proxy) {
         parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
