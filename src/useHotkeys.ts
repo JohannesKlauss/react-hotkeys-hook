@@ -65,8 +65,6 @@ export default function useHotkeys<T extends HTMLElement>(
         const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
         if ((isHotkeyMatchingKeyboardEvent(e, hotkey) || hotkey.keys?.includes('*')) && !hasTriggeredRef.current) {
-          hasTriggeredRef.current = true
-
           maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
 
           if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
@@ -77,6 +75,8 @@ export default function useHotkeys<T extends HTMLElement>(
 
           // Execute the user callback for that hotkey
           cb(e, hotkey)
+
+          hasTriggeredRef.current = true
         }
       })
     }
