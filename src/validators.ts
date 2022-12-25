@@ -54,7 +54,13 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey):
   const metaKey = isHotkeyPressed('meta')
   const ctrlKey = isHotkeyPressed('ctrl')
 
-  const keyCode = code.toLowerCase().replace('key', '')
+  const keyCode = code
+    .toLowerCase()
+    .replace('key', '')
+    .replace('digit', '')
+    .replace('numpad', '')
+    .replace('arrow', '')
+
   const pressedKey = pressedKeyUppercase.toLowerCase()
 
   if (altKey !== alt && pressedKey !== 'alt') {
