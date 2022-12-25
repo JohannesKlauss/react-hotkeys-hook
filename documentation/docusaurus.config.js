@@ -105,6 +105,20 @@ module.exports = {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
     },
+    algolia: {
+      // The application ID provided by Algolia
+      appId: 'MVSFN13FOZ',
+
+      // Public API key: it is safe to commit it
+      apiKey: 'ea10bff3a5e2fb0d82492d680e40959e',
+
+      indexName: 'react-hotkeys-hook',
+      contextualSearch: true,
+      searchParameters: {},
+
+      // Optional: path for search page that enabled by default (`false` to disable it)
+      searchPagePath: 'search',
+    },
   },
   presets: [
     [
