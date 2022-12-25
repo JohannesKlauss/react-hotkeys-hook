@@ -28,6 +28,7 @@ export default function useHotkeys<T extends HTMLElement>(
   dependencies?: OptionsOrDependencyArray,
 ) {
   const ref = useRef<RefType<T>>(null)
+  const hasTriggeredRef = useRef(false)
 
   const _options: Options | undefined = !(options instanceof Array) ? (options as Options) : !(dependencies instanceof Array) ? (dependencies as Options) : undefined
   const _deps: DependencyList = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
@@ -63,7 +64,9 @@ export default function useHotkeys<T extends HTMLElement>(
       parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => {
         const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
-        if (isHotkeyMatchingKeyboardEvent(e, hotkey) || hotkey.keys?.includes('*')) {
+        if ((isHotkeyMatchingKeyboardEvent(e, hotkey) || hotkey.keys?.includes('*')) && !hasTriggeredRef.current) {
+          hasTriggeredRef.current = true
+
           maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
 
           if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
@@ -84,6 +87,8 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
+      console.log('keydown', event.key)
+
       if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
         listener(event)
       }
@@ -94,6 +99,8 @@ export default function useHotkeys<T extends HTMLElement>(
         // Synthetic event (e.g., Chrome autofill).  Ignore.
         return
       }
+
+      hasTriggeredRef.current = false
 
       if (memoisedOptions?.keyup) {
         listener(event)

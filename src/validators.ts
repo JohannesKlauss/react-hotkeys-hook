@@ -80,6 +80,8 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey):
   // All modifiers are correct, now check the key
   // If the key is set, we check for the key
   if (keys && keys.length === 1 && (keys.includes(pressedKey) || keys.includes(keyCode))) {
+    console.log('true', keys)
+
     return true
   } else if (keys) {
     // Check if all keys are present in pressedDownKeys set
