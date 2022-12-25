@@ -21,8 +21,6 @@ const stopPropagation = (e: KeyboardEvent): void => {
 
 const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
-const pressedDownKeys = new Set<string>()
-
 export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
@@ -65,7 +63,7 @@ export default function useHotkeys<T extends HTMLElement>(
       parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => {
         const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
-        if (isHotkeyMatchingKeyboardEvent(e, hotkey, pressedDownKeys) || hotkey.keys?.includes('*')) {
+        if (isHotkeyMatchingKeyboardEvent(e, hotkey) || hotkey.keys?.includes('*')) {
           maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
 
           if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
@@ -74,6 +72,7 @@ export default function useHotkeys<T extends HTMLElement>(
             return
           }
 
+          // Execute the user callback for that hotkey
           cb(e, hotkey)
         }
       })
@@ -85,8 +84,6 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      pressedDownKeys.add(event.key.toLowerCase())
-
       if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
         listener(event)
       }
@@ -96,13 +93,6 @@ export default function useHotkeys<T extends HTMLElement>(
       if (event.key === undefined) {
         // Synthetic event (e.g., Chrome autofill).  Ignore.
         return
-      }
-
-      if (event.key.toLowerCase() !== 'meta') {
-        pressedDownKeys.delete(event.key.toLowerCase())
-      } else {
-        // On macOS pressing down the meta key prevents triggering the keyup event for any other key https://stackoverflow.com/a/57153300/735226.
-        pressedDownKeys.clear()
       }
 
       if (memoisedOptions?.keyup) {

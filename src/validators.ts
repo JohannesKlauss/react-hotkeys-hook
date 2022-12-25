@@ -45,7 +45,7 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
   return activeScopes.some(scope => scopes.includes(scope)) || activeScopes.includes('*')
 }
 
-export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, pressedDownKeys: Set<string>): boolean => {
+export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey): boolean => {
   const { alt, meta, mod, shift, keys } = hotkey
   const { key: pressedKeyUppercase, code } = e
 
@@ -82,7 +82,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
     return true
   } else if (keys) {
     // Check if all keys are present in pressedDownKeys set
-    return keys.every(key => pressedDownKeys.has(key))
+    return isHotkeyPressed(keys)
   }
   else if (!keys) {
     // If the key is not set, we only listen for modifiers, that check went alright, so we return true

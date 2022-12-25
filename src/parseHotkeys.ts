@@ -20,6 +20,10 @@ const mappedKeys: Record<string, string> = {
   '9': 'digit9',
 }
 
+export function isHotkeyModifier(key: string) {
+  return reservedModifierKeywords.includes(key)
+}
+
 export function parseKeysHookInput(keys: Keys, splitKey: string = ','): string[] {
   if (typeof keys === 'string') {
     return keys.split(splitKey)

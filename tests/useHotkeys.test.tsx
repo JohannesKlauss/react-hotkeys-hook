@@ -862,7 +862,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
   })
 })
 
-test('should set multiple modifiers to true in hotkey object if listening to multiple mofidiers', async () => {
+test('should set multiple modifiers to true in hotkey object if listening to multiple modifiers', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
