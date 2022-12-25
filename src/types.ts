@@ -35,6 +35,7 @@ export type Options = {
   keydown?: boolean // Trigger on keydown event? (Default: true)
   preventDefault?: Trigger // Prevent default browser behavior? (Default: false)
   description?: string // Use this option to describe what the hotkey does. (Default: undefined)
+  document?: Document // Listen to events on the document instead of the window. (Default: false)
 }
 
 export type OptionsOrDependencyArray = Options | DependencyList

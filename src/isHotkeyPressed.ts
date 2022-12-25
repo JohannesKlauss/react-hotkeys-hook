@@ -8,7 +8,7 @@ export function isHotkeyPressed(key: string | string[], splitKey: string = ','):
   return hotkeyArray.every((hotkey) => currentlyPressedKeys.has(hotkey.trim().toLowerCase()))
 }
 
-function pushToCurrentlyPressedKeys(key: string | string[]): void {
+export function pushToCurrentlyPressedKeys(key: string | string[]): void {
   const hotkeyArray = Array.isArray(key) ? key : [key]
 
   /*
@@ -23,7 +23,7 @@ function pushToCurrentlyPressedKeys(key: string | string[]): void {
   hotkeyArray.forEach(hotkey => currentlyPressedKeys.add(hotkey.toLowerCase()))
 }
 
-function removeFromCurrentlyPressedKeys(key: string): void {
+export function removeFromCurrentlyPressedKeys(key: string): void {
   /*
   Due to a weird behavior on macOS we need to clear the set if the user pressed down the meta key and presses another key.
   https://stackoverflow.com/questions/11818637/why-does-javascript-drop-keyup-events-when-the-metakey-is-pressed-on-mac-browser
