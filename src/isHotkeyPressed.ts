@@ -18,20 +18,20 @@ export function isHotkeyPressed(key: string | string[], splitKey: string = ','):
   })
 }
 
-export function pushToCurrentlyPressedKeys(key: string | string[]): void {
+function pushToCurrentlyPressedKeys(key: string | string[]): void {
   const hotkeyArray = Array.isArray(key) ? key : [key]
 
   hotkeyArray.forEach(hotkey => currentlyPressedKeys.add(parseHotkey(hotkey)))
 }
 
-export function removeFromCurrentlyPressedKeys(key: string | string[]): void {
+function removeFromCurrentlyPressedKeys(key: string | string[]): void {
   const hotkeyArray = Array.isArray(key) ? key : [key]
 
   hotkeyArray.forEach((hotkey) => {
     const parsedHotkey = parseHotkey(hotkey)
 
     for (const pressedHotkey of currentlyPressedKeys) {
-      if (pressedHotkey.keys?.every((key) => parsedHotkey.keys?.includes(key))) {
+      if (deepEqual(parsedHotkey, pressedHotkey)) {
         currentlyPressedKeys.delete(pressedHotkey)
       }
     }

@@ -17,6 +17,10 @@ type HookParameters = {
   dependencies?: DependencyList
 }
 
+beforeEach(() => {
+  window.dispatchEvent(new Event('DOMContentLoaded'))
+})
+
 test('should listen to esc modifier for escape key', async () => {
   const user = userEvent.setup()
 
@@ -1014,7 +1018,7 @@ test.each(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])(`Should listen to 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should not call callback if meta is held down but other key not present in combination is pressed', async() => {
+test('should not call callback if meta is held down but other key is not present in combination is pressed', async() => {
   const user = userEvent.setup()
   const callback = jest.fn()
 

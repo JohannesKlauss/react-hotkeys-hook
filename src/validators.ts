@@ -1,4 +1,5 @@
 import { FormTags, Hotkey, Scopes, Trigger } from './types'
+import { isHotkeyPressed } from './isHotkeyPressed'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -46,7 +47,12 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
 
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, pressedDownKeys: Set<string>): boolean => {
   const { alt, meta, mod, shift, keys } = hotkey
-  const { altKey, ctrlKey, metaKey, shiftKey, key: pressedKeyUppercase, code } = e
+  const { key: pressedKeyUppercase, code } = e
+
+  const altKey = isHotkeyPressed('alt')
+  const shiftKey = isHotkeyPressed('shift')
+  const metaKey = isHotkeyPressed('meta')
+  const ctrlKey = isHotkeyPressed('ctrl')
 
   const keyCode = code.toLowerCase().replace('key', '')
   const pressedKey = pressedKeyUppercase.toLowerCase()
@@ -71,7 +77,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
   }
 
   // All modifiers are correct, now check the key
-  // If the key is set we check for the key
+  // If the key is set, we check for the key
   if (keys && keys.length === 1 && (keys.includes(pressedKey) || keys.includes(keyCode))) {
     return true
   } else if (keys) {
