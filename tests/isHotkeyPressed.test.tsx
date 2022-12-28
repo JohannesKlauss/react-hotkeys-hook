@@ -1,13 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { isHotkeyPressed } from '../src/isHotkeyPressed'
 
-beforeEach(() => {
-  window.document.dispatchEvent(new Event("DOMContentLoaded", {
-    bubbles: true,
-    cancelable: true
-  }))
-})
-
 test('should return true if hotkey is currently pressed down', async () => {
   const user = userEvent.setup()
 
@@ -109,4 +102,19 @@ test.skip('should respect the splitKey option', async () => {
   expect(isHotkeyPressed('b, a')).toBe(false)
   expect(isHotkeyPressed('ba,', 'a')).toBe(false)
   expect(isHotkeyPressed(['b', ','])).toBe(false)
+})
+
+test('Should clear pressed hotkeys when window blurs', async () => {
+  const user = userEvent.setup()
+
+  await user.keyboard('{Meta>}')
+
+  expect(isHotkeyPressed('meta')).toBe(true)
+
+  window.document.dispatchEvent(new Event("blur", {
+    bubbles: true,
+    cancelable: true
+  }))
+
+  expect(isHotkeyPressed('meta')).toBe(false)
 })

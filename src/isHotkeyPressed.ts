@@ -56,4 +56,10 @@ export function removeFromCurrentlyPressedKeys(key: string): void {
       removeFromCurrentlyPressedKeys(mapKey(e.code))
     })
   }
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('blur', () => {
+      currentlyPressedKeys.clear()
+    })
+  }
 })()
