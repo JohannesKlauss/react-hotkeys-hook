@@ -103,12 +103,10 @@ export default function useHotkeys<T extends HTMLElement>(
 
       removeFromCurrentlyPressedKeys(mapKey(event.code))
 
-      hasTriggeredRef.current = false
-
       if (memoisedOptions?.keyup) {
         listener(event)
       }
-      
+
       hasTriggeredRef.current = false
     }
 
