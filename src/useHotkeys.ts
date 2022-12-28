@@ -45,7 +45,7 @@ export default function useHotkeys<T extends HTMLElement>(
       return
     }
 
-    const listener = (e: KeyboardEvent) => {
+    const listener = (e: KeyboardEvent, isKeyUp: boolean = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
         return
       }
@@ -77,7 +77,9 @@ export default function useHotkeys<T extends HTMLElement>(
           // Execute the user callback for that hotkey
           cb(e, hotkey)
 
-          hasTriggeredRef.current = true
+          if (!isKeyUp) {
+            hasTriggeredRef.current = true
+          }
         }
       })
     }
@@ -106,10 +108,8 @@ export default function useHotkeys<T extends HTMLElement>(
       hasTriggeredRef.current = false
 
       if (memoisedOptions?.keyup) {
-        listener(event)
+        listener(event, true)
       }
-      
-      hasTriggeredRef.current = false
     }
 
     // @ts-ignore
