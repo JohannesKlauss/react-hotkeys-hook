@@ -335,8 +335,7 @@ So listening to something like `#` can or cannot involve a shift modifier.
 But there are also two different scenarios possible from our apps view:
 We could say that we want to listen to the `#` character, no matter if the user presses `Shift+3` or its own dedicated key.
 Here we can ignore any potential modifiers, so we set `ignoreModifiers: true`.
-But we could also say that we want to listen to the `#` character, but only if the user presses `Shift+3`, no matter the
-produced character. In this case we do need to listen to the modifier.
+But we could also say that we only want to listen to  `Shift+3`, no matter the produced character. In this case we do need to listen to the modifier.
 
 With this option, react-hotkeys-hook supports both ways.
 :::
