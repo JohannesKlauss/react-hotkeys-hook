@@ -17,13 +17,15 @@ export function pushToCurrentlyPressedKeys(key: string | string[]): void {
   Otherwise the set will hold all ever pressed keys while the meta key is down which leads to wrong results.
    */
   if (currentlyPressedKeys.has('meta')) {
-    currentlyPressedKeys.forEach(key => !isHotkeyModifier(key) && currentlyPressedKeys.delete(key))
+    currentlyPressedKeys.forEach(key => !isHotkeyModifier(key) && currentlyPressedKeys.delete(key.toLowerCase()))
   }
 
   hotkeyArray.forEach(hotkey => currentlyPressedKeys.add(hotkey.toLowerCase()))
 }
 
-export function removeFromCurrentlyPressedKeys(key: string): void {
+export function removeFromCurrentlyPressedKeys(key: string | string[]): void {
+  const hotkeyArray = Array.isArray(key) ? key : [key]
+
   /*
   Due to a weird behavior on macOS we need to clear the set if the user pressed down the meta key and presses another key.
   https://stackoverflow.com/questions/11818637/why-does-javascript-drop-keyup-events-when-the-metakey-is-pressed-on-mac-browser
@@ -32,7 +34,7 @@ export function removeFromCurrentlyPressedKeys(key: string): void {
   if (key === 'meta') {
     currentlyPressedKeys.clear()
   } else {
-    currentlyPressedKeys.delete(key)
+    hotkeyArray.forEach(hotkey => currentlyPressedKeys.delete(hotkey.toLowerCase()))
   }
 }
 
@@ -44,7 +46,7 @@ export function removeFromCurrentlyPressedKeys(key: string): void {
         return
       }
 
-      pushToCurrentlyPressedKeys(mapKey(e.code))
+      pushToCurrentlyPressedKeys([mapKey(e.key), mapKey(e.code)])
     })
 
     document.addEventListener('keyup', e => {
@@ -53,7 +55,7 @@ export function removeFromCurrentlyPressedKeys(key: string): void {
         return
       }
 
-      removeFromCurrentlyPressedKeys(mapKey(e.code))
+      removeFromCurrentlyPressedKeys([mapKey(e.key), mapKey(e.code)])
     })
   }
 

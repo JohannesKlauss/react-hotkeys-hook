@@ -50,6 +50,8 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey):
   const { alt, meta, mod, shift, keys } = hotkey
   const { key: pressedKeyUppercase, code } = e
 
+  console.log('e', e)
+
   const altKey = isHotkeyPressed('alt')
   const shiftKey = isHotkeyPressed('shift')
   const metaKey = isHotkeyPressed('meta')
