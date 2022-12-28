@@ -108,6 +108,8 @@ export default function useHotkeys<T extends HTMLElement>(
       if (memoisedOptions?.keyup) {
         listener(event)
       }
+      
+      hasTriggeredRef.current = false
     }
 
     // @ts-ignore
