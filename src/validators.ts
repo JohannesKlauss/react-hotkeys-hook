@@ -33,7 +33,7 @@ export function isHotkeyEnabledOnTag({ target }: KeyboardEvent, enabledOnTags: F
 export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
   if (activeScopes.length === 0 && scopes) {
     console.warn(
-      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
+      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
     )
 
     return true
@@ -46,7 +46,7 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
   return activeScopes.some(scope => scopes.includes(scope)) || activeScopes.includes('*')
 }
 
-export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey): boolean => {
+export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers: boolean = false): boolean => {
   const { alt, meta, mod, shift, keys } = hotkey
   const { key: pressedKeyUppercase, code } = e
 
@@ -58,22 +58,24 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey):
   const keyCode = mapKey(code)
   const pressedKey = pressedKeyUppercase.toLowerCase()
 
-  if (altKey !== alt && pressedKey !== 'alt') {
-    return false
-  }
-
-  if (shiftKey !== shift && pressedKey !== 'shift') {
-    return false
-  }
-
-  // Mod is a special key name that is checking for meta on macOS and ctrl on other platforms
-  if (mod) {
-    if (!metaKey && !ctrlKey) {
+  if (!ignoreModifiers) {
+    if (altKey !== alt && pressedKey !== 'alt') {
       return false
     }
-  } else {
-    if (metaKey !== meta && ctrlKey !== meta && keyCode !== 'meta' && keyCode !== 'ctrl') {
+
+    if (shiftKey !== shift && pressedKey !== 'shift') {
       return false
+    }
+
+    // Mod is a special key name that is checking for meta on macOS and ctrl on other platforms
+    if (mod) {
+      if (!metaKey && !ctrlKey) {
+        return false
+      }
+    } else {
+      if (metaKey !== meta && ctrlKey !== meta && keyCode !== 'meta' && keyCode !== 'ctrl') {
+        return false
+      }
     }
   }
 
@@ -84,8 +86,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey):
   } else if (keys) {
     // Check if all keys are present in pressedDownKeys set
     return isHotkeyPressed(keys)
-  }
-  else if (!keys) {
+  } else if (!keys) {
     // If the key is not set, we only listen for modifiers, that check went alright, so we return true
     return true
   }

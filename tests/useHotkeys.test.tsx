@@ -995,7 +995,7 @@ test.each([
   ['left', 'ArrowLeft'],
   ['up', 'ArrowUp'],
   ['right', 'ArrowRight'],
-  ['down', 'ArrowDown']
+  ['down', 'ArrowDown'],
 ])('Should map key %s to %s', async (hotkey, keyboardKey) => {
   const user = userEvent.setup()
   const callback = jest.fn()
@@ -1018,7 +1018,7 @@ test.each(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])(`Should listen to 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should not call callback if meta is held down but other key is not present in combination is pressed', async() => {
+test('should not call callback if meta is held down but other key is not present in combination is pressed', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
@@ -1047,4 +1047,36 @@ test('should listen to keydown permanently', async () => {
   await user.keyboard('{A}')
 
   expect(callback).toHaveBeenCalledTimes(4)
+})
+
+test('Should test for modifiers by default', async () => {
+  const user = userEvent.setup()
+
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('shift+/', callback))
+
+  await user.keyboard('{Shift>}/{/Shift}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('/')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('Should ignore modifiers if option is set', async () => {
+  const user = userEvent.setup()
+
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('/', callback, { ignoreModifiers: true }))
+
+  await user.keyboard('{Shift>}/{/Shift}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('/')
+
+  expect(callback).toHaveBeenCalledTimes(2)
 })

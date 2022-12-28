@@ -36,6 +36,7 @@ export type Options = {
   preventDefault?: Trigger // Prevent default browser behavior? (Default: false)
   description?: string // Use this option to describe what the hotkey does. (Default: undefined)
   document?: Document // Listen to events on the document instead of the window. (Default: false)
+  ignoreModifiers?: boolean // Ignore modifiers when matching hotkeys. (Default: false)
 }
 
 export type OptionsOrDependencyArray = Options | DependencyList

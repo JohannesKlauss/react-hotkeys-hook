@@ -150,7 +150,8 @@ const options = {
   keydown: true,
   preventDefault: false,
   description: undefined,
-  document: undefined
+  document: undefined,
+  ignoreModifiers: false,
 };
 ```
 
@@ -171,6 +172,7 @@ type Options = {
   preventDefault?: Trigger
   description?: string
   document?: Document
+  ignoreModifiers?: boolean
 };
 ```
 
@@ -259,7 +261,7 @@ keydown: boolean // default: true
 
 Set this to `true` if we want the hook to trigger our callback on the browsers `keyDown` event. This is the default behavior.
 
-:::info Setting `keydown` __and__ `keyup`
+:::tip Setting `keydown` __and__ `keyup`
 If we set `keyup` to `true` and __don't__ set the `keydown` prop (leaving the default), React Hotkeys Hook will assume
 that we want to only listen to the browsers `keyUp` event.
 
@@ -276,7 +278,7 @@ useHotkeys('a', () => someCallback, {
 
 ##### `document`
 
-if your react app uses iframes, you can pass the `document` object of the iframe to the hook. This way the hook will bind
+if our React app uses iframes, we can pass the `document` object of the iframe to the hook. This way the hook will bind
 the hotkeys to the iframe instead of the main document.
 
 ```js
@@ -298,6 +300,45 @@ function App() {
   )
 }
 ```
+
+##### `ignoreModifiers`
+
+```ts
+ignoreModifiers: boolean // default: false
+```
+
+When listening to keystrokes, we can ignore the modifier keys (e.g. `shift`, `alt`, `ctrl`, `meta`) by setting this option
+to true. This is especially useful when we want to to listen to secondary key combinations like `shift+1` (producing
+the exclamation point `!`). A common use case for this would be to listen to the `/` Character in order to focus a search
+input field.
+
+```tsx
+function App() {
+  useHotkeys('/', () => inputRef.current?.focus(), { ignoreModifiers: true, preventDefault: true })
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  return (
+    <input type='text' ref={inputRef} placeholder="search via '/'" />
+  )
+}
+```
+
+:::info Why is this necessary?
+There are tons of keyboard layouts all across different languages and operating systems. For example, we reach the
+hashtag sign `#` via `Shift+3` on a US keyboard, but on a German keyboard it has its own dedicated key. On the other hand
+in a German keyboard layout we reach the character `[` via `Option+5` on macOS, but on windows there is a dedicated key for that.
+
+This is already confusing, and it gets even worse when we consider that users can customize their keyboard layout.
+So listening to something like `#` can or cannot involve a shift modifier.
+
+But there are also two different scenarios possible from our apps view:
+We could say that we want to listen to the `#` character, no matter if the user presses `Shift+3` or its own dedicated key.
+Here we can ignore any potential modifiers, so we set `ignoreModifiers: true`.
+But we could also say that we only want to listen to  `Shift+3`, no matter the produced character. In this case we do need to listen to the modifier.
+
+With this option, react-hotkeys-hook supports both ways.
+:::
 
 ***
 
