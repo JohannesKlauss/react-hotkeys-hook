@@ -261,7 +261,7 @@ keydown: boolean // default: true
 
 Set this to `true` if we want the hook to trigger our callback on the browsers `keyDown` event. This is the default behavior.
 
-:::hint Setting `keydown` __and__ `keyup`
+:::tip Setting `keydown` __and__ `keyup`
 If we set `keyup` to `true` and __don't__ set the `keydown` prop (leaving the default), React Hotkeys Hook will assume
 that we want to only listen to the browsers `keyUp` event.
 
@@ -278,7 +278,7 @@ useHotkeys('a', () => someCallback, {
 
 ##### `document`
 
-if our react app uses iframes, we can pass the `document` object of the iframe to the hook. This way the hook will bind
+if our React app uses iframes, we can pass the `document` object of the iframe to the hook. This way the hook will bind
 the hotkeys to the iframe instead of the main document.
 
 ```js
@@ -328,13 +328,16 @@ function App() {
 There are tons of keyboard layouts all across different languages and operating systems. For example you reach the
 hashtag sign `#` via `Shift+3` on a US keyboard, but on a German keyboard it has its own dedicated key. On the other hand
 in a German keyboard layout you reach the character `[` via `Option+5`, but on windows you have your own key for that.
+
 This is already confusing, and it gets even worse when we consider that users can customize their keyboard layout.
 So listening to something like `#` can or cannot involve a shift modifier.
+
 But there are also two different scenarios possible from our apps view:
 We could say that we want to listen to the `#` character, no matter if the user presses `Shift+3` or its own dedicated key.
 Here we can ignore any potential modifiers, so we set `ignoreModifiers: true`.
 But we could also say that we want to listen to the `#` character, but only if the user presses `Shift+3`, no matter the
 produced character. In this case we do need to listen to the modifier.
+
 With this option, react-hotkeys-hook supports both ways.
 :::
 
