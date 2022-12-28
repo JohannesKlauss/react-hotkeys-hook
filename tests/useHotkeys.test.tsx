@@ -1036,3 +1036,15 @@ test('should not call callback if meta is held down but other key is not present
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
+
+test('should listen to keydown permanently', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('A', callback, { keyup: true, keydown: true }))
+
+  await user.keyboard('{A}')
+  await user.keyboard('{A}')
+
+  expect(callback).toHaveBeenCalledTimes(4)
+})
