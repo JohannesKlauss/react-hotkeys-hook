@@ -7181,10 +7181,10 @@ react-helmet-async@*, react-helmet-async@^1.3.0:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
-react-hotkeys-hook@4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.3.1.tgz#2b8dce99bab6a7629fa944ba0b4766f106e6e9ff"
-  integrity sha512-AtFdDPklFAz6+E284BbpOzTxOUhB40aSwMOPDxNjHZkphSCh/fR07E/kSFSN88+fZ+SB2Hnzu6haOGfhKqpKzg==
+react-hotkeys-hook@4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.3.2.tgz#0faf9f86fc0058fe5da0e73535359cd088af3468"
+  integrity sha512-ZA/li3kBDHuRTtJIf7Td41UU87bPtnt9xV4r+PlEzpnFoYRDVspk3B+mlaX75zowyQygMVmoaWnM4B88lkyExQ==
 
 react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0:
   version "16.13.1"
