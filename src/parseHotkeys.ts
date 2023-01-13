@@ -9,6 +9,7 @@ const mappedKeys: Record<string, string> = {
   ',': 'comma',
   '-': 'slash',
   ' ': 'space',
+  '`': 'backquote',
   '#': 'backslash',
   '+': 'bracketright',
   'ShiftLeft': 'shift',
