@@ -65,7 +65,9 @@ export default function useHotkeys<T extends HTMLElement>(
       parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => {
         const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
-        if ((isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) && !hasTriggeredRef.current) {
+        if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
+          if (isKeyUp && hasTriggeredRef.current) return
+          
           maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
 
           if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
