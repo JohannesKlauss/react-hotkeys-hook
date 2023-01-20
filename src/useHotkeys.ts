@@ -34,7 +34,15 @@ export default function useHotkeys<T extends HTMLElement>(
   const _options: Options | undefined = !(options instanceof Array) ? (options as Options) : !(dependencies instanceof Array) ? (dependencies as Options) : undefined
   const _deps: DependencyList = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
 
-  const cb = useCallback(callback, [..._deps])
+  const memoisedCB = useCallback(callback, [..._deps])
+  const cbRef = useRef<HotkeyCallback>(memoisedCB);
+
+  if(_deps.length) {
+    cbRef.current = memoisedCB;
+  } else {
+   cbRef.current = callback;
+  }
+
   const memoisedOptions = useDeepEqualMemo(_options)
 
   const { enabledScopes } = useHotkeysContext()
@@ -75,7 +83,7 @@ export default function useHotkeys<T extends HTMLElement>(
           }
 
           // Execute the user callback for that hotkey
-          cb(e, hotkey)
+          cbRef.current(e, hotkey)
 
           if (!isKeyUp) {
             hasTriggeredRef.current = true
@@ -131,7 +139,7 @@ export default function useHotkeys<T extends HTMLElement>(
         parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
       }
     }
-  }, [keys, cb, memoisedOptions, enabledScopes])
+  }, [keys, memoisedOptions, enabledScopes])
 
   return ref
 }
