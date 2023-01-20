@@ -40,7 +40,7 @@ export default function useHotkeys<T extends HTMLElement>(
   if(_deps) {
     cbRef.current = memoisedCB;
   } else {
-   cbRef.current = callback;
+    cbRef.current = callback;
   }
 
   const memoisedOptions = useDeepEqualMemo(_options)
