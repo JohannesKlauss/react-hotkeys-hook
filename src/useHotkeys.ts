@@ -32,12 +32,12 @@ export default function useHotkeys<T extends HTMLElement>(
   const hasTriggeredRef = useRef(false)
 
   const _options: Options | undefined = !(options instanceof Array) ? (options as Options) : !(dependencies instanceof Array) ? (dependencies as Options) : undefined
-  const _deps: DependencyList = options instanceof Array ? options : dependencies instanceof Array ? dependencies : []
+  const _deps: DependencyList | undefined = options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
 
-  const memoisedCB = useCallback(callback, [..._deps])
+  const memoisedCB = useCallback(callback, _deps ?? [])
   const cbRef = useRef<HotkeyCallback>(memoisedCB);
 
-  if(_deps.length) {
+  if(_deps) {
     cbRef.current = memoisedCB;
   } else {
    cbRef.current = callback;
