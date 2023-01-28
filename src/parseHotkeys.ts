@@ -52,6 +52,7 @@ export function parseHotkey(hotkey: string, combinationKey: string = '+'): Hotke
 
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),
+    ctrl: keys.includes('ctrl'),
     shift: keys.includes('shift'),
     meta: keys.includes('meta'),
     mod: keys.includes('mod'),
