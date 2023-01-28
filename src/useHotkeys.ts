@@ -66,8 +66,10 @@ export default function useHotkeys<T extends HTMLElement>(
         const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
         if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
-          if (isKeyUp && hasTriggeredRef.current) return
-          
+          if (isKeyUp && hasTriggeredRef.current) {
+            return
+          }
+
           maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
 
           if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {

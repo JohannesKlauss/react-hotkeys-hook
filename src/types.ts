@@ -8,6 +8,7 @@ export type RefType<T> = T | null
 
 export type KeyboardModifiers = {
   alt?: boolean
+  ctrl?: boolean
   meta?: boolean
   shift?: boolean
   mod?: boolean
