@@ -811,24 +811,6 @@ test('should set ctrl to true in hotkey object if listening to ctrl', async () =
   })
 })
 
-test('should set meta to true in hotkey object if listening to meta', async () => {
-  const user = userEvent.setup()
-  const callback = jest.fn()
-
-  renderHook(() => useHotkeys('meta+a', callback))
-
-  await user.keyboard('{Meta>}A{/Control}')
-
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
-    keys: ['a'],
-    shift: false,
-    alt: false,
-    meta: true,
-    mod: false,
-  })
-})
-
 test('should set alt to true in hotkey object if listening to alt', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
@@ -844,25 +826,6 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
     ctrl: false,
     alt: true,
     meta: false,
-    mod: false,
-  })
-})
-
-test('should set meta to true in hotkey object if listening to meta', async () => {
-  const user = userEvent.setup()
-  const callback = jest.fn()
-
-  renderHook(() => useHotkeys('meta+a', callback))
-
-  await user.keyboard('{Meta>}A{/Meta}')
-
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
-    keys: ['a'],
-    shift: false,
-    ctrl: false,
-    alt: false,
-    meta: true,
     mod: false,
   })
 })
@@ -883,6 +846,25 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
     alt: false,
     meta: false,
     mod: true,
+  })
+})
+
+test('should set meta to true in hotkey object if listening to meta', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('meta+a', callback))
+
+  await user.keyboard('{Meta>}A{/Meta}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+    keys: ['a'],
+    shift: false,
+    ctrl: false,
+    alt: false,
+    meta: true,
+    mod: false,
   })
 })
 
