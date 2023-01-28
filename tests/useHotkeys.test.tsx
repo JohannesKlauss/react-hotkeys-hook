@@ -766,6 +766,7 @@ test('should pass keyboard event and hotkey object to callback', async () => {
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
+    ctrl: false,
     alt: false,
     meta: false,
     mod: false,
@@ -784,6 +785,26 @@ test('should set shift to true in hotkey object if listening to shift', async ()
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: true,
+    ctrl: false,
+    alt: false,
+    meta: false,
+    mod: false,
+  })
+})
+
+test('should set ctrl to true in hotkey object if listening to ctrl', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('ctrl+a', callback))
+
+  await user.keyboard('{Control>}A{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+    keys: ['a'],
+    shift: false,
+    ctrl: true,
     alt: false,
     meta: false,
     mod: false,
@@ -820,6 +841,7 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
+    ctrl: false,
     alt: true,
     meta: false,
     mod: false,
@@ -838,6 +860,7 @@ test('should set meta to true in hotkey object if listening to meta', async () =
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
+    ctrl: false,
     alt: false,
     meta: true,
     mod: false,
@@ -856,6 +879,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
+    ctrl: false,
     alt: false,
     meta: false,
     mod: true,
@@ -875,6 +899,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
     keys: ['a'],
     shift: true,
     alt: false,
+    ctrl: false,
     meta: false,
     mod: true,
   })
@@ -973,6 +998,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
     keys: ['a'],
     shift: false,
     alt: false,
+    ctrl: false,
     meta: false,
     mod: false,
   })
