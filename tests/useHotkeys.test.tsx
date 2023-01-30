@@ -1088,3 +1088,26 @@ test('Should ignore modifiers if option is set', async () => {
 
   expect(callback).toHaveBeenCalledTimes(2)
 })
+
+test('Should trigger only callback for combination', async () => {
+  const user = userEvent.setup()
+  const combinationsCallback = jest.fn()
+  const keysCallback = jest.fn()
+
+  const handleHotkey = (event, hotkeysEvent) =>{
+      const {meta,keys} = hotkeysEvent
+      if(meta && keys[0] === 'z'){
+        combinationsCallback()
+      }else if(!meta && keys[0] === 'z'){
+        keysCallback()
+      }
+  }
+
+  renderHook(() => useHotkeys([`meta+z`, `z`], handleHotkey))
+
+  await user.keyboard(`{Meta>}Z`)
+
+  expect(combinationsCallback).toHaveBeenCalledTimes(1)
+
+  expect(keysCallback).toHaveBeenCalledTimes(0)
+})
