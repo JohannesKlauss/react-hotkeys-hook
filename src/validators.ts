@@ -55,11 +55,11 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
 
   if (!ignoreModifiers) {
     // We check the pressed keys for compatibility with the keyup event. In keyup events the modifier flags are not set.
-    if (alt === !altKey && (alt && pressedKey !== 'alt')) {
+    if (alt === !altKey && pressedKey !== 'alt') {
       return false
     }
 
-    if (shift === !shiftKey && (shift && pressedKey !== 'shift')) {
+    if (shift === !shiftKey && pressedKey !== 'shift') {
       return false
     }
 
@@ -69,11 +69,11 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
         return false
       }
     } else {
-      if (meta === !metaKey && (meta && pressedKey !== 'meta')) {
+      if (meta === !metaKey && pressedKey !== 'meta') {
         return false
       }
 
-      if (ctrl === !ctrlKey && (ctrl && pressedKey !== 'ctrl')) {
+      if (ctrl === !ctrlKey && pressedKey !== 'ctrl') {
         return false
       }
     }
