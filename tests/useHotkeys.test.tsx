@@ -766,6 +766,7 @@ test('should pass keyboard event and hotkey object to callback', async () => {
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
+    ctrl: false,
     alt: false,
     meta: false,
     mod: false,
@@ -784,26 +785,28 @@ test('should set shift to true in hotkey object if listening to shift', async ()
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: true,
+    ctrl: false,
     alt: false,
     meta: false,
     mod: false,
   })
 })
 
-test('should set meta to true in hotkey object if listening to meta', async () => {
+test('should set ctrl to true in hotkey object if listening to ctrl', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  renderHook(() => useHotkeys('meta+a', callback))
+  renderHook(() => useHotkeys('ctrl+a', callback))
 
-  await user.keyboard('{Meta>}A{/Control}')
+  await user.keyboard('{Control>}A{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
+    ctrl: true,
     alt: false,
-    meta: true,
+    meta: false,
     mod: false,
   })
 })
@@ -820,26 +823,9 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
+    ctrl: false,
     alt: true,
     meta: false,
-    mod: false,
-  })
-})
-
-test('should set meta to true in hotkey object if listening to meta', async () => {
-  const user = userEvent.setup()
-  const callback = jest.fn()
-
-  renderHook(() => useHotkeys('meta+a', callback))
-
-  await user.keyboard('{Meta>}A{/Meta}')
-
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
-    keys: ['a'],
-    shift: false,
-    alt: false,
-    meta: true,
     mod: false,
   })
 })
@@ -856,9 +842,29 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
     shift: false,
+    ctrl: false,
     alt: false,
     meta: false,
     mod: true,
+  })
+})
+
+test('should set meta to true in hotkey object if listening to meta', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('meta+a', callback))
+
+  await user.keyboard('{Meta>}A{/Meta}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+    keys: ['a'],
+    shift: false,
+    ctrl: false,
+    alt: false,
+    meta: true,
+    mod: false,
   })
 })
 
@@ -875,6 +881,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
     keys: ['a'],
     shift: true,
     alt: false,
+    ctrl: false,
     meta: false,
     mod: true,
   })
@@ -973,6 +980,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
     keys: ['a'],
     shift: false,
     alt: false,
+    ctrl: false,
     meta: false,
     mod: false,
   })
@@ -1083,56 +1091,76 @@ test('Should ignore modifiers if option is set', async () => {
 
 
 
-describe.only('dependencies array', function() {
-  test('should respect dependencies array if they are passed', async () => {
-    function Fixture() {
-      const [count ,setCount] = useState(0);
+test('should respect dependencies array if they are passed', async () => {
+  function Fixture() {
+    const [count ,setCount] = useState(0);
 
-      const incrementCount = useCallback(() => {
-        setCount(count + 1);
-      }, [count]);
+    const incrementCount = useCallback(() => {
+      setCount(count + 1);
+    }, [count]);
 
-      useHotkeys('esc', incrementCount, []);
+    useHotkeys('esc', incrementCount, []);
 
-      return <div>{count}</div>
-    }
+    return <div>{count}</div>
+  }
 
-    const user = userEvent.setup();
+  const user = userEvent.setup();
 
-    const {getByText} = render(<Fixture />);
+  const {getByText} = render(<Fixture />);
 
-    expect(getByText('0')).not.toBeNull()
+  expect(getByText('0')).not.toBeNull()
 
-    await user.keyboard('{Escape}')
-    await user.keyboard('{Escape}')
+  await user.keyboard('{Escape}')
+  await user.keyboard('{Escape}')
 
-    expect(getByText('1')).not.toBeNull()
-  })
+  expect(getByText('1')).not.toBeNull()
+})
 
 
-  test('should use updated callback if no dependencies are passed', async () => {
-    function Fixture() {
-      const [count ,setCount] = useState(0);
+test('should use updated callback if no dependencies are passed', async () => {
+  function Fixture() {
+    const [count ,setCount] = useState(0);
 
-      const incrementCount = useCallback(() => {
-        setCount(count + 1);
-      }, [count]);
+    const incrementCount = useCallback(() => {
+      setCount(count + 1);
+    }, [count]);
 
-      useHotkeys('esc', incrementCount);
+    useHotkeys('esc', incrementCount);
 
-      return <div>{count}</div>
-    }
+    return <div>{count}</div>
+  }
 
-    const user = userEvent.setup();
+  const user = userEvent.setup();
 
-    const {getByText} = render(<Fixture />);
+  const {getByText} = render(<Fixture />);
 
-    expect(getByText('0')).not.toBeNull()
+  expect(getByText('0')).not.toBeNull()
 
-    await user.keyboard('{Escape}')
-    await user.keyboard('{Escape}')
+  await user.keyboard('{Escape}')
+  await user.keyboard('{Escape}')
 
-    expect(getByText('2')).not.toBeNull()
-  })
+  expect(getByText('2')).not.toBeNull()
+})
 
+test('Should trigger only callback for combination', async () => {
+  const user = userEvent.setup()
+  const combinationsCallback = jest.fn()
+  const keysCallback = jest.fn()
+
+  const handleHotkey = (event, hotkeysEvent) =>{
+      const {meta,keys} = hotkeysEvent
+      if(meta && keys[0] === 'z'){
+        combinationsCallback()
+      }else if(!meta && keys[0] === 'z'){
+        keysCallback()
+      }
+  }
+
+  renderHook(() => useHotkeys([`meta+z`, `z`], handleHotkey))
+
+  await user.keyboard(`{Meta>}Z`)
+
+  expect(combinationsCallback).toHaveBeenCalledTimes(1)
+
+  expect(keysCallback).toHaveBeenCalledTimes(0)
 })

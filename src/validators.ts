@@ -47,23 +47,19 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
 }
 
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers: boolean = false): boolean => {
-  const { alt, meta, mod, shift, keys } = hotkey
-  const { key: pressedKeyUppercase, code } = e
-
-  const altKey = isHotkeyPressed('alt')
-  const shiftKey = isHotkeyPressed('shift')
-  const metaKey = isHotkeyPressed('meta')
-  const ctrlKey = isHotkeyPressed('ctrl')
+  const { alt, meta, mod, shift, ctrl, keys } = hotkey
+  const { key: pressedKeyUppercase, code, ctrlKey, metaKey, shiftKey, altKey } = e
 
   const keyCode = mapKey(code)
   const pressedKey = pressedKeyUppercase.toLowerCase()
 
   if (!ignoreModifiers) {
-    if (altKey !== alt && pressedKey !== 'alt') {
+    // We check the pressed keys for compatibility with the keyup event. In keyup events the modifier flags are not set.
+    if (alt === !altKey && pressedKey !== 'alt') {
       return false
     }
 
-    if (shiftKey !== shift && pressedKey !== 'shift') {
+    if (shift === !shiftKey && pressedKey !== 'shift') {
       return false
     }
 
@@ -73,7 +69,11 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
         return false
       }
     } else {
-      if (metaKey !== meta && ctrlKey !== meta && keyCode !== 'meta' && keyCode !== 'ctrl') {
+      if (meta === !metaKey && pressedKey !== 'meta') {
+        return false
+      }
+
+      if (ctrl === !ctrlKey && pressedKey !== 'ctrl') {
         return false
       }
     }
