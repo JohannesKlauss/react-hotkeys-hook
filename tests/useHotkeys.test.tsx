@@ -2,7 +2,7 @@ import { renderHook, WrapperComponent } from '@testing-library/react-hooks'
 import userEvent from '@testing-library/user-event'
 import { useHotkeys, HotkeysProvider } from '../src'
 import { FormTags, HotkeyCallback, Keys, Options } from '../src/types'
-import { DependencyList, MutableRefObject, ReactNode } from 'react'
+import { DependencyList, MutableRefObject, ReactNode, useCallback, useState } from 'react'
 import { createEvent, fireEvent, render, screen } from '@testing-library/react'
 
 const wrapper =
@@ -1087,6 +1087,59 @@ test('Should ignore modifiers if option is set', async () => {
   await user.keyboard('/')
 
   expect(callback).toHaveBeenCalledTimes(2)
+})
+
+
+
+test('should respect dependencies array if they are passed', async () => {
+  function Fixture() {
+    const [count ,setCount] = useState(0);
+
+    const incrementCount = useCallback(() => {
+      setCount(count + 1);
+    }, [count]);
+
+    useHotkeys('esc', incrementCount, []);
+
+    return <div>{count}</div>
+  }
+
+  const user = userEvent.setup();
+
+  const {getByText} = render(<Fixture />);
+
+  expect(getByText('0')).not.toBeNull()
+
+  await user.keyboard('{Escape}')
+  await user.keyboard('{Escape}')
+
+  expect(getByText('1')).not.toBeNull()
+})
+
+
+test('should use updated callback if no dependencies are passed', async () => {
+  function Fixture() {
+    const [count ,setCount] = useState(0);
+
+    const incrementCount = useCallback(() => {
+      setCount(count + 1);
+    }, [count]);
+
+    useHotkeys('esc', incrementCount);
+
+    return <div>{count}</div>
+  }
+
+  const user = userEvent.setup();
+
+  const {getByText} = render(<Fixture />);
+
+  expect(getByText('0')).not.toBeNull()
+
+  await user.keyboard('{Escape}')
+  await user.keyboard('{Escape}')
+
+  expect(getByText('2')).not.toBeNull()
 })
 
 test('Should trigger only callback for combination', async () => {
