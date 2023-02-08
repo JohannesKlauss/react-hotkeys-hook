@@ -1,11 +1,11 @@
 .idea
-.docz
 .npmrc
 .DS_Store
 node_modules
 .cache
 
 public
+lab
 
 # Logs
 logs

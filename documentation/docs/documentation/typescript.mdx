@@ -1,0 +1,62 @@
+---
+sidebar_position: 7
+---
+
+# Using TypeScript
+
+:::tip Works out of the box!
+React Hotkeys Hook is written in TypeScript and therefore ready to go with our TypeScript project.
+
+:::
+
+## Examples
+
+Using type safety to prevent the passing of parameters with an incorrect type.
+
+```tsx
+import { useHotkeys } from "react-hotkeys-hook";
+import { useState } from "React";
+
+interface Props {
+  hotKey: number;
+}
+
+const MyComponent = ({hotKey}: Props) => {
+  const [count, setCount] = useState(0);
+
+  // This will produce an error, because hotKey has to be of type string.
+  useHotkeys(hotKey, () => setCount(prevCount => prevCount + 1));
+
+  return (
+    <div>
+      The count is {count}.
+    </div>
+  )
+}
+```
+
+***
+
+Using TypeScript to infer the type of the given ref.
+
+```tsx
+import { useHotkeys } from "react-hotkeys-hook";
+import { useState } from "React";
+
+interface Props {
+  hotKey: string;
+}
+
+const MyComponent = ({hotKey}: Props) => {
+  const [count, setCount] = useState(0);
+
+  // ref will have the type of React.MutableRef<HTMLDivElement>
+  const ref = useHotkeys(hotKey, () => setCount(prevCount => prevCount + 1));
+
+  return (
+    <div ref={ref}>
+      The count is {count}.
+    </div>
+  )
+}
+```

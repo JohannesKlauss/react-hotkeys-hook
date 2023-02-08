@@ -1,0 +1,203 @@
+---
+sidebar_position: 1
+title: "Basic Usage"
+---
+
+# useHotkeys
+
+This hook allows us to listen to hotkeys in a declarative way and execute a callback function once the user pressed down
+the given hotkey.
+
+:::tip tip
+This documentation is using [react-live](https://react-live.netlify.app/), so we can edit the code of every example and
+immediately see the results of our changes.
+:::
+
+# Basic Usage
+
+Import the `useHotkeys` hook from the package:
+
+```js
+import { useHotkeys } from 'react-hotkeys-hook';
+```
+
+or when using `require` style syntax:
+
+```js
+const { useHotkeys } = require('react-hotkeys-hook')
+// or
+const useHotkeys = require('react-hotkeys-hook').useHotkeys
+```
+
+## Simple Hotkey
+
+The most basic usage for the hook is to assign a hotkey we want to listen to and a callback to get executed once the user
+hits that key.
+
+```jsx live
+function ExampleComponent() {
+  useHotkeys('a', () => alert('Key a was pressed'))
+
+  return (
+    <span>Press the a key to see it work.</span>
+  )
+}
+```
+
+> To make the hotkeys work, you have to focus the rendered output of the Live Editor.
+
+***
+
+Inside the callback we can do whatever we like. One common use case is to alter some component state:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('b', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Pressed the 'b' key {count} times.</span>
+  )
+}
+```
+
+`useHotkeys` will create the listener on component mount and destroy the listener once the component unmounts.
+
+***
+
+## Multiple hotkeys per component
+
+Since `useHotkeys` is a hook, we can use it in one component as much as we like:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('q', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('w', () => setCount(prevCount => prevCount - 1))
+
+  return (
+    <span>The count is {count}.</span>
+  )
+}
+```
+
+***
+
+## Keystrokes
+
+We can also listen to keystrokes. That is a combination of keys that the user has to hit in order to execute the callback.
+One example would be a Jira like UI that listens to the `Shift+C` keystroke to create a new ticket:
+
+```jsx live
+function CreateIssue() {
+  const [showIssueCreatorModal, setShowIssueCreatorModal] = useState(false)
+
+  useHotkeys('shift+c', () => setShowIssueCreatorModal(true))
+
+  return (
+    <>
+      {showIssueCreatorModal && <div>MODAL CONTENT</div>}
+      {!showIssueCreatorModal && <div>issue list</div>}
+    </>
+  )
+}
+```
+
+This is not restricted to a combination of two keys. We can also do things like `Ctrl+Shift+A+C` (maybe not the most
+intuitive keystroke for a user to memorize, though).
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('ctrl+shift+a+c', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Pressed the 'ctrl+shift+a+c' key {count} times.</span>
+  )
+}
+```
+
+:::note the keys argument is case-insensitive
+It doesn't matter if we listen for `CTRL+S`, `Ctrl+s`, `ctrl+S` or any other possible way of writing the keys in different
+cases. They all will listen to the user pressing the `ctrl` and the `s` key. This also means that upper case letters
+are treated as lower case letters. If we want to listen to the user pressing the upper case letter `S`, we'd have to listen
+to `shift+s`.
+:::
+
+***
+
+## Multiple hotkeys
+
+We can also listen to multiple keystrokes and/or hotkeys and trigger the same callback. Combinations are separated by
+a comma sign:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('ctrl+shift+a+c, c, shift+c', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Received the combination {count} times.</span>
+  )
+}
+```
+
+You can also use an array as first arguments: `useHotkeys(['ctrl+shift+a+c', 'c', 'shift+c'], ....`
+
+:::info Noticed something?
+We used the `ctrl+shift+a+c` and `shift+c` combination two times for two components on this page.
+Since we pressed down one hotkey already the example above started at the count of one. Hotkeys are attached
+globally if we don't use its return value.
+
+***
+
+## Modifiers & Special keys
+
+Of course, we also want to leverage more complex keystrokes. `useHotkeys` supports the following modifiers:
+
+* `shift`
+* `alt`
+* `ctrl`
+* `meta`
+
+:::info macOS and Windows/Linux compatability
+Since version 4 `alt` and `option` are identical. The `meta` key is the same as `cmd` on macOS and `ctrl` on Windows/Linux.
+:::
+
+```jsx
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys(
+    'ctrl+shift+a+c, c, shift+c, alt+n, ctrl+d, meta+d',
+    () => setCount(prevCount => prevCount + 1)
+  )
+
+  return (
+    <span>Received the combination {count} times.</span>
+  )
+}
+```
+
+***
+
+There are also special keys like arrows, return, space bar, etc. that have their own name that can be used:
+
+* `backspace`
+* `tab`
+* `clear`
+* `enter` or `return`
+* `esc` or `escape`
+* `space`
+* `up`, `down`, `left`, `right`
+* `pageup`, `pagedown`
+* `del` or `delete`
+* `f1`, `f2` ... `f19`
+
+:::caution Warning
+Please be aware that there are some hotkeys that we cannot override, because they would interfere with a safe browsing
+experience for the user. These depend on the browser.
+For example in Chrome, most notably those are `meta + w` which closes a tab, `meta + n` for opening a new window and `meta + t` to open a new tab.
+Additionally `meta + shift + w` (closing all tabs of the current window), `meta + shift + n` (opening incognito window) and
+`meta + shift + t` (reopen the last closed tab) cannot be overridden.
+`meta + up + 1..9` on the other hand focuses the corresponding tab of the active window and also cannot be overridden.
+:::
