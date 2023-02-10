@@ -143,7 +143,7 @@ export default function useHotkeys<T extends HTMLElement>(
         parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
       }
     }
-  }, [keys, memoisedOptions, enabledScopes])
+  }, [JSON.stringify(keys), memoisedOptions, enabledScopes])
 
   return ref
 }

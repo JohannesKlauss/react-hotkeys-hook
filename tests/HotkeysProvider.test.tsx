@@ -204,3 +204,20 @@ test('should update bound hotkeys when useHotkeys changes its scopes', () => {
 
   expect(result.current.hotkeys).toHaveLength(0)
 })
+
+test('should return bound hotkeys when defined as a string array', () => {
+  const useIntegratedHotkeys = () => {
+    useHotkeys(['a+c', 'b'], () => null, { scopes: ['foo'] })
+
+    return useHotkeysContext()
+  }
+
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
+  )
+  const { result } = renderHook(useIntegratedHotkeys, {
+    wrapper,
+  })
+  expect(result.current.hotkeys[0].keys).toEqual(['a', 'c'])
+  expect(result.current.hotkeys[1].keys).toEqual(['b'])
+})
