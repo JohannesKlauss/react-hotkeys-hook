@@ -4,11 +4,4 @@ import { HotkeysProvider, useHotkeysContext } from './HotkeysProvider'
 import { isHotkeyPressed } from './isHotkeyPressed'
 import useRecordHotkeys from './useRecordHotkeys'
 
-export {
-  useHotkeys,
-  useRecordHotkeys,
-  useHotkeysContext,
-  isHotkeyPressed,
-  HotkeysProvider,
-  Options,
-}
+export { useHotkeys, useRecordHotkeys, useHotkeysContext, isHotkeyPressed, HotkeysProvider, Options }

@@ -29,9 +29,11 @@ interface Props {
   children: ReactNode
 }
 
-export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props) => {
-  const [internalActiveScopes, setInternalActiveScopes] = useState(initiallyActiveScopes?.length > 0 ? initiallyActiveScopes : ['*'])
-  const [boundHotkeys, setBoundHotkeys] = useState<Hotkey[]>([]);
+export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Props) => {
+  const [internalActiveScopes, setInternalActiveScopes] = useState(
+    initiallyActiveScopes?.length > 0 ? initiallyActiveScopes : ['*']
+  )
+  const [boundHotkeys, setBoundHotkeys] = useState<Hotkey[]>([])
 
   const enableScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
@@ -45,10 +47,10 @@ export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props
 
   const disableScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
-      if (prev.filter(s => s !== scope).length === 0) {
+      if (prev.filter((s) => s !== scope).length === 0) {
         return ['*']
       } else {
-        return prev.filter(s => s !== scope)
+        return prev.filter((s) => s !== scope)
       }
     })
   }, [])
@@ -56,10 +58,10 @@ export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props
   const toggleScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
       if (prev.includes(scope)) {
-        if (prev.filter(s => s !== scope).length === 0) {
+        if (prev.filter((s) => s !== scope).length === 0) {
           return ['*']
         } else {
-          return prev.filter(s => s !== scope)
+          return prev.filter((s) => s !== scope)
         }
       } else {
         if (prev.includes('*')) {
@@ -76,11 +78,13 @@ export const HotkeysProvider = ({initiallyActiveScopes = ['*'], children}: Props
   }, [])
 
   const removeBoundHotkey = useCallback((hotkey: Hotkey) => {
-    setBoundHotkeys((prev) => prev.filter(h => !deepEqual(h, hotkey)))
+    setBoundHotkeys((prev) => prev.filter((h) => !deepEqual(h, hotkey)))
   }, [])
 
   return (
-    <HotkeysContext.Provider value={{enabledScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope}}>
+    <HotkeysContext.Provider
+      value={{ enabledScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope }}
+    >
       <BoundHotkeysProxyProviderProvider addHotkey={addBoundHotkey} removeHotkey={removeBoundHotkey}>
         {children}
       </BoundHotkeysProxyProviderProvider>

@@ -3,7 +3,7 @@ import { mapKey } from './parseHotkeys'
 
 export default function useRecordHotkeys() {
   const [keys, setKeys] = useState(new Set<string>())
-  const [isRecording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useState(false)
 
   const handler = useCallback((event: KeyboardEvent) => {
     if (event.key === undefined) {
@@ -14,7 +14,7 @@ export default function useRecordHotkeys() {
     event.preventDefault()
     event.stopPropagation()
 
-    setKeys(prev => {
+    setKeys((prev) => {
       const newKeys = new Set(prev)
 
       newKeys.add(mapKey(event.code))

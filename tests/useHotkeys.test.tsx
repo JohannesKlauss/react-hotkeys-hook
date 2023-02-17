@@ -1090,23 +1090,22 @@ test('Should ignore modifiers if option is set', async () => {
 })
 
 
-
 test('should respect dependencies array if they are passed', async () => {
   function Fixture() {
-    const [count ,setCount] = useState(0);
+    const [count, setCount] = useState(0)
 
     const incrementCount = useCallback(() => {
-      setCount(count + 1);
-    }, [count]);
+      setCount(count + 1)
+    }, [count])
 
-    useHotkeys('esc', incrementCount, []);
+    useHotkeys('esc', incrementCount, [])
 
     return <div>{count}</div>
   }
 
-  const user = userEvent.setup();
+  const user = userEvent.setup()
 
-  const {getByText} = render(<Fixture />);
+  const { getByText } = render(<Fixture />)
 
   expect(getByText('0')).not.toBeNull()
 
@@ -1119,20 +1118,20 @@ test('should respect dependencies array if they are passed', async () => {
 
 test('should use updated callback if no dependencies are passed', async () => {
   function Fixture() {
-    const [count ,setCount] = useState(0);
+    const [count, setCount] = useState(0)
 
     const incrementCount = useCallback(() => {
-      setCount(count + 1);
-    }, [count]);
+      setCount(count + 1)
+    }, [count])
 
-    useHotkeys('esc', incrementCount);
+    useHotkeys('esc', incrementCount)
 
     return <div>{count}</div>
   }
 
-  const user = userEvent.setup();
+  const user = userEvent.setup()
 
-  const {getByText} = render(<Fixture />);
+  const { getByText } = render(<Fixture />)
 
   expect(getByText('0')).not.toBeNull()
 
@@ -1144,16 +1143,17 @@ test('should use updated callback if no dependencies are passed', async () => {
 
 test('Should trigger only callback for combination', async () => {
   const user = userEvent.setup()
+
   const combinationsCallback = jest.fn()
   const keysCallback = jest.fn()
 
-  const handleHotkey = (event, hotkeysEvent) =>{
-      const {meta,keys} = hotkeysEvent
-      if(meta && keys[0] === 'z'){
-        combinationsCallback()
-      }else if(!meta && keys[0] === 'z'){
-        keysCallback()
-      }
+  const handleHotkey: HotkeyCallback = (event, hotkeysEvent) => {
+    const { meta, keys } = hotkeysEvent
+    if (meta && keys && keys[0] === 'z') {
+      combinationsCallback()
+    } else if (!meta && keys && keys[0] === 'z') {
+      keysCallback()
+    }
   }
 
   renderHook(() => useHotkeys([`meta+z`, `z`], handleHotkey))
@@ -1161,6 +1161,5 @@ test('Should trigger only callback for combination', async () => {
   await user.keyboard(`{Meta>}Z`)
 
   expect(combinationsCallback).toHaveBeenCalledTimes(1)
-
   expect(keysCallback).toHaveBeenCalledTimes(0)
 })
