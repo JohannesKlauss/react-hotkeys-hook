@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { isHotkeyPressed } from '../src/isHotkeyPressed'
+import { isHotkeyPressed } from '../src'
 
 test('should return true if hotkey is currently pressed down', async () => {
   const user = userEvent.setup()
