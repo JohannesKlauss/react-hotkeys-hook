@@ -25,10 +25,6 @@ const mappedKeys: Record<string, string> = {
 }
 
 export function mapKey(key: string): string {
-  console.log('key', key)
-
-  console.log('mappedKeys[key]', mappedKeys[key])
-
   return (mappedKeys[key] || key)
     .trim()
     .toLowerCase()
