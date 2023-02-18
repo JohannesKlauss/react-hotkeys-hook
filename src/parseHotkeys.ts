@@ -18,6 +18,8 @@ const mappedKeys: Record<string, string> = {
   AltRight: 'alt',
   MetaLeft: 'meta',
   MetaRight: 'meta',
+  OSLeft: 'meta',
+  OSRight: 'meta',
   ControlLeft: 'ctrl',
   ControlRight: 'ctrl',
 }
