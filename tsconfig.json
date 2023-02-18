@@ -7,6 +7,7 @@
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "outDir": "./dist",
+    "types": ["cypress", "node", "cypress-real-events"]
   },
   "include": ["src", "./setupTests.ts"]
 }
