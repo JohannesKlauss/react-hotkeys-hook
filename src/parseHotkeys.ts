@@ -25,13 +25,14 @@ const mappedKeys: Record<string, string> = {
 }
 
 export function mapKey(key: string): string {
+  console.log('key', key)
+
+  console.log('mappedKeys[key]', mappedKeys[key])
+
   return (mappedKeys[key] || key)
     .trim()
     .toLowerCase()
-    .replace('key', '')
-    .replace('digit', '')
-    .replace('numpad', '')
-    .replace('arrow', '')
+    .replace(/key|digit|numpad|arrow/, '')
 }
 
 export function isHotkeyModifier(key: string) {
@@ -51,6 +52,8 @@ export function parseHotkey(hotkey: string, combinationKey = '+'): Hotkey {
     .toLocaleLowerCase()
     .split(combinationKey)
     .map((k) => mapKey(k))
+
+  console.log('parsed keys', keys)
 
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),
