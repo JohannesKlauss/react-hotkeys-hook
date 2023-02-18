@@ -49,8 +49,6 @@ export function parseHotkey(hotkey: string, combinationKey = '+'): Hotkey {
     .split(combinationKey)
     .map((k) => mapKey(k))
 
-  console.log('parsed keys', keys)
-
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),
     ctrl: keys.includes('ctrl') || keys.includes('control'),
