@@ -71,7 +71,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
         return false
       }
     } else {
-      if (meta === !metaKey && pressedKey !== 'meta') {
+      if (meta === !metaKey && pressedKey !== 'meta' && pressedKey !== 'os') {
         return false
       }
 

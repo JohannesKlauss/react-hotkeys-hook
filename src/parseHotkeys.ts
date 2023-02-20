@@ -18,6 +18,8 @@ const mappedKeys: Record<string, string> = {
   AltRight: 'alt',
   MetaLeft: 'meta',
   MetaRight: 'meta',
+  OSLeft: 'meta',
+  OSRight: 'meta',
   ControlLeft: 'ctrl',
   ControlRight: 'ctrl',
 }
@@ -26,10 +28,7 @@ export function mapKey(key: string): string {
   return (mappedKeys[key] || key)
     .trim()
     .toLowerCase()
-    .replace('key', '')
-    .replace('digit', '')
-    .replace('numpad', '')
-    .replace('arrow', '')
+    .replace(/key|digit|numpad|arrow/, '')
 }
 
 export function isHotkeyModifier(key: string) {
