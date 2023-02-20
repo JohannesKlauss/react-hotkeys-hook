@@ -1,5 +1,6 @@
 {
   "name": "react-hotkeys-hook",
+  "description": "React hook for handling keyboard shortcuts",
   "version": "4.3.6-4",
   "repository": "https://JohannesKlauss@github.com/JohannesKlauss/react-keymap-hook.git",
   "homepage": "https://johannesklauss.github.io/react-hotkeys-hook/",
