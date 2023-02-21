@@ -1163,3 +1163,14 @@ test('Should trigger only callback for combination', async () => {
   expect(combinationsCallback).toHaveBeenCalledTimes(1)
   expect(keysCallback).toHaveBeenCalledTimes(0)
 })
+
+test.each(['Shift', 'Alt', 'Meta', 'Ctrl', 'Control'])('Should listen to %s on keyup', async (key) => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys(key, callback, { keyup: true }))
+
+  await user.keyboard(`{${key}}`)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
