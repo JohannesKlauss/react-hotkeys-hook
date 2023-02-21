@@ -75,7 +75,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
         return false
       }
 
-      if (ctrl === !ctrlKey && pressedKey !== 'ctrl') {
+      if (ctrl === !ctrlKey && pressedKey !== 'ctrl' && pressedKey !== 'control') {
         return false
       }
     }
