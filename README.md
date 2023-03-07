@@ -86,9 +86,9 @@ returned by the `useHotkeysContext()` hook. Note that you have to have your app 
 ```jsx harmony
 const App = () => {
   return (
-          <HotkeysProvider initiallyActiveScopes={['settings']}>
-            <ExampleComponent />
-          </HotkeysProvider>
+    <HotkeysProvider initiallyActiveScopes={['settings']}>
+      <ExampleComponent />
+    </HotkeysProvider>
   )
 }
 

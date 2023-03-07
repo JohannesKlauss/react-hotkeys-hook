@@ -26,22 +26,27 @@ export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
   options?: OptionsOrDependencyArray,
-  dependencies?: OptionsOrDependencyArray,
+  dependencies?: OptionsOrDependencyArray
 ) {
   const ref = useRef<RefType<T>>(null)
   const hasTriggeredRef = useRef(false)
 
-  const _options: Options | undefined = !(options instanceof Array) ? (options as Options) : !(dependencies instanceof Array) ? (dependencies as Options) : undefined
+  const _options: Options | undefined = !(options instanceof Array)
+    ? (options as Options)
+    : !(dependencies instanceof Array)
+    ? (dependencies as Options)
+    : undefined
   const _keys: string = keys instanceof Array ? keys.join(_options?.splitKey) : keys
-  const _deps: DependencyList | undefined = options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
+  const _deps: DependencyList | undefined =
+    options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
 
   const memoisedCB = useCallback(callback, _deps ?? [])
-  const cbRef = useRef<HotkeyCallback>(memoisedCB);
+  const cbRef = useRef<HotkeyCallback>(memoisedCB)
 
-  if(_deps) {
-    cbRef.current = memoisedCB;
+  if (_deps) {
+    cbRef.current = memoisedCB
   } else {
-    cbRef.current = callback;
+    cbRef.current = callback
   }
 
   const memoisedOptions = useDeepEqualMemo(_options)
@@ -54,20 +59,24 @@ export default function useHotkeys<T extends HTMLElement>(
       return
     }
 
-    const listener = (e: KeyboardEvent, isKeyUp: boolean = false) => {
+    const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
         return
       }
 
       // TODO: SINCE THE EVENT IS NOW ATTACHED TO THE REF, THE ACTIVE ELEMENT CAN NEVER BE INSIDE THE REF. THE HOTKEY ONLY TRIGGERS IF THE
       // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WON'T TRIGGER THE HOTKEY.
-      if (ref.current !== null && document.activeElement !== ref.current && !ref.current.contains(document.activeElement)) {
+      if (
+        ref.current !== null &&
+        document.activeElement !== ref.current &&
+        !ref.current.contains(document.activeElement)
+      ) {
         stopPropagation(e)
 
         return
       }
 
-      if (((e.target as HTMLElement)?.isContentEditable && !memoisedOptions?.enableOnContentEditable)) {
+      if ((e.target as HTMLElement)?.isContentEditable && !memoisedOptions?.enableOnContentEditable) {
         return
       }
 
@@ -125,23 +134,29 @@ export default function useHotkeys<T extends HTMLElement>(
       }
     }
 
+    const domNode = ref.current || _options?.document || document
+
     // @ts-ignore
-    (ref.current || _options?.document || document).addEventListener('keyup', handleKeyUp);
+    domNode.addEventListener('keyup', handleKeyUp)
     // @ts-ignore
-    (ref.current || _options?.document || document).addEventListener('keydown', handleKeyDown)
+    domNode.addEventListener('keydown', handleKeyDown)
 
     if (proxy) {
-      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) => proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
+      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
+        proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey))
+      )
     }
 
     return () => {
       // @ts-ignore
-      (ref.current || _options?.document || document).removeEventListener('keyup', handleKeyUp);
+      domNode.removeEventListener('keyup', handleKeyUp)
       // @ts-ignore
-      (ref.current || _options?.document || document).removeEventListener('keydown', handleKeyDown)
+      domNode.removeEventListener('keydown', handleKeyDown)
 
       if (proxy) {
-        parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
+        parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
+          proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey))
+        )
       }
     }
   }, [_keys, memoisedOptions, enabledScopes])

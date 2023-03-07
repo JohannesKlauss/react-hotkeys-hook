@@ -12,24 +12,23 @@ const mappedKeys: Record<string, string> = {
   '`': 'backquote',
   '#': 'backslash',
   '+': 'bracketright',
-  'ShiftLeft': 'shift',
-  'ShiftRight': 'shift',
-  'AltLeft': 'alt',
-  'AltRight': 'alt',
-  'MetaLeft': 'meta',
-  'MetaRight': 'meta',
-  'ControlLeft': 'ctrl',
-  'ControlRight': 'ctrl',
+  ShiftLeft: 'shift',
+  ShiftRight: 'shift',
+  AltLeft: 'alt',
+  AltRight: 'alt',
+  MetaLeft: 'meta',
+  MetaRight: 'meta',
+  OSLeft: 'meta',
+  OSRight: 'meta',
+  ControlLeft: 'ctrl',
+  ControlRight: 'ctrl',
 }
 
 export function mapKey(key: string): string {
   return (mappedKeys[key] || key)
     .trim()
     .toLowerCase()
-    .replace('key', '')
-    .replace('digit', '')
-    .replace('numpad', '')
-    .replace('arrow', '')
+    .replace(/key|digit|numpad|arrow/, '')
 }
 
 export function isHotkeyModifier(key: string) {
@@ -37,14 +36,14 @@ export function isHotkeyModifier(key: string) {
 }
 
 export function parseKeysHookInput(keys: string, splitKey: string = ','): string[] {
-    return keys.split(splitKey)
+  return keys.split(splitKey)
 }
 
-export function parseHotkey(hotkey: string, combinationKey: string = '+'): Hotkey {
+export function parseHotkey(hotkey: string, combinationKey = '+'): Hotkey {
   const keys = hotkey
     .toLocaleLowerCase()
     .split(combinationKey)
-    .map(k => mapKey(k))
+    .map((k) => mapKey(k))
 
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),

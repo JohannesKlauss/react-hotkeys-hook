@@ -24,7 +24,9 @@ export function isHotkeyEnabledOnTag({ target }: KeyboardEvent, enabledOnTags: F
   const targetTagName = target && (target as HTMLElement).tagName
 
   if (enabledOnTags instanceof Array) {
-    return Boolean(targetTagName && enabledOnTags && enabledOnTags.some(tag => tag.toLowerCase() === targetTagName.toLowerCase()))
+    return Boolean(
+      targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase())
+    )
   }
 
   return Boolean(targetTagName && enabledOnTags && enabledOnTags === true)
@@ -33,7 +35,7 @@ export function isHotkeyEnabledOnTag({ target }: KeyboardEvent, enabledOnTags: F
 export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
   if (activeScopes.length === 0 && scopes) {
     console.warn(
-      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
+      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
     )
 
     return true
@@ -43,10 +45,10 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
     return true
   }
 
-  return activeScopes.some(scope => scopes.includes(scope)) || activeScopes.includes('*')
+  return activeScopes.some((scope) => scopes.includes(scope)) || activeScopes.includes('*')
 }
 
-export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers: boolean = false): boolean => {
+export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {
   const { alt, meta, mod, shift, ctrl, keys } = hotkey
   const { key: pressedKeyUppercase, code, ctrlKey, metaKey, shiftKey, altKey } = e
 
@@ -69,11 +71,11 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
         return false
       }
     } else {
-      if (meta === !metaKey && pressedKey !== 'meta') {
+      if (meta === !metaKey && pressedKey !== 'meta' && pressedKey !== 'os') {
         return false
       }
 
-      if (ctrl === !ctrlKey && pressedKey !== 'ctrl') {
+      if (ctrl === !ctrlKey && pressedKey !== 'ctrl' && pressedKey !== 'control') {
         return false
       }
     }

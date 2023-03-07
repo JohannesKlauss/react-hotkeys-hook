@@ -19,7 +19,7 @@ export type Hotkey = KeyboardModifiers & {
   scopes?: Scopes
 }
 
-export type HotkeysEvent = Hotkey & {}
+export type HotkeysEvent = Hotkey
 
 export type HotkeyCallback = (keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => void
 
