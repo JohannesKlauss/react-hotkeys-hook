@@ -36,12 +36,8 @@ export function isHotkeyModifier(key: string) {
   return reservedModifierKeywords.includes(key)
 }
 
-export function parseKeysHookInput(keys: Keys, splitKey: string = ','): string[] {
-  if (typeof keys === 'string') {
+export function parseKeysHookInput(keys: string, splitKey: string = ','): string[] {
     return keys.split(splitKey)
-  }
-
-  return keys
 }
 
 export function parseHotkey(hotkey: string, combinationKey: string = '+'): Hotkey {

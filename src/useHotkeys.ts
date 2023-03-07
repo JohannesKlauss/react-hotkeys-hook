@@ -32,6 +32,7 @@ export default function useHotkeys<T extends HTMLElement>(
   const hasTriggeredRef = useRef(false)
 
   const _options: Options | undefined = !(options instanceof Array) ? (options as Options) : !(dependencies instanceof Array) ? (dependencies as Options) : undefined
+  const _keys: string = keys instanceof Array ? keys.join(_options?.splitKey) : keys
   const _deps: DependencyList | undefined = options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
 
   const memoisedCB = useCallback(callback, _deps ?? [])
@@ -70,7 +71,7 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => {
+      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) => {
         const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
         if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
@@ -130,7 +131,7 @@ export default function useHotkeys<T extends HTMLElement>(
     (ref.current || _options?.document || document).addEventListener('keydown', handleKeyDown)
 
     if (proxy) {
-      parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
+      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) => proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
     }
 
     return () => {
@@ -140,10 +141,10 @@ export default function useHotkeys<T extends HTMLElement>(
       (ref.current || _options?.document || document).removeEventListener('keydown', handleKeyDown)
 
       if (proxy) {
-        parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
+        parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) => proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey)))
       }
     }
-  }, [JSON.stringify(keys), memoisedOptions, enabledScopes])
+  }, [_keys, memoisedOptions, enabledScopes])
 
   return ref
 }
