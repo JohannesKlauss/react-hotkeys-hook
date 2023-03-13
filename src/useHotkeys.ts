@@ -36,6 +36,7 @@ export default function useHotkeys<T extends HTMLElement>(
     : !(dependencies instanceof Array)
     ? (dependencies as Options)
     : undefined
+  const _keys: string = keys instanceof Array ? keys.join(_options?.splitKey) : keys
   const _deps: DependencyList | undefined =
     options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
 
@@ -79,7 +80,7 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) => {
+      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) => {
         const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
         if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
@@ -141,7 +142,7 @@ export default function useHotkeys<T extends HTMLElement>(
     domNode.addEventListener('keydown', handleKeyDown)
 
     if (proxy) {
-      parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) =>
+      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
         proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey))
       )
     }
@@ -153,12 +154,12 @@ export default function useHotkeys<T extends HTMLElement>(
       domNode.removeEventListener('keydown', handleKeyDown)
 
       if (proxy) {
-        parseKeysHookInput(keys, memoisedOptions?.splitKey).forEach((key) =>
+        parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
           proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey))
         )
       }
     }
-  }, [keys, memoisedOptions, enabledScopes])
+  }, [_keys, memoisedOptions, enabledScopes])
 
   return ref
 }
