@@ -175,6 +175,40 @@ test('should return all bound hotkeys', () => {
   expect(result.current.hotkeys).toHaveLength(1)
 })
 
+test('should return descriptions for bound hotkeys', () => {
+  const useIntegratedHotkeys = () => {
+    useHotkeys('a', () => null, { scopes: ['foo'], description: 'bar' })
+
+    return useHotkeysContext()
+  }
+
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
+  )
+  const { result } = renderHook(useIntegratedHotkeys, {
+    wrapper,
+  })
+
+  expect(result.current.hotkeys[0].description).toEqual('bar')
+})
+
+test('should return descriptions for bound hotkeys', () => {
+  const useIntegratedHotkeys = () => {
+    useHotkeys('a', () => null, { scopes: ['foo'], description: 'bar' })
+
+    return useHotkeysContext()
+  }
+
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
+  )
+  const { result } = renderHook(useIntegratedHotkeys, {
+    wrapper,
+  })
+
+  expect(result.current.hotkeys[0].description).toEqual('bar')
+})
+
 test('should update bound hotkeys when useHotkeys changes its scopes', () => {
   const useIntegratedHotkeys = (scopes: string[]) => {
     useHotkeys('a', () => null, { scopes })
