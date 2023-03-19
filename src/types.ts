@@ -29,7 +29,7 @@ export type Options = {
   enabled?: Trigger // Main setting that determines if the hotkey is enabled or not. (Default: true)
   enableOnFormTags?: FormTags[] | boolean // Enable hotkeys on a list of tags. (Default: false)
   enableOnContentEditable?: boolean // Enable hotkeys on tags with contentEditable props. (Default: false)
-  ignoreEventWhen?: (e: KeyboardEvent) => void // Ignore evenets based on a condition (Default: undefined)
+  ignoreEventWhen?: (e: KeyboardEvent) => boolean // Ignore evenets based on a condition (Default: undefined)
   combinationKey?: string // Character to split keys in hotkeys combinations. (Default: +)
   splitKey?: string // Character to separate different hotkeys. (Default: ,)
   scopes?: Scopes // Scope
