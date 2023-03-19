@@ -64,7 +64,7 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      if (memoisedOptions?.ignoreEventCondition?.(e)) {
+      if (memoisedOptions?.ignoreEventWhen?.(e)) {
         return;
       }
 
