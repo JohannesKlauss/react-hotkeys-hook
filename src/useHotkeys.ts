@@ -143,7 +143,7 @@ export default function useHotkeys<T extends HTMLElement>(
 
     if (proxy) {
       parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
-        proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey))
+        proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey, memoisedOptions?.description))
       )
     }
 
@@ -155,7 +155,7 @@ export default function useHotkeys<T extends HTMLElement>(
 
       if (proxy) {
         parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
-          proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey))
+          proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey, memoisedOptions?.description))
         )
       }
     }
