@@ -8,7 +8,7 @@ test('should render children', () => {
   const { getByText } = render(
     <HotkeysProvider>
       <div>Hello</div>
-    </HotkeysProvider>,
+    </HotkeysProvider>
   )
 
   expect(getByText('Hello')).toBeInTheDocument()
@@ -23,8 +23,9 @@ test('should default to wildcard scope', () => {
 })
 
 test('should default to wildcard scope if empty array is provided as initialActiveScopes', () => {
-  const wrapper = ({ children }: { children: ReactNode }) => <HotkeysProvider
-    initiallyActiveScopes={[]}>{children}</HotkeysProvider>
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={[]}>{children}</HotkeysProvider>
+  )
   const { result } = renderHook(() => useHotkeysContext(), {
     wrapper,
   })
@@ -150,8 +151,9 @@ test('should keep wildcard scope active when all is the only active scope and ge
 })
 
 test('should return initially set scopes', () => {
-  const wrapper = ({ children }: { children: ReactNode }) => <HotkeysProvider
-    initiallyActiveScopes={['foo', 'bar']}>{children}</HotkeysProvider>
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={['foo', 'bar']}>{children}</HotkeysProvider>
+  )
   const { result } = renderHook(() => useHotkeysContext(), {
     wrapper,
   })
@@ -166,8 +168,9 @@ test('should return all bound hotkeys', () => {
     return useHotkeysContext()
   }
 
-  const wrapper = ({ children }: { children: ReactNode }) => <HotkeysProvider
-    initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
+  )
   const { result } = renderHook(useIntegratedHotkeys, {
     wrapper,
   })
@@ -183,20 +186,19 @@ test('should update bound hotkeys when useHotkeys changes its scopes', () => {
   }
 
   const wrapper = ({ children }: { children: ReactNode }) => {
-    return (
-      <HotkeysProvider initiallyActiveScopes={['foo']}>
-        {children}
-      </HotkeysProvider>
-    )
+    return <HotkeysProvider initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
   }
 
-  const { result, rerender } = renderHook<{ scopes: string[] }, HotkeysContextType>(({ scopes }) => useIntegratedHotkeys(scopes), {
-    // @ts-ignore
-    wrapper,
-    initialProps: {
-      scopes: ['foo'],
-    },
-  })
+  const { result, rerender } = renderHook<{ scopes: string[] }, HotkeysContextType>(
+    ({ scopes }) => useIntegratedHotkeys(scopes),
+    {
+      // @ts-ignore
+      wrapper,
+      initialProps: {
+        scopes: ['foo'],
+      },
+    }
+  )
 
   expect(result.current.hotkeys).toHaveLength(1)
 
@@ -220,4 +222,21 @@ test('should return bound hotkeys when defined as a string array', () => {
   })
   expect(result.current.hotkeys[0].keys).toEqual(['a', 'c'])
   expect(result.current.hotkeys[1].keys).toEqual(['b'])
+})
+
+test('should return descriptions for bound hotkeys', () => {
+  const useIntegratedHotkeys = () => {
+    useHotkeys('a', () => null, { scopes: ['foo'], description: 'bar' })
+
+    return useHotkeysContext()
+  }
+
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
+  )
+  const { result } = renderHook(useIntegratedHotkeys, {
+    wrapper,
+  })
+
+  expect(result.current.hotkeys[0].description).toEqual('bar')
 })
