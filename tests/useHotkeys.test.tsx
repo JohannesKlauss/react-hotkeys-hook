@@ -491,6 +491,60 @@ test('should ignore case of form tags', async () => {
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
+test('should ignore event when ignoreEventWhen\'s condition matches', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+  const Component = ({ cb, ignoreEventWhen }: { cb: HotkeyCallback; ignoreEventWhen?: (e: KeyboardEvent) => boolean }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
+
+    return <button className='ignore' data-testid={'test-button'} />
+  }
+
+  const eventCondition = (e: KeyboardEvent) => {
+    const element = e.target as HTMLElement
+
+    return element.className === 'ignore'
+  }
+
+  const { getByTestId } = render(<Component cb={callback} ignoreEventWhen={eventCondition} />)
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.click(getByTestId('test-button'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+  const Component = ({ cb, ignoreEventWhen }: { cb: HotkeyCallback; ignoreEventWhen?: (e: KeyboardEvent) => boolean }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
+
+    return <button className='dont-ignore' data-testid={'test-button'} />
+  }
+
+  const eventCondition = (e: KeyboardEvent) => {
+    const element = e.target as HTMLElement
+
+    return element.className === 'ignore'
+  }
+
+  const { getByTestId } = render(<Component cb={callback} ignoreEventWhen={eventCondition} />)
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.click(getByTestId('test-button'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+})
+
 test('enabledOnTags should accept boolean', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()

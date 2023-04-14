@@ -221,6 +221,22 @@ this might desirable. We can enable the callback trigger for an input tag using 
 
 `INPUT`, `TEXTAREA`, `SELECT`
 
+##### `ignoreEventWhen`
+
+```ts
+ignoreEventWhen: (e: KeyboardEvent) => boolean // default: undefined
+```
+
+Provides a fine control over what events to ignore. Can be used in special cases, for example
+
+```js
+useHotkeys('a', someCallback, {
+  ignoreEventWhen: (e) => {
+    return e.target.className.includes('special-element')
+  },
+})
+```
+
 ##### `enabled`
 
 ```ts
