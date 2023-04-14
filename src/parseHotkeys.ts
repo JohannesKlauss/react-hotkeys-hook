@@ -1,4 +1,4 @@
-import { Hotkey, KeyboardModifiers, Keys, Options } from './types'
+import { Hotkey, KeyboardModifiers } from './types'
 
 const reservedModifierKeywords = ['shift', 'alt', 'meta', 'mod', 'ctrl']
 
@@ -35,7 +35,7 @@ export function isHotkeyModifier(key: string) {
   return reservedModifierKeywords.includes(key)
 }
 
-export function parseKeysHookInput(keys: string, splitKey: string = ','): string[] {
+export function parseKeysHookInput(keys: string, splitKey = ','): string[] {
   return keys.split(splitKey)
 }
 
