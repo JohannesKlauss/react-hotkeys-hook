@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react-hooks'
+import { act, renderHook } from '@testing-library/react'
 import useRecordHotkeys from '../src/useRecordHotkeys'
 import userEvent from '@testing-library/user-event'
 

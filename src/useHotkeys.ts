@@ -65,7 +65,7 @@ export default function useHotkeys<T extends HTMLElement>(
       }
 
       if (memoisedOptions?.ignoreEventWhen?.(e)) {
-        return;
+        return
       }
 
       // TODO: SINCE THE EVENT IS NOW ATTACHED TO THE REF, THE ACTIVE ELEMENT CAN NEVER BE INSIDE THE REF. THE HOTKEY ONLY TRIGGERS IF THE

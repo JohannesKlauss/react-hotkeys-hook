@@ -16,19 +16,19 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm install --frozen-lockfile
 
       - name: Lint
-        run: yarn run lint
+        run: npm run lint
         env:
           CI: true
 
       - name: Test
-        run: yarn run test --ci --coverage
+        run: npm run test --ci --coverage
         env:
           CI: true
 
       - name: Build
-        run: yarn run build
+        run: npm run build
         env:
           CI: true

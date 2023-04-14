@@ -1,12 +1,19 @@
-import { renderHook, WrapperComponent } from '@testing-library/react-hooks'
 import userEvent from '@testing-library/user-event'
 import { useHotkeys, HotkeysProvider } from '../src'
 import { FormTags, HotkeyCallback, Keys, Options } from '../src/types'
-import { DependencyList, MutableRefObject, ReactNode, useCallback, useState } from 'react'
-import { createEvent, fireEvent, render, screen } from '@testing-library/react'
+import {
+  DependencyList,
+  JSXElementConstructor,
+  MutableRefObject,
+  ReactElement,
+  ReactNode,
+  useCallback,
+  useState,
+} from 'react'
+import { createEvent, fireEvent, render, screen, renderHook } from '@testing-library/react'
 
 const wrapper =
-  (initialScopes: string[]): WrapperComponent<any> =>
+  (initialScopes: string[]): JSXElementConstructor<{children: ReactElement}> =>
     ({ children }: { children?: ReactNode }) =>
       <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
 
@@ -62,7 +69,7 @@ test('should call hotkey when scopes are set but activatedScopes includes wildca
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
-    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
         keys: 'a',
@@ -82,7 +89,7 @@ test('should not call hotkey when scopes are set but activatedScopes does not in
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
-    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
         keys: 'a',
@@ -102,7 +109,7 @@ test('should call hotkey when scopes are set and activatedScopes does include so
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
-    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
         keys: 'a',
@@ -122,7 +129,7 @@ test('should handle multiple scopes', async () => {
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
-    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
         keys: 'a',
@@ -142,7 +149,7 @@ test('should update call behavior when set scopes change', async () => {
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
-    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
         keys: 'a',
@@ -168,7 +175,7 @@ test('scope should take precedence over enabled flag/function', async () => {
   const callback = jest.fn()
 
   const render = (initialScopes: string[] = []) =>
-    renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
         keys: 'a',
@@ -235,7 +242,7 @@ test('should be able to parse first argument as string or array', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  const { rerender } = renderHook<HookParameters, void>(({ keys }) => useHotkeys(keys, callback), {
+  const { rerender } = renderHook<void, HookParameters>(({ keys }) => useHotkeys(keys, callback), {
     initialProps: {
       keys: 'a, b',
     },
@@ -256,7 +263,7 @@ test('should listen to combinations with modifiers', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  const { rerender } = renderHook<HookParameters, void>(({ keys }) => useHotkeys(keys, callback), {
+  const { rerender } = renderHook<void, HookParameters>(({ keys }) => useHotkeys(keys, callback), {
     initialProps: {
       keys: 'meta+a',
     },
@@ -327,7 +334,7 @@ test('should reflect set splitKey character', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  const { rerender } = renderHook<HookParameters, MutableRefObject<HTMLElement | null>>(
+  const { rerender } = renderHook<MutableRefObject<HTMLElement | null>, HookParameters>(
     ({ keys, options }) => useHotkeys(keys, callback, options),
     {
       initialProps: { keys: 'a, b', options: undefined },
@@ -638,7 +645,7 @@ test('should bind the event and execute the callback if enabled is set to a func
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  const { rerender } = renderHook<HookParameters, void>(({ keys, options }) => useHotkeys(keys, callback, options), {
+  const { rerender } = renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
     initialProps: {
       keys: 'a',
       options: {
