@@ -1,6 +1,5 @@
-import { render } from '@testing-library/react'
+import { render, act, renderHook } from '@testing-library/react'
 import { HotkeysProvider, useHotkeysContext, useHotkeys } from '../src'
-import { act, renderHook } from '@testing-library/react-hooks'
 import { ReactNode } from 'react'
 import { HotkeysContextType } from '../src/HotkeysProvider'
 
@@ -189,7 +188,7 @@ test('should update bound hotkeys when useHotkeys changes its scopes', () => {
     return <HotkeysProvider initiallyActiveScopes={['foo']}>{children}</HotkeysProvider>
   }
 
-  const { result, rerender } = renderHook<{ scopes: string[] }, HotkeysContextType>(
+  const { result, rerender } = renderHook<HotkeysContextType, { scopes: string[] }>(
     ({ scopes }) => useIntegratedHotkeys(scopes),
     {
       // @ts-ignore
