@@ -75,14 +75,14 @@ If your app is highly dynamic and you want to know which scopes are currently ac
 
 ## Set initially active scopes
 
-You can set the initially active scopes by passing an array of strings to the `initialScopes` prop of the `HotkeysProvider`.
+You can set the initially active scopes by passing an array of strings to the `initiallyActiveScopes` prop of the `HotkeysProvider`.
 
 ```jsx
 import { HotkeysProvider } from 'react-hotkeys-hook';
 
 function App() {
   return (
-    <HotkeysProvider initialScopes={['scopeA']}>
+    <HotkeysProvider initiallyActiveScopes={['scopeA']}>
       <div>
         <h1>My App</h1>
       </div>
@@ -91,6 +91,6 @@ function App() {
 }
 ```
 
-:::info Wildcard scope when using `initialScopes`
-If you set the `initialScopes` prop, the wildcard scope will not be active by default. You would have to set `['scopeA', '*']`.
+:::info Wildcard scope when using `initiallyActiveScopes`
+If you set the `initiallyActiveScopes` prop, the wildcard scope will not be active by default. You would have to set `['scopeA', '*']`.
 :::
