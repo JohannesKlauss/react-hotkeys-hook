@@ -128,7 +128,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/JohannesKlauss/react-hotkeys-hook/edit/master/documentation/',
+            'https://github.com/JohannesKlauss/react-hotkeys-hook/edit/main/documentation/',
           lastVersion: 'current',
           versions: {
             current: {
