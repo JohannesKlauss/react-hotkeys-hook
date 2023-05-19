@@ -1,8 +1,8 @@
 import type { DependencyList } from 'react'
 
 export type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT'
-export type Keys = string | string[]
-export type Scopes = string | string[]
+export type Keys = string | readonly string[]
+export type Scopes = string | readonly string[]
 
 export type RefType<T> = T | null
 
@@ -15,7 +15,7 @@ export type KeyboardModifiers = {
 }
 
 export type Hotkey = KeyboardModifiers & {
-  keys?: string[]
+  keys?: readonly string[]
   scopes?: Scopes
   description?: string
 }
@@ -28,7 +28,7 @@ export type Trigger = boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: Ho
 
 export type Options = {
   enabled?: Trigger // Main setting that determines if the hotkey is enabled or not. (Default: true)
-  enableOnFormTags?: FormTags[] | boolean // Enable hotkeys on a list of tags. (Default: false)
+  enableOnFormTags?: readonly FormTags[] | boolean // Enable hotkeys on a list of tags. (Default: false)
   enableOnContentEditable?: boolean // Enable hotkeys on tags with contentEditable props. (Default: false)
   ignoreEventWhen?: (e: KeyboardEvent) => boolean // Ignore evenets based on a condition (Default: undefined)
   combinationKey?: string // Character to split keys in hotkeys combinations. (Default: +)
