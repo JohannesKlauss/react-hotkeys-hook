@@ -29,8 +29,13 @@ import { isHotkeyModifier, mapKey } from './parseHotkeys'
 
 const currentlyPressedKeys: Set<string> = new Set<string>()
 
-export function isHotkeyPressed(key: string | string[], splitKey = ','): boolean {
-  const hotkeyArray = Array.isArray(key) ? key : key.split(splitKey)
+// https://github.com/microsoft/TypeScript/issues/17002
+export function isReadonlyArray(value: unknown): value is readonly unknown[] {
+  return Array.isArray(value)
+}
+
+export function isHotkeyPressed(key: string | readonly string[], splitKey = ','): boolean {
+  const hotkeyArray = isReadonlyArray(key) ? key : key.split(splitKey)
 
   return hotkeyArray.every((hotkey) => currentlyPressedKeys.has(hotkey.trim().toLowerCase()))
 }

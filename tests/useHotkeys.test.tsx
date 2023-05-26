@@ -238,7 +238,7 @@ test('should listen to multiple hotkeys', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should be able to parse first argument as string or array', async () => {
+test('should be able to parse first argument as string, array or readonly array', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
@@ -257,6 +257,12 @@ test('should be able to parse first argument as string or array', async () => {
   await user.keyboard('B')
 
   expect(callback).toHaveBeenCalledTimes(2)
+
+  rerender({ keys: ['a', 'c'] as const })
+
+  await user.keyboard('C')
+
+  expect(callback).toHaveBeenCalledTimes(3)
 })
 
 test('should listen to combinations with modifiers', async () => {
@@ -457,7 +463,7 @@ test('should be disabled on form tags by default', async () => {
 test('should be enabled on given form tags', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
-  const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: FormTags[] }) => {
+  const Component = ({ cb, enableOnFormTags }: { cb: HotkeyCallback; enableOnFormTags?: readonly FormTags[] }) => {
     useHotkeys<HTMLDivElement>('a', cb, { enableOnFormTags })
 
     return <input type={'text'} data-testid={'form-tag'} />

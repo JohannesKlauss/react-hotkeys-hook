@@ -1,5 +1,5 @@
 import { FormTags, Hotkey, Scopes, Trigger } from './types'
-import { isHotkeyPressed } from './isHotkeyPressed'
+import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
 import { mapKey } from './parseHotkeys'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
@@ -20,10 +20,10 @@ export function isKeyboardEventTriggeredByInput(ev: KeyboardEvent): boolean {
   return isHotkeyEnabledOnTag(ev, ['input', 'textarea', 'select'])
 }
 
-export function isHotkeyEnabledOnTag({ target }: KeyboardEvent, enabledOnTags: FormTags[] | boolean = false): boolean {
+export function isHotkeyEnabledOnTag({ target }: KeyboardEvent, enabledOnTags: readonly FormTags[] | boolean = false): boolean {
   const targetTagName = target && (target as HTMLElement).tagName
 
-  if (enabledOnTags instanceof Array) {
+  if (isReadonlyArray(enabledOnTags)) {
     return Boolean(
       targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase())
     )
