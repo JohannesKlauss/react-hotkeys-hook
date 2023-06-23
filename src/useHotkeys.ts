@@ -36,7 +36,7 @@ export default function useHotkeys<T extends HTMLElement>(
     : !(dependencies instanceof Array)
     ? (dependencies as Options)
     : undefined
-  const _keys: string = isReadonlyArray(keys ) ? keys.join(_options?.splitKey) : keys
+  const _keys: string = isReadonlyArray(keys) ? keys.join(_options?.splitKey) : keys
   const _deps: DependencyList | undefined =
     options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
 
