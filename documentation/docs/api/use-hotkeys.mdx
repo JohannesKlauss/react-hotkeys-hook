@@ -178,37 +178,14 @@ type Options = {
 
 #### Properties
 
-##### `filter`
+##### `enabled`
 
 ```ts
-filter: (event: KeyboardEvent) => boolean // default: undefined
+enabled: boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean) // default: true
 ```
 
-Pass a function `filter` to determine if the callback should get triggered. Return `false` to __prevent__ the execution
-of the callback and `true` to __allow__ the callback to be triggered.
-
-##### `filterPreventDefault`
-
-```ts
-filterPreventDefault: boolean // default: true
-```
-
-This flag determines if the default browser behavior should be prevented if the given `filter` function returns `false` and
-therefore prevents the execution of the callback. `true` is the default value, so each time the filter blocks the callback
-execution, the browser won't proceed with its default behavior. Setting this to `false` will allow the browser to proceed
-with the default behavior.
-
-A good example for this behavior is the override of `meta+s`, which normally triggers a save page dialog
-inside the browser.
-
-```js
-useHotkeys('meta+s', someCallback, {
-  // This will allow the browser to show the save page dialog.
-  // Setting it to true will prevent that.
-  filterPreventDefault: false,
-  filter: () => false
-});
-```
+Determines if the callback should get triggered. Return `false` to __prevent__ the execution
+of the callback and `true` to __allow__ the callback to be triggered. You can also pass a function that returns a boolean.
 
 ##### `enableOnFormTags`
 
@@ -291,6 +268,25 @@ useHotkeys('a', () => someCallback, {
 ```
 
 :::
+
+##### `preventDefault`
+
+```ts
+preventDefault: boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean) // default: false
+```
+
+This flag determines if the default browser behavior should be prevented. `false` is the default value, so the browser
+will proceed with its default behavior. Setting this to `true` will prevent __some__ of the default browser behavior.
+
+A good example for this behavior is the override of `meta+s`, which normally triggers a save page dialog
+inside the browser.
+
+```js
+useHotkeys('meta+s', someCallback, {
+  // This will prevent the browser from showing the save page dialog
+  preventDefault: true,
+});
+```
 
 ##### `document`
 

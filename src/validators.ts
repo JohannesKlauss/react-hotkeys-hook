@@ -20,7 +20,10 @@ export function isKeyboardEventTriggeredByInput(ev: KeyboardEvent): boolean {
   return isHotkeyEnabledOnTag(ev, ['input', 'textarea', 'select'])
 }
 
-export function isHotkeyEnabledOnTag({ target }: KeyboardEvent, enabledOnTags: readonly FormTags[] | boolean = false): boolean {
+export function isHotkeyEnabledOnTag(
+  { target }: KeyboardEvent,
+  enabledOnTags: readonly FormTags[] | boolean = false
+): boolean {
   const targetTagName = target && (target as HTMLElement).tagName
 
   if (isReadonlyArray(enabledOnTags)) {
