@@ -30,44 +30,31 @@ interface Props {
 }
 
 export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Props) => {
-  const [internalActiveScopes, setInternalActiveScopes] = useState(
-    initiallyActiveScopes?.length > 0 ? initiallyActiveScopes : ['*']
-  )
+  const [internalActiveScopes, setInternalActiveScopes] = useState(initiallyActiveScopes)
   const [boundHotkeys, setBoundHotkeys] = useState<Hotkey[]>([])
-
   const enableScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
       if (prev.includes('*')) {
         return [scope]
       }
-
       return Array.from(new Set([...prev, scope]))
     })
   }, [])
 
   const disableScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
-      if (prev.filter((s) => s !== scope).length === 0) {
-        return ['*']
-      } else {
-        return prev.filter((s) => s !== scope)
-      }
+      return prev.filter((s) => s !== scope)
     })
   }, [])
 
   const toggleScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
       if (prev.includes(scope)) {
-        if (prev.filter((s) => s !== scope).length === 0) {
-          return ['*']
-        } else {
-          return prev.filter((s) => s !== scope)
-        }
+        return prev.filter((s) => s !== scope)
       } else {
         if (prev.includes('*')) {
           return [scope]
         }
-
         return Array.from(new Set([...prev, scope]))
       }
     })
