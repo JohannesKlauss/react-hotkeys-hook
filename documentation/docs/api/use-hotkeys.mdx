@@ -360,7 +360,7 @@ With this option, react-hotkeys-hook supports both ways.
 deps: any[] // default: []
 ```
 
-The dependency array lets we use the hook just like Reacts internal `useCallback` or `useMemo` hook. This where our
+The dependency array lets us use the hook just like Reacts internal `useCallback` or `useMemo` hook. This is where our
 dependencies of the callback live. If for example our callback actions depend on a referentially unstable value or a
 value that will change over time, we should add this value to our deps array. Check out the
 [documentation part](/docs/documentation/useHotkeys/setting-callback-dependencies)
