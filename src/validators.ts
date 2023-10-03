@@ -58,7 +58,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
   const keyCode = mapKey(code)
   const pressedKey = pressedKeyUppercase.toLowerCase()
 
-  if (!keys?.includes(keyCode) && !['ctrl', 'unknown', 'meta', 'alt', 'shift'].includes(keyCode)) {
+  if (!keys?.includes(keyCode) && !['ctrl', 'control', 'unknown', 'meta', 'alt', 'shift', 'os'].includes(keyCode)) {
     return false;
   }
 
