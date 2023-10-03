@@ -58,6 +58,10 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
   const keyCode = mapKey(code)
   const pressedKey = pressedKeyUppercase.toLowerCase()
 
+  if (!keys?.includes(keyCode) && !['ctrl', 'unknown', 'meta', 'alt', 'shift'].includes(keyCode)) {
+    return false;
+  }
+
   if (!ignoreModifiers) {
     // We check the pressed keys for compatibility with the keyup event. In keyup events the modifier flags are not set.
     if (alt === !altKey && pressedKey !== 'alt') {
