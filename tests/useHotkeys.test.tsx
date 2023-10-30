@@ -238,6 +238,38 @@ test('should listen to multiple hotkeys', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test('should be able to always output correct keys on multiple hotkeys', async () => {
+  const user = userEvent.setup()
+
+  const callbackA = jest.fn()
+  const callbackB = jest.fn()
+
+  renderHook(() => useHotkeys(['a'], callbackA))
+  renderHook(() => useHotkeys(['b'], callbackB))
+
+  await user.keyboard('{A>}')
+
+  expect(callbackA).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('B')
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('C')
+
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('B')
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).toHaveBeenCalledTimes(2)
+
+  await user.keyboard('{/A}')
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).toHaveBeenCalledTimes(2)
+
+})
+
 test('should be able to parse first argument as string, array or readonly array', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
