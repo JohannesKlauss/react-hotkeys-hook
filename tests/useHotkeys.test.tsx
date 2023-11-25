@@ -558,6 +558,27 @@ test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match',
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test('should call ignoreEventWhen callback only when event is a hotkey match', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+  const Component = ({ cb, ignoreEventWhen }: { cb: HotkeyCallback; ignoreEventWhen?: (e: KeyboardEvent) => boolean }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
+
+    return <button className='ignore' data-testid={'test-button'} />
+  }
+
+  const { getByTestId } = render(<Component cb={jest.fn()} ignoreEventWhen={callback} />)
+
+  await user.keyboard('X')
+
+  expect(callback).not.toHaveBeenCalled()
+
+  await user.click(getByTestId('test-button'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('enabledOnTags should accept boolean', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
