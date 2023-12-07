@@ -2,7 +2,10 @@
   "name": "react-hotkeys-hook",
   "description": "React hook for handling keyboard shortcuts",
   "version": "4.4.1",
-  "repository": "https://github.com/JohannesKlauss/react-keymap-hook.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JohannesKlauss/react-keymap-hook.git"
+  },
   "homepage": "https://johannesklauss.github.io/react-hotkeys-hook/",
   "author": "Johannes Klauss",
   "main": "dist/index.js",
