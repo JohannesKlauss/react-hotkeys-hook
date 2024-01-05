@@ -136,3 +136,22 @@ test('Should stop recording if recording is in progress and stop is called', asy
 
   expect(result.current[0]).toEqual(new Set(['a']))
 })
+
+test('Should record steps, no matter the produced key', async () => {
+  const user = userEvent.setup()
+  const { result } = renderHook(useRecordHotkeys)
+
+  act(() => {
+    result.current[1].start()
+  })
+
+  await act(async () => {
+    await user.keyboard('{Shift>}1')
+  })
+
+  act(() => {
+    result.current[1].stop()
+  })
+
+  expect(result.current[0]).toEqual(new Set(['shift', '1']))
+})

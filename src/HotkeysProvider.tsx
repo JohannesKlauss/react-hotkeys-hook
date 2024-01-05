@@ -5,7 +5,7 @@ import deepEqual from './deepEqual'
 
 export type HotkeysContextType = {
   hotkeys: ReadonlyArray<Hotkey>
-  enabledScopes: string[]
+  activeScopes: string[]
   toggleScope: (scope: string) => void
   enableScope: (scope: string) => void
   disableScope: (scope: string) => void
@@ -14,7 +14,7 @@ export type HotkeysContextType = {
 // The context is only needed for special features like global scoping, so we use a graceful default fallback
 const HotkeysContext = createContext<HotkeysContextType>({
   hotkeys: [],
-  enabledScopes: [], // This array has to be empty instead of containing '*' as default, to check if the provider is set or not
+  activeScopes: [], // This array has to be empty instead of containing '*' as default, to check if the provider is set or not
   toggleScope: () => {},
   enableScope: () => {},
   disableScope: () => {},
@@ -32,6 +32,7 @@ interface Props {
 export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Props) => {
   const [internalActiveScopes, setInternalActiveScopes] = useState(initiallyActiveScopes)
   const [boundHotkeys, setBoundHotkeys] = useState<Hotkey[]>([])
+
   const enableScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
       if (prev.includes('*')) {
@@ -70,7 +71,7 @@ export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Pro
 
   return (
     <HotkeysContext.Provider
-      value={{ enabledScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope }}
+      value={{ activeScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope }}
     >
       <BoundHotkeysProxyProviderProvider addHotkey={addBoundHotkey} removeHotkey={removeBoundHotkey}>
         {children}

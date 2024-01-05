@@ -119,12 +119,12 @@ test('Should clear pressed hotkeys when window blurs', async () => {
   expect(isHotkeyPressed('meta')).toBe(false)
 })
 
-test('Should return true for shift, 1 and ! if shift+1 is held down', async () => {
+test('Should return true for shift and ! if shift+1 is held down, but not for 1', async () => {
   const user = userEvent.setup()
 
-  await user.keyboard('{Shift>}{!>}')
+  await user.keyboard('[ShiftLeft>]{!>}')
 
   expect(isHotkeyPressed('shift')).toBe(true)
-  expect(isHotkeyPressed('1')).toBe(true)
+  expect(isHotkeyPressed('1')).toBe(false)
   expect(isHotkeyPressed('!')).toBe(true)
 })

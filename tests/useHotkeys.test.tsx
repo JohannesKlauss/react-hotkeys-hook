@@ -14,6 +14,7 @@ import { createEvent, fireEvent, render, screen, renderHook } from '@testing-lib
 
 const wrapper =
   (initialScopes: string[]): JSXElementConstructor<{children: ReactElement}> =>
+    // eslint-disable-next-line react/display-name
     ({ children }: { children?: ReactNode }) =>
       <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
 
@@ -398,7 +399,7 @@ test('should listen to + if the combinationKey is set to something different the
 
   renderHook(() => useHotkeys('shift-+', callback, { combinationKey: '-' }))
 
-  await user.keyboard('{Shift>}{BracketRight}{/Shift}')
+  await user.keyboard('{Shift>}+{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
@@ -827,21 +828,23 @@ test('should listen to function keys f1-f16', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test('should allow named keys like arrow keys, space, enter, backspace, etc.', async () => {
+test.each([
+  'arrowUp',
+  'arrowDown',
+  'arrowLeft',
+  'arrowRight',
+  'space',
+  'enter',
+  'backspace',
+])('should allow named key %s', async (key) => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  renderHook(() => useHotkeys('arrowUp, arrowDown, arrowLeft, arrowRight, space, enter, backspace', callback))
+  renderHook(() => useHotkeys(key, callback))
 
-  await user.keyboard('{arrowUp}')
-  await user.keyboard('{arrowDown}')
-  await user.keyboard('{arrowLeft}')
-  await user.keyboard('{arrowRight}')
-  await user.keyboard('[Space]')
-  await user.keyboard('{enter}')
-  await user.keyboard('{backspace}')
+  await user.keyboard(key === 'space' ? '[Space]' : `{${key}}`)
 
-  expect(callback).toHaveBeenCalledTimes(7)
+  expect(callback).toHaveBeenCalledTimes(1)
 })
 
 test.skip('should trigger when used in portals', async () => {
@@ -1235,7 +1238,6 @@ test('should respect dependencies array if they are passed', async () => {
   expect(getByText('1')).not.toBeNull()
 })
 
-
 test('should use updated callback if no dependencies are passed', async () => {
   function Fixture() {
     const [count, setCount] = useState(0)
@@ -1291,6 +1293,23 @@ test.each(['Shift', 'Alt', 'Meta', 'Ctrl', 'Control'])('Should listen to %s on k
   renderHook(() => useHotkeys(key, callback, { keyup: true }))
 
   await user.keyboard(`{${key}}`)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('Should listen to produced key and not to code', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys('!', callback))
+
+  await user.keyboard(`{Shift>}{!}{/Shift}`)
+
+  expect(callback).toHaveBeenCalledTimes(0)
+
+  renderHook(() => useHotkeys('shift+1', callback))
+
+  await user.keyboard(`{Shift>}{1}{/Shift}`)
 
   expect(callback).toHaveBeenCalledTimes(1)
 })

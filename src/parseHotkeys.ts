@@ -5,13 +5,11 @@ const reservedModifierKeywords = ['shift', 'alt', 'meta', 'mod', 'ctrl']
 const mappedKeys: Record<string, string> = {
   esc: 'escape',
   return: 'enter',
-  '.': 'period',
-  ',': 'comma',
-  '-': 'slash',
-  ' ': 'space',
-  '`': 'backquote',
-  '#': 'backslash',
-  '+': 'bracketright',
+  left: 'arrowleft',
+  right: 'arrowright',
+  up: 'arrowup',
+  down: 'arrowdown',
+  space: ' ',
   ShiftLeft: 'shift',
   ShiftRight: 'shift',
   AltLeft: 'alt',
@@ -25,10 +23,7 @@ const mappedKeys: Record<string, string> = {
 }
 
 export function mapKey(key: string): string {
-  return (mappedKeys[key] || key)
-    .trim()
-    .toLowerCase()
-    .replace(/key|digit|numpad|arrow/, '')
+  return (mappedKeys[key.trim()] || key.trim()).toLowerCase().replace(/key|digit|numpad/, '')
 }
 
 export function isHotkeyModifier(key: string) {

@@ -3,20 +3,22 @@ import { isHotkeyModifier, mapKey } from './parseHotkeys'
   if (typeof document !== 'undefined') {
     document.addEventListener('keydown', (e) => {
       if (e.key === undefined) {
-        // Synthetic event (e.g., Chrome autofill).  Ignore.
+        // Synthetic event (e.g., Chrome autofill). Ignore.
         return
       }
 
-      pushToCurrentlyPressedKeys([mapKey(e.key), mapKey(e.code)])
+      console.log('keydown', e.key, mapKey(e.key), e.key.length)
+
+      pushToCurrentlyPressedKeys([mapKey(e.key)])
     })
 
     document.addEventListener('keyup', (e) => {
       if (e.key === undefined) {
-        // Synthetic event (e.g., Chrome autofill).  Ignore.
+        // Synthetic event (e.g., Chrome autofill). Ignore.
         return
       }
 
-      removeFromCurrentlyPressedKeys([mapKey(e.key), mapKey(e.code)])
+      removeFromCurrentlyPressedKeys([mapKey(e.key)])
     })
   }
 

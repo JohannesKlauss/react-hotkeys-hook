@@ -51,11 +51,11 @@ export default function useHotkeys<T extends HTMLElement>(
 
   const memoisedOptions = useDeepEqualMemo(_options)
 
-  const { enabledScopes } = useHotkeysContext()
+  const { activeScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
   useSafeLayoutEffect(() => {
-    if (memoisedOptions?.enabled === false || !isScopeActive(enabledScopes, memoisedOptions?.scopes)) {
+    if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
       return
     }
 
@@ -68,6 +68,7 @@ export default function useHotkeys<T extends HTMLElement>(
       // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WON'T TRIGGER THE HOTKEY.
       if (ref.current !== null) {
         const rootNode = ref.current.getRootNode()
+
         if (
           (rootNode instanceof Document || rootNode instanceof ShadowRoot) &&
           rootNode.activeElement !== ref.current &&
@@ -118,7 +119,7 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      pushToCurrentlyPressedKeys(mapKey(event.code))
+      pushToCurrentlyPressedKeys(mapKey(event.key))
 
       if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
         listener(event)
@@ -131,7 +132,7 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      removeFromCurrentlyPressedKeys(mapKey(event.code))
+      removeFromCurrentlyPressedKeys(mapKey(event.key))
 
       hasTriggeredRef.current = false
 
@@ -165,7 +166,7 @@ export default function useHotkeys<T extends HTMLElement>(
         )
       }
     }
-  }, [_keys, memoisedOptions, enabledScopes])
+  }, [_keys, memoisedOptions, activeScopes])
 
   return ref
 }

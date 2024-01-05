@@ -17,7 +17,7 @@ export default function useRecordHotkeys() {
     setKeys((prev) => {
       const newKeys = new Set(prev)
 
-      newKeys.add(mapKey(event.code))
+      newKeys.add(mapKey(event.key))
 
       return newKeys
     })
