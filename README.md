@@ -80,7 +80,7 @@ export const ExampleComponent = () => {
 
 #### Changing a scope's active state
 
-You can change the active state of a scope using the `deactivateScope`, `activateScope` and `toggleScope` functions
+You can change the active state of a scope using the `disableScope`, `enableScope` and `toggleScope` functions
 returned by the `useHotkeysContext()` hook. Note that you have to have your app wrapped in a `<HotkeysProvider>` component.
 
 ```jsx harmony

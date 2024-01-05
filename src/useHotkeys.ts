@@ -64,20 +64,18 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      if (memoisedOptions?.ignoreEventWhen?.(e)) {
-        return
-      }
-
       // TODO: SINCE THE EVENT IS NOW ATTACHED TO THE REF, THE ACTIVE ELEMENT CAN NEVER BE INSIDE THE REF. THE HOTKEY ONLY TRIGGERS IF THE
       // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WON'T TRIGGER THE HOTKEY.
-      if (
-        ref.current !== null &&
-        document.activeElement !== ref.current &&
-        !ref.current.contains(document.activeElement)
-      ) {
-        stopPropagation(e)
-
-        return
+      if (ref.current !== null) {
+        const rootNode = ref.current.getRootNode()
+        if (
+          (rootNode instanceof Document || rootNode instanceof ShadowRoot) &&
+          rootNode.activeElement !== ref.current &&
+          !ref.current.contains(rootNode.activeElement)
+        ) {
+          stopPropagation(e)
+          return
+        }
       }
 
       if ((e.target as HTMLElement)?.isContentEditable && !memoisedOptions?.enableOnContentEditable) {
@@ -88,6 +86,10 @@ export default function useHotkeys<T extends HTMLElement>(
         const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
 
         if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
+          if (memoisedOptions?.ignoreEventWhen?.(e)) {
+            return
+          }
+
           if (isKeyUp && hasTriggeredRef.current) {
             return
           }

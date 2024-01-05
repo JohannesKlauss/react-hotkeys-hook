@@ -33,7 +33,7 @@ test('should return active scopes and scope modifying functions', () => {
   expect(result.current.toggleScope).toBeInstanceOf(Function)
 })
 
-test('should activate scope by calling activateScope', () => {
+test('should activate scope by calling enableScope', () => {
   const { result } = renderHook(() => useHotkeysContext(), {
     wrapper: HotkeysProvider,
   })
@@ -63,7 +63,7 @@ test('should return multiple scopes if different scopes are activated', () => {
   expect(result.current.enabledScopes).toEqual(['foo', 'bar'])
 })
 
-test('should deactivate scope by calling deactivateScope', () => {
+test('should deactivate scope by calling disableScope', () => {
   const { result } = renderHook(() => useHotkeysContext(), {
     wrapper: HotkeysProvider,
   })

@@ -238,6 +238,38 @@ test('should listen to multiple hotkeys', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test('should be able to always output correct keys on multiple hotkeys', async () => {
+  const user = userEvent.setup()
+
+  const callbackA = jest.fn()
+  const callbackB = jest.fn()
+
+  renderHook(() => useHotkeys(['a'], callbackA))
+  renderHook(() => useHotkeys(['b'], callbackB))
+
+  await user.keyboard('{A>}')
+
+  expect(callbackA).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('B')
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('C')
+
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('B')
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).toHaveBeenCalledTimes(2)
+
+  await user.keyboard('{/A}')
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).toHaveBeenCalledTimes(2)
+
+})
+
 test('should be able to parse first argument as string, array or readonly array', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
@@ -556,6 +588,27 @@ test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match',
   await user.keyboard('A')
 
   expect(callback).toHaveBeenCalledTimes(2)
+})
+
+test('should call ignoreEventWhen callback only when event is a hotkey match', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+  const Component = ({ cb, ignoreEventWhen }: { cb: HotkeyCallback; ignoreEventWhen?: (e: KeyboardEvent) => boolean }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
+
+    return <button className='ignore' data-testid={'test-button'} />
+  }
+
+  const { getByTestId } = render(<Component cb={jest.fn()} ignoreEventWhen={callback} />)
+
+  await user.keyboard('X')
+
+  expect(callback).not.toHaveBeenCalled()
+
+  await user.click(getByTestId('test-button'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
 })
 
 test('enabledOnTags should accept boolean', async () => {
