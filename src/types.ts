@@ -43,3 +43,5 @@ export type Options = {
 }
 
 export type OptionsOrDependencyArray = Options | DependencyList
+
+export type KeyboardEventHandler = (event: KeyboardEvent) => any

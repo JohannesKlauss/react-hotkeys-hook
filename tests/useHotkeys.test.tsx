@@ -4,9 +4,9 @@ import { FormTags, HotkeyCallback, Keys, Options } from '../src/types'
 import {
   DependencyList,
   JSXElementConstructor,
-  MutableRefObject,
   ReactElement,
   ReactNode,
+  Ref,
   useCallback,
   useState,
 } from 'react'
@@ -372,7 +372,7 @@ test('should reflect set splitKey character', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
 
-  const { rerender } = renderHook<MutableRefObject<HTMLElement | null>, HookParameters>(
+  const { rerender } = renderHook<Ref<HTMLElement | null>, HookParameters>(
     ({ keys, options }) => useHotkeys(keys, callback, options),
     {
       initialProps: { keys: 'a, b', options: undefined },
@@ -768,6 +768,44 @@ test('should only trigger when the element is focused if a ref is set', async ()
 
   expect(callback).not.toHaveBeenCalled()
 
+  await user.click(getByTestId('div'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger when the ref is re-attached to another element', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    const ref = useHotkeys<HTMLDivElement>('a', cb)
+    const [toggle, setToggle] = useState(false);
+
+    if(toggle) {
+      return (
+        <span ref={ref} tabIndex={0} data-testid={'div'}>
+          <button data-testid={'toggle'} onClick={() => setToggle(t => !t)}>Toggle</button>
+          <input type={'text'} />
+        </span>
+      )
+    }
+
+    return (
+      <div ref={ref} tabIndex={0} data-testid={'div'}>
+        <button data-testid={'toggle'} onClick={() => setToggle(t => !t)}>Toggle</button>
+        <input type={'text'} />
+      </div>
+    )
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.keyboard('A')
+
+  expect(callback).not.toHaveBeenCalled()
+
+  await user.click(getByTestId('toggle'))
   await user.click(getByTestId('div'))
   await user.keyboard('A')
 

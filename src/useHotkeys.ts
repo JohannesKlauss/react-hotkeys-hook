@@ -1,5 +1,5 @@
-import { HotkeyCallback, Keys, Options, OptionsOrDependencyArray, RefType } from './types'
-import { DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { HotkeyCallback, KeyboardEventHandler, Keys, Options, OptionsOrDependencyArray, RefType } from './types'
+import { DependencyList, RefCallback, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { mapKey, parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -30,6 +30,11 @@ export default function useHotkeys<T extends HTMLElement>(
 ) {
   const ref = useRef<RefType<T>>(null)
   const hasTriggeredRef = useRef(false)
+
+  const handleKeyUpRef = useRef<KeyboardEventHandler>()
+  const handleKeyDownRef = useRef<KeyboardEventHandler>()
+  const stableHandleKeyUpRef = useRef<KeyboardEventHandler>((...args) => handleKeyUpRef.current?.(...args))
+  const stableHandleKeyDownRef = useRef<KeyboardEventHandler>((...args) => handleKeyDownRef.current?.(...args))
 
   const _options: Options | undefined = !(options instanceof Array)
     ? (options as Options)
@@ -140,12 +145,8 @@ export default function useHotkeys<T extends HTMLElement>(
       }
     }
 
-    const domNode = ref.current || _options?.document || document
-
-    // @ts-ignore
-    domNode.addEventListener('keyup', handleKeyUp)
-    // @ts-ignore
-    domNode.addEventListener('keydown', handleKeyDown)
+    handleKeyUpRef.current = handleKeyUp
+    handleKeyDownRef.current = handleKeyDown
 
     if (proxy) {
       parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
@@ -154,10 +155,8 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     return () => {
-      // @ts-ignore
-      domNode.removeEventListener('keyup', handleKeyUp)
-      // @ts-ignore
-      domNode.removeEventListener('keydown', handleKeyDown)
+      handleKeyUpRef.current = undefined
+      handleKeyDownRef.current = undefined
 
       if (proxy) {
         parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
@@ -167,5 +166,34 @@ export default function useHotkeys<T extends HTMLElement>(
     }
   }, [_keys, memoisedOptions, enabledScopes])
 
-  return ref
+  useEffect(() => {
+    // This effect is needed to attach event listeners to something when the returned ref is not used.
+    // and to clean up when the component using the hook unmounts.
+    const domNode = (ref.current || memoisedOptions?.document || document) as T
+
+    domNode?.addEventListener('keyup', stableHandleKeyUpRef.current)
+    domNode?.addEventListener('keydown', stableHandleKeyDownRef.current)
+
+    return () => {
+      ref.current?.removeEventListener('keyup', stableHandleKeyUpRef.current)
+      ref.current?.removeEventListener('keydown', stableHandleKeyDownRef.current)
+    }
+  }, [memoisedOptions?.document])
+
+  const refCallback: RefCallback<T> = useCallback((element) => {
+    const domNode = (element || memoisedOptions?.document || document) as T
+
+    // Cleanup old event handlers
+    ref.current?.removeEventListener('keyup', stableHandleKeyUpRef.current)
+    ref.current?.removeEventListener('keydown', stableHandleKeyDownRef.current)
+
+    // Update refObject
+    ref.current = domNode
+
+    // Re-attach handlers to the new element
+    domNode?.addEventListener('keyup', stableHandleKeyUpRef.current)
+    domNode?.addEventListener('keydown', stableHandleKeyDownRef.current)
+  }, [])
+
+  return refCallback
 }
