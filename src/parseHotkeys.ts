@@ -25,7 +25,7 @@ const mappedKeys: Record<string, string> = {
 }
 
 export function mapKey(key: string): string {
-  return (mappedKeys[key] || key)
+  return (mappedKeys[key] || key || '')
     .trim()
     .toLowerCase()
     .replace(/key|digit|numpad|arrow/, '')
