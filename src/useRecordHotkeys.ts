@@ -43,5 +43,9 @@ export default function useRecordHotkeys() {
     }
   }, [handler, stop])
 
-  return [keys, { start, stop, isRecording }] as const
+  const resetKeys = useCallback(() => {
+    setKeys(new Set<string>())
+  }, [])
+
+  return [keys, { start, stop, resetKeys, isRecording }] as const
 }

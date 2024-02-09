@@ -1313,3 +1313,14 @@ test('Should listen to produced key and not to code', async () => {
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
+
+test('Should listen to special chars with modifiers', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  renderHook(() => useHotkeys(`shift+-`, callback))
+
+  await user.keyboard(`{Shift>}-{/Shift}`)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
