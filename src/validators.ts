@@ -1,5 +1,6 @@
 import { FormTags, Hotkey, Scopes, Trigger } from './types'
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
+import { mapKey } from './parseHotkeys'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -31,7 +32,7 @@ export function isHotkeyEnabledOnTag(
     )
   }
 
-  return Boolean(targetTagName && enabledOnTags && enabledOnTags === true)
+  return Boolean(targetTagName && enabledOnTags && enabledOnTags)
 }
 
 export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
@@ -51,26 +52,29 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
 }
 
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {
-  const { alt, meta, mod, shift, ctrl, keys } = hotkey
-  const { key: pressedKeyUppercase, ctrlKey, metaKey, shiftKey, altKey } = e
+  const { alt, meta, mod, shift, ctrl, keys, useKey } = hotkey
+  const { code, key: producedKey, ctrlKey, metaKey, shiftKey, altKey } = e
 
-  const pressedKey = pressedKeyUppercase.toLowerCase()
+  const mappedCode = mapKey(code)
+
+  if (useKey && keys?.length === 1 && keys.includes(producedKey)) {
+    return true
+  }
 
   if (
-    !keys?.includes(keyCode) &&
-    !keys?.includes(pressedKey) &&
-    !['ctrl', 'control', 'unknown', 'meta', 'alt', 'shift', 'os'].includes(keyCode)
+    !keys?.includes(mappedCode) &&
+    !['ctrl', 'control', 'unknown', 'meta', 'alt', 'shift', 'os'].includes(mappedCode)
   ) {
     return false
   }
 
   if (!ignoreModifiers) {
     // We check the pressed keys for compatibility with the keyup event. In keyup events the modifier flags are not set.
-    if (alt === !altKey && pressedKey !== 'alt') {
+    if (alt !== altKey && mappedCode !== 'alt') {
       return false
     }
 
-    if (shift === !shiftKey && pressedKey !== 'shift') {
+    if (shift !== shiftKey && mappedCode !== 'shift') {
       return false
     }
 
@@ -80,11 +84,11 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
         return false
       }
     } else {
-      if (meta === !metaKey && pressedKey !== 'meta' && pressedKey !== 'os') {
+      if (meta !== metaKey && mappedCode !== 'meta' && mappedCode !== 'os') {
         return false
       }
 
-      if (ctrl === !ctrlKey && pressedKey !== 'ctrl' && pressedKey !== 'control') {
+      if (ctrl !== ctrlKey && mappedCode !== 'ctrl' && mappedCode !== 'control') {
         return false
       }
     }
@@ -92,7 +96,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
 
   // All modifiers are correct, now check the key
   // If the key is set, we check for the key
-  if (keys && keys.length === 1 && keys.includes(pressedKey)) {
+  if (keys && keys.length === 1 && keys.includes(mappedCode)) {
     return true
   } else if (keys) {
     // Check if all keys are present in pressedDownKeys set

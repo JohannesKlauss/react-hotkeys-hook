@@ -36,7 +36,7 @@ export default function useHotkeys<T extends HTMLElement>(
     : !(dependencies instanceof Array)
     ? (dependencies as Options)
     : undefined
-  const _keys: string = isReadonlyArray(keys) ? keys.join(_options?.splitKey) : keys
+  const _keys: string = isReadonlyArray(keys) ? keys.join(_options?.delimiter) : keys
   const _deps: DependencyList | undefined =
     options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
 
@@ -83,8 +83,8 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) => {
-        const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
+      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
+        const hotkey = parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey)
 
         if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
           if (memoisedOptions?.ignoreEventWhen?.(e)) {
@@ -114,12 +114,12 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === undefined) {
+      if (event.code === undefined) {
         // Synthetic event (e.g., Chrome autofill).  Ignore.
         return
       }
 
-      pushToCurrentlyPressedKeys(mapKey(event.key))
+      pushToCurrentlyPressedKeys(mapKey(event.code))
 
       if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
         listener(event)
@@ -127,12 +127,12 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.key === undefined) {
+      if (event.code === undefined) {
         // Synthetic event (e.g., Chrome autofill).  Ignore.
         return
       }
 
-      removeFromCurrentlyPressedKeys(mapKey(event.key))
+      removeFromCurrentlyPressedKeys(mapKey(event.code))
 
       hasTriggeredRef.current = false
 
@@ -149,8 +149,10 @@ export default function useHotkeys<T extends HTMLElement>(
     domNode.addEventListener('keydown', handleKeyDown)
 
     if (proxy) {
-      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
-        proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey, memoisedOptions?.description))
+      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+        proxy.addHotkey(
+          parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+        )
       )
     }
 
@@ -161,8 +163,10 @@ export default function useHotkeys<T extends HTMLElement>(
       domNode.removeEventListener('keydown', handleKeyDown)
 
       if (proxy) {
-        parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
-          proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey, memoisedOptions?.description))
+        parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+          proxy.removeHotkey(
+            parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+          )
         )
       }
     }

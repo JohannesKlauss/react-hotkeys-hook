@@ -2,23 +2,21 @@ import { isHotkeyModifier, mapKey } from './parseHotkeys'
 ;(() => {
   if (typeof document !== 'undefined') {
     document.addEventListener('keydown', (e) => {
-      if (e.key === undefined) {
+      if (e.code === undefined) {
         // Synthetic event (e.g., Chrome autofill). Ignore.
         return
       }
 
-      console.log('keydown', e.key, mapKey(e.key), e.key.length)
-
-      pushToCurrentlyPressedKeys([mapKey(e.key)])
+      pushToCurrentlyPressedKeys([mapKey(e.code)])
     })
 
     document.addEventListener('keyup', (e) => {
-      if (e.key === undefined) {
+      if (e.code === undefined) {
         // Synthetic event (e.g., Chrome autofill). Ignore.
         return
       }
 
-      removeFromCurrentlyPressedKeys([mapKey(e.key)])
+      removeFromCurrentlyPressedKeys([mapKey(e.code)])
     })
   }
 
@@ -36,8 +34,8 @@ export function isReadonlyArray(value: unknown): value is readonly unknown[] {
   return Array.isArray(value)
 }
 
-export function isHotkeyPressed(key: string | readonly string[], splitKey = ','): boolean {
-  const hotkeyArray = isReadonlyArray(key) ? key : key.split(splitKey)
+export function isHotkeyPressed(key: string | readonly string[], delimiter = ','): boolean {
+  const hotkeyArray = isReadonlyArray(key) ? key : key.split(delimiter)
 
   return hotkeyArray.every((hotkey) => currentlyPressedKeys.has(hotkey.trim().toLowerCase()))
 }

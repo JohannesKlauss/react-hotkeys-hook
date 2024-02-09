@@ -64,7 +64,7 @@ test('should support multiple hotkeys with modifiers', async () => {
   expect(isHotkeyPressed(['shift', 'a'])).toBe(false)
 })
 
-test('should use , as splitKey as default', async () => {
+test('should use , as delimiter as default', async () => {
   const user = userEvent.setup()
 
   await user.keyboard('{B>}{A>}')
@@ -82,7 +82,7 @@ test('should use , as splitKey as default', async () => {
   expect(isHotkeyPressed(['a', 'b'])).toBe(false)
 })
 
-test.skip('should respect the splitKey option', async () => {
+test.skip('should respect the delimiter option', async () => {
   const user = userEvent.setup()
 
   await user.keyboard('{B>}{,>}')
@@ -119,12 +119,12 @@ test('Should clear pressed hotkeys when window blurs', async () => {
   expect(isHotkeyPressed('meta')).toBe(false)
 })
 
-test('Should return true for shift and ! if shift+1 is held down, but not for 1', async () => {
+test('Should return true for shift and 1 if shift+1 is held down, but not for ! as it is a produced key', async () => {
   const user = userEvent.setup()
 
-  await user.keyboard('[ShiftLeft>]{!>}')
+  await user.keyboard('[ShiftLeft>]{1>}')
 
   expect(isHotkeyPressed('shift')).toBe(true)
-  expect(isHotkeyPressed('1')).toBe(false)
-  expect(isHotkeyPressed('!')).toBe(true)
+  expect(isHotkeyPressed('1')).toBe(true)
+  expect(isHotkeyPressed('!')).toBe(false)
 })

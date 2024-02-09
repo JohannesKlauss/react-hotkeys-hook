@@ -6,7 +6,7 @@ export default function useRecordHotkeys() {
   const [isRecording, setIsRecording] = useState(false)
 
   const handler = useCallback((event: KeyboardEvent) => {
-    if (event.key === undefined) {
+    if (event.code === undefined) {
       // Synthetic event (e.g., Chrome autofill).  Ignore.
       return
     }
@@ -17,7 +17,7 @@ export default function useRecordHotkeys() {
     setKeys((prev) => {
       const newKeys = new Set(prev)
 
-      newKeys.add(mapKey(event.key))
+      newKeys.add(mapKey(event.code))
 
       return newKeys
     })
