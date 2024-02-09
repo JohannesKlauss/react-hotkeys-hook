@@ -36,7 +36,7 @@ export default function useHotkeys<T extends HTMLElement>(
     : !(dependencies instanceof Array)
     ? (dependencies as Options)
     : undefined
-  const _keys: string = isReadonlyArray(keys) ? keys.join(_options?.splitKey) : keys
+  const _keys: string = isReadonlyArray(keys) ? keys.join(_options?.delimiter) : keys
   const _deps: DependencyList | undefined =
     options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
 
@@ -51,11 +51,11 @@ export default function useHotkeys<T extends HTMLElement>(
 
   const memoisedOptions = useDeepEqualMemo(_options)
 
-  const { enabledScopes } = useHotkeysContext()
+  const { activeScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
   useSafeLayoutEffect(() => {
-    if (memoisedOptions?.enabled === false || !isScopeActive(enabledScopes, memoisedOptions?.scopes)) {
+    if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
       return
     }
 
@@ -68,6 +68,7 @@ export default function useHotkeys<T extends HTMLElement>(
       // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WON'T TRIGGER THE HOTKEY.
       if (ref.current !== null) {
         const rootNode = ref.current.getRootNode()
+
         if (
           (rootNode instanceof Document || rootNode instanceof ShadowRoot) &&
           rootNode.activeElement !== ref.current &&
@@ -82,8 +83,8 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) => {
-        const hotkey = parseHotkey(key, memoisedOptions?.combinationKey)
+      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
+        const hotkey = parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
 
         if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
           if (memoisedOptions?.ignoreEventWhen?.(e)) {
@@ -113,7 +114,7 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === undefined) {
+      if (event.code === undefined) {
         // Synthetic event (e.g., Chrome autofill).  Ignore.
         return
       }
@@ -126,7 +127,7 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.key === undefined) {
+      if (event.code === undefined) {
         // Synthetic event (e.g., Chrome autofill).  Ignore.
         return
       }
@@ -148,8 +149,10 @@ export default function useHotkeys<T extends HTMLElement>(
     domNode.addEventListener('keydown', handleKeyDown)
 
     if (proxy) {
-      parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
-        proxy.addHotkey(parseHotkey(key, memoisedOptions?.combinationKey, memoisedOptions?.description))
+      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+        proxy.addHotkey(
+          parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+        )
       )
     }
 
@@ -160,12 +163,14 @@ export default function useHotkeys<T extends HTMLElement>(
       domNode.removeEventListener('keydown', handleKeyDown)
 
       if (proxy) {
-        parseKeysHookInput(_keys, memoisedOptions?.splitKey).forEach((key) =>
-          proxy.removeHotkey(parseHotkey(key, memoisedOptions?.combinationKey, memoisedOptions?.description))
+        parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+          proxy.removeHotkey(
+            parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+          )
         )
       }
     }
-  }, [_keys, memoisedOptions, enabledScopes])
+  }, [_keys, memoisedOptions, activeScopes])
 
   return ref
 }

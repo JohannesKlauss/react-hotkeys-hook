@@ -1,3 +1,4 @@
+import React from 'react'
 import { render, act, renderHook } from '@testing-library/react'
 import { HotkeysProvider, useHotkeysContext, useHotkeys } from '../src'
 import { ReactNode } from 'react'
@@ -18,18 +19,7 @@ test('should default to wildcard scope', () => {
     wrapper: HotkeysProvider,
   })
 
-  expect(result.current.enabledScopes).toEqual(['*'])
-})
-
-test('should default to wildcard scope if empty array is provided as initialActiveScopes', () => {
-  const wrapper = ({ children }: { children: ReactNode }) => (
-    <HotkeysProvider initiallyActiveScopes={[]}>{children}</HotkeysProvider>
-  )
-  const { result } = renderHook(() => useHotkeysContext(), {
-    wrapper,
-  })
-
-  expect(result.current.enabledScopes).toEqual(['*'])
+  expect(result.current.activeScopes).toEqual(['*'])
 })
 
 test('should return active scopes and scope modifying functions', () => {
@@ -37,7 +27,7 @@ test('should return active scopes and scope modifying functions', () => {
     wrapper: HotkeysProvider,
   })
 
-  expect(result.current.enabledScopes).toEqual(['*'])
+  expect(result.current.activeScopes).toEqual(['*'])
   expect(result.current.enableScope).toBeInstanceOf(Function)
   expect(result.current.disableScope).toBeInstanceOf(Function)
   expect(result.current.toggleScope).toBeInstanceOf(Function)
@@ -52,25 +42,7 @@ test('should activate scope by calling enableScope', () => {
     result.current.enableScope('foo')
   })
 
-  expect(result.current.enabledScopes).toEqual(['foo'])
-})
-
-test('should reactivate wildcard scope if all other scopes are deactivated', () => {
-  const { result } = renderHook(() => useHotkeysContext(), {
-    wrapper: HotkeysProvider,
-  })
-
-  act(() => {
-    result.current.enableScope('foo')
-  })
-
-  expect(result.current.enabledScopes).toEqual(['foo'])
-
-  act(() => {
-    result.current.disableScope('foo')
-  })
-
-  expect(result.current.enabledScopes).toEqual(['*'])
+  expect(result.current.activeScopes).toEqual(['foo'])
 })
 
 test('should return multiple scopes if different scopes are activated', () => {
@@ -82,13 +54,13 @@ test('should return multiple scopes if different scopes are activated', () => {
     result.current.enableScope('foo')
   })
 
-  expect(result.current.enabledScopes).toEqual(['foo'])
+  expect(result.current.activeScopes).toEqual(['foo'])
 
   act(() => {
     result.current.enableScope('bar')
   })
 
-  expect(result.current.enabledScopes).toEqual(['foo', 'bar'])
+  expect(result.current.activeScopes).toEqual(['foo', 'bar'])
 })
 
 test('should deactivate scope by calling disableScope', () => {
@@ -104,13 +76,13 @@ test('should deactivate scope by calling disableScope', () => {
     result.current.enableScope('bar')
   })
 
-  expect(result.current.enabledScopes).toEqual(['foo', 'bar'])
+  expect(result.current.activeScopes).toEqual(['foo', 'bar'])
 
   act(() => {
     result.current.disableScope('foo')
   })
 
-  expect(result.current.enabledScopes).toEqual(['bar'])
+  expect(result.current.activeScopes).toEqual(['bar'])
 })
 
 test('should toggle scope by calling toggleScope', () => {
@@ -122,22 +94,22 @@ test('should toggle scope by calling toggleScope', () => {
     result.current.enableScope('foo')
   })
 
-  expect(result.current.enabledScopes).toEqual(['foo'])
+  expect(result.current.activeScopes).toEqual(['foo'])
 
   act(() => {
     result.current.toggleScope('foo')
   })
 
-  expect(result.current.enabledScopes).toEqual(['*'])
+  expect(result.current.activeScopes).toEqual([])
 
   act(() => {
     result.current.toggleScope('foo')
   })
 
-  expect(result.current.enabledScopes).toEqual(['foo'])
+  expect(result.current.activeScopes).toEqual(['foo'])
 })
 
-test('should keep wildcard scope active when all is the only active scope and gets deactivated', () => {
+test('should be able to disable wildcard like any other scope', () => {
   const { result } = renderHook(() => useHotkeysContext(), {
     wrapper: HotkeysProvider,
   })
@@ -146,7 +118,7 @@ test('should keep wildcard scope active when all is the only active scope and ge
     result.current.disableScope('*')
   })
 
-  expect(result.current.enabledScopes).toEqual(['*'])
+  expect(result.current.activeScopes).toEqual([])
 })
 
 test('should return initially set scopes', () => {
@@ -157,7 +129,7 @@ test('should return initially set scopes', () => {
     wrapper,
   })
 
-  expect(result.current.enabledScopes).toEqual(['foo', 'bar'])
+  expect(result.current.activeScopes).toEqual(['foo', 'bar'])
 })
 
 test('should return all bound hotkeys', () => {
@@ -238,4 +210,25 @@ test('should return descriptions for bound hotkeys', () => {
   })
 
   expect(result.current.hotkeys[0].description).toEqual('bar')
+})
+
+test('should have no active scopes after deactivating all current scopes', () => {
+  const { result } = renderHook(() => useHotkeysContext(), {
+    wrapper: HotkeysProvider,
+  })
+  act(() => {
+    result.current.enableScope('foo')
+  })
+  act(() => {
+    result.current.enableScope('bar')
+  })
+  expect(result.current.activeScopes).toEqual(['foo', 'bar'])
+  act(() => {
+    result.current.disableScope('foo')
+  })
+  act(() => {
+    result.current.disableScope('bar')
+  })
+
+  expect(result.current.activeScopes).toEqual([])
 })

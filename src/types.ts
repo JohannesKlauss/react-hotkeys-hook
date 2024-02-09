@@ -12,6 +12,7 @@ export type KeyboardModifiers = {
   meta?: boolean
   shift?: boolean
   mod?: boolean
+  useKey?: boolean // Custom modifier to listen to the produced key instead of the code
 }
 
 export type Hotkey = KeyboardModifiers & {
@@ -27,19 +28,34 @@ export type HotkeyCallback = (keyboardEvent: KeyboardEvent, hotkeysEvent: Hotkey
 export type Trigger = boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean)
 
 export type Options = {
-  enabled?: Trigger // Main setting that determines if the hotkey is enabled or not. (Default: true)
-  enableOnFormTags?: readonly FormTags[] | boolean // Enable hotkeys on a list of tags. (Default: false)
-  enableOnContentEditable?: boolean // Enable hotkeys on tags with contentEditable props. (Default: false)
-  ignoreEventWhen?: (e: KeyboardEvent) => boolean // Ignore evenets based on a condition (Default: undefined)
-  combinationKey?: string // Character to split keys in hotkeys combinations. (Default: +)
-  splitKey?: string // Character to separate different hotkeys. (Default: ,)
-  scopes?: Scopes // Scope
-  keyup?: boolean // Trigger on keyup event? (Default: undefined)
-  keydown?: boolean // Trigger on keydown event? (Default: true)
-  preventDefault?: Trigger // Prevent default browser behavior? (Default: false)
-  description?: string // Use this option to describe what the hotkey does. (Default: undefined)
-  document?: Document // Listen to events on the document instead of the window. (Default: false)
-  ignoreModifiers?: boolean // Ignore modifiers when matching hotkeys. (Default: false)
+  // Main setting that determines if the hotkey is enabled or not. (Default: true)
+  enabled?: Trigger
+  // Enable hotkeys on a list of tags. (Default: false)
+  enableOnFormTags?: readonly FormTags[] | boolean
+  // Enable hotkeys on tags with contentEditable props. (Default: false)
+  enableOnContentEditable?: boolean
+  // Ignore evenets based on a condition (Default: undefined)
+  ignoreEventWhen?: (e: KeyboardEvent) => boolean
+  // Character to split keys in hotkeys combinations. (Default: +)
+  splitKey?: string
+  // Character to separate different hotkeys. (Default: ,)
+  delimiter?: string
+  // Scope of the hotkey. (Default: undefined)
+  scopes?: Scopes
+  // Trigger on keyup event? (Default: undefined)
+  keyup?: boolean
+  // Trigger on keydown event? (Default: true)
+  keydown?: boolean
+  // Prevent default browser behavior? (Default: false)
+  preventDefault?: Trigger
+  // Use this option to describe what the hotkey does. (Default: undefined)
+  description?: string
+  // Listen to events on the document instead of the window. (Default: false)
+  document?: Document
+  // Ignore modifiers when matching hotkeys. (Default: false)
+  ignoreModifiers?: boolean
+  // Listen to the produced key instead of the code. (Default: false)
+  useKey?: boolean
 }
 
 export type OptionsOrDependencyArray = Options | DependencyList

@@ -5,7 +5,7 @@ import deepEqual from './deepEqual'
 
 export type HotkeysContextType = {
   hotkeys: ReadonlyArray<Hotkey>
-  enabledScopes: string[]
+  activeScopes: string[]
   toggleScope: (scope: string) => void
   enableScope: (scope: string) => void
   disableScope: (scope: string) => void
@@ -14,7 +14,7 @@ export type HotkeysContextType = {
 // The context is only needed for special features like global scoping, so we use a graceful default fallback
 const HotkeysContext = createContext<HotkeysContextType>({
   hotkeys: [],
-  enabledScopes: [], // This array has to be empty instead of containing '*' as default, to check if the provider is set or not
+  activeScopes: [], // This array has to be empty instead of containing '*' as default, to check if the provider is set or not
   toggleScope: () => {},
   enableScope: () => {},
   disableScope: () => {},
@@ -30,9 +30,7 @@ interface Props {
 }
 
 export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Props) => {
-  const [internalActiveScopes, setInternalActiveScopes] = useState(
-    initiallyActiveScopes?.length > 0 ? initiallyActiveScopes : ['*']
-  )
+  const [internalActiveScopes, setInternalActiveScopes] = useState(initiallyActiveScopes)
   const [boundHotkeys, setBoundHotkeys] = useState<Hotkey[]>([])
 
   const enableScope = useCallback((scope: string) => {
@@ -40,34 +38,24 @@ export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Pro
       if (prev.includes('*')) {
         return [scope]
       }
-
       return Array.from(new Set([...prev, scope]))
     })
   }, [])
 
   const disableScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
-      if (prev.filter((s) => s !== scope).length === 0) {
-        return ['*']
-      } else {
-        return prev.filter((s) => s !== scope)
-      }
+      return prev.filter((s) => s !== scope)
     })
   }, [])
 
   const toggleScope = useCallback((scope: string) => {
     setInternalActiveScopes((prev) => {
       if (prev.includes(scope)) {
-        if (prev.filter((s) => s !== scope).length === 0) {
-          return ['*']
-        } else {
-          return prev.filter((s) => s !== scope)
-        }
+        return prev.filter((s) => s !== scope)
       } else {
         if (prev.includes('*')) {
           return [scope]
         }
-
         return Array.from(new Set([...prev, scope]))
       }
     })
@@ -83,7 +71,7 @@ export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Pro
 
   return (
     <HotkeysContext.Provider
-      value={{ enabledScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope }}
+      value={{ activeScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope }}
     >
       <BoundHotkeysProxyProviderProvider addHotkey={addBoundHotkey} removeHotkey={removeBoundHotkey}>
         {children}
