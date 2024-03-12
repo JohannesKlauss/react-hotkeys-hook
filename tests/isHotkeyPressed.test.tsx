@@ -132,7 +132,10 @@ test('Should clear pressed hotkeys when contextmenu opens', async () => {
     cancelable: true
   }))
 
-  expect(isHotkeyPressed('meta')).toBe(false)
+  // Stuck keys are cleared asynchronously for `contextmenu`. Must check after queue is clear.
+  setTimeout(() => {  
+    expect(isHotkeyPressed('meta')).toBe(false)
+  }, 0)
 })
 
 test('Should return true for shift, 1 and ! if shift+1 is held down', async () => {
