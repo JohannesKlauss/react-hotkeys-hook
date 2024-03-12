@@ -24,6 +24,10 @@ import { isHotkeyModifier, mapKey } from './parseHotkeys'
     window.addEventListener('blur', () => {
       currentlyPressedKeys.clear()
     })
+
+    window.addEventListener('contextmenu', () => {
+      currentlyPressedKeys.clear()
+    })
   }
 })()
 

@@ -119,6 +119,22 @@ test('Should clear pressed hotkeys when window blurs', async () => {
   expect(isHotkeyPressed('meta')).toBe(false)
 })
 
+
+test('Should clear pressed hotkeys when contextmenu opens', async () => {
+  const user = userEvent.setup()
+
+  await user.keyboard('{Meta>}')
+
+  expect(isHotkeyPressed('meta')).toBe(true)
+
+  window.document.dispatchEvent(new Event("contextmenu", {
+    bubbles: true,
+    cancelable: true
+  }))
+
+  expect(isHotkeyPressed('meta')).toBe(false)
+})
+
 test('Should return true for shift, 1 and ! if shift+1 is held down', async () => {
   const user = userEvent.setup()
 
