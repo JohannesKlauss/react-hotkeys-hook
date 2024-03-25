@@ -24,8 +24,8 @@ const mappedKeys: Record<string, string> = {
   ControlRight: 'ctrl',
 }
 
-export function mapKey(key: string): string {
-  return (mappedKeys[key] || key)
+export function mapKey(key?: string): string {
+  return (mappedKeys[key] || key || '')
     .trim()
     .toLowerCase()
     .replace(/key|digit|numpad|arrow/, '')
