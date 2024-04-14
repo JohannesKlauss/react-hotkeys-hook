@@ -85,11 +85,11 @@
     "@babel/preset-react": "7.24.1",
     "@babel/preset-typescript": "7.24.1",
     "@testing-library/jest-dom": "5.17.0",
-    "@testing-library/react": "14.2.2",
+    "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
     "@types/jest": "29.5.12",
-    "@types/react": "18.2.74",
-    "@types/react-dom": "18.2.24",
+    "@types/react": "18.2.78",
+    "@types/react-dom": "18.2.25",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "eslint": "8.57.0",
@@ -103,7 +103,7 @@
     "react-test-renderer": "18.2.0",
     "tsdx": "0.14.1",
     "tslib": "2.6.2",
-    "typescript": "5.4.4"
+    "typescript": "5.4.5"
   },
   "peerDependencies": {
     "react": ">=16.8.1",
