@@ -21,11 +21,17 @@ export function isKeyboardEventTriggeredByInput(ev: KeyboardEvent): boolean {
 }
 
 export function isHotkeyEnabledOnTag(
-  { target }: KeyboardEvent,
+  event: KeyboardEvent,
   enabledOnTags: readonly FormTags[] | boolean = false
 ): boolean {
-  const targetTagName = target && (target as HTMLElement).tagName
+  const {target, composed} = event;
 
+  let targetTagName;
+  if (isCustomElement(target as HTMLElement) && composed) {
+    targetTagName = event.composedPath()[0] && (event.composedPath()[0] as HTMLElement).tagName;
+  } else {
+    targetTagName = target && (target as HTMLElement).tagName;
+  }
   if (isReadonlyArray(enabledOnTags)) {
     return Boolean(
       targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase())
@@ -33,6 +39,13 @@ export function isHotkeyEnabledOnTag(
   }
 
   return Boolean(targetTagName && enabledOnTags && enabledOnTags === true)
+}
+
+export function isCustomElement(element: HTMLElement): boolean {
+  // We just do a basic check w/o any complex RegEx or validation against the list of legacy names containing a hyphen,
+  // as none of them is likely to be an event target, and it won't hurt anyway if we miss.
+  // see: https://html.spec.whatwg.org/multipage/custom-elements.html#prod-potentialcustomelementname
+  return !!element.tagName && !element.tagName.startsWith("-") && element.tagName.includes("-");
 }
 
 export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
