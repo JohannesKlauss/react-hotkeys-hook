@@ -1,5 +1,5 @@
 import { HotkeyCallback, Keys, Options, OptionsOrDependencyArray, RefType } from './types'
-import { DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { DependencyList, RefCallback, useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { mapKey, parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -28,7 +28,7 @@ export default function useHotkeys<T extends HTMLElement>(
   options?: OptionsOrDependencyArray,
   dependencies?: OptionsOrDependencyArray
 ) {
-  const ref = useRef<RefType<T>>(null)
+  const [ref, setRef] = useState<RefType<T>>(null)
   const hasTriggeredRef = useRef(false)
 
   const _options: Options | undefined = !(options instanceof Array)
@@ -66,12 +66,12 @@ export default function useHotkeys<T extends HTMLElement>(
 
       // TODO: SINCE THE EVENT IS NOW ATTACHED TO THE REF, THE ACTIVE ELEMENT CAN NEVER BE INSIDE THE REF. THE HOTKEY ONLY TRIGGERS IF THE
       // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WON'T TRIGGER THE HOTKEY.
-      if (ref.current !== null) {
-        const rootNode = ref.current.getRootNode()
+      if (ref !== null) {
+        const rootNode = ref.getRootNode()
         if (
           (rootNode instanceof Document || rootNode instanceof ShadowRoot) &&
-          rootNode.activeElement !== ref.current &&
-          !ref.current.contains(rootNode.activeElement)
+          rootNode.activeElement !== ref &&
+          !ref.contains(rootNode.activeElement)
         ) {
           stopPropagation(e)
           return
@@ -140,7 +140,7 @@ export default function useHotkeys<T extends HTMLElement>(
       }
     }
 
-    const domNode = ref.current || _options?.document || document
+    const domNode = ref || _options?.document || document
 
     // @ts-ignore
     domNode.addEventListener('keyup', handleKeyUp)
@@ -165,7 +165,7 @@ export default function useHotkeys<T extends HTMLElement>(
         )
       }
     }
-  }, [_keys, memoisedOptions, enabledScopes])
+  }, [ref, _keys, memoisedOptions, enabledScopes])
 
-  return ref
+  return setRef as RefCallback<T>
 }
