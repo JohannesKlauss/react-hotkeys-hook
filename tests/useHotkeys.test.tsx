@@ -10,7 +10,7 @@ import {
   useCallback,
   useState,
 } from 'react'
-import { createEvent, fireEvent, render, screen, renderHook } from '@testing-library/react'
+import { createEvent, fireEvent, render, screen, renderHook, within } from '@testing-library/react'
 
 const wrapper =
   (initialScopes: string[]): JSXElementConstructor<{children: ReactElement}> =>
@@ -490,6 +490,51 @@ test('should be disabled on form tags by default', async () => {
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(getByTestId('form-tag')).toHaveValue('A')
+})
+
+test('should be disabled on form tags inside custom elements by default', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  customElements.define(
+    "custom-input",
+    class extends HTMLElement {
+      constructor() {
+        super();
+
+        const inputEle = document.createElement("input");
+        inputEle.setAttribute("type", "text");
+        inputEle.setAttribute("data-testid", "input");
+
+        const shadowRoot = this.attachShadow({
+          mode: "open"
+        });
+
+        shadowRoot.appendChild(inputEle);
+      }
+    },
+  );
+
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('a', cb)
+
+    // @ts-ignore
+    return <custom-input data-testid={'form-tag'}/>
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // @ts-ignore
+  await user.click(within(getByTestId('form-tag').shadowRoot).getByTestId('input'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  // @ts-ignore
+  expect(within(getByTestId('form-tag').shadowRoot).getByTestId('input')).toHaveValue('A')
 })
 
 test('should be enabled on given form tags', async () => {
