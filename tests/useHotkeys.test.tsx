@@ -1347,3 +1347,22 @@ test('Should listen to special chars with modifiers', async () => {
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
+
+test('should use event capturing if option is set', async () => {
+  const user = userEvent.setup()
+  const callback = jest.fn()
+
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('a', cb, { capture: true, enableOnFormTags: true })
+
+    return <input type={'text'} data-testid={'form-tag'} onKeyDown={(e) => e.stopPropagation()} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(getByTestId('form-tag')).toHaveValue('A')
+})
