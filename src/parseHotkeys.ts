@@ -55,15 +55,10 @@ export function parseHotkey(hotkey: string, combinationKey = '+', description?: 
 
   const singleCharKeys = keys.filter((k) => !reservedModifierKeywords.includes(k))
 
-  const res: any = {
+  return {
     ...modifiers,
-    hotkey,
     keys: singleCharKeys,
+    description,
+    hotkey,
   }
-
-  if (description) {
-    res['description'] = description
-  }
-
-  return res
 }

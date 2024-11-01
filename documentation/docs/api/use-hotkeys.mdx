@@ -97,17 +97,14 @@ useHotkeys(['ctrl+a', 'shift+b', 'r', 'f'], (_, handler) => {
 
 Also you could work directly with hotkey trigger:
 
-
-
 ```jsx
-
 const HOTKEYS = [
   ACTION_A: 'ctrl+a',
   ACTION_B: 'shift+b',
 ]
 
-useHotkeys(HOTKEYS, (_, handler) => {
-  switch (handler.hotkey) {
+useHotkeys(HOTKEYS, (_, { hotkey }) => {
+  switch (hotkey) {
     case HOTKEYS.ACTION_A: alert('You pressed ctrl+a!');
       break;
     case HOTKEYS.ACTION_B: alert('You pressed shift+b!');
