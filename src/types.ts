@@ -18,6 +18,7 @@ export type Hotkey = KeyboardModifiers & {
   keys?: readonly string[]
   scopes?: Scopes
   description?: string
+  hotkey: string
 }
 
 export type HotkeysEvent = Hotkey

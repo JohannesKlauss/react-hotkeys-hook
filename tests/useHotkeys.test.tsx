@@ -13,9 +13,9 @@ import {
 import { createEvent, fireEvent, render, screen, renderHook } from '@testing-library/react'
 
 const wrapper =
-  (initialScopes: string[]): JSXElementConstructor<{children: ReactElement}> =>
-    ({ children }: { children?: ReactNode }) =>
-      <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
+  (initialScopes: string[]): JSXElementConstructor<{ children: ReactElement }> =>
+  ({ children }: { children?: ReactNode }) =>
+    <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
 
 type HookParameters = {
   keys: Keys
@@ -59,7 +59,7 @@ test('should log a warning when trying to set a scope without a wrapped provider
   renderHook(() => useHotkeys('a', callback, { scopes: 'foo' }))
 
   expect(console.warn).toHaveBeenCalledWith(
-    'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
+    'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
   )
   expect(callback).not.toHaveBeenCalled()
 })
@@ -267,7 +267,6 @@ test('should be able to always output correct keys on multiple hotkeys', async (
   await user.keyboard('{/A}')
   expect(callbackA).toHaveBeenCalledTimes(1)
   expect(callbackB).toHaveBeenCalledTimes(2)
-
 })
 
 test('should be able to parse first argument as string, array or readonly array', async () => {
@@ -376,7 +375,7 @@ test('should reflect set splitKey character', async () => {
     ({ keys, options }) => useHotkeys(keys, callback, options),
     {
       initialProps: { keys: 'a, b', options: undefined },
-    },
+    }
   )
 
   await user.keyboard('A')
@@ -536,13 +535,19 @@ test('should ignore case of form tags', async () => {
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
-test('should ignore event when ignoreEventWhen\'s condition matches', async () => {
+test("should ignore event when ignoreEventWhen's condition matches", async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
-  const Component = ({ cb, ignoreEventWhen }: { cb: HotkeyCallback; ignoreEventWhen?: (e: KeyboardEvent) => boolean }) => {
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
+    ignoreEventWhen?: (e: KeyboardEvent) => boolean
+  }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='ignore' data-testid={'test-button'} />
+    return <button className="ignore" data-testid={'test-button'} />
   }
 
   const eventCondition = (e: KeyboardEvent) => {
@@ -563,13 +568,19 @@ test('should ignore event when ignoreEventWhen\'s condition matches', async () =
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match', async () => {
+test("shouldn't ignore event when ignoreEventWhen's condition doesn't match", async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
-  const Component = ({ cb, ignoreEventWhen }: { cb: HotkeyCallback; ignoreEventWhen?: (e: KeyboardEvent) => boolean }) => {
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
+    ignoreEventWhen?: (e: KeyboardEvent) => boolean
+  }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='dont-ignore' data-testid={'test-button'} />
+    return <button className="dont-ignore" data-testid={'test-button'} />
   }
 
   const eventCondition = (e: KeyboardEvent) => {
@@ -593,10 +604,16 @@ test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match',
 test('should call ignoreEventWhen callback only when event is a hotkey match', async () => {
   const user = userEvent.setup()
   const callback = jest.fn()
-  const Component = ({ cb, ignoreEventWhen }: { cb: HotkeyCallback; ignoreEventWhen?: (e: KeyboardEvent) => boolean }) => {
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
+    ignoreEventWhen?: (e: KeyboardEvent) => boolean
+  }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='ignore' data-testid={'test-button'} />
+    return <button className="ignore" data-testid={'test-button'} />
   }
 
   const { getByTestId } = render(<Component cb={jest.fn()} ignoreEventWhen={callback} />)
@@ -886,8 +903,7 @@ test('should allow named keys like arrow keys, space, enter, backspace, etc.', a
   expect(callback).toHaveBeenCalledTimes(7)
 })
 
-test.skip('should trigger when used in portals', async () => {
-})
+test.skip('should trigger when used in portals', async () => {})
 
 test('should parse options and dependencies correctly no matter their position', async () => {
   const user = userEvent.setup()
@@ -929,6 +945,7 @@ test('should pass keyboard event and hotkey object to callback', async () => {
     keys: ['a'],
     shift: false,
     ctrl: false,
+    hotkey: 'a',
     alt: false,
     meta: false,
     mod: false,
@@ -948,6 +965,7 @@ test('should set shift to true in hotkey object if listening to shift', async ()
     keys: ['a'],
     shift: true,
     ctrl: false,
+    hotkey: 'shift+a',
     alt: false,
     meta: false,
     mod: false,
@@ -967,6 +985,7 @@ test('should set ctrl to true in hotkey object if listening to ctrl', async () =
     keys: ['a'],
     shift: false,
     ctrl: true,
+    hotkey: 'ctrl+a',
     alt: false,
     meta: false,
     mod: false,
@@ -986,6 +1005,7 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
     keys: ['a'],
     shift: false,
     ctrl: false,
+    hotkey: 'alt+a',
     alt: true,
     meta: false,
     mod: false,
@@ -1005,6 +1025,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
     keys: ['a'],
     shift: false,
     ctrl: false,
+    hotkey: 'mod+a',
     alt: false,
     meta: false,
     mod: true,
@@ -1024,6 +1045,7 @@ test('should set meta to true in hotkey object if listening to meta', async () =
     keys: ['a'],
     shift: false,
     ctrl: false,
+    hotkey: 'meta+a',
     alt: false,
     meta: true,
     mod: false,
@@ -1043,6 +1065,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
     keys: ['a'],
     shift: true,
     alt: false,
+    hotkey: 'mod+shift+a',
     ctrl: false,
     meta: false,
     mod: true,
@@ -1132,8 +1155,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
   const user = userEvent.setup()
   const preventDefault = jest.fn()
 
-  renderHook(() => useHotkeys('a', async () => {
-  }, { preventDefault }))
+  renderHook(() => useHotkeys('a', async () => {}, { preventDefault }))
 
   await user.keyboard('A')
 
@@ -1142,6 +1164,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
     keys: ['a'],
     shift: false,
     alt: false,
+    hotkey: 'a',
     ctrl: false,
     meta: false,
     mod: false,
@@ -1251,7 +1274,6 @@ test('Should ignore modifiers if option is set', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-
 test('should respect dependencies array if they are passed', async () => {
   function Fixture() {
     const [count, setCount] = useState(0)
@@ -1276,7 +1298,6 @@ test('should respect dependencies array if they are passed', async () => {
 
   expect(getByText('1')).not.toBeNull()
 })
-
 
 test('should use updated callback if no dependencies are passed', async () => {
   function Fixture() {
