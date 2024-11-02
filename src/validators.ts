@@ -26,19 +26,21 @@ export function isHotkeyEnabledOnTag(
 ): boolean {
   const {target, composed} = event;
 
-  let targetTagName;
+  let targetTagName: string | null = null
+
   if (isCustomElement(target as HTMLElement) && composed) {
     targetTagName = event.composedPath()[0] && (event.composedPath()[0] as HTMLElement).tagName;
   } else {
     targetTagName = target && (target as HTMLElement).tagName;
   }
+
   if (isReadonlyArray(enabledOnTags)) {
     return Boolean(
       targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase())
     )
   }
 
-  return Boolean(targetTagName && enabledOnTags && enabledOnTags === true)
+  return Boolean(targetTagName && enabledOnTags && enabledOnTags)
 }
 
 export function isCustomElement(element: HTMLElement): boolean {
