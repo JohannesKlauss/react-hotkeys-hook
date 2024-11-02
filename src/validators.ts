@@ -36,7 +36,7 @@ export function isHotkeyEnabledOnTag(
 
   if (isReadonlyArray(enabledOnTags)) {
     return Boolean(
-      targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase())
+      targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName?.toLowerCase())
     )
   }
 
