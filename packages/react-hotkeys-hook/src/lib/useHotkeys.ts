@@ -144,9 +144,9 @@ export default function useHotkeys<T extends HTMLElement>(
     const domNode = ref.current || _options?.document || document
 
     // @ts-expect-error TS2345
-    domNode.addEventListener('keyup', handleKeyUp)
+    domNode.addEventListener('keyup', handleKeyUp, _options?.eventListenerOptions)
     // @ts-expect-error TS2345
-    domNode.addEventListener('keydown', handleKeyDown)
+    domNode.addEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
     if (proxy) {
       parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
@@ -158,9 +158,9 @@ export default function useHotkeys<T extends HTMLElement>(
 
     return () => {
       // @ts-expect-error TS2345
-      domNode.removeEventListener('keyup', handleKeyUp)
+      domNode.removeEventListener('keyup', handleKeyUp, _options?.eventListenerOptions)
       // @ts-expect-error TS2345
-      domNode.removeEventListener('keydown', handleKeyDown)
+      domNode.removeEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
       if (proxy) {
         parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
