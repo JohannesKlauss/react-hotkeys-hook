@@ -10,8 +10,13 @@ import { useRecordHotkeys } from "react-hotkeys-hook";
 Function signature:
 
 ```ts
-function useRecordHotkeys(): [Set<string>, { start: () => void, stop: () => void, isRecording: boolean }]
+function useRecordHotkeys(useKey?: boolean): [Set<string>, { start: () => void, stop: () => void, isRecording: boolean }]
 ```
+
+## `useKey`
+
+By default recording hotkeys will record the keys code, not the produced character. If you want to record the produced
+character, you can pass `true` as the first argument to the hook.
 
 ***
 
