@@ -17,13 +17,21 @@ to listen to a key (`:` or `%`, etc.), you'll have to update your code.
 The hook now accepts an option called `useKey` that will only listen to the produced key. This is useful if you don't care
 about the layout of the keyboard and want to listen to the symbol that the user produces (i.e. listening to `/` to open a search bar).
 
+### `HotkeysProvider`
+
+- If all scopes are disabled in the HotkeysProvider, no hotkeys will be active.
+
 ## API changes
+
+### `useHotkeys`
+
+- The `splitKey` option has been renamed to `delimiter`
+- The `combinationKey` option has been renamed to `splitKey`
 
 ### `HotkeysProvider` Context
 
 #### `enabledScopes` is now `activeScopes`
 `enabledScopes` has been renamed to `activeScopes`, to avoid confusion with the `enableScopes` method.
-
 
 ## Other changes
 
