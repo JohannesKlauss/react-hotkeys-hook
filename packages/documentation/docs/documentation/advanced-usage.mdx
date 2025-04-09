@@ -1,0 +1,32 @@
+---
+sidebar_position: 6
+title: "Advanced Usage"
+---
+
+# Advanced Usage
+
+This section described advanced functionalities of the hook.
+
+**🚧 This section is under construction 🚧**
+
+## Using typescript types to reference key names
+Sometimes we might get confused if we need to listen to `ArrowLeft` or `LeftArrow` to listen to the left arrow key.
+To avoid this confusion, we can use the typescript types provided by the `ts-key-enum` library.
+
+You add the library to your project by running:
+
+```bash
+npm install ts-key-enum
+```
+
+Then you can import the types and use them in your code:
+
+```ts
+import { Key } from 'ts-key-enum'
+
+useHotkeys(Key.Backspace, () => {
+  console.log(`delete`)
+})
+```
+
+See https://gitlab.com/nfriend/ts-key-enum/-/blob/master/Key.enum.d.ts for the full list of available keys.

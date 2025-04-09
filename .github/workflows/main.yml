@@ -40,3 +40,8 @@ jobs:
         run: npm run build
         env:
           CI: true
+
+      - name: Build Documentation
+        run: npm run build:documentation
+        env:
+          CI: true
