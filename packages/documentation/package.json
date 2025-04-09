@@ -1,7 +1,6 @@
 {
   "name": "website",
   "version": "3.3.5",
-  "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
