@@ -10,9 +10,9 @@
     "test": "vitest",
     "prepublishOnly": "vitest run && npm run build"
   },
-  "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
