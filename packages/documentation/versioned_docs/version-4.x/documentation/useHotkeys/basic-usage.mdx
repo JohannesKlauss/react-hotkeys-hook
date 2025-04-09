@@ -9,7 +9,8 @@ This hook allows us to listen to hotkeys in a declarative way and execute a call
 the given hotkey.
 
 :::tip tip
-We can edit the code of every example and immediately see the results of our changes.
+This documentation is using [react-live](https://react-live.netlify.app/), so we can edit the code of every example and
+immediately see the results of our changes.
 :::
 
 # Basic Usage
@@ -147,7 +148,6 @@ You can also use an array as first arguments: `useHotkeys(['ctrl+shift+a+c', 'c'
 We used the `ctrl+shift+a+c` and `shift+c` combination two times for two components on this page.
 Since we pressed down one hotkey already the example above started at the count of one. Hotkeys are attached
 globally if we don't use its return value.
-:::
 
 ***
 
@@ -161,7 +161,7 @@ Of course, we also want to leverage more complex keystrokes. `useHotkeys` suppor
 * `meta`
 * `mod` (which listens for `ctrl` on Windows/Linux and `cmd` on macOS)
 
-## MacOS and Windows/Linux compatability
+:::info macOS and Windows/Linux compatability
 Since version 4 `alt` and `option` are identical. The `meta` key is the same as `cmd` on macOS and `os` key on Windows.
 
 ```jsx

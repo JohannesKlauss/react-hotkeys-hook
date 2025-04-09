@@ -132,16 +132,12 @@ module.exports = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: '4.0',
+              label: '5.0',
             },
           },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
-        },
-        gtag: {
-          trackingID: 'G-7WHC83DL0G',
-          anonymizeIP: true,
         },
       },
     ],

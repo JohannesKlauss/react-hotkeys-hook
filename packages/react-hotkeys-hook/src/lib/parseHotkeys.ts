@@ -21,7 +21,7 @@ const mappedKeys: Record<string, string> = {
   ControlRight: 'ctrl',
 }
 
-export function mapKey(key: string): string {
+export function mapCode(key: string): string {
   return (mappedKeys[key.trim()] || key.trim()).toLowerCase().replace(/key|digit|numpad/, '')
 }
 
@@ -37,7 +37,7 @@ export function parseHotkey(hotkey: string, splitKey = '+', useKey = false, desc
   const keys = hotkey
     .toLocaleLowerCase()
     .split(splitKey)
-    .map((k) => mapKey(k))
+    .map((k) => mapCode(k))
 
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),

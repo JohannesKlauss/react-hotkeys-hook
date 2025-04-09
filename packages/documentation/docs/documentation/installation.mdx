@@ -8,17 +8,16 @@ import CodeBlock from '@theme/CodeBlock';
 
 # Installation
 
-> Note: React 16.8+ is required to use Hooks.
-
-## Yarn & NPM
+## Via Package Manager
 
 To install the package we use our favorite package manager.
 
 <Tabs
-  defaultValue="yarn"
+  defaultValue="npm"
   values={[
-    {label: 'Yarn', value: 'yarn'},
     {label: 'NPM', value: 'npm'},
+    {label: 'Bun', value: 'bun'},
+    {label: 'Yarn', value: 'yarn'},
   ]}>
   <TabItem value="yarn">
     <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
@@ -26,38 +25,33 @@ To install the package we use our favorite package manager.
   <TabItem value="npm">
     <CodeBlock className="language-shell">npm i react-hotkeys-hook --save</CodeBlock>
   </TabItem>
+  <TabItem value="bun">
+      <CodeBlock className="language-shell">bun i react-hotkeys-hook</CodeBlock>
+    </TabItem>
 </Tabs>
 
-## ES Module
+```jsx
+import { useHotkeys } from 'react-hotkeys-hook';
+```
+
+## Via CDN
 
 To use the ES Module we can reference it directly from [unpkg.com](https://unpkg.com):
 
 ```js
-import { useHotkeys } from 'https://unpkg.com/browse/react-hotkeys-hook@3.4.0/dist/react-hotkeys-hook.esm.js';
+import { useHotkeys } from 'https://unpkg.com/browse/react-hotkeys-hook@5.0.0/dist/react-hotkeys-hook.esm.js';
 ```
-
-## Direct CommonJS Module
-
-We also have access to a development as well as a minified production bundle for CommonJS:
-
-<Tabs
-  defaultValue="development"
-  values={[
-    {label: 'Development', value: 'development'},
-    {label: 'Production', value: 'production'},
-  ]}>
-  <TabItem value="development">
-    <CodeBlock className="language-html">
-      {'<script src="https://unpkg.com/browse/react-hotkeys-hook@3.4.0/dist/react-hotkeys-hook.cjs.development.js"/>'}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="production">
-    <CodeBlock className="language-html">
-      {'<script src="https://unpkg.com/browse/react-hotkeys-hook@3.4.0/dist/react-hotkeys-hook.cjs.production.min.js"/>'}
-    </CodeBlock>
-  </TabItem>
-</Tabs>
 
 ***
 
-Now we are good to go to use the hook.
+```jsx live
+function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  useHotkeys('a', () => setCount(count => count + 1));
+
+  return (
+    <span>Pressed 'a' key {count} times.</span>
+  );
+}
+```

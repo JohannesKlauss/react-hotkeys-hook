@@ -1,4 +1,4 @@
-import { isHotkeyModifier, mapKey } from './parseHotkeys'
+import { isHotkeyModifier, mapCode } from './parseHotkeys'
 ;(() => {
   if (typeof document !== 'undefined') {
     document.addEventListener('keydown', (e) => {
@@ -7,7 +7,7 @@ import { isHotkeyModifier, mapKey } from './parseHotkeys'
         return
       }
 
-      pushToCurrentlyPressedKeys([mapKey(e.code)])
+      pushToCurrentlyPressedKeys([mapCode(e.code)])
     })
 
     document.addEventListener('keyup', (e) => {
@@ -16,7 +16,7 @@ import { isHotkeyModifier, mapKey } from './parseHotkeys'
         return
       }
 
-      removeFromCurrentlyPressedKeys([mapKey(e.code)])
+      removeFromCurrentlyPressedKeys([mapCode(e.code)])
     })
   }
 

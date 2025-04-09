@@ -1,6 +1,6 @@
 import { FormTags, Hotkey, Scopes, Trigger } from './types'
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
-import { mapKey } from './parseHotkeys'
+import { mapCode } from './parseHotkeys'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -70,7 +70,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
   const { alt, meta, mod, shift, ctrl, keys, useKey } = hotkey
   const { code, key: producedKey, ctrlKey, metaKey, shiftKey, altKey } = e
 
-  const mappedCode = mapKey(code)
+  const mappedCode = mapCode(code)
 
   if (useKey && keys?.length === 1 && keys.includes(producedKey)) {
     return true

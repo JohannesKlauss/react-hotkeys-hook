@@ -170,7 +170,6 @@ const options = {
   description: undefined,
   document: undefined,
   ignoreModifiers: false,
-  useKey: false,
 };
 ```
 
@@ -192,7 +191,6 @@ type Options = {
   description?: string
   document?: Document
   ignoreModifiers?: boolean
-  useKey?: boolean
 };
 ```
 
@@ -371,15 +369,6 @@ But we could also say that we only want to listen to  `Shift+3`, no matter the p
 
 With this option, react-hotkeys-hook supports both ways.
 :::
-
-##### `useKey`
-
-```ts
-useKey: boolean // default: false
-```
-
-This option allows us to listen to the produced key instead of the key code. This is useful if we want to listen to a
-specific key (e.g. `!`, `:`, `%`, etc.) and don't care about how the user produces that key.
 
 ***
 

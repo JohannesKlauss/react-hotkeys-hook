@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { mapKey } from './parseHotkeys'
+import { mapCode } from './parseHotkeys'
 
 export default function useRecordHotkeys() {
   const [keys, setKeys] = useState(new Set<string>())
@@ -17,7 +17,7 @@ export default function useRecordHotkeys() {
     setKeys((prev) => {
       const newKeys = new Set(prev)
 
-      newKeys.add(mapKey(event.code))
+      newKeys.add(mapCode(event.code))
 
       return newKeys
     })

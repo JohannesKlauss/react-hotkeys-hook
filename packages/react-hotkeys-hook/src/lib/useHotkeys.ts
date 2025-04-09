@@ -1,6 +1,6 @@
 import { HotkeyCallback, Keys, Options, OptionsOrDependencyArray, RefType } from './types'
 import { DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import { mapKey, parseHotkey, parseKeysHookInput } from './parseHotkeys'
+import { mapCode, parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
   isHotkeyEnabled,
   isHotkeyEnabledOnTag,
@@ -119,7 +119,7 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      pushToCurrentlyPressedKeys(mapKey(event.code))
+      pushToCurrentlyPressedKeys(mapCode(event.code))
 
       if ((memoisedOptions?.keydown === undefined && memoisedOptions?.keyup !== true) || memoisedOptions?.keydown) {
         listener(event)
@@ -132,7 +132,7 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      removeFromCurrentlyPressedKeys(mapKey(event.code))
+      removeFromCurrentlyPressedKeys(mapCode(event.code))
 
       hasTriggeredRef.current = false
 
