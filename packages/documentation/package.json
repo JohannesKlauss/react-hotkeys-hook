@@ -1,6 +1,7 @@
 {
   "name": "website",
   "version": "3.3.5",
+  "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
@@ -23,7 +24,7 @@
     "prism-react-renderer": "2.4.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-hotkeys-hook": "file:../react-hotkeys-hook",
+    "react-hotkeys-hook": "5.0.0-2",
     "url-loader": "4.1.1"
   },
   "browserslist": {
