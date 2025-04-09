@@ -6,6 +6,15 @@ export type Scopes = string | readonly string[]
 
 export type RefType<T> = T | null
 
+export type EventListenerOptions =
+  | {
+      capture?: boolean
+      once?: boolean
+      passive?: boolean
+      signal?: AbortSignal
+    }
+  | boolean // useCapture
+
 export type KeyboardModifiers = {
   alt?: boolean
   ctrl?: boolean
@@ -41,6 +50,7 @@ export type Options = {
   description?: string // Use this option to describe what the hotkey does. (Default: undefined)
   document?: Document // Listen to events on the document instead of the window. (Default: false)
   ignoreModifiers?: boolean // Ignore modifiers when matching hotkeys. (Default: false)
+  eventListenerOptions?: EventListenerOptions // Passthrough event listener options. (Default: false)
 }
 
 export type OptionsOrDependencyArray = Options | DependencyList
