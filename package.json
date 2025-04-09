@@ -31,7 +31,8 @@
     "build": "npm run -w packages/react-hotkeys-hook build",
     "build:documentation": "npm run -w packages/documentation build",
     "lint": "npm run -w packages/react-hotkeys-hook lint",
-    "test": "npm run -w packages/react-hotkeys-hook test"
+    "test": "npm run -w packages/react-hotkeys-hook test",
+    "prepublishOnly": "npm run test && npm run lint && npm run build"
   },
   "workspaces": [
     "packages/*"
