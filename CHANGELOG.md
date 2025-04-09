@@ -1,3 +1,6 @@
+## [4.6.0] - 01-Nov-2024
+* Added 'hotkey' field, which shows which combination triggered the handler
+
 ## [2.2.1] - 23-Jul-2020
 * Remove deprecated findDOMNode
 * Added useIsHotkeyPressed hook.
