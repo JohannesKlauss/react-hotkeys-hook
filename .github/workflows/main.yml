@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [22.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -32,11 +32,16 @@ jobs:
           CI: true
 
       - name: Test
-        run: npm run test --ci --coverage
+        run: npm run test
         env:
           CI: true
 
       - name: Build
         run: npm run build
+        env:
+          CI: true
+
+      - name: Build Documentation
+        run: npm run build:documentation
         env:
           CI: true

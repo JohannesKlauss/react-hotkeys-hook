@@ -1,0 +1,52 @@
+---
+sidebar_position: 5
+title: "Keyboard Layouts"
+---
+
+# Working with Keyboard Layouts
+
+When using hotkeys, we have to be aware of the keyboard layout that the user is using.
+`react-hotkeys-hook` will listen to the key code instead of the produced key by default.
+
+If we want to listen to a special key (`!`, `:` or `%`, etc.) there are two ways to go about it.Keyboard
+
+## Option 1 - Listen to the key code (Layout independent)
+
+This is the default behavior of the hook. It will listen to the key code instead of the produced key. Let's listen to the `!` key. We can do it like this:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('shift+1', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Pressed the '!' key {count} times.</span>
+  )
+}
+```
+
+This is layout independent. A different keyboard layout may produce a different key than `!`, but the actually key stroke is
+the same for all users. The key here is to communicate to the user that they have to press `shift+1` and not `!`, since we
+cannot guarantee `!` to be produced by the `shift+1` stroke.
+
+But there might be situations where we don't care how the user produces the key, we really want to act upon `!`. This brings us
+to the next option.
+
+## Option 2 - Listen to the produced key (Layout dependent)
+
+If we want to listen to the produced key, we can use the `useKey` option. This will listen to the produced key instead of the key code.
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('!', () => setCount(prevCount => prevCount + 1), { useKey: true })
+
+  return (
+    <span>Pressed the '!' key {count} times.</span>
+  )
+}
+```
+
+Now, the hotkey will only be triggered when the user presses `!` and not `shift+1`. For a standard american keyboard layout
+these two are the same, but there are dozens of different layouts. If we don't care how the user produces the key, this is the
+preferred option.

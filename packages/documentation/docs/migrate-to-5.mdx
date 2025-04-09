@@ -1,0 +1,30 @@
+---
+sidebar_position: 5
+title: "Migrate from 4.x to 5.x"
+---
+
+# Migrate from 4.x to 5.x
+
+There are a few breaking changes in 5.x. This guide will help you migrate your code.
+
+## Behavior changes
+
+### `useHotkeys` listens to the code instead of the key by default
+
+From version 5 on `useHotkeys` will listen to the key code instead of the key. This means that if you were using `useHotkeys`
+to listen to a key (`:` or `%`, etc.), you'll have to update your code.
+
+The hook now accepts an option called `useKey` that will only listen to the produced key. This is useful if you don't care
+about the layout of the keyboard and want to listen to the symbol that the user produces (i.e. listening to `/` to open a search bar).
+
+## API changes
+
+### `HotkeysProvider` Context
+
+#### `enabledScopes` is now `activeScopes`
+`enabledScopes` has been renamed to `activeScopes`, to avoid confusion with the `enableScopes` method.
+
+
+## Other changes
+
+- We dropped the CommonJS Module. The hook is now only available as an ES Module. If you need to use it in a CommonJS environment, you can use a bundler like Webpack or Rollup to convert it to CommonJS.

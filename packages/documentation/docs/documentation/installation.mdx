@@ -1,0 +1,57 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+
+# Installation
+
+## Via Package Manager
+
+To install the package we use our favorite package manager.
+
+<Tabs
+  defaultValue="npm"
+  values={[
+    {label: 'NPM', value: 'npm'},
+    {label: 'Bun', value: 'bun'},
+    {label: 'Yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="yarn">
+    <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
+  </TabItem>
+  <TabItem value="npm">
+    <CodeBlock className="language-shell">npm i react-hotkeys-hook --save</CodeBlock>
+  </TabItem>
+  <TabItem value="bun">
+      <CodeBlock className="language-shell">bun i react-hotkeys-hook</CodeBlock>
+    </TabItem>
+</Tabs>
+
+```jsx
+import { useHotkeys } from 'react-hotkeys-hook';
+```
+
+## Via CDN
+
+To use the ES Module we can reference it directly from [unpkg.com](https://unpkg.com):
+
+```js
+import { useHotkeys } from 'https://unpkg.com/browse/react-hotkeys-hook@5.0.0/dist/react-hotkeys-hook.esm.js';
+```
+
+***
+
+```jsx live
+function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  useHotkeys('a', () => setCount(count => count + 1));
+
+  return (
+    <span>Pressed 'a' key {count} times.</span>
+  );
+}
+```
