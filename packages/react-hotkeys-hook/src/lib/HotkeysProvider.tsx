@@ -1,7 +1,7 @@
 import { Hotkey } from './types'
-import { createContext, ReactNode, useState, useContext, useCallback } from 'react'
-import BoundHotkeysProxyProviderProvider from './BoundHotkeysProxyProvider'
-import deepEqual from './deepEqual'
+import { createContext, ReactNode } from 'react'
+import { useStore } from '@nanostores/react'
+import { atom } from 'nanostores'
 
 export type HotkeysContextType = {
   hotkeys: ReadonlyArray<Hotkey>
@@ -11,17 +11,53 @@ export type HotkeysContextType = {
   disableScope: (scope: string) => void
 }
 
+export const $activeScopes = atom(['*'])
+export const $hotkeys = atom<Hotkey[]>([])
+
+function toggleScope(scope: string) {
+  if ($activeScopes.value.includes(scope)) {
+    $activeScopes.set($activeScopes.value.filter(s => s !== scope))
+  } else {
+    if ($activeScopes.value.includes('*')) {
+      $activeScopes.set([scope])
+    } else {
+      $activeScopes.set(Array.from(new Set([...$activeScopes.value, scope])))
+    }
+  }
+}
+
+function enableScope(scope: string) {
+  if ($activeScopes.value.includes('*')) {
+    $activeScopes.set([scope])
+  } else {
+    $activeScopes.set(Array.from(new Set([...$activeScopes.value, scope])))
+  }
+}
+
+function disableScope(scope: string) {
+  $activeScopes.set($activeScopes.value.filter(s => s !== scope))
+}
+
 // The context is only needed for special features like global scoping, so we use a graceful default fallback
 const HotkeysContext = createContext<HotkeysContextType>({
   hotkeys: [],
-  activeScopes: [], // This array has to be empty instead of containing '*' as default, to check if the provider is set or not
-  toggleScope: () => {},
-  enableScope: () => {},
-  disableScope: () => {},
+  activeScopes: ['*'],
+  toggleScope,
+  enableScope,
+  disableScope,
 })
 
 export const useHotkeysContext = () => {
-  return useContext(HotkeysContext)
+  const activeScopes = useStore($activeScopes)
+  const hotkeys = useStore($hotkeys)
+
+  return {
+    activeScopes,
+    hotkeys,
+    toggleScope,
+    enableScope,
+    disableScope,
+  }
 }
 
 interface Props {
@@ -29,53 +65,20 @@ interface Props {
   children: ReactNode
 }
 
+/**
+ * @deprecated Use the toggleScope, enableScope and disableScope functions instead.
+ */
 export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Props) => {
-  const [internalActiveScopes, setInternalActiveScopes] = useState(initiallyActiveScopes)
-  const [boundHotkeys, setBoundHotkeys] = useState<Hotkey[]>([])
+  const activeScopes = useStore($activeScopes)
+  const hotkeys = useStore($hotkeys)
 
-  const enableScope = useCallback((scope: string) => {
-    setInternalActiveScopes((prev) => {
-      if (prev.includes('*')) {
-        return [scope]
-      }
-      return Array.from(new Set([...prev, scope]))
-    })
-  }, [])
-
-  const disableScope = useCallback((scope: string) => {
-    setInternalActiveScopes((prev) => {
-      return prev.filter((s) => s !== scope)
-    })
-  }, [])
-
-  const toggleScope = useCallback((scope: string) => {
-    setInternalActiveScopes((prev) => {
-      if (prev.includes(scope)) {
-        return prev.filter((s) => s !== scope)
-      } else {
-        if (prev.includes('*')) {
-          return [scope]
-        }
-        return Array.from(new Set([...prev, scope]))
-      }
-    })
-  }, [])
-
-  const addBoundHotkey = useCallback((hotkey: Hotkey) => {
-    setBoundHotkeys((prev) => [...prev, hotkey])
-  }, [])
-
-  const removeBoundHotkey = useCallback((hotkey: Hotkey) => {
-    setBoundHotkeys((prev) => prev.filter((h) => !deepEqual(h, hotkey)))
-  }, [])
+  $activeScopes.set(initiallyActiveScopes)
 
   return (
     <HotkeysContext.Provider
-      value={{ activeScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope }}
+      value={{ activeScopes, hotkeys, enableScope, disableScope, toggleScope }}
     >
-      <BoundHotkeysProxyProviderProvider addHotkey={addBoundHotkey} removeHotkey={removeBoundHotkey}>
-        {children}
-      </BoundHotkeysProxyProviderProvider>
+      {children}
     </HotkeysContext.Provider>
   )
 }

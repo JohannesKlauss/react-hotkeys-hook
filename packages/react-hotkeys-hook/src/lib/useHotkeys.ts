@@ -9,10 +9,10 @@ import {
   isScopeActive,
   maybePreventDefault,
 } from './validators'
-import { useHotkeysContext } from './HotkeysProvider'
-import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
+import { $hotkeys } from './HotkeysProvider'
 import useDeepEqualMemo from './useDeepEqualMemo'
 import { isReadonlyArray, pushToCurrentlyPressedKeys, removeFromCurrentlyPressedKeys } from './isHotkeyPressed'
+import deepEqual from './deepEqual.ts'
 
 const stopPropagation = (e: KeyboardEvent): void => {
   e.stopPropagation()
@@ -51,11 +51,8 @@ export default function useHotkeys<T extends HTMLElement>(
 
   const memoisedOptions = useDeepEqualMemo(_options)
 
-  const { activeScopes } = useHotkeysContext()
-  const proxy = useBoundHotkeysProxy()
-
   useSafeLayoutEffect(() => {
-    if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
+    if (memoisedOptions?.enabled === false || !isScopeActive(memoisedOptions?.scopes)) {
       return
     }
 
@@ -148,13 +145,9 @@ export default function useHotkeys<T extends HTMLElement>(
     // @ts-expect-error TS2345
     domNode.addEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
-    if (proxy) {
-      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
-        proxy.addHotkey(
-          parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
-        )
-      )
-    }
+    parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+      $hotkeys.set([...$hotkeys.get(), parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)])
+    )
 
     return () => {
       // @ts-expect-error TS2345
@@ -162,15 +155,13 @@ export default function useHotkeys<T extends HTMLElement>(
       // @ts-expect-error TS2345
       domNode.removeEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
-      if (proxy) {
-        parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
-          proxy.removeHotkey(
-            parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
-          )
-        )
-      }
+      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
+        const hotkey = parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+
+        $hotkeys.set($hotkeys.value.filter(h => !deepEqual(h, hotkey)))
+      })
     }
-  }, [_keys, memoisedOptions, activeScopes])
+  }, [_keys, memoisedOptions])
 
   return ref
 }

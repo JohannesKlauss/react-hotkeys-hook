@@ -1,6 +1,7 @@
 import { FormTags, Hotkey, Scopes, Trigger } from './types'
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
 import { mapCode } from './parseHotkeys'
+import { $activeScopes } from './HotkeysProvider.tsx'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -50,20 +51,12 @@ export function isCustomElement(element: HTMLElement): boolean {
   return !!element.tagName && !element.tagName.startsWith("-") && element.tagName.includes("-");
 }
 
-export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
-  if (activeScopes.length === 0 && scopes) {
-    console.warn(
-      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
-    )
-
+export function isScopeActive(scopes?: Scopes): boolean {
+  if (($activeScopes.value.length === 0 && scopes) || !scopes) {
     return true
   }
 
-  if (!scopes) {
-    return true
-  }
-
-  return activeScopes.some((scope) => scopes.includes(scope)) || activeScopes.includes('*')
+  return $activeScopes.value.some((scope) => scopes.includes(scope)) || $activeScopes.value.includes('*')
 }
 
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {

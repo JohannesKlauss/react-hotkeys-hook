@@ -10,6 +10,10 @@
     "test": "vitest",
     "prepublishOnly": "vitest run && npm run build"
   },
+  "dependencies": {
+    "@nanostores/react": "0.8.4",
+    "nanostores": "0.11.4"
+  },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
