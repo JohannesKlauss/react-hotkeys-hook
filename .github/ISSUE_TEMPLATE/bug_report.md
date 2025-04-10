@@ -20,6 +20,9 @@ Steps to reproduce the behavior:
 Please try and add a codesandbox or stackblitz to reproduce the bug:
 <-- Link to reproducable -->
 
+Here is a codesandbox template that you can use to recreate a minimal example
+https://codesandbox.io/p/sandbox/adoring-shape-bzvk53
+
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
