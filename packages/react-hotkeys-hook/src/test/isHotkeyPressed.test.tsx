@@ -129,3 +129,21 @@ test('Should return true for shift and 1 if shift+1 is held down, but not for ! 
   expect(isHotkeyPressed('1')).toBe(true)
   expect(isHotkeyPressed('!')).toBe(false)
 })
+
+test('Should clear pressed hotkeys when contextmenu opens', async () => {
+  const user = userEvent.setup()
+
+  await user.keyboard('{Meta>}')
+
+  expect(isHotkeyPressed('meta')).toBe(true)
+
+  window.document.dispatchEvent(new Event("contextmenu", {
+    bubbles: true,
+    cancelable: true
+  }))
+
+  // Stuck keys are cleared asynchronously for `contextmenu`. Must check after queue is clear.
+  setTimeout(() => {
+    expect(isHotkeyPressed('meta')).toBe(false)
+  }, 0)
+})

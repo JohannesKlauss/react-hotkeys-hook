@@ -24,6 +24,13 @@ import { isHotkeyModifier, mapCode } from './parseHotkeys'
     window.addEventListener('blur', () => {
       currentlyPressedKeys.clear()
     })
+
+    window.addEventListener('contextmenu', () => {
+      // Must clear pressed keys after existing `keydown` events in queue have resolved.
+      setTimeout(() => {
+        currentlyPressedKeys.clear()
+      }, 0)
+    })
   }
 })()
 
