@@ -2,7 +2,6 @@ import userEvent from '@testing-library/user-event'
 import { useHotkeys, HotkeysProvider } from '../lib'
 import { FormTags, HotkeyCallback, Keys, Options } from '../lib/types'
 import {
-  DependencyList,
   JSXElementConstructor,
   MutableRefObject,
   ReactElement,
@@ -22,7 +21,6 @@ type HookParameters = {
   keys: Keys
   callback?: HotkeyCallback
   options?: Options
-  dependencies?: DependencyList
 }
 
 beforeEach(() => {
@@ -859,33 +857,6 @@ test.each([
 test.skip('should trigger when used in portals', async () => {
 })
 
-test('should parse options and dependencies correctly no matter their position', async () => {
-  const user = userEvent.setup()
-  const callback = vi.fn()
-
-  renderHook(() => useHotkeys('a', callback, [true], { enabled: true }))
-
-  await user.keyboard('A')
-
-  expect(callback).toHaveBeenCalledTimes(1)
-
-  renderHook(() => useHotkeys('b', callback, { enabled: true }, [true]))
-
-  await user.keyboard('A')
-
-  expect(callback).toHaveBeenCalledTimes(2)
-
-  renderHook(() => useHotkeys('c', callback, [true], { enabled: false }))
-
-  await user.keyboard('C')
-
-  renderHook(() => useHotkeys('d', callback, { enabled: false }, [true]))
-
-  await user.keyboard('D')
-
-  expect(callback).toHaveBeenCalledTimes(2)
-})
-
 test('should pass keyboard event and hotkey object to callback', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
@@ -897,6 +868,7 @@ test('should pass keyboard event and hotkey object to callback', async () => {
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
+    hotkey: 'a',
     shift: false,
     ctrl: false,
     alt: false,
@@ -917,6 +889,7 @@ test('should set shift to true in hotkey object if listening to shift', async ()
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
+    hotkey: 'shift+a',
     shift: true,
     ctrl: false,
     alt: false,
@@ -937,6 +910,7 @@ test('should set ctrl to true in hotkey object if listening to ctrl', async () =
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
+    hotkey: 'ctrl+a',
     shift: false,
     ctrl: true,
     alt: false,
@@ -957,6 +931,7 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
+    hotkey: 'alt+a',
     shift: false,
     ctrl: false,
     alt: true,
@@ -977,6 +952,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
+    hotkey: 'mod+a',
     shift: false,
     ctrl: false,
     alt: false,
@@ -997,6 +973,7 @@ test('should set meta to true in hotkey object if listening to meta', async () =
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
+    hotkey: 'meta+a',
     shift: false,
     ctrl: false,
     alt: false,
@@ -1017,6 +994,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
+    hotkey: 'mod+shift+a',
     shift: true,
     alt: false,
     ctrl: false,
@@ -1117,6 +1095,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
   expect(preventDefault).toHaveBeenCalledTimes(1)
   expect(preventDefault).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
     keys: ['a'],
+    hotkey: 'a',
     shift: false,
     alt: false,
     ctrl: false,
@@ -1229,33 +1208,7 @@ test('Should ignore modifiers if option is set', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-
-test('should respect dependencies array if they are passed', async () => {
-  function Fixture() {
-    const [count, setCount] = useState(0)
-
-    const incrementCount = useCallback(() => {
-      setCount(count + 1)
-    }, [count])
-
-    useHotkeys('esc', incrementCount, [])
-
-    return <div>{count}</div>
-  }
-
-  const user = userEvent.setup()
-
-  const { getByText } = render(<Fixture />)
-
-  expect(getByText('0')).not.toBeNull()
-
-  await user.keyboard('{Escape}')
-  await user.keyboard('{Escape}')
-
-  expect(getByText('1')).not.toBeNull()
-})
-
-test('should use updated callback if no dependencies are passed', async () => {
+test('should use updated callback', async () => {
   function Fixture() {
     const [count, setCount] = useState(0)
 

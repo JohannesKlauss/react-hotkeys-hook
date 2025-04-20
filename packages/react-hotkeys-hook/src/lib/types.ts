@@ -8,11 +8,11 @@ export type RefType<T> = T | null
 
 export type EventListenerOptions =
   | {
-  capture?: boolean
-  once?: boolean
-  passive?: boolean
-  signal?: AbortSignal
-}
+      capture?: boolean
+      once?: boolean
+      passive?: boolean
+      signal?: AbortSignal
+    }
   | boolean // useCapture
 
 export type KeyboardModifiers = {
@@ -25,9 +25,10 @@ export type KeyboardModifiers = {
 }
 
 export type Hotkey = KeyboardModifiers & {
-  keys?: readonly string[]
+  keys: readonly string[]
   scopes?: Scopes
   description?: string
+  hotkey: string
 }
 
 export type HotkeysEvent = Hotkey

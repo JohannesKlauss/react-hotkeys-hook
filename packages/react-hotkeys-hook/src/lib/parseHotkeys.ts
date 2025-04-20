@@ -54,5 +54,6 @@ export function parseHotkey(hotkey: string, splitKey = '+', useKey = false, desc
     ...modifiers,
     keys: singleCharKeys,
     description,
+    hotkey,
   }
 }
