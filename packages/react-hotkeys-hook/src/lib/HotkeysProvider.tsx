@@ -1,7 +1,7 @@
 import { Hotkey } from './types'
-import { createContext, ReactNode, useState, useContext, useCallback } from 'react'
+import { createContext, ReactNode, useState, useContext, useCallback, useMemo } from 'react'
+import deepEqual from './util/deepEqual'
 import BoundHotkeysProxyProviderProvider from './BoundHotkeysProxyProvider'
-import deepEqual from './deepEqual'
 
 export type HotkeysContextType = {
   hotkeys: ReadonlyArray<Hotkey>
@@ -69,10 +69,19 @@ export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Pro
     setBoundHotkeys((prev) => prev.filter((h) => !deepEqual(h, hotkey)))
   }, [])
 
+  const hotkeysContextValue = useMemo<HotkeysContextType>(
+    () => ({
+      hotkeys: boundHotkeys,
+      activeScopes: internalActiveScopes,
+      enableScope,
+      disableScope,
+      toggleScope,
+    }),
+    [boundHotkeys, internalActiveScopes, enableScope, disableScope, toggleScope]
+  )
+
   return (
-    <HotkeysContext.Provider
-      value={{ activeScopes: internalActiveScopes, hotkeys: boundHotkeys, enableScope, disableScope, toggleScope }}
-    >
+    <HotkeysContext.Provider value={hotkeysContextValue}>
       <BoundHotkeysProxyProviderProvider addHotkey={addBoundHotkey} removeHotkey={removeBoundHotkey}>
         {children}
       </BoundHotkeysProxyProviderProvider>
