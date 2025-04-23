@@ -268,7 +268,6 @@ test('should be able to always output correct keys on multiple hotkeys', async (
   await user.keyboard('{/A}')
   expect(callbackA).toHaveBeenCalledTimes(1)
   expect(callbackB).toHaveBeenCalledTimes(2)
-
 })
 
 test('should be able to parse first argument as string, array or readonly array', async () => {
@@ -1423,4 +1422,31 @@ test('should be disabled on form tags inside custom elements by default', async 
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(within(getByTestId('form-tag').shadowRoot).getByTestId('input')).toHaveValue('A')
+})
+
+test('Should trigger only produced key hotkeys', async () => {
+  const user = userEvent.setup()
+
+  const callbackZ = vi.fn()
+  const callbackY = vi.fn()
+
+  renderHook(() => useHotkeys(['z'], callbackZ, {useKey: true}))
+  renderHook(() => useHotkeys(['y'], callbackY, {useKey: true}))
+
+  await user.keyboard('Z')
+  expect(callbackZ).toHaveBeenCalledTimes(1)
+  expect(callbackY).toHaveBeenCalledTimes(0)
+
+  await user.keyboard('Y')
+  expect(callbackZ).toHaveBeenCalledTimes(1)
+  expect(callbackY).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('W')
+
+  expect(callbackZ).toHaveBeenCalledTimes(1)
+  expect(callbackY).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('Y')
+  expect(callbackZ).toHaveBeenCalledTimes(1)
+  expect(callbackY).toHaveBeenCalledTimes(2)
 })

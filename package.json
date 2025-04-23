@@ -1,7 +1,7 @@
 {
   "name": "react-hotkeys-hook",
   "description": "React hook for handling keyboard shortcuts",
-  "version": "5.0.2",
+  "version": "5.0.1",
   "private": true,
   "repository": {
     "type": "git",
