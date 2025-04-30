@@ -27,6 +27,9 @@ type HookParameters = {
 
 beforeEach(() => {
   window.dispatchEvent(new Event('DOMContentLoaded'))
+  vi.useFakeTimers({
+    shouldAdvanceTime: true,
+  })
 })
 
 test('should listen to esc modifier for escape key', async () => {
@@ -366,6 +369,74 @@ test('should listen to multiple combinations with modifiers', async () => {
   await user.keyboard('{Alt>}B{/Alt}')
 
   expect(callback).toHaveBeenCalledTimes(2)
+})
+
+test('should listen to sequences', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  const { rerender } = renderHook<void, HookParameters>(({ keys }) => useHotkeys(keys, callback), {
+    initialProps: {
+      keys: 'y>e>e>t',
+    },
+  })
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  vi.runAllTimers()
+
+  rerender({ keys: 'y>e>e>t' })
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+})
+
+test('should not trigger when sequence is incomplete', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('y>e>e>t', callback))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(500)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(500)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(500)
+
+  expect(callback).not.toHaveBeenCalled()
+})
+
+test('should not trigger when sequence and combination are mixed', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('y>e+e>t', callback))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+
+  expect(callback).not.toHaveBeenCalled()
 })
 
 test('should reflect set delimiter character', async () => {

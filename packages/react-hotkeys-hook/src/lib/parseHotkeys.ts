@@ -33,11 +33,22 @@ export function parseKeysHookInput(keys: string, delimiter = ','): string[] {
   return keys.toLowerCase().split(delimiter)
 }
 
-export function parseHotkey(hotkey: string, splitKey = '+', useKey = false, description?: string): Hotkey {
-  const keys = hotkey
-    .toLocaleLowerCase()
-    .split(splitKey)
-    .map((k) => mapCode(k))
+export function parseHotkey(hotkey: string, splitKey = '+', sequenceSplitKey = '>', useKey = false, description?: string): Hotkey {
+  let keys: string[] = []
+  let isSequence = false
+
+  if (hotkey.includes(sequenceSplitKey)) {
+    isSequence = true
+    keys = hotkey
+      .toLocaleLowerCase()
+      .split(sequenceSplitKey)
+      .map((k) => mapCode(k))
+  } else {
+    keys = hotkey
+      .toLocaleLowerCase()
+      .split(splitKey)
+      .map((k) => mapCode(k))
+  }
 
   const modifiers: KeyboardModifiers = {
     alt: keys.includes('alt'),
@@ -54,5 +65,6 @@ export function parseHotkey(hotkey: string, splitKey = '+', useKey = false, desc
     ...modifiers,
     keys: singleCharKeys,
     description,
+    isSequence,
   }
 }

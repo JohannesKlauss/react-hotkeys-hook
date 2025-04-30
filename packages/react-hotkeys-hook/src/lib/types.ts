@@ -28,6 +28,7 @@ export type Hotkey = KeyboardModifiers & {
   keys?: readonly string[]
   scopes?: Scopes
   description?: string
+  isSequence?: boolean
 }
 
 export type HotkeysEvent = Hotkey
@@ -63,10 +64,14 @@ export type Options = {
   document?: Document
   // Ignore modifiers when matching hotkeys. (Default: false)
   ignoreModifiers?: boolean
-  // Listen to the produced key instead of the code. (Default: false)
-  eventListenerOptions?: EventListenerOptions
   // Pass through event listener options. (Default: undefined)
+  eventListenerOptions?: EventListenerOptions
+  // Listen to the produced key instead of the code. (Default: false)
   useKey?: boolean
+  // The timeout to wait for the next key to be pressed. (Default: 1000ms)
+  sequenceTimeout?: number
+  // The character to split the sequence of keys. (Default: >)
+  sequenceSplitKey?: string
 }
 
 export type OptionsOrDependencyArray = Options | DependencyList

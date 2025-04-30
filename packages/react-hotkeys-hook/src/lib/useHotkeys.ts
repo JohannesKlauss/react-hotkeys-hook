@@ -54,6 +54,9 @@ export default function useHotkeys<T extends HTMLElement>(
   const { activeScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
+  let recordedKeys: string[] = []
+  let sequenceTimer: NodeJS.Timeout | undefined
+
   useSafeLayoutEffect(() => {
     if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
       return
@@ -84,30 +87,58 @@ export default function useHotkeys<T extends HTMLElement>(
       }
 
       parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
-        const hotkey = parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+        if (key.includes(memoisedOptions?.splitKey ?? '') && key.includes(memoisedOptions?.sequenceSplitKey ?? '' )) {
+          return
+        }
 
-        if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
-          if (memoisedOptions?.ignoreEventWhen?.(e)) {
-            return
+        const hotkey = parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.sequenceSplitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+
+        if (hotkey.isSequence) {
+          // Set a timeout to check post which the sequence should reset
+          sequenceTimer = setTimeout(() => {
+            recordedKeys = []
+          }, memoisedOptions?.sequenceTimeout ?? 1000)
+
+          // Add current key to the sequence
+          recordedKeys.push(e.key)
+
+          // If the sequence is complete, trigger the callback
+          if (recordedKeys.length === hotkey.keys?.length) {
+            // Check if the sequence is correct
+            if (recordedKeys.every((key, index) => key === hotkey.keys?.[index])) {
+              cbRef.current(e, hotkey)
+
+              if (sequenceTimer) {
+                clearTimeout(sequenceTimer)
+              }
+
+              recordedKeys = []
+            }
           }
+        } else {
+          if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
+            if (memoisedOptions?.ignoreEventWhen?.(e)) {
+              return
+            }
 
-          if (isKeyUp && hasTriggeredRef.current) {
-            return
-          }
+            if (isKeyUp && hasTriggeredRef.current) {
+              return
+            }
 
-          maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
+            maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
 
-          if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
-            stopPropagation(e)
+            if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
+              stopPropagation(e)
 
-            return
-          }
+              return
+            }
 
-          // Execute the user callback for that hotkey
-          cbRef.current(e, hotkey)
+            // Execute the user callback for that hotkey
+            cbRef.current(e, hotkey)
 
-          if (!isKeyUp) {
-            hasTriggeredRef.current = true
+            if (!isKeyUp) {
+              hasTriggeredRef.current = true
+            }
           }
         }
       })
@@ -151,7 +182,7 @@ export default function useHotkeys<T extends HTMLElement>(
     if (proxy) {
       parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
         proxy.addHotkey(
-          parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+          parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.sequenceSplitKey, memoisedOptions?.useKey, memoisedOptions?.description)
         )
       )
     }
@@ -165,7 +196,7 @@ export default function useHotkeys<T extends HTMLElement>(
       if (proxy) {
         parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
           proxy.removeHotkey(
-            parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+            parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.sequenceSplitKey, memoisedOptions?.useKey, memoisedOptions?.description)
           )
         )
       }
