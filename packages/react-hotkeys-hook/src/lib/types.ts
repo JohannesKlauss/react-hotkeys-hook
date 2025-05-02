@@ -69,7 +69,7 @@ export type Options = {
   // Listen to the produced key instead of the code. (Default: false)
   useKey?: boolean
   // The timeout to wait for the next key to be pressed. (Default: 1000ms)
-  sequenceTimeout?: number
+  sequenceTimeoutMs?: number
   // The character to split the sequence of keys. (Default: >)
   sequenceSplitKey?: string
 }

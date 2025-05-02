@@ -423,6 +423,7 @@ test('should not trigger when sequence is incomplete', async () => {
 })
 
 test('should not trigger when sequence and combination are mixed', async () => {
+  console.warn = vi.fn()
   const user = userEvent.setup()
   const callback = vi.fn()
 
@@ -436,7 +437,128 @@ test('should not trigger when sequence and combination are mixed', async () => {
   vi.advanceTimersByTime(200)
   await user.keyboard('t')
 
+  expect(console.warn).toHaveBeenCalledWith(
+    'Hotkey y>e+e>t contains both + and > which is not supported.',
+  )
+
   expect(callback).not.toHaveBeenCalled()
+})
+
+test('should work with sequences and other hotkeys together', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook<void, HookParameters>(({ keys }) => useHotkeys(keys, callback), {
+    initialProps: {
+      keys: ['y>e>e>t', 'y', 'meta+a'],
+    },
+  })
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+
+  await user.keyboard('{Meta>}A{/Meta}')
+
+  expect(callback).toHaveBeenCalledTimes(3)
+})
+
+test('should reset sequence when timeout occurs', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('y>e>e>t', callback))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(1100)
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should handle component unmount during sequence detection', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  const { unmount } = renderHook(() => useHotkeys('y>e>e>t', callback))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+
+  unmount()
+
+  vi.advanceTimersByTime(1100)
+})
+
+test('should reset sequence when incorrect key is pressed', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('y>e>e>t', callback))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('x')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+
+  expect(callback).not.toHaveBeenCalled()
+
+  vi.runAllTimers()
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger sequence with useKey', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('%>!', callback, { useKey: true }))
+
+  await user.keyboard(`{Shift>}{%}{/Shift}`)
+  vi.advanceTimersByTime(200)
+  await user.keyboard(`{Shift>}{!}{/Shift}`)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should not trigger sequence without useKey', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('%>!', callback, { useKey: false }))
+
+  await user.keyboard(`{Shift>}{%}{/Shift}`)
+  vi.advanceTimersByTime(200)
+  await user.keyboard(`{Shift>}{!}{/Shift}`)
+
+  expect(callback).toHaveBeenCalledTimes(0)
 })
 
 test('should reflect set delimiter character', async () => {
@@ -973,6 +1095,7 @@ test('should pass keyboard event and hotkey object to callback', async () => {
     meta: false,
     mod: false,
     useKey: false,
+    isSequence: false,
   })
 })
 
@@ -993,6 +1116,7 @@ test('should set shift to true in hotkey object if listening to shift', async ()
     meta: false,
     mod: false,
     useKey: false,
+    isSequence: false,
   })
 })
 
@@ -1013,6 +1137,7 @@ test('should set ctrl to true in hotkey object if listening to ctrl', async () =
     meta: false,
     mod: false,
     useKey: false,
+    isSequence: false,
   })
 })
 
@@ -1033,6 +1158,7 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
     meta: false,
     mod: false,
     useKey: false,
+    isSequence: false,
   })
 })
 
@@ -1053,6 +1179,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
     meta: false,
     mod: true,
     useKey: false,
+    isSequence: false,
   })
 })
 
@@ -1073,6 +1200,7 @@ test('should set meta to true in hotkey object if listening to meta', async () =
     meta: true,
     mod: false,
     useKey: false,
+    isSequence: false,
   })
 })
 
@@ -1093,6 +1221,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
     meta: false,
     mod: true,
     useKey: false,
+    isSequence: false,
   })
 })
 
@@ -1193,6 +1322,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
     meta: false,
     mod: false,
     useKey: false,
+    isSequence: false,
   })
 })
 
