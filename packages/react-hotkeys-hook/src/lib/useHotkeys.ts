@@ -1,4 +1,4 @@
-import { HotkeyCallback, Keys, Options, OptionsOrDependencyArray, RefType } from './types'
+import { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
 import { DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
@@ -28,7 +28,7 @@ export default function useHotkeys<T extends HTMLElement>(
   options?: OptionsOrDependencyArray,
   dependencies?: OptionsOrDependencyArray
 ) {
-  const ref = useRef<RefType<T>>(null)
+  const ref = useRef<T>(null)
   const hasTriggeredRef = useRef(false)
 
   const _options: Options | undefined = !(options instanceof Array)

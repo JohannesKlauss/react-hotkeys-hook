@@ -4,8 +4,6 @@ export type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 
 export type Keys = string | readonly string[]
 export type Scopes = string | readonly string[]
 
-export type RefType<T> = T | null
-
 export type EventListenerOptions =
   | {
   capture?: boolean
