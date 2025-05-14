@@ -151,6 +151,47 @@ globally if we don't use its return value.
 
 ***
 
+## Sequential Hotkeys
+
+We can also listen to keystrokes sequentially, meaning that the user has to press keys in a specific order before invoking the callback. To specify a sequential hotkey, we use the `>` character.
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('g>h>i', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Received the combination {count} times.</span>
+  )
+}
+```
+
+In the example above, the user has to press the `g` key, then the `h` key and finally the `i` key in order to trigger the callback.
+
+#### Timeout
+`useHotkeys` sets a default time window for the sequential hotkey of `1000ms` to prevent listening for incomplete sequences indefinitely. If the user doesn't press the next key in that given time, the sequence is aborted.
+
+We can override the timeout by passing the `sequenceTimeoutMs` option:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('g>h>i>j', () => setCount(prevCount => prevCount + 1), {
+    sequenceTimeoutMs: 10000,
+  })
+
+  return (
+    <span>Received the combination {count} times.</span>
+  )
+}
+```
+
+In the example above, the user has to press the `g` key, then the `h` key and then the `i` key, and finally the `j` key in order to trigger the callback.
+The timeout is 10 seconds, so the user has a lot of time to press the keys.
+
+
+***
+
 ## Modifiers & Special keys
 
 Of course, we also want to leverage more complex keystrokes. `useHotkeys` supports the following modifiers:
@@ -161,7 +202,7 @@ Of course, we also want to leverage more complex keystrokes. `useHotkeys` suppor
 * `meta`
 * `mod` (which listens for `ctrl` on Windows/Linux)
 
-## MacOS and Windows/Linux compatability
+## MacOS and Windows/Linux compatibility
 Since version 4 `alt` and `option` are identical. The `meta` key is the same as `cmd` on macOS and `os` key on Windows.
 
 ```jsx
