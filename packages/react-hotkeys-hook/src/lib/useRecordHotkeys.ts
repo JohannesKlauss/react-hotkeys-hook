@@ -1,54 +1,54 @@
-import { useCallback, useState } from 'react';
-import { mapCode } from './parseHotkeys';
+import { useCallback, useState } from 'react'
+import { mapCode } from './parseHotkeys'
 
 export default function useRecordHotkeys(useKey = false) {
-  const [keys, setKeys] = useState(new Set<string>());
-  const [isRecording, setIsRecording] = useState(false);
+  const [keys, setKeys] = useState(new Set<string>())
+  const [isRecording, setIsRecording] = useState(false)
 
   const handler = useCallback(
     (event: KeyboardEvent) => {
       if (event.code === undefined) {
         // Synthetic event (e.g., Chrome autofill).  Ignore.
-        return;
+        return
       }
 
-      event.preventDefault();
-      event.stopPropagation();
+      event.preventDefault()
+      event.stopPropagation()
 
       setKeys((prev) => {
-        const newKeys = new Set(prev);
+        const newKeys = new Set(prev)
 
-        newKeys.add(mapCode(useKey ? event.key : event.code));
+        newKeys.add(mapCode(useKey ? event.key : event.code))
 
-        return newKeys;
-      });
+        return newKeys
+      })
     },
     [useKey],
-  );
+  )
 
   const stop = useCallback(() => {
     if (typeof document !== 'undefined') {
-      document.removeEventListener('keydown', handler);
+      document.removeEventListener('keydown', handler)
 
-      setIsRecording(false);
+      setIsRecording(false)
     }
-  }, [handler]);
+  }, [handler])
 
   const start = useCallback(() => {
-    setKeys(new Set<string>());
+    setKeys(new Set<string>())
 
     if (typeof document !== 'undefined') {
-      stop();
+      stop()
 
-      document.addEventListener('keydown', handler);
+      document.addEventListener('keydown', handler)
 
-      setIsRecording(true);
+      setIsRecording(true)
     }
-  }, [handler, stop]);
+  }, [handler, stop])
 
   const resetKeys = useCallback(() => {
-    setKeys(new Set<string>());
-  }, []);
+    setKeys(new Set<string>())
+  }, [])
 
-  return [keys, { start, stop, resetKeys, isRecording }] as const;
+  return [keys, { start, stop, resetKeys, isRecording }] as const
 }

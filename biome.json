@@ -28,7 +28,8 @@
 	"javascript": {
 		"formatter": {
 			"lineWidth": 120,
-			"quoteStyle": "single"
+			"quoteStyle": "single",
+			"semicolons": "asNeeded"
 		}
 	}
 }

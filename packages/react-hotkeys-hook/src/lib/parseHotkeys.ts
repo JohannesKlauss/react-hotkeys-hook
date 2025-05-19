@@ -1,6 +1,6 @@
-import type { Hotkey, KeyboardModifiers } from './types';
+import type { Hotkey, KeyboardModifiers } from './types'
 
-const reservedModifierKeywords = ['shift', 'alt', 'meta', 'mod', 'ctrl', 'control'];
+const reservedModifierKeywords = ['shift', 'alt', 'meta', 'mod', 'ctrl', 'control']
 
 const mappedKeys: Record<string, string> = {
   esc: 'escape',
@@ -19,18 +19,18 @@ const mappedKeys: Record<string, string> = {
   OSRight: 'meta',
   ControlLeft: 'ctrl',
   ControlRight: 'ctrl',
-};
+}
 
 export function mapCode(key: string): string {
-  return (mappedKeys[key.trim()] || key.trim()).toLowerCase().replace(/key|digit|numpad/, '');
+  return (mappedKeys[key.trim()] || key.trim()).toLowerCase().replace(/key|digit|numpad/, '')
 }
 
 export function isHotkeyModifier(key: string) {
-  return reservedModifierKeywords.includes(key);
+  return reservedModifierKeywords.includes(key)
 }
 
 export function parseKeysHookInput(keys: string, delimiter = ','): string[] {
-  return keys.toLowerCase().split(delimiter);
+  return keys.toLowerCase().split(delimiter)
 }
 
 export function parseHotkey(
@@ -40,20 +40,20 @@ export function parseHotkey(
   useKey = false,
   description?: string,
 ): Hotkey {
-  let keys: string[] = [];
-  let isSequence = false;
+  let keys: string[] = []
+  let isSequence = false
 
   if (hotkey.includes(sequenceSplitKey)) {
-    isSequence = true;
+    isSequence = true
     keys = hotkey
       .toLocaleLowerCase()
       .split(sequenceSplitKey)
-      .map((k) => mapCode(k));
+      .map((k) => mapCode(k))
   } else {
     keys = hotkey
       .toLocaleLowerCase()
       .split(splitKey)
-      .map((k) => mapCode(k));
+      .map((k) => mapCode(k))
   }
 
   const modifiers: KeyboardModifiers = {
@@ -63,14 +63,14 @@ export function parseHotkey(
     meta: keys.includes('meta'),
     mod: keys.includes('mod'),
     useKey,
-  };
+  }
 
-  const singleCharKeys = keys.filter((k) => !reservedModifierKeywords.includes(k));
+  const singleCharKeys = keys.filter((k) => !reservedModifierKeywords.includes(k))
 
   return {
     ...modifiers,
     keys: singleCharKeys,
     description,
     isSequence,
-  };
+  }
 }
