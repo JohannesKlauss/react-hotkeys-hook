@@ -1,8 +1,10 @@
 import js from '@eslint/js'
-import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import globals from 'globals'
 import tseslint from 'typescript-eslint'
+
+const customHooksWithDeps = ['useIsomorphicLayoutEffect'];
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -23,6 +25,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      'react-hooks/exhaustive-deps': ['warn', { additionalHooks: `(${customHooksWithDeps.join('|')})` }],
     },
   },
 )

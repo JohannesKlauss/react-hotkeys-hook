@@ -1,28 +1,27 @@
+import { createEvent, fireEvent, render, renderHook, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { useHotkeys, HotkeysProvider } from '../lib'
-import type { FormTags, HotkeyCallback, Keys, Options } from '../lib/types'
 import {
-  type DependencyList,
   type JSXElementConstructor,
-  type MutableRefObject,
   type ReactElement,
   type ReactNode,
+  type RefObject,
   useCallback,
   useState,
 } from 'react'
-import { createEvent, fireEvent, render, screen, renderHook, within } from '@testing-library/react'
-import {test, expect, beforeEach, vi} from 'vitest'
+import { beforeEach, expect, test, vi } from 'vitest'
+import { HotkeysProvider, useHotkeys } from '../lib'
+import type { FormTags, Hotkey, HotkeyCallback, Keys, Options } from '../lib/types'
 
 const wrapper =
   (initialScopes: string[]): JSXElementConstructor<{ children: ReactElement }> =>
-    ({ children }: { children: ReactNode }) =>
-      <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
+  ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
+  )
 
 type HookParameters = {
   keys: Keys
   callback?: HotkeyCallback
   options?: Options
-  dependencies?: DependencyList
 }
 
 beforeEach(() => {
@@ -437,9 +436,7 @@ test('should not trigger when sequence and combination are mixed', async () => {
   vi.advanceTimersByTime(200)
   await user.keyboard('t')
 
-  expect(console.warn).toHaveBeenCalledWith(
-    'Hotkey y>e+e>t contains both + and > which is not supported.',
-  )
+  expect(console.warn).toHaveBeenCalledWith('Hotkey y>e+e>t contains both + and > which is not supported.')
 
   expect(callback).not.toHaveBeenCalled()
 })
@@ -541,9 +538,9 @@ test('should trigger sequence with useKey', async () => {
 
   renderHook(() => useHotkeys('%>!', callback, { useKey: true }))
 
-  await user.keyboard(`{Shift>}{%}{/Shift}`)
+  await user.keyboard('{Shift>}{%}{/Shift}')
   vi.advanceTimersByTime(200)
-  await user.keyboard(`{Shift>}{!}{/Shift}`)
+  await user.keyboard('{Shift>}{!}{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
@@ -554,9 +551,9 @@ test('should not trigger sequence without useKey', async () => {
 
   renderHook(() => useHotkeys('%>!', callback, { useKey: false }))
 
-  await user.keyboard(`{Shift>}{%}{/Shift}`)
+  await user.keyboard('{Shift>}{%}{/Shift}')
   vi.advanceTimersByTime(200)
-  await user.keyboard(`{Shift>}{!}{/Shift}`)
+  await user.keyboard('{Shift>}{!}{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(0)
 })
@@ -565,7 +562,7 @@ test('should reflect set delimiter character', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  const { rerender } = renderHook<MutableRefObject<HTMLElement | null>, HookParameters>(
+  const { rerender } = renderHook<RefObject<HTMLElement | null>, HookParameters>(
     ({ keys, options }) => useHotkeys(keys, callback, options),
     {
       initialProps: { keys: 'a, b', options: undefined },
@@ -729,16 +726,19 @@ test('should ignore case of form tags', async () => {
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
-test('should ignore event when ignoreEventWhen\'s condition matches', async () => {
+test("should ignore event when ignoreEventWhen's condition matches", async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
-  const Component = ({ cb, ignoreEventWhen }: {
-    cb: HotkeyCallback;
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
     ignoreEventWhen?: (e: KeyboardEvent) => boolean
   }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='ignore' data-testid={'test-button'} />
+    return <button className="ignore" data-testid={'test-button'} />
   }
 
   const eventCondition = (e: KeyboardEvent) => {
@@ -759,16 +759,19 @@ test('should ignore event when ignoreEventWhen\'s condition matches', async () =
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match', async () => {
+test("shouldn't ignore event when ignoreEventWhen's condition doesn't match", async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
-  const Component = ({ cb, ignoreEventWhen }: {
-    cb: HotkeyCallback;
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
     ignoreEventWhen?: (e: KeyboardEvent) => boolean
   }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='dont-ignore' data-testid={'test-button'} />
+    return <button className="dont-ignore" data-testid={'test-button'} />
   }
 
   const eventCondition = (e: KeyboardEvent) => {
@@ -792,13 +795,16 @@ test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match',
 test('should call ignoreEventWhen callback only when event is a hotkey match', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
-  const Component = ({ cb, ignoreEventWhen }: {
-    cb: HotkeyCallback;
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
     ignoreEventWhen?: (e: KeyboardEvent) => boolean
   }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='ignore' data-testid={'test-button'} />
+    return <button className="ignore" data-testid={'test-button'} />
   }
 
   const { getByTestId } = render(<Component cb={vi.fn()} ignoreEventWhen={callback} />)
@@ -1029,66 +1035,34 @@ test('should listen to function keys f1-f16', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test.each([
-  'arrowUp',
-  'arrowDown',
-  'arrowLeft',
-  'arrowRight',
-  'space',
-  'enter',
-  'backspace',
-])('should allow named key %s', async (key) => {
-  const user = userEvent.setup()
-  const callback = vi.fn()
+test.each(['arrowUp', 'arrowDown', 'arrowLeft', 'arrowRight', 'space', 'enter', 'backspace'])(
+  'should allow named key %s',
+  async (key) => {
+    const user = userEvent.setup()
+    const callback = vi.fn()
 
-  renderHook(() => useHotkeys(key, callback))
+    renderHook(() => useHotkeys(key, callback))
 
-  await user.keyboard(key === 'space' ? '[Space]' : `{${key}}`)
+    await user.keyboard(key === 'space' ? '[Space]' : `{${key}}`)
 
-  expect(callback).toHaveBeenCalledTimes(1)
-})
+    expect(callback).toHaveBeenCalledTimes(1)
+  },
+)
 
-test.skip('should trigger when used in portals', async () => {
-})
-
-test('should parse options and dependencies correctly no matter their position', async () => {
-  const user = userEvent.setup()
-  const callback = vi.fn()
-
-  renderHook(() => useHotkeys('a', callback, [true], { enabled: true }))
-
-  await user.keyboard('A')
-
-  expect(callback).toHaveBeenCalledTimes(1)
-
-  renderHook(() => useHotkeys('b', callback, { enabled: true }, [true]))
-
-  await user.keyboard('A')
-
-  expect(callback).toHaveBeenCalledTimes(2)
-
-  renderHook(() => useHotkeys('c', callback, [true], { enabled: false }))
-
-  await user.keyboard('C')
-
-  renderHook(() => useHotkeys('d', callback, { enabled: false }, [true]))
-
-  await user.keyboard('D')
-
-  expect(callback).toHaveBeenCalledTimes(2)
-})
+test.skip('should trigger when used in portals', async () => {})
 
 test('should pass keyboard event and hotkey object to callback', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  renderHook(() => useHotkeys('a', callback))
+  const hotkey = 'a'
+  renderHook(() => useHotkeys(hotkey, callback))
 
   await user.keyboard('A')
 
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+  expectHotkeysCallbackToHaveBeenCalledWith(callback, {
     keys: ['a'],
+    hotkey,
     shift: false,
     ctrl: false,
     alt: false,
@@ -1103,13 +1077,14 @@ test('should set shift to true in hotkey object if listening to shift', async ()
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  renderHook(() => useHotkeys('shift+a', callback))
+  const hotkey = 'shift+a'
+  renderHook(() => useHotkeys(hotkey, callback))
 
   await user.keyboard('{Shift>}A{/Shift}')
 
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+  expectHotkeysCallbackToHaveBeenCalledWith(callback, {
     keys: ['a'],
+    hotkey,
     shift: true,
     ctrl: false,
     alt: false,
@@ -1124,13 +1099,14 @@ test('should set ctrl to true in hotkey object if listening to ctrl', async () =
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  renderHook(() => useHotkeys('ctrl+a', callback))
+  const hotkey = 'ctrl+a'
+  renderHook(() => useHotkeys(hotkey, callback))
 
   await user.keyboard('{Control>}A{/Control}')
 
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+  expectHotkeysCallbackToHaveBeenCalledWith(callback, {
     keys: ['a'],
+    hotkey,
     shift: false,
     ctrl: true,
     alt: false,
@@ -1145,13 +1121,14 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  renderHook(() => useHotkeys('alt+a', callback))
+  const hotkey = 'alt+a'
+  renderHook(() => useHotkeys(hotkey, callback))
 
   await user.keyboard('{Alt>}A{/Alt}')
 
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+  expectHotkeysCallbackToHaveBeenCalledWith(callback, {
     keys: ['a'],
+    hotkey,
     shift: false,
     ctrl: false,
     alt: true,
@@ -1166,13 +1143,14 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  renderHook(() => useHotkeys('mod+a', callback))
+  const hotkey = 'mod+a'
+  renderHook(() => useHotkeys(hotkey, callback))
 
   await user.keyboard('{Meta>}A{/Meta}')
 
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+  expectHotkeysCallbackToHaveBeenCalledWith(callback, {
     keys: ['a'],
+    hotkey,
     shift: false,
     ctrl: false,
     alt: false,
@@ -1187,13 +1165,14 @@ test('should set meta to true in hotkey object if listening to meta', async () =
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  renderHook(() => useHotkeys('meta+a', callback))
+  const hotkey = 'meta+a'
+  renderHook(() => useHotkeys(hotkey, callback))
 
   await user.keyboard('{Meta>}A{/Meta}')
 
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+  expectHotkeysCallbackToHaveBeenCalledWith(callback, {
     keys: ['a'],
+    hotkey,
     shift: false,
     ctrl: false,
     alt: false,
@@ -1208,13 +1187,14 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  renderHook(() => useHotkeys('mod+shift+a', callback))
+  const hotkey = 'mod+shift+a'
+  renderHook(() => useHotkeys(hotkey, callback))
 
   await user.keyboard('{Meta>}{Shift>}A{/Shift}{/Meta}')
 
-  expect(callback).toHaveBeenCalledTimes(1)
-  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+  expectHotkeysCallbackToHaveBeenCalledWith(callback, {
     keys: ['a'],
+    hotkey,
     shift: true,
     alt: false,
     ctrl: false,
@@ -1308,14 +1288,14 @@ test('should call preventDefault option function with hotkey and keyboard event'
   const user = userEvent.setup()
   const preventDefault = vi.fn()
 
-  renderHook(() => useHotkeys('a', async () => {
-  }, { preventDefault }))
+  const hotkey = 'a'
+  renderHook(() => useHotkeys(hotkey, async () => {}, { preventDefault }))
 
   await user.keyboard('A')
 
-  expect(preventDefault).toHaveBeenCalledTimes(1)
-  expect(preventDefault).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+  expectHotkeysCallbackToHaveBeenCalledWith(preventDefault, {
     keys: ['a'],
+    hotkey,
     shift: false,
     alt: false,
     ctrl: false,
@@ -1355,7 +1335,7 @@ test.each([
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test.each(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])(`Should listen to number key %s`, async (key) => {
+test.each(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])('Should listen to number key %s', async (key) => {
   const user = userEvent.setup()
   const callback = vi.fn()
 
@@ -1370,9 +1350,9 @@ test('should not call callback if meta is held down but other key is not present
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  renderHook(() => useHotkeys(`meta+z`, callback))
+  renderHook(() => useHotkeys('meta+z', callback))
 
-  await user.keyboard(`{Meta>}Z`)
+  await user.keyboard('{Meta>}Z')
 
   expect(callback).toHaveBeenCalledTimes(1)
 
@@ -1429,57 +1409,6 @@ test('Should ignore modifiers if option is set', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-
-test('should respect dependencies array if they are passed', async () => {
-  function Fixture() {
-    const [count, setCount] = useState(0)
-
-    const incrementCount = useCallback(() => {
-      setCount(count + 1)
-    }, [count])
-
-    useHotkeys('esc', incrementCount, [])
-
-    return <div>{count}</div>
-  }
-
-  const user = userEvent.setup()
-
-  const { getByText } = render(<Fixture />)
-
-  expect(getByText('0')).not.toBeNull()
-
-  await user.keyboard('{Escape}')
-  await user.keyboard('{Escape}')
-
-  expect(getByText('1')).not.toBeNull()
-})
-
-test('should use updated callback if no dependencies are passed', async () => {
-  function Fixture() {
-    const [count, setCount] = useState(0)
-
-    const incrementCount = useCallback(() => {
-      setCount(count + 1)
-    }, [count])
-
-    useHotkeys('esc', incrementCount)
-
-    return <div>{count}</div>
-  }
-
-  const user = userEvent.setup()
-
-  const { getByText } = render(<Fixture />)
-
-  expect(getByText('0')).not.toBeNull()
-
-  await user.keyboard('{Escape}')
-  await user.keyboard('{Escape}')
-
-  expect(getByText('2')).not.toBeNull()
-})
-
 test('Should trigger only callback for combination', async () => {
   const user = userEvent.setup()
 
@@ -1495,9 +1424,9 @@ test('Should trigger only callback for combination', async () => {
     }
   }
 
-  renderHook(() => useHotkeys([`meta+z`, `z`], handleHotkey))
+  renderHook(() => useHotkeys(['meta+z', 'z'], handleHotkey))
 
-  await user.keyboard(`{Meta>}Z`)
+  await user.keyboard('{Meta>}Z')
 
   expect(combinationsCallback).toHaveBeenCalledTimes(1)
   expect(keysCallback).toHaveBeenCalledTimes(0)
@@ -1520,13 +1449,13 @@ test('Should listen to produced key and not to code', async () => {
 
   renderHook(() => useHotkeys('!', callback))
 
-  await user.keyboard(`{Shift>}{!}{/Shift}`)
+  await user.keyboard('{Shift>}{!}{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(0)
 
   renderHook(() => useHotkeys('shift+1', callback))
 
-  await user.keyboard(`{Shift>}{1}{/Shift}`)
+  await user.keyboard('{Shift>}{1}{/Shift}')
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
@@ -1588,28 +1517,28 @@ test('should be disabled on form tags inside custom elements by default', async 
   const callback = vi.fn()
 
   customElements.define(
-    "custom-input",
+    'custom-input',
     class extends HTMLElement {
       constructor() {
-        super();
+        super()
 
-        const inputEle = document.createElement("input");
-        inputEle.setAttribute("type", "text");
-        inputEle.setAttribute("data-testid", "input");
+        const inputEle = document.createElement('input')
+        inputEle.setAttribute('type', 'text')
+        inputEle.setAttribute('data-testid', 'input')
 
         const shadowRoot = this.attachShadow({
-          mode: "open"
-        });
+          mode: 'open',
+        })
 
-        shadowRoot.appendChild(inputEle);
+        shadowRoot.appendChild(inputEle)
       }
     },
-  );
+  )
 
   const Component = ({ cb }: { cb: HotkeyCallback }) => {
     useHotkeys<HTMLDivElement>('a', cb)
 
-    return <custom-input data-testid={'form-tag'}/>
+    return <custom-input data-testid={'form-tag'} />
   }
 
   const { getByTestId } = render(<Component cb={callback} />)
@@ -1631,8 +1560,8 @@ test('Should trigger only produced key hotkeys', async () => {
   const callbackZ = vi.fn()
   const callbackY = vi.fn()
 
-  renderHook(() => useHotkeys(['z'], callbackZ, {useKey: true}))
-  renderHook(() => useHotkeys(['y'], callbackY, {useKey: true}))
+  renderHook(() => useHotkeys(['z'], callbackZ, { useKey: true }))
+  renderHook(() => useHotkeys(['y'], callbackY, { useKey: true }))
 
   await user.keyboard('Z')
   expect(callbackZ).toHaveBeenCalledTimes(1)
@@ -1651,3 +1580,8 @@ test('Should trigger only produced key hotkeys', async () => {
   expect(callbackZ).toHaveBeenCalledTimes(1)
   expect(callbackY).toHaveBeenCalledTimes(2)
 })
+
+function expectHotkeysCallbackToHaveBeenCalledWith(callback: HotkeyCallback, HotkeyEvent: Hotkey) {
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), HotkeyEvent)
+}
