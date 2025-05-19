@@ -176,12 +176,12 @@ export default function useHotkeys<T extends HTMLElement>(keys: Keys, callback: 
       }
     }
 
-    const domNode = ref.current || options?.document || document
+    const domNode = ref.current || memoisedOptions?.document || document
 
     // @ts-expect-error TS2345
-    domNode.addEventListener('keyup', handleKeyUp, options?.eventListenerOptions)
+    domNode.addEventListener('keyup', handleKeyUp, memoisedOptions?.eventListenerOptions)
     // @ts-expect-error TS2345
-    domNode.addEventListener('keydown', handleKeyDown, options?.eventListenerOptions)
+    domNode.addEventListener('keydown', handleKeyDown, memoisedOptions?.eventListenerOptions)
 
     if (proxy) {
       parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
@@ -199,9 +199,9 @@ export default function useHotkeys<T extends HTMLElement>(keys: Keys, callback: 
 
     return () => {
       // @ts-expect-error TS2345
-      domNode.removeEventListener('keyup', handleKeyUp, options?.eventListenerOptions)
+      domNode.removeEventListener('keyup', handleKeyUp, memoisedOptions?.eventListenerOptions)
       // @ts-expect-error TS2345
-      domNode.removeEventListener('keydown', handleKeyDown, options?.eventListenerOptions)
+      domNode.removeEventListener('keydown', handleKeyDown, memoisedOptions?.eventListenerOptions)
 
       if (proxy) {
         parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
@@ -222,7 +222,7 @@ export default function useHotkeys<T extends HTMLElement>(keys: Keys, callback: 
         clearTimeout(sequenceTimer)
       }
     }
-  }, [_keys, memoisedOptions, activeScopes, options?.document, options?.eventListenerOptions, proxy, _callback])
+  }, [_keys, activeScopes, proxy, _callback, memoisedOptions])
 
   return ref
 }
