@@ -1,5 +1,5 @@
-import { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
-import { DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
+import { type DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -26,19 +26,22 @@ export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
   options?: OptionsOrDependencyArray,
-  dependencies?: OptionsOrDependencyArray
+  dependencies?: OptionsOrDependencyArray,
 ) {
   const ref = useRef<T>(null)
   const hasTriggeredRef = useRef(false)
 
-  const _options: Options | undefined = !(options instanceof Array)
+  const _options: Options | undefined = !Array.isArray(options)
     ? (options as Options)
-    : !(dependencies instanceof Array)
-    ? (dependencies as Options)
-    : undefined
+    : !Array.isArray(dependencies)
+      ? (dependencies as Options)
+      : undefined
   const _keys: string = isReadonlyArray(keys) ? keys.join(_options?.delimiter) : keys
-  const _deps: DependencyList | undefined =
-    options instanceof Array ? options : dependencies instanceof Array ? dependencies : undefined
+  const _deps: DependencyList | undefined = Array.isArray(options)
+    ? options
+    : Array.isArray(dependencies)
+      ? dependencies
+      : undefined
 
   const memoisedCB = useCallback(callback, _deps ?? [])
   const cbRef = useRef<HotkeyCallback>(memoisedCB)
@@ -88,11 +91,19 @@ export default function useHotkeys<T extends HTMLElement>(
 
       parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
         if (key.includes(memoisedOptions?.splitKey ?? '+') && key.includes(memoisedOptions?.sequenceSplitKey ?? '>')) {
-          console.warn(`Hotkey ${key} contains both ${memoisedOptions?.splitKey ?? '+'} and ${memoisedOptions?.sequenceSplitKey ?? '>'} which is not supported.`)
+          console.warn(
+            `Hotkey ${key} contains both ${memoisedOptions?.splitKey ?? '+'} and ${memoisedOptions?.sequenceSplitKey ?? '>'} which is not supported.`,
+          )
           return
         }
 
-        const hotkey = parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.sequenceSplitKey, memoisedOptions?.useKey, memoisedOptions?.description)
+        const hotkey = parseHotkey(
+          key,
+          memoisedOptions?.splitKey,
+          memoisedOptions?.sequenceSplitKey,
+          memoisedOptions?.useKey,
+          memoisedOptions?.description,
+        )
 
         if (hotkey.isSequence) {
           // Set a timeout to check post which the sequence should reset
@@ -129,7 +140,10 @@ export default function useHotkeys<T extends HTMLElement>(
             recordedKeys = []
           }
         } else {
-          if (isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) || hotkey.keys?.includes('*')) {
+          if (
+            isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) ||
+            hotkey.keys?.includes('*')
+          ) {
             if (memoisedOptions?.ignoreEventWhen?.(e)) {
               return
             }
@@ -195,8 +209,14 @@ export default function useHotkeys<T extends HTMLElement>(
     if (proxy) {
       parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
         proxy.addHotkey(
-          parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.sequenceSplitKey, memoisedOptions?.useKey, memoisedOptions?.description)
-        )
+          parseHotkey(
+            key,
+            memoisedOptions?.splitKey,
+            memoisedOptions?.sequenceSplitKey,
+            memoisedOptions?.useKey,
+            memoisedOptions?.description,
+          ),
+        ),
       )
     }
 
@@ -209,8 +229,14 @@ export default function useHotkeys<T extends HTMLElement>(
       if (proxy) {
         parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
           proxy.removeHotkey(
-            parseHotkey(key, memoisedOptions?.splitKey, memoisedOptions?.sequenceSplitKey, memoisedOptions?.useKey, memoisedOptions?.description)
-          )
+            parseHotkey(
+              key,
+              memoisedOptions?.splitKey,
+              memoisedOptions?.sequenceSplitKey,
+              memoisedOptions?.useKey,
+              memoisedOptions?.description,
+            ),
+          ),
         )
       }
 

@@ -1,7 +1,7 @@
 import { render, act, renderHook } from '@testing-library/react'
 import { HotkeysProvider, useHotkeysContext, useHotkeys } from '../lib'
-import { ReactNode } from 'react'
-import { HotkeysContextType } from '../lib/HotkeysProvider'
+import type { ReactNode } from 'react'
+import type { HotkeysContextType } from '../lib/HotkeysProvider'
 import {test, expect} from 'vitest'
 
 test('should render children', () => {

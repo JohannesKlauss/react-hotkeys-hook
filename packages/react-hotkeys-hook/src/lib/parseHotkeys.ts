@@ -1,4 +1,4 @@
-import { Hotkey, KeyboardModifiers } from './types'
+import type { Hotkey, KeyboardModifiers } from './types'
 
 const reservedModifierKeywords = ['shift', 'alt', 'meta', 'mod', 'ctrl', 'control']
 
@@ -33,7 +33,13 @@ export function parseKeysHookInput(keys: string, delimiter = ','): string[] {
   return keys.toLowerCase().split(delimiter)
 }
 
-export function parseHotkey(hotkey: string, splitKey = '+', sequenceSplitKey = '>', useKey = false, description?: string): Hotkey {
+export function parseHotkey(
+  hotkey: string,
+  splitKey = '+',
+  sequenceSplitKey = '>',
+  useKey = false,
+  description?: string,
+): Hotkey {
   let keys: string[] = []
   let isSequence = false
 

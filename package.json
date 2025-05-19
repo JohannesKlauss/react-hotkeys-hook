@@ -31,9 +31,10 @@
   "scripts": {
     "build": "npm run -w packages/react-hotkeys-hook build",
     "build:documentation": "npm run -w packages/documentation build",
-    "lint": "npm run -w packages/react-hotkeys-hook lint",
     "test": "npm run -w packages/react-hotkeys-hook test",
-    "prepublishOnly": "npm run test && npm run lint && npm run build"
+    "prepublishOnly": "npm run test && npm run lint && npm run build",
+    "format": "npx @biomejs/biome format --write packages",
+    "lint": "npx @biomejs/biome lint --write packages"
   },
   "workspaces": [
     "packages/*"
@@ -41,5 +42,8 @@
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
   }
 }

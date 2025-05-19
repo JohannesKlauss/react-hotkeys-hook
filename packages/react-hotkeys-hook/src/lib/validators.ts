@@ -1,4 +1,4 @@
-import { FormTags, Hotkey, Scopes, Trigger } from './types'
+import type { FormTags, Hotkey, Scopes, Trigger } from './types'
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
 import { mapCode } from './parseHotkeys'
 
@@ -22,11 +22,11 @@ export function isKeyboardEventTriggeredByInput(ev: KeyboardEvent): boolean {
 
 export function isHotkeyEnabledOnTag(
   event: KeyboardEvent,
-  enabledOnTags: readonly FormTags[] | boolean = false
+  enabledOnTags: readonly FormTags[] | boolean = false,
 ): boolean {
-  const {target, composed} = event
+  const { target, composed } = event
 
-  let targetTagName
+  let targetTagName: EventTarget | string | undefined | null = undefined
 
   if (isCustomElement(target as HTMLElement) && composed) {
     targetTagName = event.composedPath()[0] && (event.composedPath()[0] as HTMLElement).tagName
@@ -36,7 +36,7 @@ export function isHotkeyEnabledOnTag(
 
   if (isReadonlyArray(enabledOnTags)) {
     return Boolean(
-      targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase())
+      targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase()),
     )
   }
 
@@ -47,13 +47,13 @@ export function isCustomElement(element: HTMLElement): boolean {
   // We just do a basic check w/o any complex RegEx or validation against the list of legacy names containing a hyphen,
   // as none of them is likely to be an event target, and it won't hurt anyway if we miss.
   // see: https://html.spec.whatwg.org/multipage/custom-elements.html#prod-potentialcustomelementname
-  return !!element.tagName && !element.tagName.startsWith("-") && element.tagName.includes("-");
+  return !!element.tagName && !element.tagName.startsWith('-') && element.tagName.includes('-')
 }
 
 export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
   if (activeScopes.length === 0 && scopes) {
     console.warn(
-      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>'
+      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
     )
 
     return true
@@ -113,10 +113,14 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
   // If the key is set, we check for the key
   if (keys && keys.length === 1 && keys.includes(mappedCode)) {
     return true
-  } else if (keys) {
+  }
+
+  if (keys) {
     // Check if all keys are present in pressedDownKeys set
     return isHotkeyPressed(keys)
-  } else if (!keys) {
+  }
+
+  if (!keys) {
     // If the key is not set, we only listen for modifiers, that check went alright, so we return true
     return true
   }

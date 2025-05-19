@@ -6,11 +6,11 @@ export type Scopes = string | readonly string[]
 
 export type EventListenerOptions =
   | {
-  capture?: boolean
-  once?: boolean
-  passive?: boolean
-  signal?: AbortSignal
-}
+      capture?: boolean
+      once?: boolean
+      passive?: boolean
+      signal?: AbortSignal
+    }
   | boolean // useCapture
 
 export type KeyboardModifiers = {

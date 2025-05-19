@@ -10,7 +10,7 @@ export {
   useHotkeysContext,
   isHotkeyPressed,
   HotkeysProvider,
-  Options,
-  Keys,
-  HotkeyCallback,
+  type Options,
+  type Keys,
+  type HotkeyCallback,
 }

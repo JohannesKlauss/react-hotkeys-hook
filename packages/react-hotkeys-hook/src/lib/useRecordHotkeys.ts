@@ -5,23 +5,26 @@ export default function useRecordHotkeys(useKey = false) {
   const [keys, setKeys] = useState(new Set<string>())
   const [isRecording, setIsRecording] = useState(false)
 
-  const handler = useCallback((event: KeyboardEvent) => {
-    if (event.code === undefined) {
-      // Synthetic event (e.g., Chrome autofill).  Ignore.
-      return
-    }
+  const handler = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.code === undefined) {
+        // Synthetic event (e.g., Chrome autofill).  Ignore.
+        return
+      }
 
-    event.preventDefault()
-    event.stopPropagation()
+      event.preventDefault()
+      event.stopPropagation()
 
-    setKeys((prev) => {
-      const newKeys = new Set(prev)
+      setKeys((prev) => {
+        const newKeys = new Set(prev)
 
-      newKeys.add(mapCode(useKey ? event.key : event.code))
+        newKeys.add(mapCode(useKey ? event.key : event.code))
 
-      return newKeys
-    })
-  }, [useKey])
+        return newKeys
+      })
+    },
+    [useKey],
+  )
 
   const stop = useCallback(() => {
     if (typeof document !== 'undefined') {
