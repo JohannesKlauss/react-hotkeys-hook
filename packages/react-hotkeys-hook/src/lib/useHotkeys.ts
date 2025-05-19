@@ -1,6 +1,12 @@
-import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
-import { type DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
+import { useRef } from 'react'
+import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
+import { useHotkeysContext } from './HotkeysProvider'
+import { isReadonlyArray, pushToCurrentlyPressedKeys, removeFromCurrentlyPressedKeys } from './isHotkeyPressed'
+import { isHotkeyModifier, mapCode, parseHotkey, parseKeysHookInput } from './parseHotkeys'
+import type { HotkeyCallback, Keys, Options } from './types'
+import useDeepEqualMemo from './useDeepEqualMemo'
+import useEventCallback from './utils/useEventCallback'
+import useIsomorphicLayoutEffect from './utils/useIsomorphicLayoutEffect'
 import {
   isHotkeyEnabled,
   isHotkeyEnabledOnTag,
@@ -9,10 +15,6 @@ import {
   isScopeActive,
   maybePreventDefault,
 } from './validators'
-import { useHotkeysContext } from './HotkeysProvider'
-import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
-import useDeepEqualMemo from './useDeepEqualMemo'
-import { isReadonlyArray, pushToCurrentlyPressedKeys, removeFromCurrentlyPressedKeys } from './isHotkeyPressed'
 
 const stopPropagation = (e: KeyboardEvent): void => {
   e.stopPropagation()
@@ -20,44 +22,19 @@ const stopPropagation = (e: KeyboardEvent): void => {
   e.stopImmediatePropagation()
 }
 
-const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
-
-export default function useHotkeys<T extends HTMLElement>(
-  keys: Keys,
-  callback: HotkeyCallback,
-  options?: OptionsOrDependencyArray,
-  dependencies?: OptionsOrDependencyArray,
-) {
+export default function useHotkeys<T extends HTMLElement>(keys: Keys, callback: HotkeyCallback, options?: Options) {
   const ref = useRef<T>(null)
   const hasTriggeredRef = useRef(false)
 
-  const _options: Options | undefined = !Array.isArray(options)
-    ? (options as Options)
-    : !Array.isArray(dependencies)
-      ? (dependencies as Options)
-      : undefined
-  const _keys: string = isReadonlyArray(keys) ? keys.join(_options?.delimiter) : keys
-  const _deps: DependencyList | undefined = Array.isArray(options)
-    ? options
-    : Array.isArray(dependencies)
-      ? dependencies
-      : undefined
+  const _keys: string = isReadonlyArray(keys) ? keys.join(options?.delimiter) : keys
+  const _callback = useEventCallback(callback)
 
-  const memoisedCB = useCallback(callback, _deps ?? [])
-  const cbRef = useRef<HotkeyCallback>(memoisedCB)
-
-  if (_deps) {
-    cbRef.current = memoisedCB
-  } else {
-    cbRef.current = callback
-  }
-
-  const memoisedOptions = useDeepEqualMemo(_options)
+  const memoisedOptions = useDeepEqualMemo(options)
 
   const { activeScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
-  useSafeLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
       return
     }
@@ -131,7 +108,7 @@ export default function useHotkeys<T extends HTMLElement>(
 
           // If the sequence is complete, trigger the callback
           if (recordedKeys.length === hotkey.keys?.length) {
-            cbRef.current(e, hotkey)
+            _callback(e, hotkey)
 
             if (sequenceTimer) {
               clearTimeout(sequenceTimer)
@@ -161,7 +138,7 @@ export default function useHotkeys<T extends HTMLElement>(
             }
 
             // Execute the user callback for that hotkey
-            cbRef.current(e, hotkey)
+            _callback(e, hotkey)
 
             if (!isKeyUp) {
               hasTriggeredRef.current = true
@@ -199,12 +176,12 @@ export default function useHotkeys<T extends HTMLElement>(
       }
     }
 
-    const domNode = ref.current || _options?.document || document
+    const domNode = ref.current || options?.document || document
 
     // @ts-expect-error TS2345
-    domNode.addEventListener('keyup', handleKeyUp, _options?.eventListenerOptions)
+    domNode.addEventListener('keyup', handleKeyUp, options?.eventListenerOptions)
     // @ts-expect-error TS2345
-    domNode.addEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
+    domNode.addEventListener('keydown', handleKeyDown, options?.eventListenerOptions)
 
     if (proxy) {
       parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
@@ -222,9 +199,9 @@ export default function useHotkeys<T extends HTMLElement>(
 
     return () => {
       // @ts-expect-error TS2345
-      domNode.removeEventListener('keyup', handleKeyUp, _options?.eventListenerOptions)
+      domNode.removeEventListener('keyup', handleKeyUp, options?.eventListenerOptions)
       // @ts-expect-error TS2345
-      domNode.removeEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
+      domNode.removeEventListener('keydown', handleKeyDown, options?.eventListenerOptions)
 
       if (proxy) {
         parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
@@ -245,7 +222,7 @@ export default function useHotkeys<T extends HTMLElement>(
         clearTimeout(sequenceTimer)
       }
     }
-  }, [_keys, memoisedOptions, activeScopes])
+  }, [_keys, memoisedOptions, activeScopes, options?.document, options?.eventListenerOptions, proxy, _callback])
 
   return ref
 }

@@ -1,5 +1,3 @@
-import type { DependencyList } from 'react'
-
 export type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT'
 export type Keys = string | readonly string[]
 export type Scopes = string | readonly string[]
@@ -23,10 +21,11 @@ export type KeyboardModifiers = {
 }
 
 export type Hotkey = KeyboardModifiers & {
-  keys?: readonly string[]
+  keys: readonly string[]
   scopes?: Scopes
   description?: string
   isSequence?: boolean
+  hotkey: string
 }
 
 export type HotkeysEvent = Hotkey
@@ -71,5 +70,3 @@ export type Options = {
   // The character to split the sequence of keys. (Default: >)
   sequenceSplitKey?: string
 }
-
-export type OptionsOrDependencyArray = Options | DependencyList

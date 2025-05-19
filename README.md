@@ -43,7 +43,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+k', () => setCount(count + 1), [count])
+  useHotkeys('ctrl+k', () => setCount(count + 1))
 
   return (
     <p>
@@ -131,7 +131,7 @@ export const ExampleComponent = () => {
 ### useHotkeys(keys, callback)
 
 ```typescript
-useHotkeys(keys: string | string[], callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {}, deps: DependencyList = [])
+useHotkeys(keys: string | string[], callback: (event: KeyboardEvent, handler: HotkeysEvent) => void, options: Options = {})
 ```
 
 | Parameter     | Type                                                    | Required? | Default value | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -139,7 +139,6 @@ useHotkeys(keys: string | string[], callback: (event: KeyboardEvent, handler: Ho
 | `keys`        | `string` or `string[]`                                  | required  | -             | set the hotkeys you want the hook to listen to. You can use single or multiple keys, modifier combinations, etc. This will either be a string or an array of strings. To separate multiple keys, use a comma. This split key value can be overridden with the `splitKey` option.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | `callback`    | `(event: KeyboardEvent, handler: HotkeysEvent) => void` | required  | -             | This is the callback function that will be called when the hotkey is pressed. The callback will receive the browsers native `KeyboardEvent` and the libraries `HotkeysEvent`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | `options`     | `Options`                                               | optional  | `{}`          | Object to modify the behavior of the hook. Default options are given below.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `dependencies` | `DependencyList`                                         | optional  | `[]`           | The given callback will always be memoised inside the hook. So if you reference any outside variables, you need to set them here for the callback to get updated (Much like `useCallback` works in React). |
 
 ### Options
 
@@ -157,14 +156,6 @@ All options are optional and have a default value which you can override to chan
 | `keydown`                | `boolean`                                                                            | `true`        | Determines whether to listen to the browsers `keydown` event for triggering the callback. If you set both `keyup`and `keydown` to true, the callback will trigger on both events.                                                                                                                                                                                                       |
 | `preventDefault`         | `boolean` or `(keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean` | `false`       | Set this to a `true` if you want the hook to prevent the browsers default behavior on certain keystrokes like `meta+s` to save a page. NOTE: Certain keystrokes are not preventable, like `meta+w` to close a tab in chrome.                                                                                                                                                            |
 | `description`             | `string`                                                                              | `undefined`    | Use this option to describe what the hotkey does. this is helpful if you want to display a list of active hotkeys to the user.                                                                                                                                                                                                                                                          |
-
-
-#### Overloads
-
-The hooks call signature is very flexible. For example if you don't need to set any special options you can use the dependency
-array as your third parameter:
-
-`useHotkeys('ctrl+k', () => console.log(counter + 1), [counter])`
 
 ### `isHotkeyPressed(keys: string | string[], splitKey?: string = ',')`
 

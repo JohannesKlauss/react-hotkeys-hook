@@ -72,5 +72,6 @@ export function parseHotkey(
     keys: singleCharKeys,
     description,
     isSequence,
+    hotkey,
   }
 }
