@@ -1,5 +1,5 @@
-import { createContext, ReactNode, useContext } from 'react'
-import { Hotkey } from './types'
+import { createContext, type ReactNode, useContext } from 'react'
+import type { Hotkey } from './types'
 
 type BoundHotkeysProxyProviderType = {
   addHotkey: (hotkey: Hotkey) => void

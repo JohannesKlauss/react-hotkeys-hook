@@ -1,12 +1,12 @@
 import userEvent from '@testing-library/user-event'
 import { useHotkeys, HotkeysProvider } from '../lib'
-import { FormTags, HotkeyCallback, Keys, Options } from '../lib/types'
+import type { FormTags, HotkeyCallback, Keys, Options } from '../lib/types'
 import {
-  DependencyList,
-  JSXElementConstructor,
-  MutableRefObject,
-  ReactElement,
-  ReactNode,
+  type DependencyList,
+  type JSXElementConstructor,
+  type MutableRefObject,
+  type ReactElement,
+  type ReactNode,
   useCallback,
   useState,
 } from 'react'

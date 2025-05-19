@@ -1,5 +1,5 @@
-import { Hotkey } from './types'
-import { createContext, ReactNode, useState, useContext, useCallback } from 'react'
+import type { Hotkey } from './types'
+import { createContext, type ReactNode, useState, useContext, useCallback } from 'react'
 import BoundHotkeysProxyProviderProvider from './BoundHotkeysProxyProvider'
 import deepEqual from './deepEqual'
 
