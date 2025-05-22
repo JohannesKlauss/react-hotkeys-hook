@@ -39,7 +39,7 @@ render(
 )
 ```
 
-Everytime we press down the `c` key, both component trigger the callback. But how can we separate those two components
+Every time we press down the `c` key, both components trigger the callback. But how can we separate those two components
 and their assigned hotkeys? The answer is [`Refs`](https://react.dev/learn/manipulating-the-dom-with-refs). `useHotkeys`
 returns a [React ref callback function](https://react.dev/reference/react-dom/components/common#ref-callback) that we
 can attach to any component that takes a ref. This way we can tell the hook which element should receive the users focus
