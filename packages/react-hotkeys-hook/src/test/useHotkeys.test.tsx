@@ -560,16 +560,62 @@ test('should trigger sequence with useKey', async () => {
 })
 
 test('should not trigger sequence without useKey', async () => {
-  const user = userEvent.setup()
+  const user = userEvent.setup({delay: 200})
   const callback = vi.fn()
 
   renderHook(() => useHotkeys('%>!', callback, { useKey: false }))
 
-  await user.keyboard(`{Shift>}{%}{/Shift}`)
-  vi.advanceTimersByTime(200)
-  await user.keyboard(`{Shift>}{!}{/Shift}`)
+  await user.keyboard(`{Shift>}{%}{/Shift}{Shift>}{!}{/Shift}`)
 
   expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('should work with different ways of referencing modifiers', async () => {
+  const user = userEvent.setup()
+  const ctrlCallback = vi.fn()
+  const capsCallback = vi.fn()
+
+  renderHook(() => useHotkeys(['ctrl', 'ctl', 'control'], ctrlCallback))
+  renderHook(() => useHotkeys(['capslock', 'caps'], capsCallback))
+  
+  await user.keyboard(`{Control}`)
+  expect(ctrlCallback).toHaveBeenCalledTimes(3)
+
+  await user.keyboard(`{CapsLock}`)
+  expect(capsCallback).toHaveBeenCalledTimes(2)
+})
+
+test('should trigger sequence with modifier keys', async () => {
+  const user = userEvent.setup({delay: 200})
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('shift>alt>control>caps>ctrl', callback))
+
+  await user.keyboard(`{Shift}{Alt}{Control}{CapsLock}{Control}`)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger sequence with duplicate keys', async () => {
+  const user = userEvent.setup({delay: 200})
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('ctrl>g>g>ctrl', callback))
+
+  await user.keyboard(`{Control}gg{Control}`)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger sequence with modifier keys with useKey', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('shift>alt>caps>ctrl', callback, { useKey: true }))
+
+  await user.keyboard(`{Shift}{Alt}{CapsLock}{Control}`)
+  
+  expect(callback).toHaveBeenCalledTimes(1)
 })
 
 test('should reflect set delimiter character', async () => {
