@@ -618,6 +618,28 @@ test('should trigger sequence with modifier keys with useKey', async () => {
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test('should trigger sequence with capslock as modifer without useKey', async () => {
+  const user = userEvent.setup({delay: 200})
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('1>2>3', callback, {useKey: false}))
+
+  await user.keyboard(`{CapsLock>}{1}{2}{3}`)
+  
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger sequence with capslock as modifer with useKey', async () => {
+  const user = userEvent.setup({delay: 200})
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('1>2>3', callback, { useKey: true }))
+
+  await user.keyboard(`{CapsLock>}{1}{2}{3}`)
+  
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should reflect set delimiter character', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()

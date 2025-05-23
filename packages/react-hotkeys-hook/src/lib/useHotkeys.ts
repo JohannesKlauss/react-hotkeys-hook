@@ -142,7 +142,7 @@ export default function useHotkeys<T extends HTMLElement>(
           }
           
           if (lastModiferKey) {
-            if ((e as any)[`${lastModiferKey}Key`]) {
+            if (lastModiferKey === 'capslock' || (e as any)[`${lastModiferKey}Key`]) {
               keysStack?.pop()
               lastKeyTime = performance.now()
             }
