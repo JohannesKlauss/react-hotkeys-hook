@@ -70,6 +70,8 @@ export type Options = {
   sequenceTimeoutMs?: number
   // The character to split the sequence of keys. (Default: >)
   sequenceSplitKey?: string
+  // Include modifier keys in `keys` array (Default: false)
+  includeModifiersInKeys?: boolean
 }
 
 export type OptionsOrDependencyArray = Options | DependencyList

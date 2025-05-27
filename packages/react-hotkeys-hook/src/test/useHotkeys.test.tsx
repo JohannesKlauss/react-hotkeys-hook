@@ -1651,3 +1651,16 @@ test('Should trigger only produced key hotkeys', async () => {
   expect(callbackZ).toHaveBeenCalledTimes(1)
   expect(callbackY).toHaveBeenCalledTimes(2)
 })
+
+test('Should allow passing through modifier keys in keys array', async () => {
+  const user = userEvent.setup()
+
+  const callbackZ = vi.fn()
+
+  renderHook(() => useHotkeys(['ctrl+alt+z'], (_, {keys}) => {
+    callbackZ(keys)
+  }, {useKey: true, includeModifiersInKeys: true}))
+  
+  await user.keyboard('{Control>}{Alt>}z{/Alt}{/Control}')
+  expect(callbackZ).toHaveBeenCalledWith(['ctrl', 'alt', 'z'])
+})
