@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import useRecordHotkeys from '../lib/useRecordHotkeys'
 import userEvent from '@testing-library/user-event'
-import {test, expect} from 'vitest'
+import { test, expect } from 'vitest'
 
 test('Should set record flag to true if recording is in progress', () => {
   const { result } = renderHook(useRecordHotkeys)
@@ -155,4 +155,55 @@ test('Should record steps, no matter the produced key', async () => {
   })
 
   expect(result.current[0]).toEqual(new Set(['shift', '1']))
+})
+
+test('Should handle start being called multiple times', async () => {
+  const user = userEvent.setup()
+  const { result } = renderHook(useRecordHotkeys)
+
+  act(() => {
+    result.current[1].start()
+  })
+
+  await act(async () => {
+    await user.keyboard('a')
+  })
+
+  act(() => {
+    result.current[1].start()
+  })
+
+  await act(async () => {
+    await user.keyboard('b')
+    await user.keyboard('c')
+  })
+
+  act(() => {
+    result.current[1].stop()
+  })
+
+  // It's currently desired behaviour to reset the keys when start is called.
+  // The important thing to test here is that the event listener is not registered multiple times.
+  expect(result.current[0]).toEqual(new Set(['b', 'c']))
+})
+
+test('Should ignore blacklisted keys while recording', async () => {
+  const user = userEvent.setup()
+  const { result } = renderHook(() => useRecordHotkeys(false, ['tab', 'enter']))
+
+  act(() => {
+    result.current[1].start()
+  })
+
+  await act(async () => {
+    await user.keyboard('{Tab}')
+    await user.keyboard('{Enter}')
+    await user.keyboard('a')
+  })
+
+  act(() => {
+    result.current[1].stop()
+  })
+
+  expect(result.current[0]).toEqual(new Set(['a']))
 })
