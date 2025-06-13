@@ -10,20 +10,27 @@ import { useRecordHotkeys } from "react-hotkeys-hook";
 Function signature:
 
 ```ts
-function useRecordHotkeys(useKey?: boolean): [Set<string>, { start: () => void, stop: () => void, isRecording: boolean }]
+function useRecordHotkeys(useKey?: boolean, blacklist?: string[]): [Set<string>, { start: () => void, stop: () => void, resetKeys: () => void, isRecording: boolean }]
 ```
 
 ## `useKey`
 
-By default recording hotkeys will record the keys code, not the produced character. If you want to record the produced
-character, you can pass `true` as the first argument to the hook.
+By default recording hotkeys will record the keys code, not the produced
+character. If you want to record the produced character, you can pass `true`
+as the first argument to the hook.
+
+## `blacklist`
+
+Optional list of key names that should be ignored while recording.
+Keys present in this list will retain their default behaviour and will not
+be included in the recorded set.
 
 ***
 
 ## Return value
 
 ```ts
-const [keys, { start, stop, isRecording }] = useRecordHotkeys()
+const [keys, { start, stop, resetKeys, isRecording }] = useRecordHotkeys()
 ```
 
 ### `keys`
@@ -37,6 +44,10 @@ A function that starts recording the keys that are pressed. Only works in the br
 ### `stop`
 
 A function that stops recording the keys that are pressed. Only works in the browser.
+
+### `resetKeys`
+
+A function that resets the recorded keys.
 
 ### `isRecording`
 
