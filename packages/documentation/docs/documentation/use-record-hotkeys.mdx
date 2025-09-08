@@ -52,3 +52,23 @@ Note that the returned value of the recorded keys is a `Set` object. This is bec
 Implementation wise it is easier to use a `Set` than an array, but you can convert it to an array if you want or need to,
 like we are in the example above.
 :::
+
+## Ignoring specific keys
+
+You can exclude certain keys from being recorded by passing a `blacklist` array as the second argument. Keys in the blacklist will retain their default behavior and will not be added to the recorded set.
+
+```jsx live
+function ExampleWithBlacklist() {
+  const [keys, { start, stop, resetKeys, isRecording }] = useRecordHotkeys(false, ['tab', 'enter']);
+
+  return (
+    <div>
+      <p>Recording (ignoring Tab and Enter): {isRecording ? 'yes' : 'no'}</p>
+      <p>Recorded keys: {Array.from(keys).join(' + ')}</p>
+      <button onClick={start}>Record</button>
+      <button onClick={stop}>Stop</button>
+      <button onClick={resetKeys}>Reset Keys</button>
+    </div>
+  );
+}
+```
