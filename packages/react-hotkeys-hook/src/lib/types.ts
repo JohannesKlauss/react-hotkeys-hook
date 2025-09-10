@@ -27,6 +27,7 @@ export type Hotkey = KeyboardModifiers & {
   scopes?: Scopes
   description?: string
   isSequence?: boolean
+  hotkey: string
 }
 
 export type HotkeysEvent = Hotkey
