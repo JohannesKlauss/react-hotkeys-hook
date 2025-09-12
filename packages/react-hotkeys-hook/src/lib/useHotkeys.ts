@@ -1,4 +1,4 @@
-import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
+import type { Hotkey, HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
 import { type DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
@@ -62,8 +62,39 @@ export default function useHotkeys<T extends HTMLElement>(
       return
     }
 
-    let recordedKeys: string[] = []
-    let sequenceTimer: NodeJS.Timeout | undefined
+    const hotkeys = parseKeysHookInput(_keys, memoisedOptions?.delimiter)
+      .reduce<{ key: string; hotkey: Hotkey }[]>((acc, key) => {
+        const splitKey = memoisedOptions?.splitKey ?? '+'
+        const sequenceSplitKey = memoisedOptions?.sequenceSplitKey ?? '>'
+
+        if (key.includes(splitKey) && key.includes(sequenceSplitKey)) {
+          console.warn(`Hotkey ${key} contains both ${splitKey} and ${sequenceSplitKey} which is not supported.`)
+          return acc
+        }
+
+        const hotkey = parseHotkey(
+          key,
+          splitKey,
+          sequenceSplitKey,
+          memoisedOptions?.useKey,
+          memoisedOptions?.description,
+        )
+
+        return acc.concat({ key, hotkey })
+      }, [])
+
+    const sequenceMaps = new Map(
+      hotkeys
+        .reduce<[string, { recordedKeys: string[]; sequenceTimer: NodeJS.Timeout | undefined }][]>(
+          (acc, { key, hotkey }) => {
+            if (hotkey.isSequence) {
+              acc.push([key, { recordedKeys: [], sequenceTimer: void 0 }])
+            }
+            return acc
+          },
+          []
+        )
+    );
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
@@ -89,67 +120,62 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
-        if (key.includes(memoisedOptions?.splitKey ?? '+') && key.includes(memoisedOptions?.sequenceSplitKey ?? '>')) {
-          console.warn(
-            `Hotkey ${key} contains both ${memoisedOptions?.splitKey ?? '+'} and ${memoisedOptions?.sequenceSplitKey ?? '>'} which is not supported.`,
-          )
-          return
-        }
-
-        const hotkey = parseHotkey(
-          key,
-          memoisedOptions?.splitKey,
-          memoisedOptions?.sequenceSplitKey,
-          memoisedOptions?.useKey,
-          memoisedOptions?.description,
-        )
-
+      for (const { key, hotkey } of hotkeys) {
         if (hotkey.isSequence) {
+          const sequenceMap = sequenceMaps.get(key)
+
+          if (!sequenceMap) {
+            continue
+          }
+
           // Set a timeout to check post which the sequence should reset
-          sequenceTimer = setTimeout(() => {
-            recordedKeys = []
+          if (sequenceMap.sequenceTimer) {
+            clearTimeout(sequenceMap.sequenceTimer)
+          }
+
+          sequenceMap.sequenceTimer = setTimeout(() => {
+            sequenceMap.recordedKeys = []
           }, memoisedOptions?.sequenceTimeoutMs ?? 1000)
 
           const currentKey = hotkey.useKey ? e.key : mapCode(e.code)
 
-          // TODO: Make modifiers work with sequences
           if (isHotkeyModifier(currentKey.toLowerCase())) {
-            return
+            continue
           }
 
-          recordedKeys.push(currentKey)
+          sequenceMap.recordedKeys.push(currentKey)
 
-          const expectedKey = hotkey.keys?.[recordedKeys.length - 1]
+          const expectedKey = hotkey.keys?.[sequenceMap.recordedKeys.length - 1]
           if (currentKey !== expectedKey) {
-            recordedKeys = []
-            if (sequenceTimer) {
-              clearTimeout(sequenceTimer)
+            sequenceMap.recordedKeys = []
+            if (sequenceMap.sequenceTimer) {
+              clearTimeout(sequenceMap.sequenceTimer)
             }
-            return
+            continue
           }
 
           // If the sequence is complete, trigger the callback
-          if (recordedKeys.length === hotkey.keys?.length) {
+          if (sequenceMap.recordedKeys.length === hotkey.keys?.length) {
             cbRef.current(e, hotkey)
 
-            if (sequenceTimer) {
-              clearTimeout(sequenceTimer)
+            if (sequenceMap.sequenceTimer) {
+              clearTimeout(sequenceMap.sequenceTimer)
             }
 
-            recordedKeys = []
+            sequenceMap.recordedKeys = []
           }
-        } else {
+        }
+        else {
           if (
             isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) ||
             hotkey.keys?.includes('*')
           ) {
             if (memoisedOptions?.ignoreEventWhen?.(e)) {
-              return
+              continue
             }
 
             if (isKeyUp && hasTriggeredRef.current) {
-              return
+              continue
             }
 
             maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
@@ -157,7 +183,7 @@ export default function useHotkeys<T extends HTMLElement>(
             if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
               stopPropagation(e)
 
-              return
+              continue
             }
 
             // Execute the user callback for that hotkey
@@ -168,7 +194,7 @@ export default function useHotkeys<T extends HTMLElement>(
             }
           }
         }
-      })
+      }
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -240,9 +266,12 @@ export default function useHotkeys<T extends HTMLElement>(
         )
       }
 
-      recordedKeys = []
-      if (sequenceTimer) {
-        clearTimeout(sequenceTimer)
+      // clear the recorded keys and timeout on unmount
+      for (const [, sequenceMap] of sequenceMaps) {
+        sequenceMap.recordedKeys = []
+        if (sequenceMap.sequenceTimer) {
+          clearTimeout(sequenceMap.sequenceTimer)
+        }
       }
     }
   }, [_keys, memoisedOptions, activeScopes])
