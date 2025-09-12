@@ -33,6 +33,21 @@ export function parseKeysHookInput(keys: string, delimiter = ','): string[] {
   return keys.toLowerCase().split(delimiter)
 }
 
+/**
+ * Check if sequence ends with a given sub-sequence
+ * @param sequence full sequence e.g. ['h', 'e', 'l', 'l', 'o']
+ * @param subSequence  sub-sequence to check e.g. ['l', 'l', 'o']
+ */
+export const sequenceEndsWith = (sequence: string[], subSequence: string[]): boolean => {
+  if (sequence.length < subSequence.length) {
+    return false;
+  }
+
+  const endOfSequence = sequence.slice(-subSequence.length);
+
+  return subSequence.every((key, index) => key === endOfSequence[index]);
+};
+
 export function parseHotkey(
   hotkey: string,
   splitKey = '+',
