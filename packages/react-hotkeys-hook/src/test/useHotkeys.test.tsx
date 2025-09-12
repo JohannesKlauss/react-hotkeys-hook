@@ -422,7 +422,7 @@ test('should not trigger when sequence is incomplete', async () => {
   expect(callback).not.toHaveBeenCalled()
 })
 
-test.skip('should not trigger when sequence and combination are mixed', async () => {
+test('should not trigger when sequence and combination are mixed', async () => {
   console.warn = vi.fn()
   const user = userEvent.setup()
   const callback = vi.fn()

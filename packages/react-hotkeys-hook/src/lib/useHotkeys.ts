@@ -1,4 +1,4 @@
-import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
+import type { Hotkey, HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
 import { type DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier, sequenceEndsWith } from './parseHotkeys'
 import {
@@ -62,20 +62,37 @@ export default function useHotkeys<T extends HTMLElement>(
       return
     }
 
-    const hotkeys = parseKeysHookInput(_keys, memoisedOptions?.delimiter)
-      .map((key) => parseHotkey(
-        key,
-        memoisedOptions?.splitKey,
-        memoisedOptions?.sequenceSplitKey,
-        memoisedOptions?.useKey,
-        memoisedOptions?.description,
-      ));
+    const [comboHotkeys, sequenceHotkeys] = parseKeysHookInput(_keys, memoisedOptions?.delimiter)
+      .reduce<[Hotkey[], Hotkey[]]>((acc, key) => {
+        const [_comboHotkey, _sequenceHotkey] = acc;
 
-    const comboHotkeys = hotkeys.filter(hotkey => !hotkey.isSequence);
-    const sequenceHotkeys = hotkeys.filter(hotkey => hotkey.isSequence);
+        const splitKey = memoisedOptions?.splitKey ?? '+'
+        const sequenceSplitKey = memoisedOptions?.sequenceSplitKey ?? '>'
+
+        if (key.includes(splitKey) && key.includes(sequenceSplitKey)) {
+          console.warn(`Hotkey ${key} contains both ${splitKey} and ${sequenceSplitKey} which is not supported.`);
+        }
+
+        const hotkey = parseHotkey(
+          key,
+          splitKey,
+          sequenceSplitKey,
+          memoisedOptions?.useKey,
+          memoisedOptions?.description,
+        )
+
+        if (hotkey.isSequence) {
+          _sequenceHotkey.push(hotkey)
+        } else {
+          _comboHotkey.push(hotkey)
+        }
+        return [_comboHotkey, _sequenceHotkey]
+      }, [[], []]);
 
     let sequenceRecordedKeys: string[] = [];
     let sequenceTimer: NodeJS.Timeout | undefined = undefined;
+
+    const combinedHotkeys = [...comboHotkeys, ...sequenceHotkeys]
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
@@ -199,7 +216,7 @@ export default function useHotkeys<T extends HTMLElement>(
     domNode.addEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
     if (proxy) {
-      hotkeys.forEach(proxy.addHotkey)
+      combinedHotkeys.forEach(proxy.addHotkey)
     }
 
     return () => {
@@ -209,7 +226,7 @@ export default function useHotkeys<T extends HTMLElement>(
       domNode.removeEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
       if (proxy) {
-        hotkeys.forEach(proxy.removeHotkey);
+        combinedHotkeys.forEach(proxy.removeHotkey);
       }
 
       sequenceRecordedKeys = [];
