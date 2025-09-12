@@ -40,13 +40,13 @@ export function parseKeysHookInput(keys: string, delimiter = ','): string[] {
  */
 export const sequenceEndsWith = (sequence: string[], subSequence: string[]): boolean => {
   if (sequence.length < subSequence.length) {
-    return false;
+    return false
   }
 
-  const endOfSequence = sequence.slice(-subSequence.length);
+  const endOfSequence = sequence.slice(-subSequence.length)
 
-  return subSequence.every((key, index) => key === endOfSequence[index]);
-};
+  return subSequence.every((key, index) => key === endOfSequence[index])
+}
 
 export function parseHotkey(
   hotkey: string,

@@ -62,15 +62,18 @@ export default function useHotkeys<T extends HTMLElement>(
       return
     }
 
+    let recordedKeys: string[] = []
+    let sequenceTimer: NodeJS.Timeout | undefined
+
     const [comboHotkeys, sequenceHotkeys] = parseKeysHookInput(_keys, memoisedOptions?.delimiter)
       .reduce<[Hotkey[], Hotkey[]]>((acc, key) => {
-        const [_comboHotkey, _sequenceHotkey] = acc;
+        const [_comboHotkey, _sequenceHotkey] = acc
 
         const splitKey = memoisedOptions?.splitKey ?? '+'
         const sequenceSplitKey = memoisedOptions?.sequenceSplitKey ?? '>'
 
         if (key.includes(splitKey) && key.includes(sequenceSplitKey)) {
-          console.warn(`Hotkey ${key} contains both ${splitKey} and ${sequenceSplitKey} which is not supported.`);
+          console.warn(`Hotkey ${key} contains both ${splitKey} and ${sequenceSplitKey} which is not supported.`)
         }
 
         const hotkey = parseHotkey(
@@ -87,10 +90,7 @@ export default function useHotkeys<T extends HTMLElement>(
           _comboHotkey.push(hotkey)
         }
         return [_comboHotkey, _sequenceHotkey]
-      }, [[], []]);
-
-    let sequenceRecordedKeys: string[] = [];
-    let sequenceTimer: NodeJS.Timeout | undefined = undefined;
+      }, [[], []])
 
     const combinedHotkeys = [...comboHotkeys, ...sequenceHotkeys]
 
@@ -158,22 +158,22 @@ export default function useHotkeys<T extends HTMLElement>(
         if (!isHotkeyModifier(currentKey.toLowerCase())) {
           // clear the previous timer
           if (sequenceTimer) {
-            clearTimeout(sequenceTimer);
+            clearTimeout(sequenceTimer)
           }
 
           sequenceTimer = setTimeout(() => {
-            sequenceRecordedKeys = [];
-          }, memoisedOptions?.sequenceTimeoutMs ?? 1000);
+            recordedKeys = []
+          }, memoisedOptions?.sequenceTimeoutMs ?? 1000)
 
-          sequenceRecordedKeys.push(currentKey);
+          recordedKeys.push(currentKey)
 
           for (const hotkey of sequenceHotkeys) {
             if (!hotkey.keys) {
               continue
             }
 
-            if (sequenceEndsWith(sequenceRecordedKeys, [...hotkey.keys])) {
-              cbRef.current(e, hotkey);
+            if (sequenceEndsWith(recordedKeys, [...hotkey.keys])) {
+              cbRef.current(e, hotkey)
             }
           }
         }
@@ -226,12 +226,12 @@ export default function useHotkeys<T extends HTMLElement>(
       domNode.removeEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
       if (proxy) {
-        combinedHotkeys.forEach(proxy.removeHotkey);
+        combinedHotkeys.forEach(proxy.removeHotkey)
       }
 
-      sequenceRecordedKeys = [];
+      recordedKeys = []
       if (sequenceTimer) {
-        clearTimeout(sequenceTimer);
+        clearTimeout(sequenceTimer)
       }
     }
   }, [_keys, memoisedOptions, activeScopes])
