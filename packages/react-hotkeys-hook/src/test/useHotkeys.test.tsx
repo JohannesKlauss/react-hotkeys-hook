@@ -634,6 +634,14 @@ test('should trigger callback for overlapping substring sequences', async () => 
   await user.keyboard('o')
 
   expect(callback).toHaveBeenCalledTimes(2)
+
+  vi.advanceTimersByTime(100)
+  await user.keyboard('l')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('l')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('o')
+  expect(callback).toHaveBeenCalledTimes(3)
 })
 
 test('should reflect set delimiter character', async () => {
