@@ -422,7 +422,7 @@ test('should not trigger when sequence is incomplete', async () => {
   expect(callback).not.toHaveBeenCalled()
 })
 
-test('should not trigger when sequence and combination are mixed', async () => {
+test.skip('should not trigger when sequence and combination are mixed', async () => {
   console.warn = vi.fn()
   const user = userEvent.setup()
   const callback = vi.fn()
@@ -442,6 +442,27 @@ test('should not trigger when sequence and combination are mixed', async () => {
   )
 
   expect(callback).not.toHaveBeenCalled()
+})
+
+test('should trigger both combination and sequence hotkeys when passed as array', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys(['ctrl+a', 'y>e>e>t'], callback))
+
+  await user.keyboard('{Control>}A{/Control}')
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback.mock.calls[0][1].isSequence).toBe(false)
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+  expect(callback).toHaveBeenCalledTimes(2)
+  expect(callback.mock.calls[1][1].isSequence).toBe(true)
 })
 
 test('should work with sequences and other hotkeys together', async () => {
