@@ -43,6 +43,8 @@ export function parseHotkey(
   let keys: string[] = []
   let isSequence = false
 
+  // hotkey might contain a leading space from eg. `ctrl+a, shift+a`
+  hotkey = hotkey.trim()
   if (hotkey.includes(sequenceSplitKey)) {
     isSequence = true
     keys = hotkey
@@ -72,5 +74,6 @@ export function parseHotkey(
     keys: singleCharKeys,
     description,
     isSequence,
+    hotkey,
   }
 }
