@@ -39,6 +39,7 @@ export function parseHotkey(
   sequenceSplitKey = '>',
   useKey = false,
   description?: string,
+  includeModifiersInKeys = false,
 ): Hotkey {
   let keys: string[] = []
   let isSequence = false
@@ -65,11 +66,11 @@ export function parseHotkey(
     useKey,
   }
 
-  const singleCharKeys = keys.filter((k) => !reservedModifierKeywords.includes(k))
+  const filteredKeys = includeModifiersInKeys ? keys : keys.filter((k) => !reservedModifierKeywords.includes(k))
 
   return {
     ...modifiers,
-    keys: singleCharKeys,
+    keys: filteredKeys,
     description,
     isSequence,
   }
