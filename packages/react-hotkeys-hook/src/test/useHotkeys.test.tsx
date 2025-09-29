@@ -685,6 +685,29 @@ test('should be disabled on form tags by default', async () => {
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
+test('should be disabled on aria form roles by default', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const formCallback = vi.fn()
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('a', cb)
+
+    return <div role={'searchbox'} tabIndex={0} onKeyDown={formCallback} data-testid={'form-tag'} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(formCallback).toHaveBeenCalledTimes(1)
+})
+
 test('should be enabled on given form tags', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
