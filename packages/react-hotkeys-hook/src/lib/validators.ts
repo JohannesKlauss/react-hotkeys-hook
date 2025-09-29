@@ -16,8 +16,11 @@ export function isHotkeyEnabled(e: KeyboardEvent, hotkey: Hotkey, enabled?: Trig
   return enabled === true || enabled === undefined
 }
 
+// these are ARIA roles that are considered form fields
+const FORM_TAGS_AND_ROLES: readonly FormTags[] = ['input', 'textarea', 'select', 'searchbox', 'slider', 'spinbutton', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'option', 'radio', 'textbox'];
+
 export function isKeyboardEventTriggeredByInput(ev: KeyboardEvent): boolean {
-  return isHotkeyEnabledOnTag(ev, ['input', 'textarea', 'select'])
+  return isHotkeyEnabledOnTag(ev, FORM_TAGS_AND_ROLES);
 }
 
 export function isHotkeyEnabledOnTag(
@@ -25,18 +28,21 @@ export function isHotkeyEnabledOnTag(
   enabledOnTags: readonly FormTags[] | boolean = false,
 ): boolean {
   const { target, composed } = event
-
+  
   let targetTagName: EventTarget | string | undefined | null = undefined
+  let targetRole: string | undefined | null = undefined
 
   if (isCustomElement(target as HTMLElement) && composed) {
     targetTagName = event.composedPath()[0] && (event.composedPath()[0] as HTMLElement).tagName
+    targetRole = event.composedPath()[0] && (event.composedPath()[0] as HTMLElement).role
   } else {
     targetTagName = target && (target as HTMLElement).tagName
+    targetRole = target && (target as HTMLElement).role
   }
 
   if (isReadonlyArray(enabledOnTags)) {
     return Boolean(
-      targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase()),
+      targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase() || tag === targetRole),
     )
   }
 

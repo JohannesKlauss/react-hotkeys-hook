@@ -177,7 +177,7 @@ const options = {
 ```ts
 // Type Definitions
 type Trigger = boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean)
-type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT';
+type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT' | 'searchbox' | 'slider' | 'spinbutton' | 'menuitem' | 'menuitemcheckbox' | 'menuitemradio' | 'option' | 'radio' | 'textbox';
 
 type Options = {
   enabled?: Trigger
@@ -213,10 +213,10 @@ of the callback and `true` to __allow__ the callback to be triggered. You can al
 enableOnFormTags: string[] // default: undefined
 ```
 
-Normally we do not want a hotkey being triggered while a user types something into an input field. In some cases however
+Normally we do not want a hotkey being triggered while a user types something into an input field or a custom input that uses ARIA roles. In some cases however
 this might desirable. We can enable the callback trigger for an input tag using the following values:
 
-`INPUT`, `TEXTAREA`, `SELECT`
+`INPUT`, `TEXTAREA`, `SELECT`, `ROLE_NAME_HERE`
 
 ##### `ignoreEventWhen`
 
