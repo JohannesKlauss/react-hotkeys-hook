@@ -30,7 +30,7 @@
     "jsdom": "26.1.0",
     "typescript": "~5.9.0",
     "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.7",
+    "vite": "^7.0.0",
     "vitest": "3.2.4",
     "vite-plugin-dts": "4.5.4"
   }
