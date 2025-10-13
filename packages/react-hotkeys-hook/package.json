@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint .",
     "test": "vitest",
     "prepublishOnly": "vitest run && npm run build"
   },
