@@ -29,8 +29,8 @@ export function isHotkeyEnabledOnTag(
 ): boolean {
   const { target, composed } = event
   
-  let targetTagName: EventTarget | string | undefined | null = undefined
-  let targetRole: string | undefined | null = undefined
+  let targetTagName: EventTarget | string | undefined | null 
+  let targetRole: string | undefined | null 
 
   if (isCustomElement(target as HTMLElement) && composed) {
     targetTagName = event.composedPath()[0] && (event.composedPath()[0] as HTMLElement).tagName
