@@ -369,6 +369,19 @@ test('should listen to multiple combinations with modifiers', async () => {
   await user.keyboard('{Alt>}B{/Alt}')
 
   expect(callback).toHaveBeenCalledTimes(2)
+
+  // Assert the leading space from alt+b is dropped
+  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+    keys: ['b'],
+    shift: false,
+    ctrl: false,
+    alt: true,
+    meta: false,
+    mod: false,
+    useKey: false,
+    isSequence: false,
+    hotkey: 'alt+b',
+  })
 })
 
 test('should listen to sequences', async () => {
@@ -1119,6 +1132,7 @@ test('should pass keyboard event and hotkey object to callback', async () => {
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'a',
   })
 })
 
@@ -1140,6 +1154,7 @@ test('should set shift to true in hotkey object if listening to shift', async ()
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'shift+a',
   })
 })
 
@@ -1161,6 +1176,7 @@ test('should set ctrl to true in hotkey object if listening to ctrl', async () =
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'ctrl+a',
   })
 })
 
@@ -1182,6 +1198,7 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'alt+a',
   })
 })
 
@@ -1203,6 +1220,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
     mod: true,
     useKey: false,
     isSequence: false,
+    hotkey: 'mod+a',
   })
 })
 
@@ -1224,6 +1242,7 @@ test('should set meta to true in hotkey object if listening to meta', async () =
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'meta+a',
   })
 })
 
@@ -1245,6 +1264,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
     mod: true,
     useKey: false,
     isSequence: false,
+    hotkey: 'mod+shift+a',
   })
 })
 
@@ -1346,6 +1366,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'a',
   })
 })
 
