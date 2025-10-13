@@ -1,6 +1,21 @@
 import type { DependencyList } from 'react'
 
-export type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT' | 'searchbox' | 'slider' | 'spinbutton' | 'menuitem' | 'menuitemcheckbox' | 'menuitemradio' | 'option' | 'radio' | 'textbox'
+export type FormTags =
+  | 'input'
+  | 'textarea'
+  | 'select'
+  | 'INPUT'
+  | 'TEXTAREA'
+  | 'SELECT'
+  | 'searchbox'
+  | 'slider'
+  | 'spinbutton'
+  | 'menuitem'
+  | 'menuitemcheckbox'
+  | 'menuitemradio'
+  | 'option'
+  | 'radio'
+  | 'textbox'
 export type Keys = string | readonly string[]
 export type Scopes = string | readonly string[]
 
