@@ -171,6 +171,7 @@ const options = {
   document: undefined,
   ignoreModifiers: false,
   useKey: false,
+  includeModifiersInKeys: false,
 };
 ```
 
@@ -380,6 +381,17 @@ useKey: boolean // default: false
 
 This option allows us to listen to the produced key instead of the key code. This is useful if we want to listen to a
 specific key (e.g. `!`, `:`, `%`, etc.) and don't care about how the user produces that key.
+
+
+##### `includeModifiersInKeys`
+
+```ts
+includeModifiersInKeys: boolean // default: false
+```
+
+When set to `true`, the `keys` property of the `handler` object will include the modifier keys (e.g. `shift`, `ctrl`, etc.)
+This is useful if we want to know which modifier keys were pressed in addition to the main key. For example, if the user
+presses `ctrl+s`, the `keys` property will contain `['ctrl', 's']` instead of just `['s']`.
 
 ***
 

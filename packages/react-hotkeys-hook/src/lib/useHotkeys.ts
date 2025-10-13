@@ -104,6 +104,7 @@ export default function useHotkeys<T extends HTMLElement>(
           memoisedOptions?.sequenceSplitKey,
           memoisedOptions?.useKey,
           memoisedOptions?.description,
+          memoisedOptions?.includeModifiersInKeys,
         )
 
         if (hotkey.isSequence) {
@@ -216,6 +217,7 @@ export default function useHotkeys<T extends HTMLElement>(
             memoisedOptions?.sequenceSplitKey,
             memoisedOptions?.useKey,
             memoisedOptions?.description,
+            memoisedOptions?.includeModifiersInKeys,
           ),
         ),
       )
@@ -236,6 +238,7 @@ export default function useHotkeys<T extends HTMLElement>(
               memoisedOptions?.sequenceSplitKey,
               memoisedOptions?.useKey,
               memoisedOptions?.description,
+              memoisedOptions?.includeModifiersInKeys,
             ),
           ),
         )
