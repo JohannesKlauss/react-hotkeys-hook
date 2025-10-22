@@ -457,6 +457,27 @@ test('should not trigger when sequence and combination are mixed', async () => {
   expect(callback).not.toHaveBeenCalled()
 })
 
+test('should trigger both combination and sequence hotkeys when passed as array', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys(['ctrl+a', 'y>e>e>t'], callback))
+
+  await user.keyboard('{Control>}A{/Control}')
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback.mock.calls[0][1].isSequence).toBe(false)
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('t')
+  expect(callback).toHaveBeenCalledTimes(2)
+  expect(callback.mock.calls[1][1].isSequence).toBe(true)
+})
+
 test('should work with sequences and other hotkeys together', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
@@ -572,6 +593,68 @@ test('should not trigger sequence without useKey', async () => {
   await user.keyboard(`{Shift>}{!}{/Shift}`)
 
   expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('should trigger callback for each sequence in array', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys(['h>i', 'o>k'], callback))
+
+  await user.keyboard('h')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('i')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('o')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('k')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+})
+
+test('should trigger callback for each overlapping sequence in array', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys(['h>i', 'i>k'], callback))
+
+  await user.keyboard('h')
+  vi.advanceTimersByTime(200)
+  await user.keyboard('i')
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  vi.advanceTimersByTime(200)
+  await user.keyboard('k')
+  expect(callback).toHaveBeenCalledTimes(2)
+})
+
+test('should trigger callback for overlapping substring sequences', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys(['h>e>l>l>o', 'l>l>o'], callback))
+
+  await user.keyboard('h')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('l')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('l')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('o')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+
+  vi.advanceTimersByTime(100)
+  await user.keyboard('l')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('l')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('o')
+  expect(callback).toHaveBeenCalledTimes(3)
 })
 
 test('should reflect set delimiter character', async () => {
