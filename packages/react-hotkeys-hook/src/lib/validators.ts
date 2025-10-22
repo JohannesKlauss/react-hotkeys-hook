@@ -93,13 +93,10 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
 
   const mappedCode = mapCode(code)
 
-  if (useKey && keys?.length === 1 && keys.includes(producedKey)) {
-    return true
-  }
-
   if (
     !keys?.includes(mappedCode) &&
-    !['ctrl', 'control', 'unknown', 'meta', 'alt', 'shift', 'os'].includes(mappedCode)
+    !['ctrl', 'control', 'unknown', 'meta', 'alt', 'shift', 'os'].includes(mappedCode) &&
+    !(useKey && keys?.includes(producedKey))
   ) {
     return false
   }
@@ -128,6 +125,11 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
         return false
       }
     }
+  }
+
+  // Check if the key matches when useKey is enabled
+  if (useKey && keys?.length === 1 && keys.includes(producedKey)) {
+    return true
   }
 
   // All modifiers are correct, now check the key

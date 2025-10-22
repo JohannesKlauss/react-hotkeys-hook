@@ -1473,6 +1473,30 @@ test('Should ignore modifiers if option is set', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test("Should test for modifiers when useKey is true", async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('meta+.', callback, { useKey: true }))
+  renderHook(() => useHotkeys('shift+a', callback, { useKey: true }))
+
+  await user.keyboard('{Meta>}.{/Meta}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('.')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('{Shift>}a{/Shift}')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+
+  await user.keyboard('a')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+});
+
 
 test('should respect dependencies array if they are passed', async () => {
   function Fixture() {
