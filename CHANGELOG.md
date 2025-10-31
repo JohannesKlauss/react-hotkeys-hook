@@ -1,3 +1,21 @@
+## [5.2.0] - 13-Oct-2025
+* Introduced global scopes via HotkeysProvider and useHotkeysContext to group and control hotkeys across the app (enableScope/disableScope/toggleScope)
+* Added support for key sequences (e.g. "g>g") with configurable sequenceSplitKey (default ">") and sequenceTimeoutMs
+* New options: useKey, delimiter, splitKey, keyup/keydown toggles, description, document, ignoreModifiers, eventListenerOptions, enableOnContentEditable, ignoreEventWhen
+* Accessibility: enableOnFormTags can now accept ARIA roles and works with composedPath() in shadow DOM/custom elements
+* Improved key mapping (mod/meta/OS, code→key normalization) and standardized HotkeysEvent passed to callbacks
+* Internal: refactors and stability improvements around pressed-keys tracking and listener cleanup
+
+## [5.1.0] - 05-Sep-2025
+* Added BoundHotkeysProxyProvider for advanced scenarios and performance
+* Added helpers and warnings for missing provider when using scopes
+* Fixed various edge cases with modifier-only hotkeys and OS/meta key handling
+
+## [5.0.0] - 10-Jan-2025
+* Major refactor of the hook internals to support scopes and sequences
+* BREAKING: Package is ESM-only; ensure your toolchain supports ES modules
+* BREAKING: The callback now receives (keyboardEvent, hotkeysEvent) consistently; update your typings if you relied on the previous shape
+
 ## [4.6.0] - 01-Nov-2024
 * Added 'hotkey' field, which shows which combination triggered the handler
 

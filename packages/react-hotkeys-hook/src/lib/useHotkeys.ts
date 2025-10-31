@@ -43,6 +43,7 @@ export default function useHotkeys<T extends HTMLElement>(
       ? dependencies
       : undefined
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: is exhaustive
   const memoisedCB = useCallback(callback, _deps ?? [])
   const cbRef = useRef<HotkeyCallback>(memoisedCB)
 
