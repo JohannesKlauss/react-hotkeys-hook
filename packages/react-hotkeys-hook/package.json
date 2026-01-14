@@ -1,6 +1,5 @@
 {
   "name": "react-hotkeys-hook",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -9,6 +8,30 @@
     "test": "vitest",
     "prepublishOnly": "vitest run && npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JohannesKlauss/react-keymap-hook.git"
+  },
+  "homepage": "https://johannesklauss.github.io/react-hotkeys-hook/",
+  "author": "Johannes Klauss",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "react",
+    "hook",
+    "hooks",
+    "component",
+    "hotkey",
+    "shortcut",
+    "keyboard",
+    "shortcuts",
+    "keypress",
+    "hotkeys"
+  ],
+  "license": "MIT",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
