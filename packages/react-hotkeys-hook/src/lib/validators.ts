@@ -73,11 +73,7 @@ export function isCustomElement(element: HTMLElement): boolean {
 
 export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
   if (activeScopes.length === 0 && scopes) {
-    console.warn(
-      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
-    )
-
-    return true
+    return false
   }
 
   if (!scopes) {

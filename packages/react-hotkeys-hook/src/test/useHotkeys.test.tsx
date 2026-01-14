@@ -62,9 +62,6 @@ test('should log a warning when trying to set a scope without a wrapped provider
 
   renderHook(() => useHotkeys('a', callback, { scopes: 'foo' }))
 
-  expect(console.warn).toHaveBeenCalledWith(
-    'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
-  )
   expect(callback).not.toHaveBeenCalled()
 })
 
@@ -72,7 +69,7 @@ test('should call hotkey when scopes are set but activatedScopes includes wildca
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  const render = (initialScopes: string[] = []) =>
+  const render = (initialScopes?: string[]) =>
     renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
