@@ -56,10 +56,16 @@ export function pushToCurrentlyPressedKeys(key: string | string[]): void {
   Otherwise the set will hold all ever pressed keys while the meta key is down which leads to wrong results.
    */
   if (currentlyPressedKeys.has('meta')) {
-    currentlyPressedKeys.forEach((key) => !isHotkeyModifier(key) && currentlyPressedKeys.delete(key.toLowerCase()))
+    currentlyPressedKeys.forEach((key) => {
+      if (!isHotkeyModifier(key)) {
+        currentlyPressedKeys.delete(key.toLowerCase())
+      }
+    })
   }
 
-  hotkeyArray.forEach((hotkey) => currentlyPressedKeys.add(hotkey.toLowerCase()))
+  hotkeyArray.forEach((hotkey) => {
+    currentlyPressedKeys.add(hotkey.toLowerCase())
+  })
 }
 
 export function removeFromCurrentlyPressedKeys(key: string | string[]): void {
@@ -73,6 +79,8 @@ export function removeFromCurrentlyPressedKeys(key: string | string[]): void {
   if (key === 'meta') {
     currentlyPressedKeys.clear()
   } else {
-    hotkeyArray.forEach((hotkey) => currentlyPressedKeys.delete(hotkey.toLowerCase()))
+    hotkeyArray.forEach((hotkey) => {
+      currentlyPressedKeys.delete(hotkey.toLowerCase())
+    })
   }
 }

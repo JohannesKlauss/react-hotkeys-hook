@@ -39,7 +39,7 @@ export function parseHotkey(
   sequenceSplitKey = '>',
   useKey = false,
   description?: string,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): Hotkey {
   let keys: string[] = []
   let isSequence = false
@@ -78,6 +78,6 @@ export function parseHotkey(
     description,
     isSequence,
     hotkey,
-    metadata
+    metadata,
   }
 }

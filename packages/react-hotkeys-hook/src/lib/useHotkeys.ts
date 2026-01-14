@@ -209,7 +209,7 @@ export default function useHotkeys<T extends HTMLElement>(
     domNode.addEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
     if (proxy) {
-      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
         proxy.addHotkey(
           parseHotkey(
             key,
@@ -219,8 +219,8 @@ export default function useHotkeys<T extends HTMLElement>(
             memoisedOptions?.description,
             memoisedOptions?.metadata,
           ),
-        ),
-      )
+        )
+      })
     }
 
     return () => {
@@ -230,7 +230,7 @@ export default function useHotkeys<T extends HTMLElement>(
       domNode.removeEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
       if (proxy) {
-        parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+        parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
           proxy.removeHotkey(
             parseHotkey(
               key,
@@ -240,8 +240,8 @@ export default function useHotkeys<T extends HTMLElement>(
               memoisedOptions?.description,
               memoisedOptions?.metadata,
             ),
-          ),
-        )
+          )
+        })
       }
 
       recordedKeys = []
