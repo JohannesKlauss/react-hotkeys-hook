@@ -1,0 +1,37 @@
+# React Hotkeys Hook
+
+> React Hotkeys Hook is a React hook library for handling keyboard shortcuts in a declarative way. It provides a simple API to bind hotkeys to callback functions within your React components.
+
+Important notes:
+
+- This library is designed for React 16.8+ and requires the Hooks API
+- It supports both single keys and key combinations (e.g., `ctrl+s`, `shift+alt+a`)
+- Hotkeys can be scoped to specific components or made global
+- The library is written in TypeScript and provides full type support out of the box
+- It uses the browser's native KeyboardEvent API
+
+## Docs
+
+- [Quick Start](https://johannesklauss.github.io/docs/intro): Getting started with installation and basic usage
+- [Installation](https://johannesklauss.github.io/docs/documentation/installation): How to install the library using npm, yarn, or bun
+- [Basic Usage](https://johannesklauss.github.io/docs/documentation/useHotkeys/basic-usage): Core concepts and basic examples of using the useHotkeys hook
+- [Scoping Hotkeys](https://johannesklauss.github.io/docs/documentation/useHotkeys/scoping-hotkeys): How to scope hotkeys to specific components or areas
+- [Disable Hotkeys](https://johannesklauss.github.io/docs/documentation/useHotkeys/disable-hotkeys): Conditionally enabling and disabling hotkeys
+- [Callback Dependencies](https://johannesklauss.github.io/docs/documentation/useHotkeys/setting-callback-dependencies): Managing callback dependencies correctly
+- [Ignore Keyboard Layouts](https://johannesklauss.github.io/docs/documentation/useHotkeys/ignore-layouts): Handling different keyboard layouts
+- [HotkeysProvider](https://johannesklauss.github.io/docs/documentation/hotkeys-provider): Using the context provider for advanced scenarios
+- [isHotkeyPressed](https://johannesklauss.github.io/docs/documentation/is-hotkey-pressed): Checking if a hotkey is currently pressed
+- [useRecordHotkeys](https://johannesklauss.github.io/docs/documentation/use-record-hotkeys): Recording user hotkey input
+- [TypeScript](https://johannesklauss.github.io/docs/documentation/typescript): TypeScript integration and type definitions
+- [Advanced Usage](https://johannesklauss.github.io/docs/documentation/advanced-usage): Advanced patterns and techniques
+
+## API Reference
+
+- [useHotkeys API](https://johannesklauss.github.io/docs/api/use-hotkeys): Complete API reference for the useHotkeys hook
+- [isHotkeyPressed API](https://johannesklauss.github.io/docs/api/is-hotkey-pressed): API reference for the isHotkeyPressed function
+- [useRecordHotkeys API](https://johannesklauss.github.io/docs/api/use-record-hotkeys): API reference for the useRecordHotkeys hook
+
+## Optional
+
+- [Migration Guide to v5](https://johannesklauss.github.io/docs/migrate-to-5): Guide for migrating from v4 to v5
+- [GitHub Repository](https://github.com/JohannesKlauss/react-hotkeys-hook): Source code and issue tracker

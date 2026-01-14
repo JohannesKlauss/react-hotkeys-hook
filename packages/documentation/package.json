@@ -38,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "docusaurus-plugin-llms": "^0.2.2"
   }
 }
