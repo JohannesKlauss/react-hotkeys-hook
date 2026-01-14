@@ -1,154 +1,195 @@
-import React from 'react';
-import clsx from 'clsx';
-import Layout from '@theme/Layout';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import styles from './index.module.css';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import CodeBlock from '@theme/CodeBlock';
+import React from 'react'
+import clsx from 'clsx'
+import Layout from '@theme/Layout'
+import Link from '@docusaurus/Link'
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
+import styles from './index.module.css'
+import CodeBlock from '@theme/CodeBlock'
+
+// @ts-expect-error - theme-live-codeblock types not available
+import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live'
+// @ts-expect-error - theme scope
+import ReactLiveScope from '@theme/ReactLiveScope'
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext()
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header className={clsx('hero', 'hero--primary')}>
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro">
+          <Link className="button button--secondary button--lg" to="/docs/intro">
             Quick Start
           </Link>
-
-          <Link
-            className="button button--primary button--lg"
-            to="/docs/documentation/installation">
+          <Link className="button button--primary button--lg" to="/docs/documentation/installation">
             Documentation
           </Link>
-
-          <iframe className="indexCtasGitHubButton_5nVI"
-                  src="https://ghbtns.com/github-btn.html?user=JohannesKlauss&amp;repo=react-hotkeys-hook&amp;type=star&amp;count=true&amp;size=large"
-                  width="160" height="30" title="GitHub Stars"></iframe>
         </div>
       </div>
     </header>
-  );
+  )
 }
 
-export default function Home(): JSX.Element {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <Layout
-      title={siteConfig.title}
-      description="A react library to use hotkeys in a declarative way">
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
+const taskManagerCode = `function TaskManager() {
+  const [tasks, setTasks] = useState(['Learn useHotkeys', 'Build app', 'Ship it'])
 
-        <div className={'container'}>
-          <div className={'row margin-vert--xl'}>
-            <div className={'col col-6'}>
-              <h1 className={styles.rightAlign}>Easy to use</h1>
-              <p className={styles.rightAlign}>Use just one hook to bind your hotkeys to a component.</p>
-            </div>
-            <div className={'col col-6'}>
-              <CodeBlock className={'language-jsx'}>
-                {`function MyAwesomeComponent() {
-  const [count, setCount] = useState(0)
-  useHotkeys('a', () => setCount(prevCount =>
-    prevCount + 1
-  ))
-  
+  useHotkeys('n', () => setTasks([...tasks, 'New task']))
+
   return (
-    <span>{count}</span>
+    <ul>
+      {tasks.map((task, i) => (
+        <li key={i}>
+          {task}
+        </li>
+      ))}
+    </ul>
   )
-}`}
-              </CodeBlock>
+}
+
+render(<TaskManager />)`
+
+function TaskManagerDemo() {
+  return (
+    <section className={styles.demoSection}>
+      <div className="container">
+        <div className={styles.demoIntro}>
+          <h2>Keyboard shortcuts made simple</h2>
+          <p>
+            Build keyboard-driven interfaces with just a few lines of code. Try the demo below - click on the preview
+            and use the keyboard shortcuts to interact with the task manager.
+          </p>
+        </div>
+        <div className={styles.demoContainer}>
+          <LiveProvider code={taskManagerCode} scope={ReactLiveScope} noInline>
+            <div className={styles.demoCode}>
+              <LiveEditor />
             </div>
+            <div className={styles.demoPreview}>
+              <LiveError />
+              <LivePreview />
+            </div>
+          </LiveProvider>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function FeatureSection({
+  title,
+  description,
+  code,
+  reversed = false,
+}: {
+  title: string
+  description: string
+  code: string
+  reversed?: boolean
+}) {
+  return (
+    <section className={styles.featureSection}>
+      <div className="container">
+        <div className={clsx(styles.featureGrid, reversed && styles.featureGridReversed)}>
+          <div>
+            <h2 className={styles.featureTitle}>{title}</h2>
+            <p className={styles.featureDescription}>{description}</p>
           </div>
-
-          <div className={'row margin-vert--xl'}>
-            <div className={'col col-6'}>
-              <CodeBlock className={'language-jsx'}>
-                {`function MyAwesomeComponent() {
-  const [count, setCount] = useState(0)
-  const ref = useHotkeys('b', () => setCount(prevCount =>
-    prevCount + 1
-  ))
-  
-  return (
-    <div>
-      <span>
-        Focusing this element will disable the hotkey {count}.
-      </span>
-      <br/>
-      <span ref={ref} tabIndex='-1'>
-        Focusing this element will enable the hotkey {count}.
-      </span>
-    </div>
-  )
-}`}
-              </CodeBlock>
-
-            </div>
-            <div className={'col col-6'}>
-              <h1>Dead simple component scoping</h1>
-              <p>With the usage of a returned ref you can easily scope your callback to your component, sub component or subtree.</p>
-            </div>
-          </div>
-
-          <div className={'row margin-vert--xl'}>
-            <div className={'col col-6'}>
-              <h1 className={styles.rightAlign}>Modifier support and combinations</h1>
-              <p className={styles.rightAlign}>Use all major modifiers. You can also combine multiple hotkey combinations to trigger the same callback. Supports ctrl, cmd, option, alt, pagedown, etc.</p>
-            </div>
-            <div className={'col col-6'}>
-              <CodeBlock className={'language-jsx'}>
-                {`function MyAwesomeComponent() {
-  const [count, setCount] = useState(0);
-  useHotkeys('ctrl+a, shift+ctrl+x', () => setCount(prevCount =>
-    prevCount + 1
-  ))
-  
-  return (
-    <span>{count}</span>
-  )
-}`}
-              </CodeBlock>
-            </div>
-          </div>
-
-          <div className={'row margin-vert--xl'}>
-            <div className={'col col-6'}>
-              <CodeBlock className={'language-jsx'}>
-                {`function MyAwesomeComponent() {
-  const [enabled, setEnabled] = useState(false)
-  const [count, setCount] = useState(0)
-  useHotkeys('shift+c', () => setCount(prevCount => prevCount + 1), {
-    enabled,
-  })
-  
-  const onClick = () => setEnabled(prevEnabled => !prevEnabled)
-  
-  return (
-    <div>
-      <button onClick={onClick}>Toggle Hotkey</button>
-      <p>Hotkey is {!enabled && 'not'} enabled.</p>
-      <p>Pressed the 'shift+c' keystroke {count} times.</p>
-    </div>
-  )
-}`}
-              </CodeBlock>
-
-            </div>
-            <div className={'col col-6'}>
-              <h1>Dynamically enable or disable hotkeys</h1>
-              <p>You can enable and disable hotkeys during runtime as well as prevent the defaults browser behavior.</p>
-            </div>
+          <div>
+            <CodeBlock className="language-jsx">{code}</CodeBlock>
           </div>
         </div>
+      </div>
+    </section>
+  )
+}
+
+function QuickStart() {
+  return (
+    <section className={styles.quickStart}>
+      <div className="container">
+        <h2>Quick Start</h2>
+        <div className={styles.quickStartCode}>
+          <CodeBlock className="language-shell">{`npm install react-hotkeys-hook`}</CodeBlock>
+          <CodeBlock className="language-jsx">{`import { useHotkeys } from 'react-hotkeys-hook'
+
+function App() {
+  useHotkeys('ctrl+k', () => openSearch())
+  
+  return <div>...</div>
+}`}</CodeBlock>
+        </div>
+        <div className={styles.quickStartCta}>
+          <Link className="button button--primary button--lg" to="/docs/intro">
+            Read full documentation
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export default function Home() {
+  const { siteConfig } = useDocusaurusContext()
+  return (
+    <Layout title={siteConfig.title} description="A react library to use hotkeys in a declarative way">
+      <HomepageHeader />
+      <main>
+        <TaskManagerDemo />
+
+        <FeatureSection
+          title="Simple & Declarative"
+          description="Define hotkeys with a single hook call. No complex setup, just import and use."
+          code={`useHotkeys('ctrl+s', () => {
+  saveDocument()
+})`}
+        />
+
+        <FeatureSection
+          title="Scoped to Components"
+          description="Scope hotkeys to specific components using refs. Hotkeys only trigger when the element is focused."
+          code={`function Editor() {
+  const ref = useHotkeys('ctrl+b', () => toggleBold())
+  
+  return (
+    <div ref={ref} tabIndex={-1}>
+      Click here to focus, then press ctrl+b
+    </div>
+  )
+}`}
+          reversed
+        />
+
+        <FeatureSection
+          title="Sequences & Combinations"
+          description="Support for modifier keys and sequential hotkeys. Create vim-style commands or complex shortcuts."
+          code={`// Modifier combinations
+useHotkeys('ctrl+shift+k', () => deleteLine())
+
+// Sequential hotkeys (vim-style)
+useHotkeys('g>i>t', () => goToInbox())`}
+        />
+
+        <FeatureSection
+          title="Record Custom Hotkeys"
+          description="Let users define their own keyboard shortcuts. Perfect for customizable applications."
+          code={`function HotkeyRecorder() {
+  const [keys, { start, stop, isRecording }] = useRecordHotkeys()
+
+  return (
+    <div>
+      <p>Recorded: {Array.from(keys).join(' + ')}</p>
+      <button onClick={isRecording ? stop : start}>
+        {isRecording ? 'Stop' : 'Record'}
+      </button>
+    </div>
+  )
+}`}
+          reversed
+        />
+
+        <QuickStart />
       </main>
     </Layout>
-  );
+  )
 }
