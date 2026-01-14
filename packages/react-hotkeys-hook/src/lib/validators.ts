@@ -132,13 +132,19 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
     return true
   }
 
-  if (keys) {
+  if (keys && keys.length > 0) {
+    // For multi-key combinations, the pressed key must be one of the expected keys
+    // This prevents triggering when a modifier is pressed while holding an unrelated key
+    if (!keys.includes(mappedCode)) {
+      return false
+    }
     // Check if all keys are present in pressedDownKeys set
     return isHotkeyPressed(keys)
   }
 
-  if (!keys) {
-    // If the key is not set, we only listen for modifiers, that check went alright, so we return true
+  if (!keys || keys.length === 0) {
+    // If no keys are set (modifier-only hotkey like 'shift'), we only listen for modifiers.
+    // The modifier checks above passed, so we return true.
     return true
   }
 

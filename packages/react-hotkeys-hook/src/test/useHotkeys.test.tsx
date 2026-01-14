@@ -1470,6 +1470,30 @@ test('Should ignore modifiers if option is set', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test('should not trigger callback twice when pressing a key and then a modifier', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a', callback))
+
+  // Press 'a' and hold it, then press shift while still holding 'a'
+  // The callback should only fire once (when 'a' is pressed)
+  await user.keyboard('{a>}{Shift>}{/Shift}{/a}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should not trigger callback when modifier is pressed while holding unrelated key', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('b', callback))
+
+  // Press 'a' and hold it, then press shift - should not trigger 'b' callback
+  await user.keyboard('{a>}{Shift>}{/Shift}{/a}')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
 
 test('should respect dependencies array if they are passed', async () => {
   function Fixture() {
