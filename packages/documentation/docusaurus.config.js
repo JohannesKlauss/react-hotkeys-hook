@@ -8,7 +8,11 @@ module.exports = {
   url: 'https://johannesklauss.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
   favicon: 'img/favicon.ico',
   organizationName: 'Johannes Klauss', // Usually your GitHub org/user name.
   projectName: 'react-hotkeys-hook', // Usually your repo name.
