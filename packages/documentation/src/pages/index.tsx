@@ -38,11 +38,7 @@ const taskManagerCode = `function TaskManager() {
 
   return (
     <ul>
-      {tasks.map((task, i) => (
-        <li key={i}>
-          {task}
-        </li>
-      ))}
+      {tasks.map((task, i) => <li key={i}>{task}</li>)}
     </ul>
   )
 }
