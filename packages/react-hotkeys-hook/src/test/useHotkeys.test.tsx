@@ -14,9 +14,10 @@ import { createEvent, fireEvent, render, screen, renderHook, within } from '@tes
 import {test, expect, beforeEach, vi} from 'vitest'
 
 const wrapper =
-  (initialScopes: string[]): JSXElementConstructor<{ children: ReactElement }> =>
-    ({ children }: { children: ReactNode }) =>
-      <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
+  (initialScopes?: string[]): JSXElementConstructor<{ children: ReactNode }> =>
+  ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
+  )
 
 type HookParameters = {
   keys: Keys
@@ -89,7 +90,7 @@ test('should not call hotkey when scopes are set but activatedScopes does not in
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  const render = (initialScopes: string[] = []) =>
+  const render = (initialScopes?: string[]) =>
     renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
@@ -1616,6 +1617,22 @@ test('Should check produced key if useKey is true', async () => {
   await user.keyboard(`=`)
 
   expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('Should match mixed-case keys like PageUp with useKey option', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('PageUp', callback, { useKey: true }))
+
+  // Simulate PageUp from the dedicated PageUp key (code: PageUp, key: PageUp)
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', code: 'PageUp', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Simulate PageUp from numpad (code: Numpad9, key: PageUp) - this was the bug
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', code: 'Numpad9', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(2)
 })
 
 test('Should remove listener on AbortSignal', async () => {

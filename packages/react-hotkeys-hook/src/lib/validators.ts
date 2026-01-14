@@ -89,7 +89,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
 
   const mappedCode = mapCode(code)
 
-  if (useKey && keys?.length === 1 && keys.includes(producedKey)) {
+  if (useKey && keys?.length === 1 && keys.includes(producedKey.toLowerCase())) {
     return true
   }
 
