@@ -8,7 +8,11 @@ module.exports = {
   url: 'https://johannesklauss.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
   favicon: 'img/favicon.ico',
   organizationName: 'Johannes Klauss', // Usually your GitHub org/user name.
   projectName: 'react-hotkeys-hook', // Usually your repo name.
@@ -120,6 +124,30 @@ module.exports = {
       searchPagePath: 'search',
     },
   },
+  plugins: [
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        docsDir: 'docs',
+        title: 'React Hotkeys Hook Documentation',
+        description: 'Complete documentation for react-hotkeys-hook - A React hook for handling keyboard shortcuts in a declarative way.',
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+        includeBlog: false,
+        includeOrder: [
+          'intro.mdx',
+          'documentation/installation.mdx',
+          'documentation/useHotkeys/*',
+          'documentation/*',
+          'api/*',
+          'migrate-to-5.mdx',
+        ],
+        includeUnmatchedLast: true,
+      },
+    ],
+  ],
   presets: [
     [
       '@docusaurus/preset-classic',

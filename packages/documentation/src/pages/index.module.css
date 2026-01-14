@@ -5,35 +5,114 @@
  * and scoped locally.
  */
 
-.heroBanner {
-    padding: 4rem 0;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-@media screen and (max-width: 966px) {
-    .heroBanner {
-        padding: 2rem;
-    }
-}
-
 .buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
-.heroProjectTagline {
-    font-size: 60px;
-    margin: 0;
+/* Demo section */
+.demoSection {
+  padding: 4rem 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
 }
 
-.fullWidth {
-    width: 100%;
+.demoIntro {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.rightAlign {
-    text-align: right;
+.demoIntro h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.demoIntro p {
+  color: var(--ifm-color-emphasis-700);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.demoContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.demoCode {
+  overflow: auto;
+  border-radius: var(--ifm-code-border-radius);
+}
+
+.demoPreview {
+  padding: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-code-border-radius);
+  background: var(--ifm-background-surface-color);
+}
+
+@media (max-width: 996px) {
+  .demoContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Feature sections */
+.featureSection {
+  padding: 4rem 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.featureGridReversed {
+  direction: rtl;
+}
+
+.featureGridReversed > * {
+  direction: ltr;
+}
+
+@media (max-width: 996px) {
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .featureGridReversed {
+    direction: ltr;
+  }
+}
+
+.featureTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.featureDescription {
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.6;
+}
+
+/* Quick start section */
+.quickStart {
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.quickStartCode {
+  max-width: 600px;
+  margin: 2rem auto;
+  text-align: left;
+}
+
+.quickStartCta {
+  margin-top: 2rem;
 }

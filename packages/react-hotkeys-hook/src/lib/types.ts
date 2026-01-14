@@ -1,6 +1,21 @@
 import type { DependencyList } from 'react'
 
-export type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT'
+export type FormTags =
+  | 'input'
+  | 'textarea'
+  | 'select'
+  | 'INPUT'
+  | 'TEXTAREA'
+  | 'SELECT'
+  | 'searchbox'
+  | 'slider'
+  | 'spinbutton'
+  | 'menuitem'
+  | 'menuitemcheckbox'
+  | 'menuitemradio'
+  | 'option'
+  | 'radio'
+  | 'textbox'
 export type Keys = string | readonly string[]
 export type Scopes = string | readonly string[]
 
@@ -27,6 +42,8 @@ export type Hotkey = KeyboardModifiers & {
   scopes?: Scopes
   description?: string
   isSequence?: boolean
+  hotkey: string
+  metadata?: Record<string, unknown>
 }
 
 export type HotkeysEvent = Hotkey
@@ -70,6 +87,8 @@ export type Options = {
   sequenceTimeoutMs?: number
   // The character to split the sequence of keys. (Default: >)
   sequenceSplitKey?: string
+  // MetaData | Custom data to store and retrieve with the hotkey (Default: undefined)
+  metadata?: Record<string, unknown>
 }
 
 export type OptionsOrDependencyArray = Options | DependencyList

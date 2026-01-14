@@ -16,8 +16,24 @@ export function isHotkeyEnabled(e: KeyboardEvent, hotkey: Hotkey, enabled?: Trig
   return enabled === true || enabled === undefined
 }
 
+// these are ARIA roles that are considered form fields
+const FORM_TAGS_AND_ROLES: readonly FormTags[] = [
+  'input',
+  'textarea',
+  'select',
+  'searchbox',
+  'slider',
+  'spinbutton',
+  'menuitem',
+  'menuitemcheckbox',
+  'menuitemradio',
+  'option',
+  'radio',
+  'textbox',
+]
+
 export function isKeyboardEventTriggeredByInput(ev: KeyboardEvent): boolean {
-  return isHotkeyEnabledOnTag(ev, ['input', 'textarea', 'select'])
+  return isHotkeyEnabledOnTag(ev, FORM_TAGS_AND_ROLES)
 }
 
 export function isHotkeyEnabledOnTag(
@@ -26,17 +42,22 @@ export function isHotkeyEnabledOnTag(
 ): boolean {
   const { target, composed } = event
 
-  let targetTagName: EventTarget | string | undefined | null = undefined
+  let targetTagName: EventTarget | string | undefined | null
+  let targetRole: string | undefined | null
 
   if (isCustomElement(target as HTMLElement) && composed) {
     targetTagName = event.composedPath()[0] && (event.composedPath()[0] as HTMLElement).tagName
+    targetRole = event.composedPath()[0] && (event.composedPath()[0] as HTMLElement).role
   } else {
     targetTagName = target && (target as HTMLElement).tagName
+    targetRole = target && (target as HTMLElement).role
   }
 
   if (isReadonlyArray(enabledOnTags)) {
     return Boolean(
-      targetTagName && enabledOnTags && enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase()),
+      targetTagName &&
+        enabledOnTags &&
+        enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase() || tag === targetRole),
     )
   }
 
@@ -52,11 +73,7 @@ export function isCustomElement(element: HTMLElement): boolean {
 
 export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean {
   if (activeScopes.length === 0 && scopes) {
-    console.warn(
-      'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
-    )
-
-    return true
+    return false
   }
 
   if (!scopes) {
@@ -128,13 +145,19 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
     return true
   }
 
-  if (keys) {
+  if (keys && keys.length > 0) {
+    // For multi-key combinations, the pressed key must be one of the expected keys
+    // This prevents triggering when a modifier is pressed while holding an unrelated key
+    if (!keys.includes(mappedCode)) {
+      return false
+    }
     // Check if all keys are present in pressedDownKeys set
     return isHotkeyPressed(keys)
   }
 
-  if (!keys) {
-    // If the key is not set, we only listen for modifiers, that check went alright, so we return true
+  if (!keys || keys.length === 0) {
+    // If no keys are set (modifier-only hotkey like 'shift'), we only listen for modifiers.
+    // The modifier checks above passed, so we return true.
     return true
   }
 

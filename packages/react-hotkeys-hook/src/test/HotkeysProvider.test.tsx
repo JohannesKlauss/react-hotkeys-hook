@@ -231,3 +231,21 @@ test('should have no active scopes after deactivating all current scopes', () =>
 
   expect(result.current.activeScopes).toEqual([])
 })
+
+test('should not disable other scopes when enabling same scope twice', () => {
+  const { result } = renderHook(() => useHotkeysContext(), {
+    wrapper: HotkeysProvider,
+  })
+
+  act(() => {
+    result.current.enableScope('foo')
+  })
+  act(() => {
+    result.current.enableScope('bar')
+  })
+  act(() => {
+    result.current.enableScope('foo')
+  })
+
+  expect(result.current.activeScopes).toEqual(['foo', 'bar'])
+})

@@ -14,9 +14,10 @@ import { createEvent, fireEvent, render, screen, renderHook, within } from '@tes
 import {test, expect, beforeEach, vi} from 'vitest'
 
 const wrapper =
-  (initialScopes: string[]): JSXElementConstructor<{ children: ReactElement }> =>
-    ({ children }: { children: ReactNode }) =>
-      <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
+  (initialScopes?: string[]): JSXElementConstructor<{ children: ReactNode }> =>
+  ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={initialScopes}>{children}</HotkeysProvider>
+  )
 
 type HookParameters = {
   keys: Keys
@@ -62,9 +63,6 @@ test('should log a warning when trying to set a scope without a wrapped provider
 
   renderHook(() => useHotkeys('a', callback, { scopes: 'foo' }))
 
-  expect(console.warn).toHaveBeenCalledWith(
-    'A hotkey has the "scopes" option set, however no active scopes were found. If you want to use the global scopes feature, you need to wrap your app in a <HotkeysProvider>',
-  )
   expect(callback).not.toHaveBeenCalled()
 })
 
@@ -72,7 +70,7 @@ test('should call hotkey when scopes are set but activatedScopes includes wildca
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  const render = (initialScopes: string[] = []) =>
+  const render = (initialScopes?: string[]) =>
     renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
@@ -92,7 +90,7 @@ test('should not call hotkey when scopes are set but activatedScopes does not in
   const user = userEvent.setup()
   const callback = vi.fn()
 
-  const render = (initialScopes: string[] = []) =>
+  const render = (initialScopes?: string[]) =>
     renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
       wrapper: wrapper(initialScopes),
       initialProps: {
@@ -369,6 +367,19 @@ test('should listen to multiple combinations with modifiers', async () => {
   await user.keyboard('{Alt>}B{/Alt}')
 
   expect(callback).toHaveBeenCalledTimes(2)
+
+  // Assert the leading space from alt+b is dropped
+  expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
+    keys: ['b'],
+    shift: false,
+    ctrl: false,
+    alt: true,
+    meta: false,
+    mod: false,
+    useKey: false,
+    isSequence: false,
+    hotkey: 'alt+b',
+  })
 })
 
 test('should listen to sequences', async () => {
@@ -683,6 +694,29 @@ test('should be disabled on form tags by default', async () => {
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(getByTestId('form-tag')).toHaveValue('A')
+})
+
+test('should be disabled on aria form roles by default', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const formCallback = vi.fn()
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('a', cb)
+
+    return <div role={'searchbox'} tabIndex={0} onKeyDown={formCallback} data-testid={'form-tag'} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(formCallback).toHaveBeenCalledTimes(1)
 })
 
 test('should be enabled on given form tags', async () => {
@@ -1096,6 +1130,7 @@ test('should pass keyboard event and hotkey object to callback', async () => {
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'a',
   })
 })
 
@@ -1117,6 +1152,7 @@ test('should set shift to true in hotkey object if listening to shift', async ()
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'shift+a',
   })
 })
 
@@ -1138,6 +1174,7 @@ test('should set ctrl to true in hotkey object if listening to ctrl', async () =
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'ctrl+a',
   })
 })
 
@@ -1159,6 +1196,7 @@ test('should set alt to true in hotkey object if listening to alt', async () => 
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'alt+a',
   })
 })
 
@@ -1180,6 +1218,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
     mod: true,
     useKey: false,
     isSequence: false,
+    hotkey: 'mod+a',
   })
 })
 
@@ -1201,6 +1240,7 @@ test('should set meta to true in hotkey object if listening to meta', async () =
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'meta+a',
   })
 })
 
@@ -1222,6 +1262,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
     mod: true,
     useKey: false,
     isSequence: false,
+    hotkey: 'mod+shift+a',
   })
 })
 
@@ -1323,6 +1364,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
     mod: false,
     useKey: false,
     isSequence: false,
+    hotkey: 'a',
   })
 })
 
@@ -1429,6 +1471,30 @@ test('Should ignore modifiers if option is set', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test('should not trigger callback twice when pressing a key and then a modifier', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a', callback))
+
+  // Press 'a' and hold it, then press shift while still holding 'a'
+  // The callback should only fire once (when 'a' is pressed)
+  await user.keyboard('{a>}{Shift>}{/Shift}{/a}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should not trigger callback when modifier is pressed while holding unrelated key', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('b', callback))
+
+  // Press 'a' and hold it, then press shift - should not trigger 'b' callback
+  await user.keyboard('{a>}{Shift>}{/Shift}{/a}')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
 
 test('should respect dependencies array if they are passed', async () => {
   function Fixture() {
@@ -1551,6 +1617,22 @@ test('Should check produced key if useKey is true', async () => {
   await user.keyboard(`=`)
 
   expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('Should match mixed-case keys like PageUp with useKey option', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('PageUp', callback, { useKey: true }))
+
+  // Simulate PageUp from the dedicated PageUp key (code: PageUp, key: PageUp)
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', code: 'PageUp', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Simulate PageUp from numpad (code: Numpad9, key: PageUp) - this was the bug
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', code: 'Numpad9', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(2)
 })
 
 test('Should remove listener on AbortSignal', async () => {

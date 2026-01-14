@@ -43,6 +43,7 @@ export default function useHotkeys<T extends HTMLElement>(
       ? dependencies
       : undefined
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: is exhaustive
   const memoisedCB = useCallback(callback, _deps ?? [])
   const cbRef = useRef<HotkeyCallback>(memoisedCB)
 
@@ -103,6 +104,7 @@ export default function useHotkeys<T extends HTMLElement>(
           memoisedOptions?.sequenceSplitKey,
           memoisedOptions?.useKey,
           memoisedOptions?.description,
+          memoisedOptions?.metadata,
         )
 
         if (hotkey.isSequence) {
@@ -207,7 +209,7 @@ export default function useHotkeys<T extends HTMLElement>(
     domNode.addEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
     if (proxy) {
-      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
         proxy.addHotkey(
           parseHotkey(
             key,
@@ -215,9 +217,10 @@ export default function useHotkeys<T extends HTMLElement>(
             memoisedOptions?.sequenceSplitKey,
             memoisedOptions?.useKey,
             memoisedOptions?.description,
+            memoisedOptions?.metadata,
           ),
-        ),
-      )
+        )
+      })
     }
 
     return () => {
@@ -227,7 +230,7 @@ export default function useHotkeys<T extends HTMLElement>(
       domNode.removeEventListener('keydown', handleKeyDown, _options?.eventListenerOptions)
 
       if (proxy) {
-        parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) =>
+        parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
           proxy.removeHotkey(
             parseHotkey(
               key,
@@ -235,9 +238,10 @@ export default function useHotkeys<T extends HTMLElement>(
               memoisedOptions?.sequenceSplitKey,
               memoisedOptions?.useKey,
               memoisedOptions?.description,
+              memoisedOptions?.metadata,
             ),
-          ),
-        )
+          )
+        })
       }
 
       recordedKeys = []

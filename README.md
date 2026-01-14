@@ -26,7 +26,9 @@
   </a>
 </p>
 
-<pre align="center">npm i react-hotkeys-hook</pre>
+```
+npm i react-hotkeys-hook
+```
 
 <p align="center">
 A React hook for using keyboard shortcuts in components in a declarative way.
