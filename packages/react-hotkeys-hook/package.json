@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/JohannesKlauss/react-keymap-hook.git"
   },
-  "homepage": "https://johannesklauss.github.io/react-hotkeys-hook/",
+  "homepage": "https://react-hotkeys-hook.vercel.app/",
   "author": "Johannes Klauss",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
