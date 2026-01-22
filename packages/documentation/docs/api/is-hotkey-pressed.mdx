@@ -29,10 +29,11 @@ const onClick = () => isHotkeyPressed('shift') ? setCount(count - 1) : setCount(
 key: string | string[]
 ```
 
-The key or keys to check. This can be a single key string (like `'a'`), a
-delimited string of keys (like `'shift,a'`), or an array of strings (like
-`['a','shift']`). If multiple keys are provided, either as a delimited string or
-as an array, all keys must be pressed down for the function to return `true`.
+The key or keys to check. This can be a single keycode string (like `'a'`), a
+delimited string of keycodes (like `'shift,a'`), or an array of keycode strings
+(like `['shift','a']`). If multiple keys are provided, either as a delimited
+string or as an array, all keys must be pressed down for the function to return
+`true`.
 
 Special characters that require `shift` to be held (like `!`, `@`, `#`, `?`,
 etc.) are also not directly supported; instead, check if the base key is held
