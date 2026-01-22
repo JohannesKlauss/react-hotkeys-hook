@@ -11,7 +11,7 @@ Function signature:
 function isHotkeyPressed(key: string | string[], splitKey: string = ','): boolean
 ```
 
-This function allows us to check if a specific key is pressed by the user.
+This function allows us to check if a specific key or combination of keys is pressed by the user.
 
 ```jsx
 const isHotkeyPressed = useIsHotkeyPressed();
@@ -29,7 +29,20 @@ const onClick = () => isHotkeyPressed('shift') ? setCount(count - 1) : setCount(
 key: string | string[]
 ```
 
-The key we want to listen to. This can be a string (like `'a'`, `'shift+a'`) or an array of strings (like `['a', 'shift+a']`).
+The key or keys to check. This can be a single key string (like `'a'`), a
+delimited string of keys (like `'shift,a'`), or an array of strings (like
+`['a','shift']`). If multiple keys are provided, either as a delimited string or
+as an array, all keys must be pressed down for the function to return `true`.
+
+Special characters that require `shift` to be held (like `!`, `@`, `#`, `?`,
+etc.) are also not directly supported; instead, check if the base key is held
+(like `1`, `2`, `3`, `slash`, etc.) along with the `shift` key (e.g.
+`['shift','1']`).
+
+:::caution Warning 
+The `mod` key is not supported. Please check for `ctrl` and
+`meta` keys separately.
+:::
 
 ### splitKey
 
@@ -37,11 +50,12 @@ The key we want to listen to. This can be a string (like `'a'`, `'shift+a'`) or 
 key: string = ','
 ```
 
-We can combine to check for multiple keys in one string by separating them with a comma (`,`). We can change
-this by passing a different key.
+The delimiter used to parse multiple keys from a single string. This is a comma
+(`,`) by default.
 
 ## Return value
 
 ### boolean
 
-The function returns `true` if the key or keystroke is currently pressed down, otherwise it will return `false`.
+The function returns `true` if the key or key combination is currently pressed
+down, otherwise it will return `false`.

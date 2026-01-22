@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # isHotkeyPressed
 
-This function allows us to check if the user is currently pressing down a key.
+This function allows us to check if the user is currently pressing down a key or a combination of keys.
 
 ## Basic Usage
 
@@ -43,4 +43,22 @@ function ExampleComponent() {
 }
 ```
 
-Just like with `useHotkeys`, you can pass an array as the first argument to check for multiple keys.
+You can pass an array or delimited string as the first argument to check if
+multiple keys are pressed simultaneously. Commas (`,`) are used as the default
+delimiter.
+
+```jsx live
+function ExampleComponent() {
+  const [pressed, setPressed] = useState(false);
+
+  // You can also pass a string with delimiters like 'shift,a'
+  const onClick = () => setPressed(isHotkeyPressed(['shift', 'a']));
+
+  return (
+    <div>
+      <p>The hotkey was: {pressed ? 'pressed' : 'not pressed'}</p>
+      <button onClick={onClick}>Check if hotkey is pressed</button>
+    </div>
+  )
+}
+```
