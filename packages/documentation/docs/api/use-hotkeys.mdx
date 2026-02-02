@@ -163,6 +163,8 @@ const options = {
   enableOnContentEditable: false,
   combinationKey: '+',
   splitKey: ',',
+  sequenceSplitKey: '>',
+  sequenceTimeoutMs: 1000,
   scopes: '*',
   keyup: undefined,
   keydown: true,
@@ -185,6 +187,8 @@ type Options = {
   enableOnContentEditable?: boolean
   combinationKey?: string
   splitKey?: string
+  sequenceSplitKey?: string
+  sequenceTimeoutMs?: number
   scopes?: string | string[]
   keyup?: boolean
   keydown?: boolean
@@ -250,6 +254,23 @@ splitKey: string // default: "+"
 
 Specifies the key that is used to combine multiple hotkeys into keystrokes. The default value is `+`, so `shift+a` triggers
 when the user presses the "shift" key __and__ the "a" key.
+
+##### `sequenceSplitKey`       
+
+```ts
+sequenceSplitKey: string // default: ">"
+```
+
+Specifies the key that is used to separate multiple hotkeys in a [keystroke sequence](../documentation/useHotkeys/basic-usage#sequential-hotkeys).  The default value is '>', so `g>h` triggers when the user presses the "g" key followed by the "h" key.
+
+##### `sequenceTimeoutMs`
+
+```ts
+sequenceTimeoutMs: number // default: 1000
+```
+
+Timeout in milliseconds for recognizing a [keystroke sequence](../documentation/useHotkeys/basic-usage#sequential-hotkeys).
+The default value is `1000ms`, so if the user doesn't press the next key in that given time, the sequence is aborted.
 
 ##### `scopes`
 

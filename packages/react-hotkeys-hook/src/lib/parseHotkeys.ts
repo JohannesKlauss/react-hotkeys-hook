@@ -72,6 +72,12 @@ export function parseHotkey(
 
   const singleCharKeys = keys.filter((k) => !reservedModifierKeywords.includes(k))
 
+  if (singleCharKeys.some(i => !i)) {
+    console.warn(
+      `Invalid hotkey "${hotkey}". Hotkeys should not contain empty keys. Check your delimiter, splitKey ("${splitKey}"), sequenceSplitKey ("${sequenceSplitKey}").`
+    )
+  }
+
   return {
     ...modifiers,
     keys: singleCharKeys,
