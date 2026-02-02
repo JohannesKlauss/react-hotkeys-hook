@@ -3,7 +3,6 @@
   "description": "React hook for handling keyboard shortcuts",
   "version": "5.2.4",
   "sideEffects": false,
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/JohannesKlauss/react-keymap-hook.git"
