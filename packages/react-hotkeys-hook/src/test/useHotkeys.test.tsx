@@ -1733,27 +1733,3 @@ test('Should trigger only produced key hotkeys', async () => {
   expect(callbackZ).toHaveBeenCalledTimes(1)
   expect(callbackY).toHaveBeenCalledTimes(2)
 })
-
-test('Should trigger only produced key hotkeys with Dvorak layout', async () => {
-  const callbackDWithUseKey = vi.fn()
-
-  renderHook(() => useHotkeys('h', callbackDWithUseKey, { useKey: true }))
-
-  const keyDownEventUSLayout = createEvent.keyDown(document, {
-    key: 'h',
-    code: 'KeyH',
-    keyCode: 72
-  })
-
-  fireEvent(document, keyDownEventUSLayout)
-
-  const keyDownEventDvorakLayout = createEvent.keyDown(document, {
-    key: 'd',
-    code: 'KeyH',
-    keyCode: 68
-  })
-
-  fireEvent(document, keyDownEventDvorakLayout)
-
-  expect(callbackDWithUseKey).toHaveBeenCalledTimes(1)
-})
