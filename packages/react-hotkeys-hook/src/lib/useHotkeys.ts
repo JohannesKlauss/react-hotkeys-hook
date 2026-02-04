@@ -1,5 +1,5 @@
 import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
-import { type DependencyList, RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { type DependencyList, RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -64,7 +64,7 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     let recordedKeys: string[] = []
-    let sequenceTimer: NodeJS.Timeout | undefined
+    let sequenceTimer: ReturnType<typeof setTimeout> | undefined
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
