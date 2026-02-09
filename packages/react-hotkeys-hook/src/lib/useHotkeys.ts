@@ -63,8 +63,9 @@ export default function useHotkeys<T extends HTMLElement>(
       return
     }
 
-    let recordedKeys: string[] = []
-    let sequenceTimer: NodeJS.Timeout | undefined
+    let keysStack: string[] | null = null
+    let lastModiferKey: string | null = null
+    let lastKeyTime = performance.now()
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
@@ -108,38 +109,54 @@ export default function useHotkeys<T extends HTMLElement>(
         )
 
         if (hotkey.isSequence) {
-          // Set a timeout to check post which the sequence should reset
-          sequenceTimer = setTimeout(() => {
-            recordedKeys = []
-          }, memoisedOptions?.sequenceTimeoutMs ?? 1000)
-
-          const currentKey = hotkey.useKey ? e.key : mapCode(e.code)
-
-          // TODO: Make modifiers work with sequences
-          if (isHotkeyModifier(currentKey.toLowerCase())) {
-            return
+          if (performance.now() - lastKeyTime > (memoisedOptions?.sequenceTimeoutMs ?? 1000)) {
+            keysStack = null
           }
 
-          recordedKeys.push(currentKey)
+          if (!keysStack && hotkey.keys) {
+            keysStack = hotkey.keys.map((v) => v).reverse()
+          }
 
-          const expectedKey = hotkey.keys?.[recordedKeys.length - 1]
+          let currentKey = hotkey.useKey ? e.key : mapCode(e.code)
+          let isCurrentKeyModifer = isHotkeyModifier(currentKey.toLowerCase())
+          if (hotkey.useKey) {
+            currentKey = currentKey.toLowerCase()
+            if (isCurrentKeyModifer) {
+                if (currentKey == 'control') {
+                  currentKey = 'ctrl'
+                }
+            }
+          }
+
+          const expectedKey = keysStack?.[keysStack.length - 1]
+
           if (currentKey !== expectedKey) {
-            recordedKeys = []
-            if (sequenceTimer) {
-              clearTimeout(sequenceTimer)
+            if (hotkey.useKey) {
+              if (isCurrentKeyModifer && !isHotkeyModifier(keysStack?.[keysStack?.length - 1] as string)) {
+                lastModiferKey = currentKey
+              } else {
+                keysStack = null
+              }
             }
             return
+          }
+          
+          if (lastModiferKey) {
+            if (lastModiferKey === 'capslock' || (e as any)[`${lastModiferKey}Key`]) {
+              keysStack?.pop()
+              lastKeyTime = performance.now()
+            }
+            lastModiferKey = null
+          } else {
+            keysStack?.pop()
+            lastKeyTime = performance.now()
           }
 
           // If the sequence is complete, trigger the callback
-          if (recordedKeys.length === hotkey.keys?.length) {
+          // if (recordedKeys.length === hotkey.keys?.length) {
+          if (keysStack?.length === 0) {
             cbRef.current(e, hotkey)
-
-            if (sequenceTimer) {
-              clearTimeout(sequenceTimer)
-            }
-
-            recordedKeys = []
+            keysStack = null
           }
         } else {
           if (
@@ -242,11 +259,6 @@ export default function useHotkeys<T extends HTMLElement>(
             ),
           )
         })
-      }
-
-      recordedKeys = []
-      if (sequenceTimer) {
-        clearTimeout(sequenceTimer)
       }
     }
   }, [_keys, memoisedOptions, activeScopes])
