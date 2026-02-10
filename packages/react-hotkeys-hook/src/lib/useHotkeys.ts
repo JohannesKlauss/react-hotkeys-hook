@@ -1,5 +1,5 @@
-import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
-import { type DependencyList, RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { type HotkeyCallback, type Keys, type Options, type OptionsOrDependencyArray } from './types'
+import { type DependencyList, type RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -28,7 +28,12 @@ export default function useHotkeys<T extends HTMLElement>(
   options?: OptionsOrDependencyArray,
   dependencies?: OptionsOrDependencyArray,
 ) {
-  const [ref, setRef] = useState<T | null>(null)
+  const [ref, _setRef] = useState<T | null>(null)
+  const setRef = useCallback<RefCallback<T | null>>((instance) => {
+    _setRef(instance)
+    return () => _setRef(null)
+  }, [])
+
   const hasTriggeredRef = useRef(false)
 
   const _options: Options | undefined = !Array.isArray(options)
@@ -251,5 +256,5 @@ export default function useHotkeys<T extends HTMLElement>(
     }
   }, [ref, memoisedOptions, activeScopes, _keys])
 
-  return setRef as RefCallback<T>
+  return setRef
 }
