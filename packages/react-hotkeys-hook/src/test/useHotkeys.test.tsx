@@ -1707,6 +1707,67 @@ test('should be disabled on form tags inside custom elements by default', async 
   expect(within(getByTestId('form-tag').shadowRoot).getByTestId('input')).toHaveValue('A')
 })
 
+test('should not trigger callback on repeat events when ignoreRepeat is set to true', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a', callback, { ignoreRepeat: true }))
+
+  // First keydown (not a repeat) should trigger
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: false, bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Repeated keydown events (held key) should not trigger
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: true, bubbles: true }))
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: true, bubbles: true }))
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: true, bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger callback on repeat events by default', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a', callback))
+
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: false, bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: true, bubbles: true }))
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: true, bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(3)
+})
+
+test('should trigger callback on repeat events when ignoreRepeat is set to false', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a', callback, { ignoreRepeat: false }))
+
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: false, bubbles: true }))
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: true, bubbles: true }))
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', repeat: true, bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(3)
+})
+
+test('should not trigger callback on repeat events for modifier combinations when ignoreRepeat is set', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('meta+a', callback, { ignoreRepeat: true }))
+
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', code: 'MetaLeft', metaKey: true, repeat: false, bubbles: true }))
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', metaKey: true, repeat: false, bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', metaKey: true, repeat: true, bubbles: true }))
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', code: 'KeyA', metaKey: true, repeat: true, bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('Should trigger only produced key hotkeys', async () => {
   const user = userEvent.setup()
 
