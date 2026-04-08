@@ -87,6 +87,8 @@ export type Options = {
   sequenceTimeoutMs?: number
   // The character to split the sequence of keys. (Default: >)
   sequenceSplitKey?: string
+  // Ignore repeated events when the key is held down. (Default: false)
+  ignoreRepeat?: boolean
   // MetaData | Custom data to store and retrieve with the hotkey (Default: undefined)
   metadata?: Record<string, unknown>
 }

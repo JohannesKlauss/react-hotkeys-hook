@@ -67,6 +67,10 @@ export default function useHotkeys<T extends HTMLElement>(
     let sequenceTimer: NodeJS.Timeout | undefined
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
+      if (memoisedOptions?.ignoreRepeat && e.repeat) {
+        return
+      }
+
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
         return
       }
