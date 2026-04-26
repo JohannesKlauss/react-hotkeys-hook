@@ -44,6 +44,6 @@
     "react-dom": ">=16.8.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.11"
+    "@biomejs/biome": "2.4.13"
   }
 }
