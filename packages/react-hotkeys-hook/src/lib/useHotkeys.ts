@@ -1,5 +1,5 @@
-import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
-import { type DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { type HotkeyCallback, type Keys, type Options, type OptionsOrDependencyArray } from './types'
+import { type DependencyList, type RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -28,7 +28,12 @@ export default function useHotkeys<T extends HTMLElement>(
   options?: OptionsOrDependencyArray,
   dependencies?: OptionsOrDependencyArray,
 ) {
-  const ref = useRef<T>(null)
+  const [ref, _setRef] = useState<T | null>(null)
+  const setRef = useCallback<RefCallback<T | null>>((instance) => {
+    _setRef(instance)
+    return () => _setRef(null)
+  }, [])
+
   const hasTriggeredRef = useRef(false)
 
   const _options: Options | undefined = !Array.isArray(options)
@@ -64,7 +69,7 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     let recordedKeys: string[] = []
-    let sequenceTimer: NodeJS.Timeout | undefined
+    let sequenceTimer: ReturnType<typeof setTimeout> | undefined
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
@@ -73,13 +78,13 @@ export default function useHotkeys<T extends HTMLElement>(
 
       // TODO: SINCE THE EVENT IS NOW ATTACHED TO THE REF, THE ACTIVE ELEMENT CAN NEVER BE INSIDE THE REF. THE HOTKEY ONLY TRIGGERS IF THE
       // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WON'T TRIGGER THE HOTKEY.
-      if (ref.current !== null) {
-        const rootNode = ref.current.getRootNode()
+      if (ref !== null) {
+        const rootNode = ref.getRootNode()
 
         if (
           (rootNode instanceof Document || rootNode instanceof ShadowRoot) &&
-          rootNode.activeElement !== ref.current &&
-          !ref.current.contains(rootNode.activeElement)
+          rootNode.activeElement !== ref &&
+          !ref.contains(rootNode.activeElement)
         ) {
           stopPropagation(e)
           return
@@ -201,7 +206,7 @@ export default function useHotkeys<T extends HTMLElement>(
       }
     }
 
-    const domNode = ref.current || _options?.document || document
+    const domNode = ref || _options?.document || document
 
     // @ts-expect-error TS2345
     domNode.addEventListener('keyup', handleKeyUp, _options?.eventListenerOptions)
@@ -249,7 +254,7 @@ export default function useHotkeys<T extends HTMLElement>(
         clearTimeout(sequenceTimer)
       }
     }
-  }, [_keys, memoisedOptions, activeScopes])
+  }, [ref, memoisedOptions, activeScopes, _keys])
 
-  return ref
+  return setRef
 }

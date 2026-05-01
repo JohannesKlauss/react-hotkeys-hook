@@ -1040,6 +1040,52 @@ test.skip('should preventDefault and stop propagation when ref is not focused', 
   expect(callback).toHaveBeenCalled()
 })
 
+test('should trigger when the ref is re-attached to another element', async () => {
+  const callback = vi.fn()
+
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    const ref = useHotkeys<HTMLDivElement>('a', cb)
+
+    const [isVisible, setVisible] = useState(false)
+    const toggle = useCallback(() => setVisible((v) => !v), [])
+
+    return (
+      <>
+        <button data-testid={'toggle'} onClick={toggle}>
+          Toggle
+        </button>
+        {isVisible &&  (
+          <div ref={ref} tabIndex={0} data-testid={'conditional-div'}>
+            Conditionally rendered hotkey area
+          </div>
+        )}
+        <button data-testid={'another-button'}>Another focusable button</button>
+      </>
+    )
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  // An event listener is attached to the `document` and processes presses globally
+  await userEvent.keyboard('A')
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // An element listener is attached to the `conditional-div` and processes presses only inside it
+  await userEvent.click(getByTestId('toggle'))
+  await userEvent.click(getByTestId('conditional-div'))
+  await userEvent.keyboard('A')
+  expect(callback).toHaveBeenCalledTimes(2)
+
+  // Tabbing to another focusable element must be permitted
+  await userEvent.tab()
+  expect(getByTestId('another-button')).toBe(document.activeElement)
+
+  // Presses outside the `conditional-div` should be ignored
+  await userEvent.keyboard('A')
+  expect(callback).toHaveBeenCalledTimes(2)
+
+})
+
 test('should allow * as a wildcard', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
