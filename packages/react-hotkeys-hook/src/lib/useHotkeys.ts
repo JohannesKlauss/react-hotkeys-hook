@@ -22,6 +22,13 @@ const stopPropagation = (e: KeyboardEvent): void => {
 
 const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
+// Strip function properties from options so that inline callbacks don't trigger constant re-registration.
+function getSerializableOptions(options?: Options): Omit<Options, 'enabled' | 'preventDefault' | 'ignoreEventWhen'> | undefined {
+  if (!options) return undefined
+  const { enabled: _enabled, preventDefault: _preventDefault, ignoreEventWhen: _ignoreEventWhen, ...rest } = options
+  return rest
+}
+
 export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
@@ -58,13 +65,21 @@ export default function useHotkeys<T extends HTMLElement>(
     cbRef.current = callback
   }
 
-  const memoisedOptions = useDeepEqualMemo(_options)
+  const memoisedOptions = useDeepEqualMemo(getSerializableOptions(_options))
+
+  // Keep function callbacks in refs so they're always up-to-date without causing effect re-registration.
+  const enabledRef = useRef(_options?.enabled)
+  enabledRef.current = _options?.enabled
+  const preventDefaultRef = useRef(_options?.preventDefault)
+  preventDefaultRef.current = _options?.preventDefault
+  const ignoreEventWhenRef = useRef(_options?.ignoreEventWhen)
+  ignoreEventWhenRef.current = _options?.ignoreEventWhen
 
   const { activeScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
   useSafeLayoutEffect(() => {
-    if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
+    if (enabledRef.current === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
       return
     }
 
@@ -151,7 +166,7 @@ export default function useHotkeys<T extends HTMLElement>(
             isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) ||
             hotkey.keys?.includes('*')
           ) {
-            if (memoisedOptions?.ignoreEventWhen?.(e)) {
+            if (ignoreEventWhenRef.current?.(e)) {
               return
             }
 
@@ -159,11 +174,9 @@ export default function useHotkeys<T extends HTMLElement>(
               return
             }
 
-            maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
+            maybePreventDefault(e, hotkey, preventDefaultRef.current)
 
-            if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
-              stopPropagation(e)
-
+            if (!isHotkeyEnabled(e, hotkey, enabledRef.current)) {
               return
             }
 

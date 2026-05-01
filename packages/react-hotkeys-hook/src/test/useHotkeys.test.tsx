@@ -1312,7 +1312,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
   })
 })
 
-test('should stop propagation when enabled function resolves to false', async () => {
+test('should not stop propagation when enabled function resolves to false', async () => {
   const callback = vi.fn()
 
   renderHook(() => useHotkeys('a', callback, { enabled: () => false }))
@@ -1324,7 +1324,8 @@ test('should stop propagation when enabled function resolves to false', async ()
 
   fireEvent(document, keyDownEvent)
 
-  expect(keyDownEvent.defaultPrevented).toBe(true)
+  expect(keyDownEvent.defaultPrevented).toBe(false)
+  expect(callback).not.toHaveBeenCalled()
 })
 
 test('should reflect preventDefault option when set', async () => {
@@ -1833,4 +1834,36 @@ test('Should trigger only produced key hotkeys', async () => {
   await user.keyboard('Y')
   expect(callbackZ).toHaveBeenCalledTimes(1)
   expect(callbackY).toHaveBeenCalledTimes(2)
+})
+
+test('Should not disable later-registered handlers when one uses enabled callback returning false', async () => {
+  const user = userEvent.setup()
+
+  const callbackA = vi.fn()
+  const callbackB = vi.fn()
+  const callbackC = vi.fn()
+
+  renderHook(() => useHotkeys('shift+a', callbackA))
+  renderHook(() => useHotkeys('shift+a', callbackB, { enabled: () => false }))
+  renderHook(() => useHotkeys('shift+a', callbackC))
+
+  await user.keyboard('{Shift>}a{/Shift}')
+
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).not.toHaveBeenCalled()
+  expect(callbackC).toHaveBeenCalledTimes(1)
+})
+
+test('Should work when both scopes and enabled callback are set', async () => {
+  const user = userEvent.setup()
+
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('ctrl+b', callback, { scopes: ['scopeA'], enabled: () => true }), {
+    wrapper: wrapper(['scopeA']),
+  })
+
+  await user.keyboard('{Control>}b{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
 })
