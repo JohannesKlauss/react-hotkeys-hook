@@ -2,6 +2,11 @@ import type { Hotkey, KeyboardModifiers } from './types'
 
 const reservedModifierKeywords = ['shift', 'alt', 'meta', 'mod', 'ctrl', 'control']
 
+export function isMacOS(): boolean {
+  if (typeof navigator === 'undefined') return false
+  return /mac/i.test(navigator.userAgent) && !/iphone|ipad|ipod/i.test(navigator.userAgent)
+}
+
 const mappedKeys: Record<string, string> = {
   esc: 'escape',
   return: 'enter',

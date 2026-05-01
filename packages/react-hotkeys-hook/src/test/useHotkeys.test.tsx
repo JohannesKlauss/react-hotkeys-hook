@@ -1206,7 +1206,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
 
   renderHook(() => useHotkeys('mod+a', callback))
 
-  await user.keyboard('{Meta>}A{/Meta}')
+  await user.keyboard('{Control>}A{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -1250,7 +1250,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
 
   renderHook(() => useHotkeys('mod+shift+a', callback))
 
-  await user.keyboard('{Meta>}{Shift>}A{/Shift}{/Meta}')
+  await user.keyboard('{Control>}{Shift>}A{/Shift}{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
