@@ -1,4 +1,4 @@
-import { type HotkeyCallback, type Keys, type Options, type OptionsOrDependencyArray } from './types'
+import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
 import { type DependencyList, type RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
