@@ -200,7 +200,13 @@ Of course, we also want to leverage more complex keystrokes. `useHotkeys` suppor
 * `alt`
 * `ctrl`
 * `meta`
-* `mod` (which maps to `ctrl` on Windows/Linux and `meta` on MacOS)
+* `mod` (listens for both `ctrl` and `meta` on all platforms, but is commonly used as `ctrl` on Windows/Linux and `cmd` on macOS)
+
+:::info `mod` listens to both modifier keys
+`mod` is an alias that will trigger if **either** `ctrl` or `meta` is pressed, regardless of the platform.
+If you need to listen to the platform's primary modifier **exclusively** (e.g. only `cmd` on macOS or only `ctrl` on Windows),
+use `ctrl` or `meta` directly instead of `mod`.
+:::
 
 ## MacOS and Windows/Linux compatibility
 Since version 4 `alt` and `option` are identical. The `meta` key is the same as `cmd` on macOS and `os` key on Windows.
