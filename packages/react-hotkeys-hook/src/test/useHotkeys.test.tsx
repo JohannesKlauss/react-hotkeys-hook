@@ -1753,6 +1753,61 @@ test('should be disabled on form tags inside custom elements by default', async 
   expect(within(getByTestId('form-tag').shadowRoot).getByTestId('input')).toHaveValue('A')
 })
 
+test('should trigger Enter hotkey inside input with enableOnFormTags true', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('enter', cb, { enableOnFormTags: true })
+
+    return <input type={'text'} data-testid={'form-tag'} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('{Enter}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger ctrl+s hotkey inside input with enableOnFormTags true', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('ctrl+s', cb, { enableOnFormTags: true, preventDefault: true })
+
+    return <input type={'text'} data-testid={'form-tag'} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('{Control>}s{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger Enter hotkey inside form input with enableOnFormTags true', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('enter', cb, { enableOnFormTags: true })
+
+    return (
+      <form>
+        <input type={'text'} data-testid={'form-tag'} />
+      </form>
+    )
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('{Enter}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('Should trigger only produced key hotkeys', async () => {
   const user = userEvent.setup()
 

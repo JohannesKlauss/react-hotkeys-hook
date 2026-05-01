@@ -6,6 +6,11 @@ This file provides guidelines for agentic coding agents working in this reposito
 
 This repo is hosted on Github. Use the `gh` CLI to fetch issues, create PRs, etc.
 
+## Development Workflow
+
+- Use `packages/lab` to reproduce bugs
+- Verify behavior with the playwright mcp
+
 ## Development Commands
 
 ### Build and Development
