@@ -1867,3 +1867,51 @@ test('Should work when both scopes and enabled callback are set', async () => {
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
+
+test('Should not re-trigger combo hotkey after visibilitychange clears stuck keys', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a+b', callback))
+
+  // Simulate pressing 'a' and 'b' — combo fires once
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyA', bubbles: true }))
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Simulate lost keyup events (e.g. alert() blocked them) followed by tab switch
+  document.dispatchEvent(new Event('visibilitychange'))
+
+  // Press 'b' alone — 'a' was cleared, so combo should NOT fire again
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Cleanup
+  window.document.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyB', bubbles: true }))
+  window.document.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyA', bubbles: true }))
+})
+
+test('Should not re-trigger combo hotkey after window focus clears stuck keys', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a+b', callback))
+
+  // Simulate pressing 'a' and 'b' — combo fires once
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyA', bubbles: true }))
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Simulate window regaining focus after alert() blocked keyup events
+  window.dispatchEvent(new Event('focus'))
+
+  // Press 'b' alone — 'a' was cleared, so combo should NOT fire again
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Cleanup
+  window.document.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyB', bubbles: true }))
+  window.document.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyA', bubbles: true }))
+})

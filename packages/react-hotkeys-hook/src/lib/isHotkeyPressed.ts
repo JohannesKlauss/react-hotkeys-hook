@@ -25,11 +25,21 @@ import { isHotkeyModifier, mapCode } from './parseHotkeys'
       currentlyPressedKeys.clear()
     })
 
+    window.addEventListener('focus', () => {
+      currentlyPressedKeys.clear()
+    })
+
     window.addEventListener('contextmenu', () => {
       // Must clear pressed keys after existing `keydown` events in queue have resolved.
       setTimeout(() => {
         currentlyPressedKeys.clear()
       }, 0)
+    })
+  }
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      currentlyPressedKeys.clear()
     })
   }
 })()
