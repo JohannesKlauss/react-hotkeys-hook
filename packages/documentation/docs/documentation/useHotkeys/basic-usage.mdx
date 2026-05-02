@@ -5,22 +5,19 @@ title: "Basic Usage"
 
 # useHotkeys
 
-This hook allows us to listen to hotkeys in a declarative way and execute a callback function once the user pressed down
-the given hotkey.
+The `useHotkeys` hook lets you listen to keyboard shortcuts declaratively and run a callback when the user presses the specified key combination.
 
-:::tip tip
-We can edit the code of every example and immediately see the results of our changes.
+:::tip Interactive examples
+Every code example on this page is editable — change the code and see the result immediately.
 :::
 
-# Basic Usage
-
-Import the `useHotkeys` hook from the package:
+## Import
 
 ```js
 import { useHotkeys } from 'react-hotkeys-hook';
 ```
 
-or when using `require` style syntax:
+Or with `require`:
 
 ```js
 const { useHotkeys } = require('react-hotkeys-hook')
@@ -28,10 +25,9 @@ const { useHotkeys } = require('react-hotkeys-hook')
 const useHotkeys = require('react-hotkeys-hook').useHotkeys
 ```
 
-## Simple Hotkey
+## Simple hotkey
 
-The most basic usage for the hook is to assign a hotkey we want to listen to and a callback to get executed once the user
-hits that key.
+The simplest use case is binding a single key to a callback:
 
 ```jsx live
 function ExampleComponent() {
@@ -43,11 +39,11 @@ function ExampleComponent() {
 }
 ```
 
-> To make the hotkeys work, you have to focus the rendered output of the Live Editor.
+> Click inside the live preview area to focus it before pressing keys.
 
 ***
 
-Inside the callback we can do whatever we like. One common use case is to alter some component state:
+Inside the callback you can do anything. A common pattern is updating component state:
 
 ```jsx live
 function ExampleComponent() {
@@ -60,13 +56,13 @@ function ExampleComponent() {
 }
 ```
 
-`useHotkeys` will create the listener on component mount and destroy the listener once the component unmounts.
+`useHotkeys` attaches the listener when the component mounts and removes it when the component unmounts.
 
 ***
 
 ## Multiple hotkeys per component
 
-Since `useHotkeys` is a hook, we can use it in one component as much as we like:
+Since `useHotkeys` is a hook, you can call it multiple times in the same component:
 
 ```jsx live
 function ExampleComponent() {
@@ -82,10 +78,9 @@ function ExampleComponent() {
 
 ***
 
-## Keystrokes
+## Key combinations
 
-We can also listen to keystrokes. That is a combination of keys that the user has to hit in order to execute the callback.
-One example would be a Jira like UI that listens to the `Shift+C` keystroke to create a new ticket:
+You can listen to key combinations — multiple keys pressed together. For example, a Jira-like `Shift+C` shortcut to create a new ticket:
 
 ```jsx live
 function CreateIssue() {
@@ -102,8 +97,7 @@ function CreateIssue() {
 }
 ```
 
-This is not restricted to a combination of two keys. We can also do things like `Ctrl+Shift+A+C` (maybe not the most
-intuitive keystroke for a user to memorize, though).
+You are not limited to two keys. Combinations like `ctrl+shift+a+c` are also valid (though perhaps not the most user-friendly).
 
 ```jsx live
 function ExampleComponent() {
@@ -116,19 +110,15 @@ function ExampleComponent() {
 }
 ```
 
-:::note the keys argument is case-insensitive
-It doesn't matter if we listen for `CTRL+S`, `Ctrl+s`, `ctrl+S` or any other possible way of writing the keys in different
-cases. They all will listen to the user pressing the `ctrl` and the `s` key. This also means that upper case letters
-are treated as lower case letters. If we want to listen to the user pressing the upper case letter `S`, we'd have to listen
-to `shift+s`.
+:::note The keys argument is case-insensitive
+It does not matter whether you write `CTRL+S`, `Ctrl+s`, `ctrl+S`, or any other case variation. They all listen for the `ctrl` and `s` keys. Uppercase letters are treated as lowercase — to listen for an uppercase `S`, use `shift+s`.
 :::
 
 ***
 
-## Multiple hotkeys
+## Multiple bindings for one callback
 
-We can also listen to multiple keystrokes and/or hotkeys and trigger the same callback. Combinations are separated by
-a comma sign:
+You can bind several different key combinations to the same callback by separating them with a comma:
 
 ```jsx live
 function ExampleComponent() {
@@ -141,19 +131,17 @@ function ExampleComponent() {
 }
 ```
 
-You can also use an array as first arguments: `useHotkeys(['ctrl+shift+a+c', 'c', 'shift+c'], ....`
+You can also pass an array as the first argument: `useHotkeys(['ctrl+shift+a+c', 'c', 'shift+c'], ...)`
 
-:::info Noticed something?
-We used the `ctrl+shift+a+c` and `shift+c` combination two times for two components on this page.
-Since we pressed down one hotkey already the example above started at the count of one. Hotkeys are attached
-globally if we don't use its return value.
+:::info Global listeners by default
+The `ctrl+shift+a+c` and `shift+c` combinations are used by multiple examples on this page. If you already pressed one of them, the example above may start with a count greater than zero. Hotkeys are attached globally unless you use the returned ref to scope them.
 :::
 
 ***
 
-## Sequential Hotkeys
+## Sequential hotkeys
 
-We can also listen to keystrokes sequentially, meaning that the user has to press keys in a specific order before invoking the callback. To specify a sequential hotkey, we use the `>` character.
+You can listen for keys pressed in sequence using the `>` character:
 
 ```jsx live
 function ExampleComponent() {
@@ -166,12 +154,10 @@ function ExampleComponent() {
 }
 ```
 
-In the example above, the user has to press the `g` key, then the `h` key and finally the `i` key in order to trigger the callback.
+In this example, the user must press `g`, then `h`, then `i` in order to trigger the callback.
 
 #### Timeout
-`useHotkeys` sets a default time window for the sequential hotkey of `1000ms` to prevent listening for incomplete sequences indefinitely. If the user doesn't press the next key in that given time, the sequence is aborted.
-
-We can override the timeout by passing the `sequenceTimeoutMs` option:
+By default, `useHotkeys` allows **1 second** between each key in a sequence. If the user does not press the next key within that window, the sequence resets. You can change this with the `sequenceTimeoutMs` option:
 
 ```jsx live
 function ExampleComponent() {
@@ -186,32 +172,29 @@ function ExampleComponent() {
 }
 ```
 
-In the example above, the user has to press the `g` key, then the `h` key and then the `i` key, and finally the `j` key in order to trigger the callback.
-The timeout is 10 seconds, so the user has a lot of time to press the keys.
-
+Here the user has 10 seconds to complete the `g>h>i>j` sequence.
 
 ***
 
-## Modifiers & Special keys
+## Modifiers
 
-Of course, we also want to leverage more complex keystrokes. `useHotkeys` supports the following modifiers:
+`useHotkeys` supports the following modifier keys:
 
 * `shift`
 * `alt`
 * `ctrl`
 * `meta`
-* `mod` (listens for both `ctrl` and `meta` on all platforms, but is commonly used as `ctrl` on Windows/Linux and `cmd` on macOS)
+* `mod` — triggers on **either** `ctrl` or `meta`, regardless of platform. This is commonly used as `ctrl` on Windows/Linux and `cmd` on macOS.
 
 :::info `mod` listens to both modifier keys
-`mod` is an alias that will trigger if **either** `ctrl` or `meta` is pressed, regardless of the platform.
-If you need to listen to the platform's primary modifier **exclusively** (e.g. only `cmd` on macOS or only `ctrl` on Windows),
-use `ctrl` or `meta` directly instead of `mod`.
+`mod` is an alias that triggers if **either** `ctrl` or `meta` is pressed. If you need to listen to the platform's primary modifier **exclusively** (e.g. only `cmd` on macOS or only `ctrl` on Windows), use `ctrl` or `meta` directly instead of `mod`.
 :::
 
-## MacOS and Windows/Linux compatibility
-Since version 4 `alt` and `option` are identical. The `meta` key is the same as `cmd` on macOS and `os` key on Windows.
+## Cross-platform compatibility
 
-```jsx
+Since version 4, `alt` and `option` are treated as identical. The `meta` key is `cmd` on macOS and the Windows/`os` key on Windows/Linux.
+
+```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
   useHotkeys(
@@ -227,7 +210,9 @@ function ExampleComponent() {
 
 ***
 
-There are also special keys like arrows, return, space bar, etc. that have their own name that can be used:
+## Special keys
+
+Arrow keys, return, space, and other special keys have dedicated names:
 
 * `backspace`
 * `tab`
@@ -240,11 +225,14 @@ There are also special keys like arrows, return, space bar, etc. that have their
 * `del` or `delete`
 * `f1`, `f2` ... `f19`
 
-:::caution Warning
-Please be aware that there are some hotkeys that we cannot override, because they would interfere with a safe browsing
-experience for the user. These depend on the browser.
-For example in Chrome, most notably those are `meta + w` which closes a tab, `meta + n` for opening a new window and `meta + t` to open a new tab.
-Additionally `meta + shift + w` (closing all tabs of the current window), `meta + shift + n` (opening incognito window) and
-`meta + shift + t` (reopen the last closed tab) cannot be overridden.
-`meta + up + 1..9` on the other hand focuses the corresponding tab of the active window and also cannot be overridden.
+:::caution Browsers reserve some shortcuts
+Some shortcuts cannot be overridden because they are essential to the browser's safe browsing experience. In Chrome, for example:
+
+* `meta+w` — close tab
+* `meta+n` — new window
+* `meta+t` — new tab
+* `meta+shift+w` — close all tabs of the current window
+* `meta+shift+n` — open incognito window
+* `meta+shift+t` — reopen last closed tab
+* `meta+1..9` — focus corresponding tab
 :::

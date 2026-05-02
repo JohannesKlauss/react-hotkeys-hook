@@ -10,20 +10,39 @@ import { useRecordHotkeys } from "react-hotkeys-hook";
 Function signature:
 
 ```ts
-function useRecordHotkeys(useKey?: boolean, blacklist?: string[]): [Set<string>, { start: () => void, stop: () => void, resetKeys: () => void, isRecording: boolean }]
+function useRecordHotkeys(
+  useKey?: boolean,
+  blacklist?: string[]
+): [Set<string>, {
+  start: () => void,
+  stop: () => void,
+  resetKeys: () => void,
+  isRecording: boolean
+}]
 ```
 
 ## `useKey`
 
-By default recording hotkeys will record the keys code, not the produced
-character. If you want to record the produced character, you can pass `true`
-as the first argument to the hook.
+```ts
+useKey: boolean // default: false
+```
+
+By default, the hook records key codes (physical keys). Pass `true` to record the produced character instead.
+
+* `useKey: false` — records `"shift+1"` when the user presses Shift+1
+* `useKey: true` — records `"!"` when the user presses Shift+1 on a US layout
 
 ## `blacklist`
 
-Optional list of key names that should be ignored while recording.
-Keys present in this list will retain their default behaviour and will not
-be included in the recorded set.
+```ts
+blacklist: string[] // default: []
+```
+
+Array of key names to ignore while recording. Blacklisted keys retain their default behavior and are not added to the recorded set.
+
+```js
+const [keys, { start, stop }] = useRecordHotkeys(false, ['tab', 'enter']);
+```
 
 ***
 
@@ -35,20 +54,40 @@ const [keys, { start, stop, resetKeys, isRecording }] = useRecordHotkeys()
 
 ### `keys`
 
-A `Set` of the keys that have been pressed.
+```ts
+keys: Set<string>
+```
+
+A `Set` of the keys that have been recorded. Each key appears only once. Use `Array.from(keys)` to convert it to an array.
 
 ### `start`
 
-A function that starts recording the keys that are pressed. Only works in the browser.
+```ts
+start: () => void
+```
+
+Begins recording keystrokes.
 
 ### `stop`
 
-A function that stops recording the keys that are pressed. Only works in the browser.
+```ts
+stop: () => void
+```
+
+Stops recording keystrokes.
 
 ### `resetKeys`
 
-A function that resets the recorded keys.
+```ts
+resetKeys: () => void
+```
+
+Clears the recorded keys.
 
 ### `isRecording`
 
-A boolean that indicates whether the recording is in progress or not.
+```ts
+isRecording: boolean
+```
+
+`true` while recording is active, `false` otherwise.

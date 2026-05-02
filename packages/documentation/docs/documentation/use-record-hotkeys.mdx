@@ -5,31 +5,19 @@ title: "useRecordHotkeys"
 
 # useRecordHotkeys
 
-This hook allows you to record a hotkey stroke by the user. This is useful if you want the user to define their custom
-keystroke for your application.
+`useRecordHotkeys` lets you capture whatever keys the user presses. This is useful for building custom keyboard shortcut settings — for example, letting users define their own hotkeys.
 
-## Basic Usage
+## Basic usage
 
-Import the `useRecordHotkeys` hook from the package:
+Import the hook from the package:
 
 ```js
 import { useRecordHotkeys } from 'react-hotkeys-hook';
 ```
 
-or if you are using `require` style syntax:
-
-```js
-const { useRecordHotkeys } = require('react-hotkeys-hook')
-// or
-const useRecordHotkeys = require('react-hotkeys-hook').useRecordHotkeys
-```
-
-***
-
 ### Record hotkeys
 
-In order to record a hotkey, you need to call the `useRecordHotkeys` hook. This hook returns an array similar to the `useState`
-hook, but the second argument has some extra properties.
+Call `useRecordHotkeys` to start capturing keystrokes. It returns a tuple: the first element is a `Set` of recorded keys, and the second element is a control object with `start`, `stop`, `resetKeys`, and `isRecording`.
 
 ```jsx live
 function ExampleComponent() {
@@ -47,15 +35,13 @@ function ExampleComponent() {
 }
 ```
 
-:::info
-Note that the returned value of the recorded keys is a `Set` object. This is because every key gets recorded only once.
-Implementation wise it is easier to use a `Set` than an array, but you can convert it to an array if you want or need to,
-like we are in the example above.
+:::info Recorded keys are a Set
+Each key is recorded only once. The returned value is a `Set<string>` rather than an array, which makes deduplication easy. Convert it to an array when you need to display or store the keys.
 :::
 
 ## Ignoring specific keys
 
-You can exclude certain keys from being recorded by passing a `blacklist` array as the second argument. Keys in the blacklist will retain their default behavior and will not be added to the recorded set.
+Pass a `blacklist` array as the second argument to exclude certain keys from being recorded. Blacklisted keys keep their default behavior and are not added to the recorded set.
 
 ```jsx live
 function ExampleWithBlacklist() {
@@ -71,4 +57,12 @@ function ExampleWithBlacklist() {
     </div>
   );
 }
+```
+
+## Recording produced characters vs. key codes
+
+By default, `useRecordHotkeys` records key codes (physical keys). To record the produced character instead, pass `true` as the first argument:
+
+```jsx
+const [keys, controls] = useRecordHotkeys(true); // records characters like "!" instead of "shift+1"
 ```

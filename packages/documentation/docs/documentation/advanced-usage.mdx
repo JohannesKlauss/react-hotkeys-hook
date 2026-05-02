@@ -5,28 +5,151 @@ title: "Advanced Usage"
 
 # Advanced Usage
 
-This section described advanced functionalities of the hook.
+## Using `ts-key-enum` for type-safe key names
 
-**🚧 This section is under construction 🚧**
+It can be hard to remember whether the left arrow key is called `ArrowLeft` or `LeftArrow`. The `ts-key-enum` library provides TypeScript enums for all key names, giving you autocomplete and eliminating guesswork.
 
-## Using typescript types to reference key names
-Sometimes we might get confused if we need to listen to `ArrowLeft` or `LeftArrow` to listen to the left arrow key.
-To avoid this confusion, we can use the typescript types provided by the `ts-key-enum` library.
-
-You add the library to your project by running:
+Install it:
 
 ```bash
 npm install ts-key-enum
 ```
 
-Then you can import the types and use them in your code:
+Use it in your code:
 
 ```ts
 import { Key } from 'ts-key-enum'
 
 useHotkeys(Key.Backspace, () => {
-  console.log(`delete`)
+  console.log('Delete pressed')
 })
 ```
 
-See https://gitlab.com/nfriend/ts-key-enum/-/blob/master/Key.enum.d.ts for the full list of available keys.
+See the [full list of available keys](https://gitlab.com/nfriend/ts-key-enum/-/blob/master/Key.enum.d.ts).
+
+***
+
+## Building a help panel with metadata
+
+You can attach a `description` and custom `metadata` to every hotkey. This makes it easy to build a dynamic help panel that lists all active shortcuts:
+
+```tsx
+function useActiveHotkeys() {
+  // You would collect this from your components or a registry
+  const hotkeys = [
+    { keys: 'ctrl+s', description: 'Save document', scope: 'editor' },
+    { keys: 'ctrl+z', description: 'Undo', scope: 'editor' },
+    { keys: 'esc', description: 'Close modal', scope: 'modal' },
+  ];
+
+  return hotkeys;
+}
+
+function HelpPanel() {
+  const hotkeys = useActiveHotkeys();
+
+  return (
+    <div>
+      <h3>Keyboard Shortcuts</h3>
+      <ul>
+        {hotkeys.map(h => (
+          <li key={h.keys}>
+            <kbd>{h.keys}</kbd> — {h.description}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+When registering hotkeys, include the `description` option:
+
+```tsx
+useHotkeys('ctrl+s', handleSave, {
+  description: 'Save the current document',
+  metadata: { category: 'file' },
+});
+```
+
+***
+
+## Custom hooks built on `useHotkeys`
+
+Wrapping `useHotkeys` in a custom hook keeps your components clean and enforces consistent behavior across your app:
+
+```tsx
+function useEditorShortcuts() {
+  const { enableScope, disableScope } = useHotkeysContext();
+
+  useHotkeys('ctrl+s', saveDocument, {
+    scopes: 'editor',
+    preventDefault: true,
+    description: 'Save document',
+  });
+
+  useHotkeys('ctrl+z', undo, {
+    scopes: 'editor',
+    preventDefault: true,
+    description: 'Undo',
+  });
+
+  useHotkeys('ctrl+shift+z', redo, {
+    scopes: 'editor',
+    preventDefault: true,
+    description: 'Redo',
+  });
+
+  return { enableScope, disableScope };
+}
+```
+
+Then in your editor component:
+
+```tsx
+function Editor() {
+  useEditorShortcuts();
+
+  return <div>{/* editor content */}</div>;
+}
+```
+
+***
+
+## Listening inside iframes
+
+If your React app runs inside an iframe, pass the iframe's `document` object to bind hotkeys to that document instead of the main page:
+
+```tsx
+import FrameComponent from 'react-frame-component'
+
+function InsideFrameComponent() {
+  const { document } = useFrame()
+
+  useHotkeys('s', () => console.log('Triggered inside iframe'), { document })
+
+  return <div>....</div>
+}
+
+function App() {
+  return (
+    <FrameComponent>
+      <InsideFrameComponent/>
+    </FrameComponent>
+  )
+}
+```
+
+***
+
+## Event listener options
+
+You can pass custom [event listener options](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options) to the underlying `addEventListener` call:
+
+```tsx
+useHotkeys('ctrl+s', handleSave, {
+  eventListenerOptions: { passive: true, capture: true },
+});
+```
+
+This is useful when you need fine-grained control over event propagation.
