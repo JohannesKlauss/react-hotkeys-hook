@@ -23,10 +23,16 @@ const stopPropagation = (e: KeyboardEvent): void => {
 const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 // Strip function properties from options so that inline callbacks don't trigger constant re-registration.
-function getSerializableOptions(options?: Options): Omit<Options, 'enabled' | 'preventDefault' | 'ignoreEventWhen'> | undefined {
+// Preserve boolean/undefined `enabled` so that toggling it dynamically re-runs the effect.
+function getSerializableOptions(options?: Options): Omit<Options, 'preventDefault' | 'ignoreEventWhen'> | undefined {
   if (!options) return undefined
   const { enabled: _enabled, preventDefault: _preventDefault, ignoreEventWhen: _ignoreEventWhen, ...rest } = options
-  return rest
+
+  if (typeof _enabled === 'function') {
+    return rest
+  }
+
+  return { ...rest, enabled: _enabled }
 }
 
 export default function useHotkeys<T extends HTMLElement>(
