@@ -976,6 +976,46 @@ test('should bind the event and execute the callback if enabled is set to a func
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test('should dynamically attach and detach listeners when enabled boolean changes', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  const { rerender } = renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    initialProps: {
+      keys: 'a',
+      options: {
+        enabled: false,
+      },
+    },
+  })
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+
+  rerender({
+    keys: 'a',
+    options: {
+      enabled: true,
+    },
+  })
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  rerender({
+    keys: 'a',
+    options: {
+      enabled: false,
+    },
+  })
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should return a ref', async () => {
   const callback = vi.fn()
 
