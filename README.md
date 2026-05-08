@@ -169,6 +169,59 @@ array as your third parameter:
 
 `useHotkeys('ctrl+k', () => console.log(counter + 1), [counter])`
 
+### `useHotkeysContext()`
+
+Access the `HotkeysProvider` context to inspect the registered hotkeys for the currently active scopes and to control scope activation.
+
+```typescript
+useHotkeysContext(): {
+  hotkeys: ReadonlyArray<Hotkey>
+  activeScopes: string[]
+  toggleScope: (scope: string) => void
+  enableScope: (scope: string) => void
+  disableScope: (scope: string) => void
+}
+```
+
+```tsx
+import { HotkeysProvider, useHotkeys, useHotkeysContext } from 'react-hotkeys-hook'
+
+function EditorHotkeys() {
+  useHotkeys('ctrl+s', () => {}, { scopes: 'settings', description: 'Save document' })
+
+  return null
+}
+
+function ShortcutList() {
+  const { hotkeys, activeScopes, toggleScope } = useHotkeysContext()
+
+  return (
+    <>
+      <p>Active scopes: {activeScopes.join(', ') || 'none'}</p>
+      <button onClick={() => toggleScope('settings')}>Toggle settings scope</button>
+      <ul>
+        {hotkeys.map(({ hotkey, description }) => (
+          <li key={hotkey}>
+            {hotkey} {description ? `— ${description}` : ''}
+          </li>
+        ))}
+      </ul>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <HotkeysProvider initiallyActiveScopes={['settings']}>
+      <EditorHotkeys />
+      <ShortcutList />
+    </HotkeysProvider>
+  )
+}
+```
+
+> **Note:** Wrap your components in a `HotkeysProvider` to access active scopes and registered hotkeys. Outside a provider, the hook returns empty arrays and no-op functions.
+
 ### `isHotkeyPressed(keys: string | string[], splitKey?: string = ',')`
 
 This function allows us to check if the user is currently pressing down a key.
