@@ -88,7 +88,13 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
 
   const mappedCode = mapCode(code)
 
+  const hasHotkeyModifiers = !!(alt || ctrl || shift || meta || mod)
+
   if (useKey && keys?.length === 1 && keys.includes(producedKey.toLowerCase())) {
+    if (!ignoreModifiers && !hasHotkeyModifiers && e.getModifierState?.('AltGraph')) {
+      return false
+    }
+
     return true
   }
 
@@ -100,6 +106,10 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
   }
 
   if (!ignoreModifiers) {
+    if (!hasHotkeyModifiers && keys?.length === 1 && e.getModifierState?.('AltGraph')) {
+      return false
+    }
+
     // We check the pressed keys for compatibility with the keyup event. In keyup events the modifier flags are not set.
     if (alt !== altKey && mappedCode !== 'alt') {
       return false

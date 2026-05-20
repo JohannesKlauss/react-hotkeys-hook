@@ -1583,6 +1583,32 @@ test('should not trigger callback when modifier is pressed while holding unrelat
   expect(callback).toHaveBeenCalledTimes(0)
 })
 
+test('should not trigger single-key hotkey when AltGraph modifier is active', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('c', callback))
+
+  const keyDownWithAltGraph = createEvent.keyDown(document, {
+    key: 'c',
+    code: 'KeyC',
+  })
+
+  keyDownWithAltGraph.getModifierState = (key: string) => key === 'AltGraph'
+
+  fireEvent(document, keyDownWithAltGraph)
+
+  expect(callback).not.toHaveBeenCalled()
+
+  const keyDownWithoutAltGraph = createEvent.keyDown(document, {
+    key: 'c',
+    code: 'KeyC',
+  })
+
+  fireEvent(document, keyDownWithoutAltGraph)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should respect dependencies array if they are passed', async () => {
   function Fixture() {
     const [count, setCount] = useState(0)
