@@ -1,6 +1,6 @@
-import type { FormTags, Hotkey, Scopes, Trigger } from './types'
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
 import { isMacOS, mapCode } from './parseHotkeys'
+import type { FormTags, Hotkey, Scopes, Trigger } from './types'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -87,6 +87,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
   const { code, key: producedKey, ctrlKey, metaKey, shiftKey, altKey } = e
 
   const mappedCode = mapCode(code)
+  const altGraphKey = typeof e.getModifierState === 'function' && e.getModifierState('AltGraph')
 
   if (useKey && keys?.length === 1 && keys.includes(producedKey.toLowerCase())) {
     return true
@@ -122,6 +123,10 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
       if (ctrl !== ctrlKey && mappedCode !== 'ctrl' && mappedCode !== 'control') {
         return false
       }
+    }
+
+    if (altGraphKey && !alt && !ctrl && !mod && !['alt', 'ctrl', 'control'].includes(mappedCode)) {
+      return false
     }
   }
 
