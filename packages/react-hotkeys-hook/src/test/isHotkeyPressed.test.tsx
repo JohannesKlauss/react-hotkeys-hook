@@ -120,6 +120,40 @@ test('Should clear pressed hotkeys when window blurs', async () => {
   expect(isHotkeyPressed('meta')).toBe(false)
 })
 
+test('Should clear pressed hotkeys when document becomes hidden via visibilitychange', async () => {
+  const user = userEvent.setup()
+
+  await user.keyboard('{Shift>}{W>}')
+
+  expect(isHotkeyPressed('shift')).toBe(true)
+  expect(isHotkeyPressed('w')).toBe(true)
+
+  // Simulate tab switching or alert dialog blocking keyup events
+  Object.defineProperty(document, 'visibilityState', {
+    value: 'hidden',
+    writable: true,
+    configurable: true,
+  })
+  document.dispatchEvent(new Event('visibilitychange'))
+
+  expect(isHotkeyPressed('shift')).toBe(false)
+  expect(isHotkeyPressed('w')).toBe(false)
+})
+
+test('Should clear pressed hotkeys when window regains focus', async () => {
+  const user = userEvent.setup()
+
+  await user.keyboard('{Meta>}{A>}')
+
+  expect(isHotkeyPressed('meta')).toBe(true)
+  expect(isHotkeyPressed('a')).toBe(true)
+
+  window.dispatchEvent(new Event('focus'))
+
+  expect(isHotkeyPressed('meta')).toBe(false)
+  expect(isHotkeyPressed('a')).toBe(false)
+})
+
 test('Should return true for shift and 1 if shift+1 is held down, but not for ! as it is a produced key', async () => {
   const user = userEvent.setup()
 

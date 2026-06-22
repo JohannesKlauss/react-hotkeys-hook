@@ -8,7 +8,7 @@ import CodeBlock from '@theme/CodeBlock';
 
 # Quick Start
 
-The fastest way to get you going.
+Get up and running with keyboard shortcuts in under a minute.
 
 ## Install
 
@@ -23,7 +23,7 @@ The fastest way to get you going.
     <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
   </TabItem>
   <TabItem value="npm">
-    <CodeBlock className="language-shell">npm i react-hotkeys-hook --save</CodeBlock>
+    <CodeBlock className="language-shell">npm i react-hotkeys-hook</CodeBlock>
   </TabItem>
   <TabItem value="bun">
       <CodeBlock className="language-shell">bun i react-hotkeys-hook</CodeBlock>
@@ -43,11 +43,11 @@ function MyComponent() {
   useHotkeys('a', () => setCount(count => count + 1));
 
   return (
-    <span>Pressed 'a' key {count} times.</span>
+    <span>Pressed the 'a' key {count} times.</span>
   );
 }
 ```
 
-:::note Out of the box support for TypeScript
-`react-hotkeys-hook` is written in TypeScript, so we don't have to install any additional typings.
+:::note TypeScript support out of the box
+`react-hotkeys-hook` is written in TypeScript — no additional `@types` package needed.
 :::

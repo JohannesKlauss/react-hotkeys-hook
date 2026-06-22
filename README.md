@@ -38,14 +38,12 @@ A React hook for using keyboard shortcuts in components in a declarative way.
 
 ## Quick Start
 
-The easiest way to use the hook.
-
 ```jsx harmony
 import { useHotkeys } from 'react-hotkeys-hook'
 
 export const ExampleComponent = () => {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+k', () => setCount(count + 1), [count])
+  useHotkeys('ctrl+k', () => setCount(prevCount => prevCount + 1))
 
   return (
     <p>
@@ -150,15 +148,18 @@ All options are optional and have a default value which you can override to chan
 | Option                   | Type                                                                                 | Default value | Description                                                                                                                                                                                                                                                                                                                                                                             |
 |--------------------------|--------------------------------------------------------------------------------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `enabled`                | `boolean` or `(keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean` | `true`        | This option determines whether the hotkey is active or not. It can take a boolean (for example a flag from a state outside) or a function which gets executed once the hotkey is pressed. If the function returns `false` the hotkey won't get executed and all browser events are prevented.                                                                                           |
-| `enableOnFormTags`       | `boolean` or `FormTags[]`                                                            | `false`       | By default hotkeys are not registered if a focus focuses on an input field. This will prevent accidental triggering of hotkeys when the user is typing. If you want to enable hotkeys, use this option. Setting it to true will enable on all form tags, otherwise you can give an array of form tags to enable the hotkey on (possible options are: `['input', 'textarea', 'select']`) |
-| `enableOnContentEditable` | `boolean`                                                                            | `false`       | Set this option to enable hotkeys on tags that have set the `contentEditable` prop to `true`                                                                                                                                                                                                                                                                                            |
-| `combinationKey`         | `string`                                                                             | `+`           | Character to indicate keystrokes like `shift+c`. You might want to change this if you want to listen to the `+` character like `ctrl-+`.                                                                                                                                                                                                                                                |
-| `splitKey`               | `string`                                                                             | `,`           | Character to separate different keystrokes like `ctrl+a, ctrl+b`.                                                                                                                                                                                                                                                                                                                       |
+| `enableOnFormTags`       | `boolean` or `FormTags[]`                                                            | `false`       | By default, hotkeys are disabled when a form element is focused. This prevents accidental triggering while the user is typing. Set to `true` to enable on all form tags, or pass an array of specific tags (e.g. `['input', 'textarea', 'select']`) |
+| `enableOnContentEditable` | `boolean`                                                                            | `false`       | Enable hotkeys on elements with the `contentEditable` attribute set to `true` |
+| `splitKey`               | `string`                                                                             | `+`           | Character that joins keys within a combination (e.g. `shift+a`). Change this if you need to listen for the `+` key itself |
+| `delimiter`              | `string`                                                                             | `,`           | Character that separates different hotkey combinations mapped to the same callback (e.g. `ctrl+a, shift+b`) |
 | `scopes`                 | `string` or `string[]`                                                               | `*`           | With scopes you can group hotkeys together. The default scope is the wildcard `*` which matches all hotkeys. Use the `<HotkeysProvider>` component to change active scopes.                                                                                                                                                                                                             |
-| `keyup`                  | `boolean`                                                                            | `false`       | Determines whether to listen to the browsers `keyup` event for triggering the callback.                                                                                                                                                                                                                                                                                                 |
-| `keydown`                | `boolean`                                                                            | `true`        | Determines whether to listen to the browsers `keydown` event for triggering the callback. If you set both `keyup`and `keydown` to true, the callback will trigger on both events.                                                                                                                                                                                                       |
-| `preventDefault`         | `boolean` or `(keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean` | `false`       | Set this to a `true` if you want the hook to prevent the browsers default behavior on certain keystrokes like `meta+s` to save a page. NOTE: Certain keystrokes are not preventable, like `meta+w` to close a tab in chrome.                                                                                                                                                            |
-| `description`             | `string`                                                                              | `undefined`    | Use this option to describe what the hotkey does. this is helpful if you want to display a list of active hotkeys to the user.                                                                                                                                                                                                                                                          |
+| `keyup`                  | `boolean`                                                                            | `false`       | Trigger the callback on the browser's `keyup` event |
+| `keydown`                | `boolean`                                                                            | `true`        | Trigger the callback on the browser's `keydown` event. Set both `keyup` and `keydown` to `true` to trigger on both events |
+| `preventDefault`         | `boolean` or `(keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean` | `false`       | Prevent the browser's default behavior for the matched keystroke. Useful for overriding shortcuts like `meta+s`. Note: some browser shortcuts (e.g. `meta+w`) cannot be overridden |
+| `description`            | `string`                                                                              | `undefined`   | Human-readable description of what the hotkey does. Useful for building help panels |
+| `useKey`                 | `boolean`                                                                             | `false`       | Listen to the produced character instead of the physical key code |
+| `ignoreModifiers`        | `boolean`                                                                             | `false`       | Ignore modifier keys when matching hotkeys |
+| `sequenceTimeoutMs`      | `number`                                                                               | `1000`        | Time window in milliseconds for sequential hotkeys |
 
 
 #### Overloads
@@ -186,7 +187,7 @@ isHotkeyPressed(['esc', 'ctrl+s']) // Returns true if Escape or Ctrl+S are press
 
 ## Support
 
-* Ask your question in the [Github Discussions]([Support](https://github.com/JohannesKlauss/react-hotkeys-hook/discussions))
+* Ask your question in [GitHub Discussions](https://github.com/JohannesKlauss/react-hotkeys-hook/discussions)
 * Ask your question on [StackOverflow](https://stackoverflow.com/search?page=1&tab=Relevance&q=react-hotkeys-hook)
 
 ## Found an issue or have a feature request?

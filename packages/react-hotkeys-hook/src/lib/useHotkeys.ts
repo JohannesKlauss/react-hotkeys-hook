@@ -1,5 +1,5 @@
 import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
-import { type DependencyList, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { type DependencyList, type RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
   isHotkeyEnabled,
@@ -22,13 +22,31 @@ const stopPropagation = (e: KeyboardEvent): void => {
 
 const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
+// Strip function properties from options so that inline callbacks don't trigger constant re-registration.
+// Preserve boolean/undefined `enabled` so that toggling it dynamically re-runs the effect.
+function getSerializableOptions(options?: Options): Omit<Options, 'preventDefault' | 'ignoreEventWhen'> | undefined {
+  if (!options) return undefined
+  const { enabled: _enabled, preventDefault: _preventDefault, ignoreEventWhen: _ignoreEventWhen, ...rest } = options
+
+  if (typeof _enabled === 'function') {
+    return rest
+  }
+
+  return { ...rest, enabled: _enabled }
+}
+
 export default function useHotkeys<T extends HTMLElement>(
   keys: Keys,
   callback: HotkeyCallback,
   options?: OptionsOrDependencyArray,
   dependencies?: OptionsOrDependencyArray,
 ) {
-  const ref = useRef<T>(null)
+  const [ref, _setRef] = useState<T | null>(null)
+  const setRef = useCallback<RefCallback<T | null>>((instance) => {
+    _setRef(instance)
+    return () => _setRef(null)
+  }, [])
+
   const hasTriggeredRef = useRef(false)
 
   const _options: Options | undefined = !Array.isArray(options)
@@ -53,18 +71,26 @@ export default function useHotkeys<T extends HTMLElement>(
     cbRef.current = callback
   }
 
-  const memoisedOptions = useDeepEqualMemo(_options)
+  const memoisedOptions = useDeepEqualMemo(getSerializableOptions(_options))
+
+  // Keep function callbacks in refs so they're always up-to-date without causing effect re-registration.
+  const enabledRef = useRef(_options?.enabled)
+  enabledRef.current = _options?.enabled
+  const preventDefaultRef = useRef(_options?.preventDefault)
+  preventDefaultRef.current = _options?.preventDefault
+  const ignoreEventWhenRef = useRef(_options?.ignoreEventWhen)
+  ignoreEventWhenRef.current = _options?.ignoreEventWhen
 
   const { activeScopes } = useHotkeysContext()
   const proxy = useBoundHotkeysProxy()
 
   useSafeLayoutEffect(() => {
-    if (memoisedOptions?.enabled === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
+    if (enabledRef.current === false || !isScopeActive(activeScopes, memoisedOptions?.scopes)) {
       return
     }
 
     let recordedKeys: string[] = []
-    let sequenceTimer: NodeJS.Timeout | undefined
+    let sequenceTimer: ReturnType<typeof setTimeout> | undefined
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
@@ -73,13 +99,13 @@ export default function useHotkeys<T extends HTMLElement>(
 
       // TODO: SINCE THE EVENT IS NOW ATTACHED TO THE REF, THE ACTIVE ELEMENT CAN NEVER BE INSIDE THE REF. THE HOTKEY ONLY TRIGGERS IF THE
       // REF IS THE ACTIVE ELEMENT. THIS IS A PROBLEM SINCE FOCUSED SUB COMPONENTS WON'T TRIGGER THE HOTKEY.
-      if (ref.current !== null) {
-        const rootNode = ref.current.getRootNode()
+      if (ref !== null) {
+        const rootNode = ref.getRootNode()
 
         if (
           (rootNode instanceof Document || rootNode instanceof ShadowRoot) &&
-          rootNode.activeElement !== ref.current &&
-          !ref.current.contains(rootNode.activeElement)
+          rootNode.activeElement !== ref &&
+          !ref.contains(rootNode.activeElement)
         ) {
           stopPropagation(e)
           return
@@ -146,7 +172,7 @@ export default function useHotkeys<T extends HTMLElement>(
             isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) ||
             hotkey.keys?.includes('*')
           ) {
-            if (memoisedOptions?.ignoreEventWhen?.(e)) {
+            if (ignoreEventWhenRef.current?.(e)) {
               return
             }
 
@@ -154,11 +180,9 @@ export default function useHotkeys<T extends HTMLElement>(
               return
             }
 
-            maybePreventDefault(e, hotkey, memoisedOptions?.preventDefault)
+            maybePreventDefault(e, hotkey, preventDefaultRef.current)
 
-            if (!isHotkeyEnabled(e, hotkey, memoisedOptions?.enabled)) {
-              stopPropagation(e)
-
+            if (!isHotkeyEnabled(e, hotkey, enabledRef.current)) {
               return
             }
 
@@ -201,7 +225,7 @@ export default function useHotkeys<T extends HTMLElement>(
       }
     }
 
-    const domNode = ref.current || _options?.document || document
+    const domNode = ref || _options?.document || document
 
     // @ts-expect-error TS2345
     domNode.addEventListener('keyup', handleKeyUp, _options?.eventListenerOptions)
@@ -249,7 +273,7 @@ export default function useHotkeys<T extends HTMLElement>(
         clearTimeout(sequenceTimer)
       }
     }
-  }, [_keys, memoisedOptions, activeScopes])
+  }, [ref, memoisedOptions, activeScopes, _keys])
 
-  return ref
+  return setRef
 }

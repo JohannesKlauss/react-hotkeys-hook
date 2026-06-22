@@ -1,75 +1,286 @@
 /* stylelint-disable docusaurus/copyright-header */
 
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
+/* ============================================
+   HERO
+   ============================================ */
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
 
-.buttons {
+@media (min-width: 996px) {
+  .heroInner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.heroContent {
+  flex: 1;
+}
+
+.heroVisual {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Install command */
+.heroInstall {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-border-color);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+.heroInstall code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  color: var(--ifm-font-color-base);
+}
+
+.heroCopy {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--ifm-font-color-secondary);
+  cursor: pointer;
+  transition: color 0.15s ease-out, background 0.15s ease-out;
 }
 
-/* Demo section */
+.heroCopy:hover {
+  color: var(--ifm-color-primary);
+  background: var(--ifm-background-color);
+}
+
+/* Syntax-highlighted code block in hero */
+.heroCodeBlock {
+  width: 100%;
+  max-width: 520px;
+}
+
+.heroCodeBlock > div {
+  margin-bottom: 0;
+}
+
+.heroCodeBlock :global(.theme-code-block) {
+  box-shadow: 0 8px 32px oklch(0% 0 0 / 0.25);
+}
+
+.heroCodeBlock :global(.theme-code-block pre) {
+  border-radius: var(--radius-lg);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.heroCodeBlock :global(.theme-code-block code) {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+/* Keyboard hint */
+.heroKeys {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--ifm-font-color-secondary);
+}
+
+.heroKeys kbd {
+  font-size: 0.85em;
+}
+
+.heroKeys span {
+  color: var(--ifm-font-color-secondary);
+  opacity: 0.5;
+}
+
+/* CTA buttons */
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   STATS SECTION
+   ============================================ */
+.statsSection {
+  padding: var(--space-8) 0;
+  border-bottom: 1px solid var(--ifm-border-color);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+  letter-spacing: -0.02em;
+}
+
+.statLabel {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--ifm-font-color-secondary);
+  margin-top: var(--space-1);
+}
+
+/* ============================================
+   DEMO SECTION
+   ============================================ */
 .demoSection {
-  padding: 4rem 0;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  padding: var(--space-24) 0;
 }
 
 .demoIntro {
-  text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-12);
 }
 
 .demoIntro h2 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.02em;
 }
 
 .demoIntro p {
-  color: var(--ifm-color-emphasis-700);
-  max-width: 600px;
-  margin: 0 auto;
+  color: var(--ifm-font-color-secondary);
+  max-width: 65ch;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.demoHint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ifm-color-primary);
 }
 
 .demoContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
   align-items: start;
 }
 
-.demoCode {
-  overflow: auto;
-  border-radius: var(--ifm-code-border-radius);
-}
-
-.demoPreview {
-  padding: 1rem;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: var(--ifm-code-border-radius);
-  background: var(--ifm-background-surface-color);
-}
-
-@media (max-width: 996px) {
+@media (min-width: 996px) {
   .demoContainer {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-/* Feature sections */
+.demoCode {
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--ifm-border-color);
+}
+
+.demoCode > div:first-child {
+  background: var(--code-block-bg);
+  padding: var(--space-4) var(--space-6);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ifm-font-color-secondary);
+  border-bottom: 1px solid var(--ifm-border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.demoPreview {
+  padding: var(--space-6);
+  border: 1px solid var(--ifm-border-color);
+  border-radius: var(--radius-md);
+  background: var(--ifm-background-surface-color);
+  min-height: 200px;
+}
+
+.demoPreview > div:first-child {
+  background: var(--code-block-bg);
+  padding: var(--space-4) var(--space-6);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ifm-font-color-secondary);
+  border-bottom: 1px solid var(--ifm-border-color);
+  margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) var(--space-6);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ============================================
+   FEATURE SECTIONS
+   ============================================ */
 .featureSection {
-  padding: 4rem 0;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  padding: var(--space-24) 0;
+  border-top: 1px solid var(--ifm-border-color);
+}
+
+.featureSection:first-of-type {
+  border-top: none;
 }
 
 .featureGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  grid-template-columns: 1fr;
+  gap: var(--space-12);
   align-items: center;
+}
+
+@media (min-width: 996px) {
+  .featureGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+  }
 }
 
 .featureGridReversed {
@@ -81,38 +292,60 @@
 }
 
 @media (max-width: 996px) {
-  .featureGrid {
-    grid-template-columns: 1fr;
-  }
-
   .featureGridReversed {
     direction: ltr;
   }
 }
 
+.featureLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ifm-color-primary);
+  margin-bottom: var(--space-3);
+}
+
 .featureTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .featureDescription {
-  color: var(--ifm-color-emphasis-700);
-  line-height: 1.6;
+  color: var(--ifm-font-color-secondary);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  max-width: 50ch;
 }
 
-/* Quick start section */
-.quickStart {
-  padding: 4rem 0;
-  text-align: center;
+.featureCode {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--ifm-border-color);
 }
 
-.quickStartCode {
-  max-width: 600px;
-  margin: 2rem auto;
-  text-align: left;
+.featureCode :global(.theme-code-block) {
+  margin-bottom: 0;
 }
 
-.quickStartCta {
-  margin-top: 2rem;
+/* ============================================
+   LIVE EDITOR OVERRIDES
+   ============================================ */
+.demoCode :global(.prism-code) {
+  background: var(--code-block-bg) !important;
+  margin: 0;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  font-size: 0.8125rem;
+}
+
+.demoCode :global(.prism-code) textarea {
+  font-family: var(--font-mono) !important;
+}
+
+.demoPreview :global(pre) {
+  background: transparent !important;
 }

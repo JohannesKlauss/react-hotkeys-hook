@@ -16,8 +16,37 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'Johannes Klauss', // Usually your GitHub org/user name.
   projectName: 'react-hotkeys-hook', // Usually your repo name.
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Libre+Franklin:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap',
+      },
+    },
+  ],
   themes: ['@docusaurus/theme-live-codeblock'],
   themeConfig: {
+    colorMode: {
+      defaultMode: 'dark',
+      respectPrefersColorScheme: true,
+      disableSwitch: false,
+    },
     navbar: {
       title: 'React Hotkeys Hook',
       items: [

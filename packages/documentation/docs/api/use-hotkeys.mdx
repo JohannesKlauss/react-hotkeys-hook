@@ -16,7 +16,7 @@ function useHotkeys<T extends Element>(
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
   options: Options = {},
   deps: any[] = []
-): React.MutableRef<T | null>
+): React.RefCallback<T | null>
 ```
 
 ***
@@ -29,37 +29,35 @@ function useHotkeys<T extends Element>(
 keys: string | string[]
 ```
 
-Set the keystrokes we want the hook to listen to. We can use single or multiple keys,
-modifier combinations, arrow keys, function keys, etc.
+The keystrokes the hook should listen for. Supports single keys, modifier combinations, arrow keys, function keys, and more.
 
-#### Listening to all keys
+#### Listen to all keys
 
 ```jsx
 useHotkeys('*', (_, handler) => alert(handler.key))
 ```
 
-#### Using modifiers
+#### Use modifiers
 
 ```jsx
-useHotkeys('ctrl+s, shift+w', () => alert('We\'re using modifiers now!'))
+useHotkeys('ctrl+s, shift+w', () => alert('We're using modifiers now!'))
 ```
 
-#### Using F keys
+#### Use function keys
 
 ```jsx
 useHotkeys('f5', () => alert('F5 was pressed'))
 ```
 
-#### Using multiple keys
+#### Multiple key combinations
 
 ```jsx
 useHotkeys('w, a, s, d', () => alert('Player moved!'))
 ```
 
-:::tip Differentiating between multiple possible keys
+:::tip Differentiate between multiple keys
 
-If we use a combination of possible keys that use the same hook, we can use `handler.keys` to check which key the user
-pressed.
+When multiple possible keys share the same callback, use `handler.keys` to determine which one was pressed:
 
 ```jsx
 useHotkeys('ctrl+a, shift+b, r, f', (_, handler) => {
@@ -78,7 +76,7 @@ useHotkeys('ctrl+a, shift+b, r, f', (_, handler) => {
 
 :::
 
-This can also be an array:
+You can also pass an array:
 
 ```jsx
 useHotkeys(['ctrl+a', 'shift+b', 'r', 'f'], (_, handler) => {
@@ -95,15 +93,15 @@ useHotkeys(['ctrl+a', 'shift+b', 'r', 'f'], (_, handler) => {
 })
 ```
 
-Also you could work directly with hotkey trigger:
+Or work directly with the matched hotkey string:
 
 ```jsx
-const HOTKEYS = [
+const HOTKEYS = {
   ACTION_A: 'ctrl+a',
   ACTION_B: 'shift+b',
-]
+}
 
-useHotkeys(HOTKEYS, (_, { hotkey }) => {
+useHotkeys(Object.values(HOTKEYS), (_, { hotkey }) => {
   switch (hotkey) {
     case HOTKEYS.ACTION_A: alert('You pressed ctrl+a!');
       break;
@@ -121,30 +119,25 @@ useHotkeys(HOTKEYS, (_, { hotkey }) => {
 callback: (event: KeyboardEvent, handler: HotkeysEvent) => void
 ```
 
-Gets executed when the defined keystroke gets hit by the user. `event` holds the browsers keyboard event, `handler` passes
-some additional information to handle the pressed key.
+Called when the user presses the defined keystroke. `event` is the browser's native `KeyboardEvent`. `handler` contains additional information about the pressed key.
 
 #### `event`
 
-The browsers native keyboard event that gets created when the user hits a key. For a thorough documentation of this event
-check out the [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent).
+The browser's native keyboard event. See [MDN](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent) for full documentation.
 
 #### `handler`
 
-The `handler` holds information about the pressed key. In general, we should only need this object to handle our keyboard
-events.
-The most important property of the `handler` object is the `keys` prop:
+The `handler` object provides information about the matched hotkey:
 
-* `keys: string[]` - This will hold the pressed keystroke. So if we use multiple possible keystroke combinations for the same callback
-we can use this property to check which specific keystroke was pressed.
+* `keys: string[]` — The keys that were pressed. Useful when multiple key combinations map to the same callback.
+* `hotkey: string` — The full hotkey string that matched (e.g. `'ctrl+a'`).
+* `scopes?: string | string[]` — The scope(s) assigned to this hotkey.
+* `description?: string` — The description assigned via options.
+* `metadata?: Record<string, unknown>` — Custom metadata assigned via options.
 
-> There are more properties attached to the handle that currently don't get populated with values. So we can safely ignore those.
+:::info The callback is memoized
 
-:::info The callback gets memoised
-
-The callback we pass into the hook gets memoised, so every variable we reference inside the callback must be added to the
-dependencies array, otherwise we will get stale values. For more on memoisation in the context of React hooks read
-[this nice article](https://medium.com/@sdolidze/react-hooks-memoization-99a9a91c8853).
+The callback is memoized internally, so any variable referenced inside it must be listed in the dependencies array. Otherwise you will get stale values. For more on memoization in React hooks, see [this article](https://medium.com/@sdolidze/react-hooks-memoization-99a9a91c8853).
 
 :::
 
@@ -152,8 +145,7 @@ dependencies array, otherwise we will get stale values. For more on memoisation 
 
 ### `options`
 
-We can extensively configure how the hook behaves by passing it an `options` object. Below are all properties that the
-object takes.
+Configure the hook's behavior by passing an options object.
 
 ```js
 // Default values
@@ -161,8 +153,8 @@ const options = {
   enabled: true,
   enableOnFormTags: false,
   enableOnContentEditable: false,
-  combinationKey: '+',
-  splitKey: ',',
+  splitKey: '+',
+  delimiter: ',',
   scopes: '*',
   keyup: undefined,
   keydown: true,
@@ -171,6 +163,10 @@ const options = {
   document: undefined,
   ignoreModifiers: false,
   useKey: false,
+  sequenceTimeoutMs: 1000,
+  sequenceSplitKey: '>',
+  eventListenerOptions: undefined,
+  metadata: undefined,
 };
 ```
 
@@ -183,8 +179,8 @@ type Options = {
   enabled?: Trigger
   enableOnFormTags?: FormTags[] | boolean
   enableOnContentEditable?: boolean
-  combinationKey?: string
   splitKey?: string
+  delimiter?: string
   scopes?: string | string[]
   keyup?: boolean
   keydown?: boolean
@@ -193,38 +189,50 @@ type Options = {
   document?: Document
   ignoreModifiers?: boolean
   useKey?: boolean
+  sequenceTimeoutMs?: number
+  sequenceSplitKey?: string
+  eventListenerOptions?: EventListenerOptions
+  metadata?: Record<string, unknown>
 };
 ```
 
-#### Properties
-
-##### `enabled`
+#### `enabled`
 
 ```ts
-enabled: boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean) // default: true
+enabled: Trigger // default: true
 ```
 
-Determines if the callback should get triggered. Return `false` to __prevent__ the execution
-of the callback and `true` to __allow__ the callback to be triggered. You can also pass a function that returns a boolean.
+Determines if the callback should be triggered. Pass `false` to disable the hotkey entirely, or a function that receives the keyboard event and returns `true` or `false`.
 
-##### `enableOnFormTags`
+When `enabled` is a boolean `false`, the event listeners are removed from the DOM. When `enabled` is a function that returns `false`, the listeners stay attached but the callback is skipped.
+
+#### `enableOnFormTags`
 
 ```ts
-enableOnFormTags: string[] // default: undefined
+enableOnFormTags: FormTags[] | boolean // default: false
 ```
 
-Normally we do not want a hotkey being triggered while a user types something into an input field or a custom input that uses ARIA roles. In some cases however
-this might desirable. We can enable the callback trigger for an input tag using the following values:
+By default, hotkeys are disabled while the user is focused on a form element. Set this to `true` to enable hotkeys on all form tags, or pass an array of specific tags:
 
-`INPUT`, `TEXTAREA`, `SELECT`, `ROLE_NAME_HERE`
+```js
+useHotkeys('ctrl+s', save, { enableOnFormTags: ['input', 'textarea', 'select'] })
+```
 
-##### `ignoreEventWhen`
+#### `enableOnContentEditable`
+
+```ts
+enableOnContentEditable: boolean // default: false
+```
+
+Enable hotkeys on elements with the `contentEditable` attribute.
+
+#### `ignoreEventWhen`
 
 ```ts
 ignoreEventWhen: (e: KeyboardEvent) => boolean // default: undefined
 ```
 
-Provides a fine control over what events to ignore. Can be used in special cases, for example
+Fine-grained control over which events to ignore. Return `true` from the function to skip handling the event:
 
 ```js
 useHotkeys('a', someCallback, {
@@ -234,84 +242,100 @@ useHotkeys('a', someCallback, {
 })
 ```
 
-##### `enabled`
-
-```ts
-enabled: boolean // default: true
-```
-
-Setting this to `false` prevents the hook from doing anything.
-
-##### `splitKey`
+#### `splitKey`
 
 ```ts
 splitKey: string // default: "+"
 ```
 
-Specifies the key that is used to combine multiple hotkeys into keystrokes. The default value is `+`, so `shift+a` triggers
-when the user presses the "shift" key __and__ the "a" key.
+The character that joins keys within a single combination. The default is `+`, so `shift+a` triggers when the user presses Shift **and** A together.
 
-##### `scopes`
+Change this if you need to listen for the `+` key itself:
 
-To group your hotkeys into different scopes, you can pass a string or an array of strings to the `scopes` property. This
-way you can easily enable or disable a group of hotkeys at once. More on this in the
-[Grouping Hotkeys together](/docs/documentation/hotkeys-provider) section.
-By default all hotkeys are assigned to the wildcard `*` scope.
+```js
+useHotkeys('ctrl-+', zoomIn, { splitKey: '-' })
+```
 
-##### `keyup`
+#### `delimiter`
+
+```ts
+delimiter: string // default: ","
+```
+
+The character that separates different hotkey combinations mapped to the same callback. The default is `,`, so `ctrl+a, shift+b` listens for either combination.
+
+#### `sequenceSplitKey`
+
+```ts
+sequenceSplitKey: string // default: ">"
+```
+
+The character that separates keys in a sequential hotkey. The default is `>`, so `g>h>i` requires pressing G, then H, then I in sequence.
+
+#### `scopes`
+
+```ts
+scopes: string | string[] // default: "*"
+```
+
+Assign the hotkey to one or more scopes. Scopes let you group hotkeys and enable or disable them together via `HotkeysProvider`. See the [Grouping Hotkeys](/docs/documentation/hotkeys-provider) documentation for details.
+
+#### `keyup`
 
 ```ts
 keyup: boolean // default: false
 ```
 
-Set this to `true` if we want the hook to trigger our callback on the browsers `keyUp` event.
+Trigger the callback on the browser's `keyup` event.
 
-##### `keydown`
+#### `keydown`
 
 ```ts
 keydown: boolean // default: true
 ```
 
-Set this to `true` if we want the hook to trigger our callback on the browsers `keyDown` event. This is the default behavior.
+Trigger the callback on the browser's `keydown` event. This is the default.
 
-:::tip Setting `keydown` __and__ `keyup`
-If we set `keyup` to `true` and __don't__ set the `keydown` prop (leaving the default), React Hotkeys Hook will assume
-that we want to only listen to the browsers `keyUp` event.
-
-If we in fact want the callback to get triggered by both events, we have to explicitly set both properties like so:
+:::tip Listening to both `keydown` and `keyup`
+If you set `keyup: true` without explicitly setting `keydown`, the hook assumes you only want `keyup`. To listen to both, set both options:
 
 ```js
-useHotkeys('a', () => someCallback, {
+useHotkeys('a', callback, {
   keydown: true,
   keyup: true
 })
 ```
-
 :::
 
-##### `preventDefault`
+#### `preventDefault`
 
 ```ts
-preventDefault: boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean) // default: false
+preventDefault: Trigger // default: false
 ```
 
-This flag determines if the default browser behavior should be prevented. `false` is the default value, so the browser
-will proceed with its default behavior. Setting this to `true` will prevent __some__ of the default browser behavior.
-
-A good example for this behavior is the override of `meta+s`, which normally triggers a save page dialog
-inside the browser.
+Prevent the browser's default behavior for the matched keystroke. Useful for overriding shortcuts like `meta+s` (save page).
 
 ```js
 useHotkeys('meta+s', someCallback, {
-  // This will prevent the browser from showing the save page dialog
   preventDefault: true,
 });
 ```
 
-##### `document`
+#### `description`
 
-if our React app uses iframes, we can pass the `document` object of the iframe to the hook. This way the hook will bind
-the hotkeys to the iframe instead of the main document.
+```ts
+description: string // default: undefined
+```
+
+A human-readable description of what the hotkey does. Useful for building help panels or shortcut reference lists.
+
+#### `document`
+
+```ts
+document: Document // default: undefined
+```
+
+Bind the event listeners to a specific `Document` object instead of the global `document`. Useful for apps running inside iframes.
 
 ```js
 import FrameComponent from 'react-frame-component'
@@ -319,30 +343,19 @@ import FrameComponent from 'react-frame-component'
 const InsideFrameComponent = () => {
   const { document } = useFrame()
 
-  useHotkeys("s", () => console.log("I am triggered inside an iframe"), { document })
+  useHotkeys("s", () => console.log("Triggered inside iframe"), { document })
 
   return <div>....</div>
 }
-
-function App() {
-  return (
-    <FrameComponent>
-      <InsideFrameComponent/>
-    </FrameComponent>
-  )
-}
 ```
 
-##### `ignoreModifiers`
+#### `ignoreModifiers`
 
 ```ts
 ignoreModifiers: boolean // default: false
 ```
 
-When listening to keystrokes, we can ignore the modifier keys (e.g. `shift`, `alt`, `ctrl`, `meta`) by setting this option
-to true. This is especially useful when we want to to listen to secondary key combinations like `shift+1` (producing
-the exclamation point `!`). A common use case for this would be to listen to the `/` Character in order to focus a search
-input field.
+Ignore modifier keys (`shift`, `alt`, `ctrl`, `meta`) when matching hotkeys. Useful when you want to listen for a character regardless of how it is typed — for example, listening for `/` to focus a search field, whether the user presses the dedicated `/` key or `shift+7` on some layouts.
 
 ```tsx
 function App() {
@@ -357,29 +370,44 @@ function App() {
 ```
 
 :::info Why is this necessary?
-There are tons of keyboard layouts all across different languages and operating systems. For example, we reach the
-hashtag sign `#` via `Shift+3` on a US keyboard, but on a German keyboard it has its own dedicated key. On the other hand
-in a German keyboard layout we reach the character `[` via `Option+5` on macOS, but on windows there is a dedicated key for that.
+Keyboard layouts vary across languages and operating systems. For example, `#` is typed with `Shift+3` on a US keyboard but has its own dedicated key on a German keyboard. `[` is `Option+5` on a German macOS layout, but a dedicated key on Windows.
 
-This is already confusing, and it gets even worse when we consider that users can customize their keyboard layout.
-So listening to something like `#` can or cannot involve a shift modifier.
+Users can also customize their layouts. So listening to `#` may or may not involve a shift modifier.
 
-But there are also two different scenarios possible from our apps view:
-We could say that we want to listen to the `#` character, no matter if the user presses `Shift+3` or its own dedicated key.
-Here we can ignore any potential modifiers, so we set `ignoreModifiers: true`.
-But we could also say that we only want to listen to  `Shift+3`, no matter the produced character. In this case we do need to listen to the modifier.
-
-With this option, react-hotkeys-hook supports both ways.
+With `ignoreModifiers: true`, you say: "I want the `#` character, however the user produces it." Without it, you say: "I want the `Shift+3` physical keystroke, regardless of what character it produces."
 :::
 
-##### `useKey`
+#### `useKey`
 
 ```ts
 useKey: boolean // default: false
 ```
 
-This option allows us to listen to the produced key instead of the key code. This is useful if we want to listen to a
-specific key (e.g. `!`, `:`, `%`, etc.) and don't care about how the user produces that key.
+Listen to the produced character instead of the physical key code. Useful when you want to match a specific symbol (like `!` or `?`) regardless of which physical keys produce it on the user's layout.
+
+#### `sequenceTimeoutMs`
+
+```ts
+sequenceTimeoutMs: number // default: 1000
+```
+
+The time window in milliseconds for sequential hotkeys. If the user does not press the next key within this window, the sequence resets.
+
+#### `eventListenerOptions`
+
+```ts
+eventListenerOptions: EventListenerOptions // default: undefined
+```
+
+Pass custom options to the underlying `addEventListener` call, such as `{ passive: true }` or `{ capture: true }`.
+
+#### `metadata`
+
+```ts
+metadata: Record<string, unknown> // default: undefined
+```
+
+Attach arbitrary custom data to the hotkey. You can retrieve it from the `handler` object in the callback (`handler.metadata`). Useful for building dynamic shortcut registries or help panels.
 
 ***
 
@@ -389,18 +417,15 @@ specific key (e.g. `!`, `:`, `%`, etc.) and don't care about how the user produc
 deps: any[] // default: []
 ```
 
-The dependency array lets us use the hook just like Reacts internal `useCallback` or `useMemo` hook. This is where our
-dependencies of the callback live. If for example our callback actions depend on a referentially unstable value or a
-value that will change over time, we should add this value to our deps array. Check out the
-[documentation part](/docs/documentation/useHotkeys/setting-callback-dependencies)
-for examples.
+Dependency array for the callback, just like React's `useCallback` or `useMemo`. If your callback references unstable or changing values, add them here so the callback stays up to date.
+
+See the [Callback Dependencies](/docs/documentation/useHotkeys/setting-callback-dependencies) documentation for examples.
 
 ## Return value
 
-### `React.MutableRef<T | null>`
+### `React.RefCallback<T | null>`
 
-The `useHotkeys` hook returns a React ref. This ref by default holds the value of `null`. We can use this ref to only
-trigger the hotkeys if a specific element has been focused by the user.
+`useHotkeys` returns a React ref callback. Attach it to any element to scope the hotkey so it only fires when that element (or one of its children) has focus.
 
 ```jsx live
 function App() {
@@ -421,10 +446,8 @@ function App() {
 }
 ```
 
-:::info Not every html tag is able to receive focus by default
-Elements that don't provide any native interactivity like `<div>`, `<span>`, `<p>`, etc. cannot receive a focus by default.
-If we want to use `<div>` tags instead of the `<button>` tags in the example above we have to provide a `tabIndex` prop
-to the tag. This way the focusing will work with all tags.
+:::info Non-focusable elements need tabIndex
+Elements without native interactivity — like `<div>`, `<span>`, and `<p>` — cannot receive focus by default. Add a `tabIndex` prop to make them focusable:
 
 ```jsx live
 function App() {
@@ -444,30 +467,27 @@ function App() {
   );
 }
 ```
-
 :::
 
 ## Function signature overloads
 
-There is a common case where we want to pass dependencies to the hook but no options object. Normally we would need
-to write that out like this:
-
-```js
-useHotkeys('a', () => someDependency, undefined, [someDependency]);
-```
-
-To streamline this use case the hook accepts function overloads. With this
-we can pass a dependency array as the third argument instead of the fourth.
+If you want to pass a dependency array but do not need any options, you can pass the array as the third argument instead of the fourth:
 
 ```ts
 function useHotkeys<T extends Element>(
   keys: string,
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
   deps: any[] = []
-): React.MutableRef<T | null>
+): React.RefCallback<T | null>
 ```
 
-So we are able to use the hook like this:
+So instead of:
+
+```js
+useHotkeys('a', () => someDependency, undefined, [someDependency]);
+```
+
+You can write:
 
 ```js
 useHotkeys('a', () => someDependency, [someDependency]);

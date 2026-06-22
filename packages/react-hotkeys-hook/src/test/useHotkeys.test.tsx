@@ -976,6 +976,46 @@ test('should bind the event and execute the callback if enabled is set to a func
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test('should dynamically attach and detach listeners when enabled boolean changes', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  const { rerender } = renderHook<void, HookParameters>(({ keys, options }) => useHotkeys(keys, callback, options), {
+    initialProps: {
+      keys: 'a',
+      options: {
+        enabled: false,
+      },
+    },
+  })
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+
+  rerender({
+    keys: 'a',
+    options: {
+      enabled: true,
+    },
+  })
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  rerender({
+    keys: 'a',
+    options: {
+      enabled: false,
+    },
+  })
+
+  await user.keyboard('A')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should return a ref', async () => {
   const callback = vi.fn()
 
@@ -1038,6 +1078,52 @@ test.skip('should preventDefault and stop propagation when ref is not focused', 
   await userEvent.keyboard('A')
 
   expect(callback).toHaveBeenCalled()
+})
+
+test('should trigger when the ref is re-attached to another element', async () => {
+  const callback = vi.fn()
+
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    const ref = useHotkeys<HTMLDivElement>('a', cb)
+
+    const [isVisible, setVisible] = useState(false)
+    const toggle = useCallback(() => setVisible((v) => !v), [])
+
+    return (
+      <>
+        <button data-testid={'toggle'} onClick={toggle}>
+          Toggle
+        </button>
+        {isVisible &&  (
+          <div ref={ref} tabIndex={0} data-testid={'conditional-div'}>
+            Conditionally rendered hotkey area
+          </div>
+        )}
+        <button data-testid={'another-button'}>Another focusable button</button>
+      </>
+    )
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  // An event listener is attached to the `document` and processes presses globally
+  await userEvent.keyboard('A')
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // An element listener is attached to the `conditional-div` and processes presses only inside it
+  await userEvent.click(getByTestId('toggle'))
+  await userEvent.click(getByTestId('conditional-div'))
+  await userEvent.keyboard('A')
+  expect(callback).toHaveBeenCalledTimes(2)
+
+  // Tabbing to another focusable element must be permitted
+  await userEvent.tab()
+  expect(getByTestId('another-button')).toBe(document.activeElement)
+
+  // Presses outside the `conditional-div` should be ignored
+  await userEvent.keyboard('A')
+  expect(callback).toHaveBeenCalledTimes(2)
+
 })
 
 test('should allow * as a wildcard', async () => {
@@ -1206,7 +1292,7 @@ test('should set mod to true in hotkey object if listening to mod', async () => 
 
   renderHook(() => useHotkeys('mod+a', callback))
 
-  await user.keyboard('{Meta>}A{/Meta}')
+  await user.keyboard('{Control>}A{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -1250,7 +1336,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
 
   renderHook(() => useHotkeys('mod+shift+a', callback))
 
-  await user.keyboard('{Meta>}{Shift>}A{/Shift}{/Meta}')
+  await user.keyboard('{Control>}{Shift>}A{/Shift}{/Control}')
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith(expect.any(KeyboardEvent), {
@@ -1266,7 +1352,7 @@ test('should set multiple modifiers to true in hotkey object if listening to mul
   })
 })
 
-test('should stop propagation when enabled function resolves to false', async () => {
+test('should not stop propagation when enabled function resolves to false', async () => {
   const callback = vi.fn()
 
   renderHook(() => useHotkeys('a', callback, { enabled: () => false }))
@@ -1278,7 +1364,8 @@ test('should stop propagation when enabled function resolves to false', async ()
 
   fireEvent(document, keyDownEvent)
 
-  expect(keyDownEvent.defaultPrevented).toBe(true)
+  expect(keyDownEvent.defaultPrevented).toBe(false)
+  expect(callback).not.toHaveBeenCalled()
 })
 
 test('should reflect preventDefault option when set', async () => {
@@ -1707,6 +1794,61 @@ test('should be disabled on form tags inside custom elements by default', async 
   expect(within(getByTestId('form-tag').shadowRoot).getByTestId('input')).toHaveValue('A')
 })
 
+test('should trigger Enter hotkey inside input with enableOnFormTags true', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('enter', cb, { enableOnFormTags: true })
+
+    return <input type={'text'} data-testid={'form-tag'} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('{Enter}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger ctrl+s hotkey inside input with enableOnFormTags true', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('ctrl+s', cb, { enableOnFormTags: true, preventDefault: true })
+
+    return <input type={'text'} data-testid={'form-tag'} />
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('{Control>}s{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger Enter hotkey inside form input with enableOnFormTags true', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const Component = ({ cb }: { cb: HotkeyCallback }) => {
+    useHotkeys<HTMLDivElement>('enter', cb, { enableOnFormTags: true })
+
+    return (
+      <form>
+        <input type={'text'} data-testid={'form-tag'} />
+      </form>
+    )
+  }
+
+  const { getByTestId } = render(<Component cb={callback} />)
+
+  await user.click(getByTestId('form-tag'))
+  await user.keyboard('{Enter}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('Should trigger only produced key hotkeys', async () => {
   const user = userEvent.setup()
 
@@ -1732,4 +1874,84 @@ test('Should trigger only produced key hotkeys', async () => {
   await user.keyboard('Y')
   expect(callbackZ).toHaveBeenCalledTimes(1)
   expect(callbackY).toHaveBeenCalledTimes(2)
+})
+
+test('Should not disable later-registered handlers when one uses enabled callback returning false', async () => {
+  const user = userEvent.setup()
+
+  const callbackA = vi.fn()
+  const callbackB = vi.fn()
+  const callbackC = vi.fn()
+
+  renderHook(() => useHotkeys('shift+a', callbackA))
+  renderHook(() => useHotkeys('shift+a', callbackB, { enabled: () => false }))
+  renderHook(() => useHotkeys('shift+a', callbackC))
+
+  await user.keyboard('{Shift>}a{/Shift}')
+
+  expect(callbackA).toHaveBeenCalledTimes(1)
+  expect(callbackB).not.toHaveBeenCalled()
+  expect(callbackC).toHaveBeenCalledTimes(1)
+})
+
+test('Should work when both scopes and enabled callback are set', async () => {
+  const user = userEvent.setup()
+
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('ctrl+b', callback, { scopes: ['scopeA'], enabled: () => true }), {
+    wrapper: wrapper(['scopeA']),
+  })
+
+  await user.keyboard('{Control>}b{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('Should not re-trigger combo hotkey after visibilitychange clears stuck keys', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a+b', callback))
+
+  // Simulate pressing 'a' and 'b' — combo fires once
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyA', bubbles: true }))
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Simulate lost keyup events (e.g. alert() blocked them) followed by tab switch
+  document.dispatchEvent(new Event('visibilitychange'))
+
+  // Press 'b' alone — 'a' was cleared, so combo should NOT fire again
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Cleanup
+  window.document.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyB', bubbles: true }))
+  window.document.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyA', bubbles: true }))
+})
+
+test('Should not re-trigger combo hotkey after window focus clears stuck keys', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a+b', callback))
+
+  // Simulate pressing 'a' and 'b' — combo fires once
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyA', bubbles: true }))
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Simulate window regaining focus after alert() blocked keyup events
+  window.dispatchEvent(new Event('focus'))
+
+  // Press 'b' alone — 'a' was cleared, so combo should NOT fire again
+  window.document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB', bubbles: true }))
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  // Cleanup
+  window.document.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyB', bubbles: true }))
+  window.document.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyA', bubbles: true }))
 })

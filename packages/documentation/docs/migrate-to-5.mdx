@@ -5,34 +5,74 @@ title: "Migrate from 4.x to 5.x"
 
 # Migrate from 4.x to 5.x
 
-There are a few breaking changes in 5.x. This guide will help you migrate your code.
+Version 5 introduces a few breaking changes. This guide walks you through updating your code.
 
 ## Behavior changes
 
-### `useHotkeys` listens to the code instead of the key by default
+### `useHotkeys` listens to physical keys by default
 
-From version 5 on `useHotkeys` will listen to the key code instead of the key. This means that if you were using `useHotkeys`
-to listen to a key (`:` or `%`, etc.), you'll have to update your code.
+Starting with version 5, `useHotkeys` listens to the physical key **code** instead of the produced **character** by default.
 
-The hook now accepts an option called `useKey` that will only listen to the produced key. This is useful if you don't care
-about the layout of the keyboard and want to listen to the symbol that the user produces (i.e. listening to `/` to open a search bar).
+**What this means:**
+* In v4, `useHotkeys('!', callback)` would trigger when the user typed `!`.
+* In v5, `useHotkeys('!', callback)` does **not** work by default, because `!` is not a physical key code.
 
-### `HotkeysProvider`
+**How to migrate:**
 
-- If all scopes are disabled in the HotkeysProvider, no hotkeys will be active.
+If you were listening to special characters, you have two options:
+
+1. **Listen to the physical keystroke** (layout-independent):
+   ```js
+   // v5 default behavior
+   useHotkeys('shift+1', callback)
+   ```
+
+2. **Listen to the produced character** (layout-dependent) — use the `useKey` option:
+   ```js
+   useHotkeys('!', callback, { useKey: true })
+   ```
+
+See the [Keyboard Layouts](/docs/documentation/useHotkeys/ignore-layouts) documentation for more details.
+
+### `HotkeysProvider` scope behavior
+
+If **all** scopes are disabled in `HotkeysProvider`, no hotkeys will be active.
 
 ## API changes
 
-### `useHotkeys`
+### `useHotkeys` options renamed
 
-- The `splitKey` option has been renamed to `delimiter`
-- The `combinationKey` option has been renamed to `splitKey`
+In v4, the option names for combining and separating keys were confusing:
 
-### `HotkeysProvider` Context
+| v4 name | v5 name | Purpose |
+|---------|---------|---------|
+| `combinationKey` | `splitKey` | Character that joins keys within a combination (default: `+`) |
+| `splitKey` | `delimiter` | Character that separates different hotkey combinations (default: `,`) |
 
-#### `enabledScopes` is now `activeScopes`
-`enabledScopes` has been renamed to `activeScopes`, to avoid confusion with the `enableScopes` method.
+**Migration:**
+
+```js
+// v4
+useHotkeys('ctrl+a, shift+b', callback, { combinationKey: '-', splitKey: ';' })
+
+// v5
+useHotkeys('ctrl+a, shift+b', callback, { splitKey: '-', delimiter: ';' })
+```
+
+### `HotkeysProvider` context
+
+#### `enabledScopes` renamed to `activeScopes`
+
+To avoid confusion with the `enableScope` method, `enabledScopes` has been renamed to `activeScopes`.
+
+```js
+// v4
+const { enabledScopes } = useHotkeysContext()
+
+// v5
+const { activeScopes } = useHotkeysContext()
+```
 
 ## Other changes
 
-- We dropped the CommonJS Module. The hook is now only available as an ES Module. If you need to use it in a CommonJS environment, you can use a bundler like Webpack or Rollup to convert it to CommonJS.
+- **Dropped CommonJS support.** The package is now ESM-only. If you need CommonJS, use a bundler like Webpack, Rollup, or Vite to handle the conversion.

@@ -1,6 +1,6 @@
 import type { FormTags, Hotkey, Scopes, Trigger } from './types'
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
-import { mapCode } from './parseHotkeys'
+import { isMacOS, mapCode } from './parseHotkeys'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -56,8 +56,7 @@ export function isHotkeyEnabledOnTag(
   if (isReadonlyArray(enabledOnTags)) {
     return Boolean(
       targetTagName &&
-        enabledOnTags &&
-        enabledOnTags.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase() || tag === targetRole),
+        enabledOnTags?.some((tag) => tag.toLowerCase() === targetTagName.toLowerCase() || tag === targetRole),
     )
   }
 
@@ -109,7 +108,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
 
     // Mod is a special key name that is checking for meta on macOS and ctrl on other platforms
     if (mod) {
-      if (!metaKey && !ctrlKey) {
+      if (isMacOS() ? !metaKey : !ctrlKey) {
         return false
       }
     } else {

@@ -1,14 +1,13 @@
 ---
 slug: new-documentation
 title: New Documentation and Support Channel
-author: Johannes Klauss
-author_title: Software Engineer @ Spaceteams
-author_url: https://github.com/johannesklauss
-author_image_url: https://avatars0.githubusercontent.com/u/6214415?s=400&v=4
+authors: [johannesklauss]
 tags: [documentation, support, v4]
 ---
 
 ## New Docs
+
+<!-- truncate -->
 
 The last couple of weeks I overhauled the documentation to better explain how the hook works and what you can do with it.
 I hope this will reduce questions that are frequently popping up in the issues panel of the

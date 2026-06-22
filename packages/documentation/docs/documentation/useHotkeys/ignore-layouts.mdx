@@ -5,14 +5,13 @@ title: "Keyboard Layouts"
 
 # Working with Keyboard Layouts
 
-When using hotkeys, we have to be aware of the keyboard layout that the user is using.
-`react-hotkeys-hook` will listen to the key code instead of the produced key by default.
+Keyboard shortcuts behave differently depending on the user's keyboard layout. By default, `react-hotkeys-hook` listens to the physical key code — not the character produced by that key.
 
-If we want to listen to a special key (`!`, `:` or `%`, etc.) there are two ways to go about it.Keyboard
+If you want to listen for a special character like `!`, `:`, or `%`, you have two approaches.
 
-## Option 1 - Listen to the key code (Layout independent)
+## Option 1 — Listen to the physical key (layout-independent)
 
-This is the default behavior of the hook. It will listen to the key code instead of the produced key. Let's listen to the `!` key. We can do it like this:
+This is the default behavior. The hook listens to which physical keys are pressed, not the resulting character. For example, to respond to the `!` character on a US layout, you listen to the physical keys that produce it:
 
 ```jsx live
 function ExampleComponent() {
@@ -25,16 +24,11 @@ function ExampleComponent() {
 }
 ```
 
-This is layout independent. A different keyboard layout may produce a different key than `!`, but the actually key stroke is
-the same for all users. The key here is to communicate to the user that they have to press `shift+1` and not `!`, since we
-cannot guarantee `!` to be produced by the `shift+1` stroke.
+This is layout-independent: the same physical keystroke (`shift+1`) works for all users, even if their layout produces a different character. The trade-off is that you must communicate the physical shortcut (`shift+1`) to users, not the character (`!`), because you cannot guarantee that `shift+1` produces `!` on every layout.
 
-But there might be situations where we don't care how the user produces the key, we really want to act upon `!`. This brings us
-to the next option.
+## Option 2 — Listen to the produced character (layout-dependent)
 
-## Option 2 - Listen to the produced key (Layout dependent)
-
-If we want to listen to the produced key, we can use the `useKey` option. This will listen to the produced key instead of the key code.
+If you care about the character itself rather than how it is typed, use the `useKey` option. This listens to the produced key instead of the physical key code:
 
 ```jsx live
 function ExampleComponent() {
@@ -47,6 +41,91 @@ function ExampleComponent() {
 }
 ```
 
-Now, the hotkey will only be triggered when the user presses `!` and not `shift+1`. For a standard american keyboard layout
-these two are the same, but there are dozens of different layouts. If we don't care how the user produces the key, this is the
-preferred option.
+Now the hotkey only triggers when the user produces the `!` character, regardless of which physical keys they press. On a standard US keyboard, `shift+1` and `!` are equivalent, but on other layouts they may differ. Choose `useKey: true` when the character matters more than the physical keystroke.
+
+## Symbol and punctuation keys
+
+Shortcuts that involve symbol or punctuation keys like `=`, `+`, `;`, `,`, `?`, or `/` are a common source of confusion. The same two approaches apply, but the string you pass to `useHotkeys` looks different depending on which one you choose.
+
+### Listening to the physical key
+
+Pass the physical key's [`KeyboardEvent.code`](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values) name. These names are derived from the US layout and stay the same regardless of which layout the user actually uses:
+
+| Character on US layout | Physical key code |
+|------------------------|-------------------|
+| `-`                    | `Minus`           |
+| `=`                    | `Equal`           |
+| `[`                    | `BracketLeft`     |
+| `]`                    | `BracketRight`    |
+| `\`                    | `Backslash`       |
+| `;`                    | `Semicolon`       |
+| `'`                    | `Quote`           |
+| `,`                    | `Comma`           |
+| `.`                    | `Period`          |
+| `/`                    | `Slash`           |
+| `` ` ``                | `Backquote`       |
+
+For example, to listen to the physical `;` key — regardless of layout — pass the code name:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('Semicolon', () => setCount(prevCount => prevCount + 1))
+
+  return (
+    <span>Pressed the ';' key {count} times.</span>
+  )
+}
+```
+
+The code names are case-insensitive, so `Semicolon` and `semicolon` behave the same. The same applies when you combine them with modifiers:
+
+```js
+useHotkeys('ctrl+Equal', zoomIn, { preventDefault: true })
+useHotkeys('ctrl+Minus', zoomOut, { preventDefault: true })
+useHotkeys('mod+Slash', toggleComment)
+```
+
+### Listening to the produced character
+
+If you care about the character itself — for example, you want `?` to open a help dialog whether the user is on a US layout (`shift+/`) or a German layout (`shift+ß`) — set `useKey: true` and pass the character directly:
+
+```jsx live
+function ExampleComponent() {
+  const [count, setCount] = useState(0)
+  useHotkeys('?', () => setCount(prevCount => prevCount + 1), { useKey: true })
+
+  return (
+    <span>Pressed '?' {count} times.</span>
+  )
+}
+```
+
+The same works for `=`, `+`, `/`, `;`, and most other printable characters:
+
+```js
+useHotkeys('+', addItem, { useKey: true })
+useHotkeys('=', resetZoom, { useKey: true })
+useHotkeys('/', focusSearch, { useKey: true })
+```
+
+:::caution Watch out for `+` and `,`
+By default, `+` is the [`splitKey`](/docs/api/use-hotkeys#splitkey) that joins keys in a combination, and `,` is the [`delimiter`](/docs/api/use-hotkeys#delimiter) that separates multiple hotkeys. To listen for those characters themselves, either switch to the physical-key approach (`Equal`/`Comma`) or change the option:
+
+```js
+// Listen to the '+' character by changing the splitKey
+useHotkeys('ctrl-+', addItem, { splitKey: '-' })
+```
+:::
+
+### When to choose which
+
+| You want…                                                                                              | Use                                  |
+|--------------------------------------------------------------------------------------------------------|--------------------------------------|
+| Editor-style shortcuts that always work on the same physical key (e.g. `Ctrl+;` for "go to file")      | Physical key (`'ctrl+Semicolon'`)    |
+| A user-visible character that appears in your UI hint (e.g. "Press `?` for help")                      | `useKey: true`                       |
+| The numpad `+` instead of the main-row `+`                                                             | Physical key (`'NumpadAdd'`)         |
+
+:::note Why two approaches?
+On a US keyboard, `?` is produced by `Shift + Slash`. On a German keyboard, the same physical `Slash` key produces `-`, and `?` is produced elsewhere. Listening to the physical key gives you a stable position across layouts; listening to the produced character gives you a stable user-visible symbol.
+:::

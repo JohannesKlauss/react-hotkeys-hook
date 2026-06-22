@@ -10,7 +10,7 @@ import CodeBlock from '@theme/CodeBlock';
 
 ## Via Package Manager
 
-To install the package we use our favorite package manager.
+Install the package using your preferred package manager:
 
 <Tabs
   defaultValue="npm"
@@ -23,7 +23,7 @@ To install the package we use our favorite package manager.
     <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
   </TabItem>
   <TabItem value="npm">
-    <CodeBlock className="language-shell">npm i react-hotkeys-hook --save</CodeBlock>
+    <CodeBlock className="language-shell">npm i react-hotkeys-hook</CodeBlock>
   </TabItem>
   <TabItem value="bun">
       <CodeBlock className="language-shell">bun i react-hotkeys-hook</CodeBlock>
@@ -36,22 +36,8 @@ import { useHotkeys } from 'react-hotkeys-hook';
 
 ## Via CDN
 
-To use the ES Module we can reference it directly from [unpkg.com](https://unpkg.com):
+You can import the ES Module directly from [unpkg.com](https://unpkg.com):
 
 ```js
-import { useHotkeys } from 'https://unpkg.com/browse/react-hotkeys-hook@5.0.0/dist/react-hotkeys-hook.esm.js';
-```
-
-***
-
-```jsx live
-function MyComponent() {
-  const [count, setCount] = useState(0);
-
-  useHotkeys('a', () => setCount(count => count + 1));
-
-  return (
-    <span>Pressed 'a' key {count} times.</span>
-  );
-}
+import { useHotkeys } from 'https://unpkg.com/react-hotkeys-hook@latest/dist/react-hotkeys-hook.esm.js';
 ```

@@ -1,5 +1,5 @@
 import React from 'react'
-import { isHotkeyPressed, useHotkeys, useRecordHotkeys } from 'react-hotkeys-hook/src/lib'
+import { isHotkeyPressed, useHotkeys, useRecordHotkeys } from 'react-hotkeys-hook'
 // Add react-live imports you need here
 const ReactLiveScope = {
   React,
