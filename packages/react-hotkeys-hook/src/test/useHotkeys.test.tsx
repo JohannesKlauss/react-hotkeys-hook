@@ -1876,6 +1876,50 @@ test('Should trigger only produced key hotkeys', async () => {
   expect(callbackY).toHaveBeenCalledTimes(2)
 })
 
+test('Should not fire useKey hotkey with modifiers when only the bare key is pressed', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('ctrl+shift+s', callback, { useKey: true }))
+
+  await user.keyboard('s')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('Should fire useKey hotkey with modifiers only when all modifiers are pressed', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('ctrl+shift+s', callback, { useKey: true }))
+
+  await user.keyboard('{Control>}{Shift>}s{/Shift}{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('Should not fire useKey hotkey when only some modifiers are pressed', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('ctrl+shift+s', callback, { useKey: true }))
+
+  await user.keyboard('{Control>}s{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('Should not fire useKey hotkey with alt modifier when alt is not pressed', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('alt+s', callback, { useKey: true }))
+
+  await user.keyboard('s')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
 test('Should not disable later-registered handlers when one uses enabled callback returning false', async () => {
   const user = userEvent.setup()
 
