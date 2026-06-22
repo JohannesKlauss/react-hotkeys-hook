@@ -73,6 +73,56 @@ If your app is highly dynamic and you want to know which scopes are currently ac
 `enabledScopes` from the context.
 :::
 
+## Troubleshooting scoped hotkeys in Safari
+
+Safari can be stricter than other browsers about which element currently owns keyboard focus. If a scoped hotkey works
+in Chrome or Firefox but not in Safari, check the focus target before assuming that scopes are not enabled.
+
+- Make sure the component that registers the scoped hotkey is rendered inside a `<HotkeysProvider>`.
+- Verify that the scope you pass to `useHotkeys` is active by reading `enabledScopes` from `useHotkeysContext()`.
+- If you set `initiallyActiveScopes`, remember that the wildcard `*` scope is no longer active unless you include it.
+- If you use the ref returned by `useHotkeys`, Safari will only fire the hotkey when that element or one of its children has focus.
+- Non-interactive elements such as `<div>` and `<span>` need `tabIndex={0}` before Safari can focus them reliably.
+- Click or programmatically focus the scoped element before testing the shortcut.
+- Confirm with `document.activeElement` that Safari focused the element you expected.
+- If focus stays on `body`, move the hotkey to a focusable element or add `tabIndex` to the scoped container.
+- Hotkeys are ignored inside form controls by default so typing into inputs does not trigger app shortcuts.
+- Set `enableOnFormTags` when a scoped shortcut intentionally needs to work from an `input`, `textarea`, or `select`.
+- Set `enableOnContentEditable: true` when the focused target is a `contentEditable` editor.
+- Use `ignoreEventWhen` for custom editors that should sometimes opt out of global or scoped shortcuts.
+- Be careful with `preventDefault: true`; Safari may keep some reserved browser shortcuts for itself.
+- Prefer testing with a simple key such as `s` before debugging a browser-reserved combination such as `meta+l`.
+- If the shortcut includes `meta`, `alt`, or `ctrl`, check whether Safari already uses that combination for browser UI.
+- When using `preventDefault` as a function, log its return value to make sure it returns `true` for the failing shortcut.
+- Check whether both `keydown` and `keyup` are configured the way you expect.
+- If you only set `keyup: true`, add `keydown: true` as well when you want both events to trigger.
+- Log the `event.key`, `event.code`, and the hotkeys handler data from the callback while testing different keyboard layouts.
+- Try `ignoreModifiers: true` only when you want to match the produced character instead of the physical modifier combination.
+- Confirm that the component registering the hotkey is mounted when the scope is enabled.
+- Confirm that dependencies passed to `useHotkeys` do not leave the callback with stale scope or state values.
+- In iframes, pass the iframe `document` option so Safari attaches the listener to the focused document.
+- Retest after disabling browser extensions that capture keyboard shortcuts.
+- Build a minimal page with one `<HotkeysProvider>`, one active scope, and one focused button to isolate Safari-specific focus issues.
+
+A minimal debug helper can make the active scope and focus target visible while testing:
+
+```jsx
+import { useHotkeysContext } from 'react-hotkeys-hook';
+
+function ScopeDebug() {
+  const { enabledScopes } = useHotkeysContext();
+
+  return (
+    <pre>
+      {JSON.stringify({
+        enabledScopes,
+        activeElement: document.activeElement?.tagName,
+      })}
+    </pre>
+  )
+}
+```
+
 ## Set initially active scopes
 
 You can set the initially active scopes by passing an array of strings to the `initiallyActiveScopes` prop of the `HotkeysProvider`.
