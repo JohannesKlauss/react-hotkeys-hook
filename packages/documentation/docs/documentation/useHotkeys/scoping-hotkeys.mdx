@@ -49,7 +49,7 @@ function ScopedHotkey() {
   return (
     <>
       <p>The count is {count}. Click anywhere except the button to disable the hotkey.</p>
-      <button ref={ref}>
+      <button ref={ref} onClick={event => event.currentTarget.focus()}>
         Click me to enable the hotkey
       </button>
     </>
@@ -63,7 +63,7 @@ function SecondScopedHotkey() {
   return (
     <>
       <p>The count is {count}. Click anywhere except the button to disable the hotkey.</p>
-      <button ref={ref}>
+      <button ref={ref} onClick={event => event.currentTarget.focus()}>
         Click me to enable the hotkey
       </button>
     </>
@@ -79,7 +79,9 @@ render(
 )
 ```
 
-Now each hotkey only fires when its assigned button has focus. You can use this technique for any hotkey, not just duplicates.
+Now each hotkey only fires when its assigned button has focus. The click handler explicitly focuses the button so the demo
+also works in Safari, where clicking a button does not always move focus automatically. You can use this technique for any
+hotkey, not just duplicates.
 
 ***
 

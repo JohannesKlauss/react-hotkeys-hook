@@ -73,22 +73,6 @@ If your app is highly dynamic and you want to know which scopes are currently ac
 `enabledScopes` from the context.
 :::
 
-## Troubleshooting Safari button focus
-
-Safari does not always move focus to a `<button>` when it is clicked. In the example above, the scoped hotkey only runs
-while the element returned by `useHotkeys` owns focus. If the button does not become `document.activeElement` after the
-click, Safari leaves the scoped hotkey disabled even though the same demo works in browsers that focus buttons on click.
-
-When debugging Safari-specific scoped hotkey behavior:
-
-- Check `document.activeElement` after clicking the scoped element.
-- If the active element is still `body`, call `.focus()` from the click handler or attach the ref to a container that can
-  be focused explicitly.
-- For non-interactive containers, add `tabIndex={-1}` as shown below so the element can receive programmatic focus without
-  entering the normal tab order.
-- Keep browser-reserved shortcuts in mind; verify the behavior first with a simple shortcut before testing combinations
-  that Safari may intercept.
-
 ## Set initially active scopes
 
 You can set the initially active scopes by passing an array of strings to the `initiallyActiveScopes` prop of the `HotkeysProvider`.

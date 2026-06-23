@@ -53,7 +53,7 @@ function ScopedHotkey() {
   return (
     <>
       <p>The count is {count}. Click anywhere except for the button to disable the hotkey.</p>
-      <button ref={ref}>
+      <button ref={ref} onClick={event => event.currentTarget.focus()}>
         Click me to enable the hotkey
       </button>
     </>
@@ -67,7 +67,7 @@ function SecondScopedHotkey() {
   return (
     <>
       <p>The count is {count}. Click anywhere except for the button to disable the hotkey.</p>
-      <button ref={ref}>
+      <button ref={ref} onClick={event => event.currentTarget.focus()}>
         Click me to enable the hotkey
       </button>
     </>
@@ -83,8 +83,9 @@ render(
 )
 ```
 
-As we can see only if the button receives focus the hotkey gets enabled. We also added a second component that
-listens to the same hotkey but only triggers if an assigned component receives focus.
+As we can see only if the button receives focus the hotkey gets enabled. The click handler explicitly focuses the button so
+the demo also works in Safari, where clicking a button does not always move focus automatically. We also added a second
+component that listens to the same hotkey but only triggers if an assigned component receives focus.
 
 We successfully scoped our duplicate global hotkey to their own components. This practice isn't restricted to duplicate
 hotkeys, we can use this technique to scope any hotkey we like.
