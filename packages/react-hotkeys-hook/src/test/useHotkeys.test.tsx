@@ -1542,6 +1542,42 @@ test('Should test for modifiers by default', async () => {
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test('should not trigger a single-key hotkey while AltGraph is active', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('c', callback))
+
+  const event = createEvent.keyDown(document, {
+    key: 'c',
+    code: 'KeyC',
+  })
+  Object.defineProperty(event, 'getModifierState', {
+    value: (key: string) => key === 'AltGraph',
+  })
+
+  fireEvent(document, event)
+
+  expect(callback).not.toHaveBeenCalled()
+})
+
+test('should trigger a single-key hotkey with AltGraph when modifiers are ignored', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('c', callback, { ignoreModifiers: true }))
+
+  const event = createEvent.keyDown(document, {
+    key: 'c',
+    code: 'KeyC',
+  })
+  Object.defineProperty(event, 'getModifierState', {
+    value: (key: string) => key === 'AltGraph',
+  })
+
+  fireEvent(document, event)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('Should ignore modifiers if option is set', async () => {
   const user = userEvent.setup()
 
