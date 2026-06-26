@@ -502,6 +502,40 @@ test('should reset sequence when timeout occurs', async () => {
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test('should treat sequenceTimeoutMs as a per-key timeout, not a total sequence timeout', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('y>e>e>t', callback, { sequenceTimeoutMs: 200 }))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should reset sequence when a single key gap exceeds sequenceTimeoutMs', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('y>e>e>t', callback, { sequenceTimeoutMs: 200 }))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(300)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
 test('should handle component unmount during sequence detection', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
