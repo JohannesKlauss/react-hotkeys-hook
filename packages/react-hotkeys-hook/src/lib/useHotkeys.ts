@@ -124,7 +124,7 @@ export default function useHotkeys<T extends HTMLElement>(
           return
         }
 
-        recordedKeys[index] = recordedKeys[index] || [];
+        const rec = recordedKeys[index] ||= []
 
         const hotkey = parseHotkey(
           key,
@@ -137,11 +137,10 @@ export default function useHotkeys<T extends HTMLElement>(
 
         if (hotkey.isSequence) {
           // Restart the timeout — if the next key isn't pressed in time, reset the sequence
-          if (sequenceTimer[index]) {
-            clearTimeout(sequenceTimer[index]);
-          }
+          // clearTimeout with undefined is a no-op: https://developer.mozilla.org/en-US/docs/Web/API/Window/clearTimeout
+          clearTimeout(sequenceTimer[index])
           sequenceTimer[index] = setTimeout(() => {
-            recordedKeys[index] = []
+            rec.length = 0 // Clear in place so the `rec` reference stays valid
           }, memoisedOptions?.sequenceTimeoutMs ?? 1000)
 
           const currentKey = hotkey.useKey ? e.key : mapCode(e.code)
@@ -151,26 +150,20 @@ export default function useHotkeys<T extends HTMLElement>(
             return
           }
 
-          recordedKeys[index].push(currentKey)
+          rec.push(currentKey)
 
-          const expectedKey = hotkey.keys?.[recordedKeys[index].length - 1]
+          const expectedKey = hotkey.keys?.[rec.length - 1]
           if (currentKey !== expectedKey) {
-            recordedKeys[index] = []
-            if (sequenceTimer[index]) {
-              clearTimeout(sequenceTimer[index])
-            }
+            rec.length = 0
+            clearTimeout(sequenceTimer[index])
             return
           }
 
           // If the sequence is complete, trigger the callback
-          if (recordedKeys[index].length === hotkey.keys?.length) {
+          if (rec.length === hotkey.keys?.length) {
             cbRef.current(e, hotkey)
-
-            if (sequenceTimer[index]) {
-              clearTimeout(sequenceTimer[index])
-            }
-
-            recordedKeys[index] = []
+            clearTimeout(sequenceTimer[index])
+            rec.length = 0
           }
         } else {
           if (
