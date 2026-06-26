@@ -89,7 +89,7 @@ export default function useHotkeys<T extends HTMLElement>(
       return
     }
 
-    let recordedKeys: string[] = []
+    let recordedKeys: string[][] = []
     let sequenceTimer: ReturnType<typeof setTimeout>[] = []
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
@@ -124,6 +124,8 @@ export default function useHotkeys<T extends HTMLElement>(
           return
         }
 
+        recordedKeys[index] = recordedKeys[index] || [];
+
         const hotkey = parseHotkey(
           key,
           memoisedOptions?.splitKey,
@@ -139,7 +141,7 @@ export default function useHotkeys<T extends HTMLElement>(
             clearTimeout(sequenceTimer[index]);
           }
           sequenceTimer[index] = setTimeout(() => {
-            recordedKeys = []
+            recordedKeys[index] = []
           }, memoisedOptions?.sequenceTimeoutMs ?? 1000)
 
           const currentKey = hotkey.useKey ? e.key : mapCode(e.code)
@@ -149,11 +151,11 @@ export default function useHotkeys<T extends HTMLElement>(
             return
           }
 
-          recordedKeys.push(currentKey)
+          recordedKeys[index].push(currentKey)
 
-          const expectedKey = hotkey.keys?.[recordedKeys.length - 1]
+          const expectedKey = hotkey.keys?.[recordedKeys[index].length - 1]
           if (currentKey !== expectedKey) {
-            recordedKeys = []
+            recordedKeys[index] = []
             if (sequenceTimer[index]) {
               clearTimeout(sequenceTimer[index])
             }
@@ -161,14 +163,14 @@ export default function useHotkeys<T extends HTMLElement>(
           }
 
           // If the sequence is complete, trigger the callback
-          if (recordedKeys.length === hotkey.keys?.length) {
+          if (recordedKeys[index].length === hotkey.keys?.length) {
             cbRef.current(e, hotkey)
 
             if (sequenceTimer[index]) {
               clearTimeout(sequenceTimer[index])
             }
 
-            recordedKeys = []
+            recordedKeys[index] = []
           }
         } else {
           if (
