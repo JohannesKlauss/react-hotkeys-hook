@@ -52,7 +52,7 @@
     "@testing-library/user-event": "14.6.1",
     "@types/node": "24.13.2",
     "globals": "17.7.0",
-    "jsdom": "27.4.0",
+    "jsdom": "29.1.1",
     "typescript": "5.9.3",
     "vite": "8.1.0",
     "vitest": "4.1.9",
