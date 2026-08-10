@@ -46,16 +46,16 @@
     "@eslint/js": "10.0.1",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.2",
+    "@vitejs/plugin-react": "6.0.3",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
-    "@types/node": "24.13.2",
-    "globals": "17.6.0",
-    "jsdom": "27.4.0",
+    "@types/node": "24.13.3",
+    "globals": "17.7.0",
+    "jsdom": "29.1.1",
     "typescript": "5.9.3",
-    "vite": "8.0.16",
-    "vitest": "4.1.9",
+    "vite": "8.1.5",
+    "vitest": "4.1.10",
     "vite-plugin-dts": "4.5.4"
   }
 }
