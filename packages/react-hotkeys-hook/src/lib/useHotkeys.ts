@@ -89,8 +89,8 @@ export default function useHotkeys<T extends HTMLElement>(
       return
     }
 
-    let recordedKeys: string[] = []
-    let sequenceTimer: ReturnType<typeof setTimeout> | undefined
+    let recordedKeys: string[][] = []
+    let sequenceTimer: ReturnType<typeof setTimeout>[] = []
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
@@ -116,13 +116,15 @@ export default function useHotkeys<T extends HTMLElement>(
         return
       }
 
-      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
+      parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key, index) => {
         if (key.includes(memoisedOptions?.splitKey ?? '+') && key.includes(memoisedOptions?.sequenceSplitKey ?? '>')) {
           console.warn(
             `Hotkey ${key} contains both ${memoisedOptions?.splitKey ?? '+'} and ${memoisedOptions?.sequenceSplitKey ?? '>'} which is not supported.`,
           )
           return
         }
+
+        const rec = recordedKeys[index] ||= []
 
         const hotkey = parseHotkey(
           key,
@@ -134,9 +136,11 @@ export default function useHotkeys<T extends HTMLElement>(
         )
 
         if (hotkey.isSequence) {
-          // Set a timeout to check post which the sequence should reset
-          sequenceTimer = setTimeout(() => {
-            recordedKeys = []
+          // Restart the timeout — if the next key isn't pressed in time, reset the sequence
+          // clearTimeout with undefined is a no-op: https://developer.mozilla.org/en-US/docs/Web/API/Window/clearTimeout
+          clearTimeout(sequenceTimer[index])
+          sequenceTimer[index] = setTimeout(() => {
+            rec.length = 0 // Clear in place so the `rec` reference stays valid
           }, memoisedOptions?.sequenceTimeoutMs ?? 1000)
 
           const currentKey = hotkey.useKey ? e.key : mapCode(e.code)
@@ -146,26 +150,20 @@ export default function useHotkeys<T extends HTMLElement>(
             return
           }
 
-          recordedKeys.push(currentKey)
+          rec.push(currentKey)
 
-          const expectedKey = hotkey.keys?.[recordedKeys.length - 1]
+          const expectedKey = hotkey.keys?.[rec.length - 1]
           if (currentKey !== expectedKey) {
-            recordedKeys = []
-            if (sequenceTimer) {
-              clearTimeout(sequenceTimer)
-            }
+            rec.length = 0
+            clearTimeout(sequenceTimer[index])
             return
           }
 
           // If the sequence is complete, trigger the callback
-          if (recordedKeys.length === hotkey.keys?.length) {
+          if (rec.length === hotkey.keys?.length) {
             cbRef.current(e, hotkey)
-
-            if (sequenceTimer) {
-              clearTimeout(sequenceTimer)
-            }
-
-            recordedKeys = []
+            clearTimeout(sequenceTimer[index])
+            rec.length = 0
           }
         } else {
           if (
@@ -269,9 +267,7 @@ export default function useHotkeys<T extends HTMLElement>(
       }
 
       recordedKeys = []
-      if (sequenceTimer) {
-        clearTimeout(sequenceTimer)
-      }
+      sequenceTimer.forEach((timer) => clearTimeout(timer))
     }
   }, [ref, memoisedOptions, activeScopes, _keys])
 
