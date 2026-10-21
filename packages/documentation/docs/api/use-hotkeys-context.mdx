@@ -1,0 +1,80 @@
+---
+sidebar_position: 2
+title: useHotkeysContext
+---
+
+# useHotkeysContext API
+
+Function signature:
+
+```ts
+function useHotkeysContext(): {
+  hotkeys: ReadonlyArray<Hotkey>
+  activeScopes: string[]
+  toggleScope: (scope: string) => void
+  enableScope: (scope: string) => void
+  disableScope: (scope: string) => void
+}
+```
+
+Use `useHotkeysContext` to inspect the hotkeys registered in the currently active scopes and to enable, disable, or toggle scopes at runtime.
+
+## Returned values
+
+* `hotkeys` — The currently registered hotkeys for the active scopes. Each hotkey includes fields such as `hotkey`, `keys`, `scopes`, `description`, and `metadata`.
+* `activeScopes` — The list of scopes that are currently enabled.
+* `enableScope(scope)` — Enables a scope.
+* `disableScope(scope)` — Disables a scope.
+* `toggleScope(scope)` — Toggles a scope on or off.
+
+## Example
+
+```tsx
+function EditorHotkeys() {
+  useHotkeys('ctrl+s', () => {}, {
+    scopes: 'editor',
+    description: 'Save document',
+  })
+
+  useHotkeys('ctrl+/', () => {}, {
+    scopes: 'editor',
+    description: 'Toggle comment',
+  })
+
+  return null
+}
+
+function ShortcutList() {
+  const { hotkeys, activeScopes, toggleScope } = useHotkeysContext()
+
+  return (
+    <>
+      <p>Active scopes: {activeScopes.join(', ') || 'none'}</p>
+      <button onClick={() => toggleScope('editor')}>Toggle editor scope</button>
+      <ul>
+        {hotkeys.map(({ hotkey, description }) => (
+          <li key={hotkey}>
+            <code>{hotkey}</code>
+            {description ? ` — ${description}` : ''}
+          </li>
+        ))}
+      </ul>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <HotkeysProvider initiallyActiveScopes={['editor']}>
+      <EditorHotkeys />
+      <ShortcutList />
+    </HotkeysProvider>
+  )
+}
+```
+
+:::info Requires `HotkeysProvider`
+Wrap the part of your app that uses `useHotkeysContext` in a `HotkeysProvider`. Without a provider, the hook falls back to empty arrays and no-op scope handlers.
+:::
+
+For more about scopes, see the [Grouping Hotkeys together](/docs/documentation/hotkeys-provider) guide.
