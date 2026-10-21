@@ -5,14 +5,14 @@ title: "Callback Dependencies"
 
 # Setting callback dependencies
 
-The callback you pass to `useHotkeys` is memoized automatically inside the hook to prevent unnecessary re-renders.
-This can lead to [stale state](https://react.dev/reference/react/useState#im-trying-to-set-state-to-a-function-but-it-gets-called-instead) — the callback captures old values from its closure.
+The callback you pass to `useHotkeys` uses the latest values from each render when you omit the dependency array.
+If you pass a dependency array, the callback is memoized until a dependency changes. An empty array (`[]`) keeps the initial callback, which can lead to [stale state](https://react.dev/reference/react/useState#im-trying-to-set-state-to-a-function-but-it-gets-called-instead): the callback captures old values from its closure.
 
-To prevent this, `useHotkeys` accepts a dependency array just like React's built-in
+To control this, `useHotkeys` accepts a dependency array just like React's built-in
 [`useEffect`](https://react.dev/reference/react/useEffect), [`useMemo`](https://react.dev/reference/react/useMemo), and
 [`useCallback`](https://react.dev/reference/react/useCallback) hooks.
 
-> The general rule: put every unstable reference used inside the callback into the dependency array.
+> The general rule: when providing a dependency array, put every unstable reference used inside the callback into it.
 
 Let's look at a simple counter that works correctly because it uses the functional updater form of `setCount`:
 
@@ -35,12 +35,12 @@ We use the returned `ref` to scope the hotkey to this specific element. The `tab
 
 ## The stale-state problem
 
-Now let's change the callback to reference `count` directly:
+Now let's change the callback to reference `count` directly and pass an empty dependency array:
 
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  const ref = useHotkeys('b', () => setCount(count + 1))
+  const ref = useHotkeys('b', () => setCount(count + 1), [])
 
   return (
     <span ref={ref} tabIndex={-1}>Pressed the 'b' key {count} times.</span>
@@ -69,4 +69,4 @@ function ExampleComponent() {
 }
 ```
 
-If you remove `[squaredCount]` from `useHotkeys`, the callback appears to stop working after the first keypress. In reality, the callback still runs — it just uses the stale value of `squaredCount` from the first render.
+If you replace `[squaredCount]` with `[]`, the callback appears to stop working after the first keypress. In reality, the callback still runs — it just uses the stale value of `squaredCount` from the first render. Omitting the dependency array instead uses the latest value of `squaredCount` on every render.

@@ -1619,6 +1619,31 @@ test('should not trigger callback when modifier is pressed while holding unrelat
   expect(callback).toHaveBeenCalledTimes(0)
 })
 
+test('should distinguish omitted, empty and changing callback dependencies', async () => {
+  const user = userEvent.setup()
+  const omitted = vi.fn()
+  const empty = vi.fn()
+  const dependent = vi.fn()
+  const { rerender } = renderHook(
+    ({ dep, value }) => {
+      useHotkeys('a', () => omitted(value))
+      useHotkeys('b', () => empty(value), [])
+      useHotkeys('c', () => dependent(value), [dep])
+    },
+    { initialProps: { dep: 0, value: 'first' } },
+  )
+
+  await user.keyboard('abc')
+  rerender({ dep: 0, value: 'second' })
+  await user.keyboard('abc')
+  rerender({ dep: 1, value: 'third' })
+  await user.keyboard('abc')
+
+  expect(omitted.mock.calls).toEqual([['first'], ['second'], ['third']])
+  expect(empty.mock.calls).toEqual([['first'], ['first'], ['first']])
+  expect(dependent.mock.calls).toEqual([['first'], ['first'], ['third']])
+})
+
 test('should respect dependencies array if they are passed', async () => {
   function Fixture() {
     const [count, setCount] = useState(0)
