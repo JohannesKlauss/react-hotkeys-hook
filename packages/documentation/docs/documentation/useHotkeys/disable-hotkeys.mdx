@@ -45,11 +45,12 @@ If you use the returned `ref` to scope a hotkey to a specific element, the hotke
 
 Some shortcuts like `meta+s` are reserved by the browser — in this case, to save the current page. If you are building a text editor or any creation tool, you probably want to override `meta+s` with your own save logic.
 
-Set `preventDefault` to `true` to stop the browser from handling the shortcut:
+Set `preventDefault` to `true` to stop the browser from handling the shortcut.
+Use `mod+s` to match Command+S on macOS and Control+S on other platforms:
 
 ```jsx live
 function ExampleComponent() {
-  useHotkeys('meta+s', () => {
+  useHotkeys('mod+s', () => {
     alert('We saved your progress!')
     // ... your own save logic
   }, { preventDefault: true })
@@ -103,7 +104,7 @@ You can combine `enabled` and `preventDefault`:
 
 ```jsx
 function ExampleComponent() {
-  useHotkeys('meta+s', () => alert('We saved your progress!'), {
+  useHotkeys('mod+s', () => alert('We saved your progress!'), {
     enabled: () => false,
     preventDefault: true,
   })
@@ -131,7 +132,7 @@ However, some shortcuts — like `meta+s` for saving — should still work while
 
 ```jsx
 function ExampleComponent() {
-  useHotkeys('meta+s', (e) => {
+  useHotkeys('mod+s', (e) => {
     e.preventDefault()
     alert('We saved your progress!')
     // ... your own save logic
