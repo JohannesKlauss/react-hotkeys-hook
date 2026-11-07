@@ -502,6 +502,76 @@ test('should reset sequence when timeout occurs', async () => {
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test('should treat sequenceTimeoutMs as a per-key timeout, not a total sequence timeout', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('y>e>e>t', callback, { sequenceTimeoutMs: 200 }))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should reset sequence when a single key gap exceeds sequenceTimeoutMs', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('y>e>e>t', callback, { sequenceTimeoutMs: 200 }))
+
+  await user.keyboard('y')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(300)
+  await user.keyboard('e')
+  vi.advanceTimersByTime(100)
+  await user.keyboard('t')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('should support multiple comma-separated sequences', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>h>i, a>b>c', callback))
+
+  await user.keyboard('a')
+  await user.keyboard('b')
+  await user.keyboard('c')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+
+  await user.keyboard('g')
+  await user.keyboard('h')
+  await user.keyboard('i')
+
+  expect(callback).toHaveBeenCalledTimes(2)
+})
+
+test('should not let one sequence timer interfere with another', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>h>i, a>b>c', callback, { sequenceTimeoutMs: 500 }))
+
+  await user.keyboard('g')
+  vi.advanceTimersByTime(400)
+  await user.keyboard('a')
+  vi.advanceTimersByTime(400)
+  await user.keyboard('b')
+  vi.advanceTimersByTime(400)
+  await user.keyboard('c')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should handle component unmount during sequence detection', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
