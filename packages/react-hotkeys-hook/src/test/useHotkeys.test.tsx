@@ -1432,6 +1432,55 @@ test('should not prevent default behavior if preventDefault option is set to a f
   expect(keyDownEvent.defaultPrevented).toBe(false)
 })
 
+test('should prevent default behavior for sequence hotkeys when preventDefault option is set to true', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>p', callback, { preventDefault: true }))
+
+  fireEvent(document, createEvent.keyDown(document, { key: 'g', code: 'KeyG' }))
+  const keyDownEvent = createEvent.keyDown(document, { key: 'p', code: 'KeyP' })
+  fireEvent(document, keyDownEvent)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(keyDownEvent.defaultPrevented).toBe(true)
+})
+
+test('should prevent default behavior for sequence hotkeys when preventDefault function returns true', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>p', callback, { preventDefault: () => true }))
+
+  fireEvent(document, createEvent.keyDown(document, { key: 'g', code: 'KeyG' }))
+  const keyDownEvent = createEvent.keyDown(document, { key: 'p', code: 'KeyP' })
+  fireEvent(document, keyDownEvent)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(keyDownEvent.defaultPrevented).toBe(true)
+})
+
+test('should not prevent default behavior for sequence hotkeys when preventDefault is not set or returns false', async () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>p', callback))
+
+  fireEvent(document, createEvent.keyDown(document, { key: 'g', code: 'KeyG' }))
+  const unsetEvent = createEvent.keyDown(document, { key: 'p', code: 'KeyP' })
+  fireEvent(document, unsetEvent)
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(unsetEvent.defaultPrevented).toBe(false)
+
+  const callbackFalse = vi.fn()
+  renderHook(() => useHotkeys('x>y', callbackFalse, { preventDefault: () => false }))
+
+  fireEvent(document, createEvent.keyDown(document, { key: 'x', code: 'KeyX' }))
+  const falseEvent = createEvent.keyDown(document, { key: 'y', code: 'KeyY' })
+  fireEvent(document, falseEvent)
+
+  expect(callbackFalse).toHaveBeenCalledTimes(1)
+  expect(falseEvent.defaultPrevented).toBe(false)
+})
+
 test('should call preventDefault option function with hotkey and keyboard event', async () => {
   const user = userEvent.setup()
   const preventDefault = vi.fn()
