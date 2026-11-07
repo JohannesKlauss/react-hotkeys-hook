@@ -86,7 +86,7 @@ export function removeFromCurrentlyPressedKeys(key: string | string[]): void {
   https://stackoverflow.com/questions/11818637/why-does-javascript-drop-keyup-events-when-the-metakey-is-pressed-on-mac-browser
   Otherwise the set will hold all ever pressed keys while the meta key is down which leads to wrong results.
    */
-  if (key === 'meta') {
+  if (hotkeyArray.some((hotkey) => hotkey.toLowerCase() === 'meta')) {
     currentlyPressedKeys.clear()
   } else {
     hotkeyArray.forEach((hotkey) => {

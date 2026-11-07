@@ -2,6 +2,20 @@ import userEvent from '@testing-library/user-event'
 import { isHotkeyPressed } from '../lib'
 import {test, expect} from 'vitest'
 
+test('clears keys without keyup events when Meta is released', async () => {
+  const user = userEvent.setup()
+  window.dispatchEvent(new Event('blur'))
+
+  await user.keyboard('{Meta>}{A>}')
+  expect(isHotkeyPressed(['meta', 'a'])).toBe(true)
+
+  // macOS does not send A's keyup event while Meta is held.
+  await user.keyboard('{/Meta}')
+
+  expect(isHotkeyPressed('meta')).toBe(false)
+  expect(isHotkeyPressed('a')).toBe(false)
+})
+
 test('should return true if hotkey is currently pressed down', async () => {
   const user = userEvent.setup()
 
