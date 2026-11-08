@@ -82,6 +82,10 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
   return activeScopes.some((scope) => (typeof scopes === 'string' ? scopes === scope : scopes.includes(scope)))
 }
 
+function isCaseSensitive(key: string): boolean {
+  return key.toLowerCase() !== key.toUpperCase()
+}
+
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {
   const { alt, meta, mod, shift, ctrl, keys, useKey } = hotkey
   const { code, key: producedKey, ctrlKey, metaKey, shiftKey, altKey } = e
@@ -103,7 +107,12 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
       return false
     }
 
-    if (shift !== shiftKey && mappedCode !== 'shift') {
+    // With useKey, symbols such as `>` or `+` often need shift to be typed (e.g. shift+. on a US layout).
+    // Letters are excluded so that `a` and `shift+a` stay distinct.
+    const isSymbolTypedWithShift =
+      useKey && shiftKey && keys?.length === 1 && keys[0] === producedKey && !isCaseSensitive(producedKey)
+
+    if (shift !== shiftKey && mappedCode !== 'shift' && !isSymbolTypedWithShift) {
       return false
     }
 

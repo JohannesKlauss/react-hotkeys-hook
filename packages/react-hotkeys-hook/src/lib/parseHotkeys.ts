@@ -38,6 +38,19 @@ export function parseKeysHookInput(keys: string, delimiter = ','): string[] {
   return keys.toLowerCase().split(delimiter)
 }
 
+// Splits a hotkey while still allowing the separator itself to be used as a key, e.g. `+`, `ctrl++` or `>`
+function splitHotkey(hotkey: string, separator: string): string[] {
+  if (hotkey === separator) {
+    return [separator]
+  }
+
+  if (hotkey.endsWith(separator + separator)) {
+    return [...hotkey.slice(0, -2 * separator.length).split(separator), separator]
+  }
+
+  return hotkey.split(separator)
+}
+
 export function parseHotkey(hotkey: string, options?: Options): Hotkey {
   const { splitKey = '+', sequenceSplitKey = '>', useKey = false, description, metadata, scopes } = options ?? {}
   let keys: string[] = []
@@ -47,17 +60,11 @@ export function parseHotkey(hotkey: string, options?: Options): Hotkey {
   // oxlint-disable-next-line no-param-reassign -- Sanitize the hotkey argument.
   hotkey = hotkey.trim()
 
-  if (hotkey.includes(sequenceSplitKey)) {
+  if (hotkey.includes(sequenceSplitKey) && hotkey !== sequenceSplitKey) {
     isSequence = true
-    keys = hotkey
-      .toLocaleLowerCase()
-      .split(sequenceSplitKey)
-      .map((k) => mapCode(k))
+    keys = splitHotkey(hotkey.toLocaleLowerCase(), sequenceSplitKey).map((k) => mapCode(k))
   } else {
-    keys = hotkey
-      .toLocaleLowerCase()
-      .split(splitKey)
-      .map((k) => mapCode(k))
+    keys = splitHotkey(hotkey.toLocaleLowerCase(), splitKey).map((k) => mapCode(k))
   }
 
   const modifiers: KeyboardModifiers = {

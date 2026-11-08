@@ -686,6 +686,64 @@ test('should listen to + if the splitKey is set to something different then +', 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test('should listen to a lone + with useKey without changing the splitKey', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('+', callback, { useKey: true }))
+
+  await user.keyboard('{Shift>}+{/Shift}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should listen to a lone > with useKey without treating it as a sequence', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('>', callback, { useKey: true }))
+
+  await user.keyboard('{Shift>}>{/Shift}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should listen to + after a modifier with useKey', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('ctrl++', callback, { useKey: true }))
+
+  await user.keyboard('{Shift>}+{/Shift}')
+  await user.keyboard('{Control>}{Shift>}+{/Shift}{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should not trigger a symbol hotkey with useKey when a different key is produced', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('>', callback, { useKey: true }))
+
+  await user.keyboard('.')
+  await user.keyboard('{Shift>}<{/Shift}')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('should still require shift for letters with useKey', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a', callback, { useKey: true }))
+
+  await user.keyboard('{Shift>}A{/Shift}')
+  await user.keyboard('a')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should default to keydown if neither keyup nor keydown is passed', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
