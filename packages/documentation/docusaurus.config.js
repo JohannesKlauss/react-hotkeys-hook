@@ -1,5 +1,5 @@
-const lightCodeTheme = require('prism-react-renderer').themes.github;
-const darkCodeTheme = require('prism-react-renderer').themes.dracula;
+const lightCodeTheme = require('prism-react-renderer').themes.github
+const darkCodeTheme = require('prism-react-renderer').themes.dracula
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
@@ -59,7 +59,7 @@ module.exports = {
         {
           to: 'blog',
           label: 'Blog',
-          position: 'left'
+          position: 'left',
         },
         {
           type: 'docsVersionDropdown',
@@ -161,7 +161,8 @@ module.exports = {
         generateLLMsFullTxt: true,
         docsDir: 'docs',
         title: 'React Hotkeys Hook Documentation',
-        description: 'Complete documentation for react-hotkeys-hook - A React hook for handling keyboard shortcuts in a declarative way.',
+        description:
+          'Complete documentation for react-hotkeys-hook - A React hook for handling keyboard shortcuts in a declarative way.',
         excludeImports: true,
         removeDuplicateHeadings: true,
         includeBlog: false,
@@ -184,8 +185,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl:
-            'https://github.com/JohannesKlauss/react-hotkeys-hook/edit/main/documentation/',
+          editUrl: 'https://github.com/JohannesKlauss/react-hotkeys-hook/edit/main/documentation/',
           lastVersion: 'current',
           versions: {
             current: {
@@ -199,4 +199,4 @@ module.exports = {
       },
     ],
   ],
-};
+}

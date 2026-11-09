@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-title: "Callback Dependencies"
+title: 'Callback Dependencies'
 ---
 
 # Setting callback dependencies
@@ -19,10 +19,12 @@ Let's look at a simple counter that works correctly because it uses the function
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  const ref = useHotkeys('b', () => setCount(prevCount => prevCount + 1))
+  const ref = useHotkeys('b', () => setCount((prevCount) => prevCount + 1))
 
   return (
-    <span ref={ref} tabIndex={-1}>Pressed the 'b' key {count} times.</span>
+    <span ref={ref} tabIndex={-1}>
+      Pressed the 'b' key {count} times.
+    </span>
   )
 }
 ```
@@ -31,7 +33,7 @@ function ExampleComponent() {
 We use the returned `ref` to scope the hotkey to this specific element. The `tabIndex={-1}` prop lets the `<span>` receive focus, since span elements are not focusable by default.
 :::
 
-***
+---
 
 ## The stale-state problem
 
@@ -43,7 +45,9 @@ function ExampleComponent() {
   const ref = useHotkeys('b', () => setCount(count + 1), [])
 
   return (
-    <span ref={ref} tabIndex={-1}>Pressed the 'b' key {count} times.</span>
+    <span ref={ref} tabIndex={-1}>
+      Pressed the 'b' key {count} times.
+    </span>
   )
 }
 ```
@@ -64,7 +68,9 @@ function ExampleComponent() {
   const ref = useHotkeys('b', () => setCount(squaredCount + 1), [squaredCount])
 
   return (
-    <span ref={ref} tabIndex={-1}>Pressed the 'b' key {squaredCount} times.</span>
+    <span ref={ref} tabIndex={-1}>
+      Pressed the 'b' key {squaredCount} times.
+    </span>
   )
 }
 ```

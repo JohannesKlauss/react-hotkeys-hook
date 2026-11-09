@@ -3,8 +3,8 @@ sidebar_position: 1
 title: useHotkeys
 ---
 
-import { useState } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
+import { useState } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 # useHotkeys API
 
@@ -15,11 +15,11 @@ function useHotkeys<T extends Element>(
   keys: string | string[],
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
   options: Options = {},
-  deps: any[] = []
+  deps: any[] = [],
 ): React.MutableRef<T | null>
 ```
 
-***
+---
 
 ## Arguments
 
@@ -41,7 +41,7 @@ useHotkeys('*', (_, handler) => alert(handler.key))
 #### Using modifiers
 
 ```jsx
-useHotkeys('ctrl+s, shift+w', () => alert('We\'re using modifiers now!'))
+useHotkeys('ctrl+s, shift+w', () => alert("We're using modifiers now!"))
 ```
 
 #### Using F keys
@@ -64,14 +64,18 @@ pressed.
 ```jsx
 useHotkeys('ctrl+a, shift+b, r, f', (_, handler) => {
   switch (handler.keys.join('')) {
-    case 'a': alert('You pressed ctrl+a!');
-      break;
-    case 'b': alert('You pressed shift+b!');
-      break;
-    case 'r': alert('You pressed r!');
-      break;
-    case 'f': alert('You pressed f!');
-      break;
+    case 'a':
+      alert('You pressed ctrl+a!')
+      break
+    case 'b':
+      alert('You pressed shift+b!')
+      break
+    case 'r':
+      alert('You pressed r!')
+      break
+    case 'f':
+      alert('You pressed f!')
+      break
   }
 })
 ```
@@ -83,14 +87,18 @@ This can also be an array:
 ```jsx
 useHotkeys(['ctrl+a', 'shift+b', 'r', 'f'], (_, handler) => {
   switch (handler.keys.join('')) {
-    case 'a': alert('You pressed ctrl+a!');
-      break;
-    case 'b': alert('You pressed shift+b!');
-      break;
-    case 'r': alert('You pressed r!');
-      break;
-    case 'f': alert('You pressed f!');
-      break;
+    case 'a':
+      alert('You pressed ctrl+a!')
+      break
+    case 'b':
+      alert('You pressed shift+b!')
+      break
+    case 'r':
+      alert('You pressed r!')
+      break
+    case 'f':
+      alert('You pressed f!')
+      break
   }
 })
 ```
@@ -113,7 +121,7 @@ useHotkeys(HOTKEYS, (_, { hotkey }) => {
 })
 ```
 
-***
+---
 
 ### `callback`
 
@@ -135,8 +143,8 @@ The `handler` holds information about the pressed key. In general, we should onl
 events.
 The most important property of the `handler` object is the `keys` prop:
 
-* `keys: string[]` - This will hold the pressed keystroke. So if we use multiple possible keystroke combinations for the same callback
-we can use this property to check which specific keystroke was pressed.
+- `keys: string[]` - This will hold the pressed keystroke. So if we use multiple possible keystroke combinations for the same callback
+  we can use this property to check which specific keystroke was pressed.
 
 > There are more properties attached to the handle that currently don't get populated with values. So we can safely ignore those.
 
@@ -148,7 +156,7 @@ dependencies array, otherwise we will get stale values. For more on memoisation 
 
 :::
 
-***
+---
 
 ### `options`
 
@@ -170,13 +178,13 @@ const options = {
   description: undefined,
   document: undefined,
   ignoreModifiers: false,
-};
+}
 ```
 
 ```ts
 // Type Definitions
 type Trigger = boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean)
-type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT';
+type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT'
 
 type Options = {
   enabled?: Trigger
@@ -191,7 +199,7 @@ type Options = {
   description?: string
   document?: Document
   ignoreModifiers?: boolean
-};
+}
 ```
 
 #### Properties
@@ -202,8 +210,8 @@ type Options = {
 enabled: boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean) // default: true
 ```
 
-Determines if the callback should get triggered. Return `false` to __prevent__ the execution
-of the callback and `true` to __allow__ the callback to be triggered. You can also pass a function that returns a boolean.
+Determines if the callback should get triggered. Return `false` to **prevent** the execution
+of the callback and `true` to **allow** the callback to be triggered. You can also pass a function that returns a boolean.
 
 ##### `enableOnFormTags`
 
@@ -247,7 +255,7 @@ splitKey: string // default: "+"
 ```
 
 Specifies the key that is used to combine multiple hotkeys into keystrokes. The default value is `+`, so `shift+a` triggers
-when the user presses the "shift" key __and__ the "a" key.
+when the user presses the "shift" key **and** the "a" key.
 
 ##### `scopes`
 
@@ -272,8 +280,8 @@ keydown: boolean // default: true
 
 Set this to `true` if we want the hook to trigger our callback on the browsers `keyDown` event. This is the default behavior.
 
-:::tip Setting `keydown` __and__ `keyup`
-If we set `keyup` to `true` and __don't__ set the `keydown` prop (leaving the default), React Hotkeys Hook will assume
+:::tip Setting `keydown` **and** `keyup`
+If we set `keyup` to `true` and **don't** set the `keydown` prop (leaving the default), React Hotkeys Hook will assume
 that we want to only listen to the browsers `keyUp` event.
 
 If we in fact want the callback to get triggered by both events, we have to explicitly set both properties like so:
@@ -281,7 +289,7 @@ If we in fact want the callback to get triggered by both events, we have to expl
 ```js
 useHotkeys('a', () => someCallback, {
   keydown: true,
-  keyup: true
+  keyup: true,
 })
 ```
 
@@ -294,7 +302,7 @@ preventDefault: boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysE
 ```
 
 This flag determines if the default browser behavior should be prevented. `false` is the default value, so the browser
-will proceed with its default behavior. Setting this to `true` will prevent __some__ of the default browser behavior.
+will proceed with its default behavior. Setting this to `true` will prevent **some** of the default browser behavior.
 
 A good example for this behavior is the override of `meta+s`, which normally triggers a save page dialog
 inside the browser.
@@ -303,7 +311,7 @@ inside the browser.
 useHotkeys('meta+s', someCallback, {
   // This will prevent the browser from showing the save page dialog
   preventDefault: true,
-});
+})
 ```
 
 ##### `document`
@@ -317,7 +325,7 @@ import FrameComponent from 'react-frame-component'
 const InsideFrameComponent = () => {
   const { document } = useFrame()
 
-  useHotkeys("s", () => console.log("I am triggered inside an iframe"), { document })
+  useHotkeys('s', () => console.log('I am triggered inside an iframe'), { document })
 
   return <div>....</div>
 }
@@ -325,7 +333,7 @@ const InsideFrameComponent = () => {
 function App() {
   return (
     <FrameComponent>
-      <InsideFrameComponent/>
+      <InsideFrameComponent />
     </FrameComponent>
   )
 }
@@ -348,9 +356,7 @@ function App() {
 
   const inputRef = useRef<HTMLInputElement>(null)
 
-  return (
-    <input type='text' ref={inputRef} placeholder="search via '/'" />
-  )
+  return <input type="text" ref={inputRef} placeholder="search via '/'" />
 }
 ```
 
@@ -365,12 +371,12 @@ So listening to something like `#` can or cannot involve a shift modifier.
 But there are also two different scenarios possible from our apps view:
 We could say that we want to listen to the `#` character, no matter if the user presses `Shift+3` or its own dedicated key.
 Here we can ignore any potential modifiers, so we set `ignoreModifiers: true`.
-But we could also say that we only want to listen to  `Shift+3`, no matter the produced character. In this case we do need to listen to the modifier.
+But we could also say that we only want to listen to `Shift+3`, no matter the produced character. In this case we do need to listen to the modifier.
 
 With this option, react-hotkeys-hook supports both ways.
 :::
 
-***
+---
 
 ### `deps`
 
@@ -393,20 +399,18 @@ trigger the hotkeys if a specific element has been focused by the user.
 
 ```jsx live
 function App() {
-  const [count, setCount] = useState(0);
-  const ref = useHotkeys("s", () => setCount((prevCount) => prevCount + 1));
+  const [count, setCount] = useState(0)
+  const ref = useHotkeys('s', () => setCount((prevCount) => prevCount + 1))
 
   return (
     <div>
-      <div style={{ padding: "30px" }}>Count: {count}</div>
-      <button style={{ padding: "30px", background: "teal" }}>
-        Focusing this area won't trigger the hotkey.
-      </button>
-      <button style={{ padding: "30px", background: "crimson" }} ref={ref}>
+      <div style={{ padding: '30px' }}>Count: {count}</div>
+      <button style={{ padding: '30px', background: 'teal' }}>Focusing this area won't trigger the hotkey.</button>
+      <button style={{ padding: '30px', background: 'crimson' }} ref={ref}>
         Focusing this area will trigger the hotkey.
       </button>
     </div>
-  );
+  )
 }
 ```
 
@@ -417,20 +421,20 @@ to the tag. This way the focusing will work with all tags.
 
 ```jsx live
 function App() {
-  const [count, setCount] = useState(0);
-  const ref = useHotkeys("s", () => setCount((prevCount) => prevCount + 1));
+  const [count, setCount] = useState(0)
+  const ref = useHotkeys('s', () => setCount((prevCount) => prevCount + 1))
 
   return (
     <div>
-      <div style={{ padding: "30px" }}>Count: {count}</div>
-      <div style={{ padding: "30px", background: "teal" }} tabIndex={0}>
+      <div style={{ padding: '30px' }}>Count: {count}</div>
+      <div style={{ padding: '30px', background: 'teal' }} tabIndex={0}>
         Focusing this area won't trigger the hotkey.
       </div>
-      <div style={{ padding: "30px", background: "crimson" }} ref={ref} tabIndex={0}>
+      <div style={{ padding: '30px', background: 'crimson' }} ref={ref} tabIndex={0}>
         Focusing this area will trigger the hotkey.
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -442,7 +446,7 @@ There is a common case where we want to pass dependencies to the hook but no opt
 to write that out like this:
 
 ```js
-useHotkeys('a', () => someDependency, undefined, [someDependency]);
+useHotkeys('a', () => someDependency, undefined, [someDependency])
 ```
 
 To streamline this use case the hook accepts function overloads. With this
@@ -452,12 +456,12 @@ we can pass a dependency array as the third argument instead of the fourth.
 function useHotkeys<T extends Element>(
   keys: string,
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
-  deps: any[] = []
+  deps: any[] = [],
 ): React.MutableRef<T | null>
 ```
 
 So we are able to use the hook like this:
 
 ```js
-useHotkeys('a', () => someDependency, [someDependency]);
+useHotkeys('a', () => someDependency, [someDependency])
 ```

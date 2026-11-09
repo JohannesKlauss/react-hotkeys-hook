@@ -11,7 +11,7 @@ sidebar_position: 4
 Import `isHotkeyPressed` from the package:
 
 ```js
-import { isHotkeyPressed } from 'react-hotkeys-hook';
+import { isHotkeyPressed } from 'react-hotkeys-hook'
 ```
 
 ### Check for pressed keys inside callbacks
@@ -20,17 +20,17 @@ A common use case is changing behavior based on whether a modifier key is held:
 
 ```jsx live
 function ExampleComponent() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
-  const onClick = () => isHotkeyPressed('shift')
-    ? setCount(count => count - 1)
-    : setCount(count => count + 1);
+  const onClick = () => (isHotkeyPressed('shift') ? setCount((count) => count - 1) : setCount((count) => count + 1))
 
   return (
     <div>
       <p>The count is: {count}</p>
       <button onClick={onClick}>Alter the count</button>
-      <p><small>Hold Shift while clicking to decrease.</small></p>
+      <p>
+        <small>Hold Shift while clicking to decrease.</small>
+      </p>
     </div>
   )
 }
@@ -42,9 +42,9 @@ Pass an array or a comma-delimited string to check if multiple keys are pressed 
 
 ```jsx live
 function ExampleComponent() {
-  const [pressed, setPressed] = useState(false);
+  const [pressed, setPressed] = useState(false)
 
-  const onClick = () => setPressed(isHotkeyPressed(['shift', 'a']));
+  const onClick = () => setPressed(isHotkeyPressed(['shift', 'a']))
 
   return (
     <div>

@@ -1,19 +1,29 @@
 {
   "name": "react-hotkeys-hook",
   "version": "5.3.2",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "test": "vitest",
-    "prepublishOnly": "vitest run && npm run build"
-  },
+  "keywords": [
+    "component",
+    "hook",
+    "hooks",
+    "hotkey",
+    "hotkeys",
+    "keyboard",
+    "keypress",
+    "react",
+    "shortcut",
+    "shortcuts"
+  ],
+  "homepage": "https://react-hotkeys-hook.vercel.app/",
+  "license": "MIT",
+  "author": "Johannes Klauss",
   "repository": {
     "type": "git",
     "url": "https://github.com/JohannesKlauss/react-keymap-hook.git"
   },
-  "homepage": "https://react-hotkeys-hook.vercel.app/",
-  "author": "Johannes Klauss",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -22,40 +32,28 @@
       "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "react",
-    "hook",
-    "hooks",
-    "component",
-    "hotkey",
-    "shortcut",
-    "keyboard",
-    "shortcuts",
-    "keypress",
-    "hotkeys"
-  ],
-  "license": "MIT",
-  "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+  "scripts": {
+    "dev": "vp pack --watch",
+    "build": "tsc -b && vp pack",
+    "test": "vp test",
+    "prepublishOnly": "vp test && npm run build"
   },
   "devDependencies": {
-    "@eslint/js": "10.0.1",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.1.2",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.8",
     "@types/node": "24.19.2",
-    "globals": "17.13.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.1.2",
     "jsdom": "29.1.1",
-    "typescript": "7.0.2",
-    "vite": "8.1.6",
-    "vitest": "4.1.12",
-    "vite-plugin-dts": "4.5.4"
+    "typescript": "7.1.0-beta",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+    "vite-plus": "1.4.0",
+    "vitest": "5.0.5"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   }
 }

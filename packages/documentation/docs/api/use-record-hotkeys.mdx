@@ -3,7 +3,7 @@ sidebar_position: 3
 title: useRecordHotkeys
 ---
 
-import { useRecordHotkeys } from "react-hotkeys-hook";
+import { useRecordHotkeys } from 'react-hotkeys-hook'
 
 # useRecordHotkeys API
 
@@ -12,13 +12,16 @@ Function signature:
 ```ts
 function useRecordHotkeys(
   useKey?: boolean,
-  blacklist?: string[]
-): [Set<string>, {
-  start: () => void,
-  stop: () => void,
-  resetKeys: () => void,
-  isRecording: boolean
-}]
+  blacklist?: string[],
+): [
+  Set<string>,
+  {
+    start: () => void
+    stop: () => void
+    resetKeys: () => void
+    isRecording: boolean
+  },
+]
 ```
 
 ## `useKey`
@@ -29,8 +32,8 @@ useKey: boolean // default: false
 
 By default, the hook records key codes (physical keys). Pass `true` to record the produced character instead.
 
-* `useKey: false` — records `"shift+1"` when the user presses Shift+1
-* `useKey: true` — records `"!"` when the user presses Shift+1 on a US layout
+- `useKey: false` — records `"shift+1"` when the user presses Shift+1
+- `useKey: true` — records `"!"` when the user presses Shift+1 on a US layout
 
 ## `blacklist`
 
@@ -41,10 +44,10 @@ blacklist: string[] // default: []
 Array of key names to ignore while recording. Blacklisted keys retain their default behavior and are not added to the recorded set.
 
 ```js
-const [keys, { start, stop }] = useRecordHotkeys(false, ['tab', 'enter']);
+const [keys, { start, stop }] = useRecordHotkeys(false, ['tab', 'enter'])
 ```
 
-***
+---
 
 ## Return value
 

@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: "Grouping Hotkeys together"
+title: 'Grouping Hotkeys together'
 ---
 
 # `HotkeysProvider`
@@ -10,7 +10,7 @@ title: "Grouping Hotkeys together"
 Wrap your application (or the relevant part of it) with `HotkeysProvider`:
 
 ```jsx
-import { HotkeysProvider } from 'react-hotkeys-hook';
+import { HotkeysProvider } from 'react-hotkeys-hook'
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
 Use the `scopes` option to assign a hotkey to one or more scopes:
 
 ```jsx
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys } from 'react-hotkeys-hook'
 
 function MyComponent() {
   useHotkeys('ctrl+a', () => console.log('ctrl+a'), { scopes: 'scopeA' })
@@ -52,10 +52,10 @@ If you assign a hotkey to a specific scope, it **leaves** the wildcard scope. It
 Use the `useHotkeysContext` hook to control scopes programmatically:
 
 ```jsx
-import { useHotkeysContext } from 'react-hotkeys-hook';
+import { useHotkeysContext } from 'react-hotkeys-hook'
 
 function MyComponent() {
-  const { enableScope, disableScope, toggleScope } = useHotkeysContext();
+  const { enableScope, disableScope, toggleScope } = useHotkeysContext()
 
   return (
     <div>
@@ -76,7 +76,7 @@ If your application has dynamic scope switching, you can read `activeScopes` fro
 Pass an array of scope names to the `initiallyActiveScopes` prop:
 
 ```jsx
-import { HotkeysProvider } from 'react-hotkeys-hook';
+import { HotkeysProvider } from 'react-hotkeys-hook'
 
 function App() {
   return (

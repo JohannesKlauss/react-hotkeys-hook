@@ -61,7 +61,7 @@ export default function useHotkeys<T extends HTMLElement>(
       ? dependencies
       : undefined
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: is exhaustive
+  // oxlint-disable-next-line react/exhaustive-deps -- Dependencies are supplied by the caller.
   const memoisedCB = useCallback(callback, _deps ?? [])
   const cbRef = useRef<HotkeyCallback>(memoisedCB)
 
@@ -90,7 +90,7 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     let recordedKeys: string[][] = []
-    let sequenceTimer: ReturnType<typeof setTimeout>[] = []
+    const sequenceTimer: ReturnType<typeof setTimeout>[] = []
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {
@@ -124,7 +124,7 @@ export default function useHotkeys<T extends HTMLElement>(
           return
         }
 
-        const rec = recordedKeys[index] ||= []
+        const rec = (recordedKeys[index] ||= [])
 
         const hotkey = parseHotkey(
           key,

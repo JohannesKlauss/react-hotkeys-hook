@@ -2,9 +2,9 @@
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+import CodeBlock from '@theme/CodeBlock'
 
 # Quick Start
 
@@ -15,9 +15,10 @@ The fastest way to get you going.
 <Tabs
   defaultValue="yarn"
   values={[
-    {label: 'Yarn', value: 'yarn'},
-    {label: 'NPM', value: 'npm'},
-  ]}>
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'NPM', value: 'npm' },
+  ]}
+>
   <TabItem value="yarn">
     <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
   </TabItem>
@@ -31,18 +32,16 @@ The fastest way to get you going.
 ## Usage
 
 ```jsx
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys } from 'react-hotkeys-hook'
 ```
 
 ```jsx live
 function MyComponent() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
-  useHotkeys('a', () => setCount(count => count + 1));
+  useHotkeys('a', () => setCount((count) => count + 1))
 
-  return (
-    <span>Pressed 'a' key {count} times.</span>
-  );
+  return <span>Pressed 'a' key {count} times.</span>
 }
 ```
 

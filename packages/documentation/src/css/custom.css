@@ -196,7 +196,9 @@ kbd {
   color: var(--kbd-text);
   vertical-align: middle;
   white-space: nowrap;
-  transition: transform 0.1s ease-out, border-color 0.15s ease-out;
+  transition:
+    transform 0.1s ease-out,
+    border-color 0.15s ease-out;
   box-shadow: 0 1px 0 var(--kbd-shadow);
 }
 

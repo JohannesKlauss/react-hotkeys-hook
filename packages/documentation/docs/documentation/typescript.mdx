@@ -13,24 +13,20 @@ React Hotkeys Hook is written in TypeScript and works seamlessly with TypeScript
 The `keys` argument must be a string or array of strings. TypeScript catches incorrect types at compile time:
 
 ```tsx
-import { useHotkeys } from "react-hotkeys-hook";
-import { useState } from "react";
+import { useHotkeys } from 'react-hotkeys-hook'
+import { useState } from 'react'
 
 interface Props {
-  hotKey: number; // ❌ wrong type
+  hotKey: number // ❌ wrong type
 }
 
 const MyComponent = ({ hotKey }: Props) => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
   // TypeScript error: hotKey must be a string
-  useHotkeys(hotKey, () => setCount(prevCount => prevCount + 1));
+  useHotkeys(hotKey, () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <div>
-      The count is {count}.
-    </div>
-  )
+  return <div>The count is {count}.</div>
 }
 ```
 
@@ -39,20 +35,17 @@ const MyComponent = ({ hotKey }: Props) => {
 When scoping hotkeys to a specific element, you can type the returned ref for full type safety:
 
 ```tsx
-import { useHotkeys } from "react-hotkeys-hook";
-import { useState } from "react";
+import { useHotkeys } from 'react-hotkeys-hook'
+import { useState } from 'react'
 
 interface Props {
-  hotKey: string;
+  hotKey: string
 }
 
 const MyComponent = ({ hotKey }: Props) => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
-  const ref = useHotkeys<HTMLDivElement>(
-    hotKey,
-    () => setCount(prevCount => prevCount + 1)
-  );
+  const ref = useHotkeys<HTMLDivElement>(hotKey, () => setCount((prevCount) => prevCount + 1))
 
   return (
     <div ref={ref} tabIndex={-1}>
@@ -72,7 +65,7 @@ useHotkeys('ctrl+s', handleSave, {
   preventDefault: true,
   scopes: ['editor'],
   enableOnFormTags: ['input', 'textarea'],
-});
+})
 ```
 
 ## Custom metadata
@@ -83,5 +76,5 @@ You can attach custom metadata to hotkeys for your own use cases (for example, b
 useHotkeys('ctrl+s', handleSave, {
   description: 'Save the current document',
   metadata: { category: 'file', showInHelp: true },
-});
+})
 ```

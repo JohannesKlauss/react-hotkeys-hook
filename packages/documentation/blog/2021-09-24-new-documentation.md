@@ -40,6 +40,7 @@ Make sure to use the Q&A category.
 Of course you can also ask your questions on [Stackoverflow](https://stackoverflow.com/search?page=1&tab=Relevance&q=react-hotkeys-hook).
 
 ### [Ask a question on Github Discussions](https://github.com/JohannesKlauss/react-hotkeys-hook/discussions/new)
+
 ### [Ask a question on Stackoverflow](https://stackoverflow.com/search?page=1&tab=Relevance&q=react-hotkeys-hook)
 
 Last but not least: thank you all for the ongoing interest in this package.

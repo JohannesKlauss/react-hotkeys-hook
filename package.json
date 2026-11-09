@@ -1,49 +1,55 @@
 {
   "name": "react-hotkeys-hook",
-  "description": "React hook for handling keyboard shortcuts",
   "version": "5.3.3",
-  "sideEffects": false,
+  "description": "React hook for handling keyboard shortcuts",
+  "keywords": [
+    "component",
+    "hook",
+    "hooks",
+    "hotkey",
+    "hotkeys",
+    "keyboard",
+    "keypress",
+    "react",
+    "shortcut",
+    "shortcuts"
+  ],
+  "homepage": "https://react-hotkeys-hook.vercel.app/",
+  "license": "MIT",
+  "author": "Johannes Klauss",
   "repository": {
     "type": "git",
     "url": "https://github.com/JohannesKlauss/react-keymap-hook.git"
   },
-  "homepage": "https://react-hotkeys-hook.vercel.app/",
-  "author": "Johannes Klauss",
-  "type": "module",
-  "main": "packages/react-hotkeys-hook/dist/index.js",
-  "types": "packages/react-hotkeys-hook/dist/index.d.ts",
+  "workspaces": [
+    "packages/*"
+  ],
   "files": [
     "packages/react-hotkeys-hook/dist"
   ],
-  "keywords": [
-    "react",
-    "hook",
-    "hooks",
-    "component",
-    "hotkey",
-    "shortcut",
-    "keyboard",
-    "shortcuts",
-    "keypress",
-    "hotkeys"
-  ],
-  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "packages/react-hotkeys-hook/dist/index.js",
+  "types": "packages/react-hotkeys-hook/dist/index.d.ts",
   "scripts": {
     "build": "npm run -w packages/react-hotkeys-hook build",
     "build:documentation": "npm run -w packages/documentation build",
     "test": "npm run -w packages/react-hotkeys-hook test",
     "prepublishOnly": "npm run test && npm run lint && npm run build",
-    "format": "npx @biomejs/biome format --write packages",
-    "lint": "npx @biomejs/biome lint --write packages"
+    "format": "vp fmt --write",
+    "lint": "vp lint packages"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "devDependencies": {
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "vite-plus": "1.4.0"
+  },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
-  "devDependencies": {
-    "@biomejs/biome": "2.6.3"
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+    "vitest": "5.0.5"
   }
 }

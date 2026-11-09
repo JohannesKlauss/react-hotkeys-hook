@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import useRecordHotkeys from '../lib/useRecordHotkeys'
 import userEvent from '@testing-library/user-event'
-import { test, expect } from 'vitest'
+import { test, expect } from 'vite-plus/test'
 
 test('Should set record flag to true if recording is in progress', () => {
   const { result } = renderHook(useRecordHotkeys)

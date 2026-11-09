@@ -14,12 +14,12 @@ function isHotkeyPressed(key: string | string[], splitKey: string = ','): boolea
 This function allows us to check if a specific key is pressed by the user.
 
 ```jsx
-const isHotkeyPressed = useIsHotkeyPressed();
+const isHotkeyPressed = useIsHotkeyPressed()
 
-const onClick = () => isHotkeyPressed('shift') ? setCount(count - 1) : setCount(count + 1);
+const onClick = () => (isHotkeyPressed('shift') ? setCount(count - 1) : setCount(count + 1))
 ```
 
-***
+---
 
 ## Arguments
 

@@ -3,8 +3,8 @@ sidebar_position: 1
 title: useHotkeys
 ---
 
-import { useState } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
+import { useState } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 # useHotkeys API
 
@@ -15,11 +15,11 @@ function useHotkeys<T extends Element>(
   keys: string | string[],
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
   options: Options = {},
-  deps: any[] = []
+  deps: any[] = [],
 ): React.RefCallback<T | null>
 ```
 
-***
+---
 
 ## Arguments
 
@@ -62,14 +62,18 @@ When multiple possible keys share the same callback, use `handler.keys` to deter
 ```jsx
 useHotkeys('ctrl+a, shift+b, r, f', (_, handler) => {
   switch (handler.keys.join('')) {
-    case 'a': alert('You pressed ctrl+a!');
-      break;
-    case 'b': alert('You pressed shift+b!');
-      break;
-    case 'r': alert('You pressed r!');
-      break;
-    case 'f': alert('You pressed f!');
-      break;
+    case 'a':
+      alert('You pressed ctrl+a!')
+      break
+    case 'b':
+      alert('You pressed shift+b!')
+      break
+    case 'r':
+      alert('You pressed r!')
+      break
+    case 'f':
+      alert('You pressed f!')
+      break
   }
 })
 ```
@@ -81,14 +85,18 @@ You can also pass an array:
 ```jsx
 useHotkeys(['ctrl+a', 'shift+b', 'r', 'f'], (_, handler) => {
   switch (handler.keys.join('')) {
-    case 'a': alert('You pressed ctrl+a!');
-      break;
-    case 'b': alert('You pressed shift+b!');
-      break;
-    case 'r': alert('You pressed r!');
-      break;
-    case 'f': alert('You pressed f!');
-      break;
+    case 'a':
+      alert('You pressed ctrl+a!')
+      break
+    case 'b':
+      alert('You pressed shift+b!')
+      break
+    case 'r':
+      alert('You pressed r!')
+      break
+    case 'f':
+      alert('You pressed f!')
+      break
   }
 })
 ```
@@ -103,15 +111,17 @@ const HOTKEYS = {
 
 useHotkeys(Object.values(HOTKEYS), (_, { hotkey }) => {
   switch (hotkey) {
-    case HOTKEYS.ACTION_A: alert('You pressed ctrl+a!');
-      break;
-    case HOTKEYS.ACTION_B: alert('You pressed shift+b!');
-      break;
+    case HOTKEYS.ACTION_A:
+      alert('You pressed ctrl+a!')
+      break
+    case HOTKEYS.ACTION_B:
+      alert('You pressed shift+b!')
+      break
   }
 })
 ```
 
-***
+---
 
 ### `callback`
 
@@ -129,11 +139,11 @@ The browser's native keyboard event. See [MDN](https://developer.mozilla.org/en-
 
 The `handler` object provides information about the matched hotkey:
 
-* `keys: string[]` — The keys that were pressed. Useful when multiple key combinations map to the same callback.
-* `hotkey: string` — The full hotkey string that matched (e.g. `'ctrl+a'`).
-* `scopes?: string | string[]` — The scope(s) assigned to this hotkey.
-* `description?: string` — The description assigned via options.
-* `metadata?: Record<string, unknown>` — Custom metadata assigned via options.
+- `keys: string[]` — The keys that were pressed. Useful when multiple key combinations map to the same callback.
+- `hotkey: string` — The full hotkey string that matched (e.g. `'ctrl+a'`).
+- `scopes?: string | string[]` — The scope(s) assigned to this hotkey.
+- `description?: string` — The description assigned via options.
+- `metadata?: Record<string, unknown>` — Custom metadata assigned via options.
 
 :::info The callback is memoized
 
@@ -141,7 +151,7 @@ The callback is memoized internally, so any variable referenced inside it must b
 
 :::
 
-***
+---
 
 ### `options`
 
@@ -167,13 +177,28 @@ const options = {
   sequenceSplitKey: '>',
   eventListenerOptions: undefined,
   metadata: undefined,
-};
+}
 ```
 
 ```ts
 // Type Definitions
 type Trigger = boolean | ((keyboardEvent: KeyboardEvent, hotkeysEvent: HotkeysEvent) => boolean)
-type FormTags = 'input' | 'textarea' | 'select' | 'INPUT' | 'TEXTAREA' | 'SELECT' | 'searchbox' | 'slider' | 'spinbutton' | 'menuitem' | 'menuitemcheckbox' | 'menuitemradio' | 'option' | 'radio' | 'textbox';
+type FormTags =
+  | 'input'
+  | 'textarea'
+  | 'select'
+  | 'INPUT'
+  | 'TEXTAREA'
+  | 'SELECT'
+  | 'searchbox'
+  | 'slider'
+  | 'spinbutton'
+  | 'menuitem'
+  | 'menuitemcheckbox'
+  | 'menuitemradio'
+  | 'option'
+  | 'radio'
+  | 'textbox'
 
 type Options = {
   enabled?: Trigger
@@ -193,7 +218,7 @@ type Options = {
   sequenceSplitKey?: string
   eventListenerOptions?: EventListenerOptions
   metadata?: Record<string, unknown>
-};
+}
 ```
 
 #### `enabled`
@@ -302,9 +327,10 @@ If you set `keyup: true` without explicitly setting `keydown`, the hook assumes 
 ```js
 useHotkeys('a', callback, {
   keydown: true,
-  keyup: true
+  keyup: true,
 })
 ```
+
 :::
 
 #### `preventDefault`
@@ -318,7 +344,7 @@ Prevent the browser's default behavior for the matched keystroke. Useful for ove
 ```js
 useHotkeys('meta+s', someCallback, {
   preventDefault: true,
-});
+})
 ```
 
 #### `description`
@@ -343,7 +369,7 @@ import FrameComponent from 'react-frame-component'
 const InsideFrameComponent = () => {
   const { document } = useFrame()
 
-  useHotkeys("s", () => console.log("Triggered inside iframe"), { document })
+  useHotkeys('s', () => console.log('Triggered inside iframe'), { document })
 
   return <div>....</div>
 }
@@ -363,9 +389,7 @@ function App() {
 
   const inputRef = useRef<HTMLInputElement>(null)
 
-  return (
-    <input type='text' ref={inputRef} placeholder="search via '/'" />
-  )
+  return <input type="text" ref={inputRef} placeholder="search via '/'" />
 }
 ```
 
@@ -409,7 +433,7 @@ metadata: Record<string, unknown> // default: undefined
 
 Attach arbitrary custom data to the hotkey. You can retrieve it from the `handler` object in the callback (`handler.metadata`). Useful for building dynamic shortcut registries or help panels.
 
-***
+---
 
 ### `deps`
 
@@ -429,20 +453,18 @@ See the [Callback Dependencies](/docs/documentation/useHotkeys/setting-callback-
 
 ```jsx live
 function App() {
-  const [count, setCount] = useState(0);
-  const ref = useHotkeys("s", () => setCount((prevCount) => prevCount + 1));
+  const [count, setCount] = useState(0)
+  const ref = useHotkeys('s', () => setCount((prevCount) => prevCount + 1))
 
   return (
     <div>
-      <div style={{ padding: "30px" }}>Count: {count}</div>
-      <button style={{ padding: "30px", background: "teal" }}>
-        Focusing this area won't trigger the hotkey.
-      </button>
-      <button style={{ padding: "30px", background: "crimson" }} ref={ref}>
+      <div style={{ padding: '30px' }}>Count: {count}</div>
+      <button style={{ padding: '30px', background: 'teal' }}>Focusing this area won't trigger the hotkey.</button>
+      <button style={{ padding: '30px', background: 'crimson' }} ref={ref}>
         Focusing this area will trigger the hotkey.
       </button>
     </div>
-  );
+  )
 }
 ```
 
@@ -451,22 +473,23 @@ Elements without native interactivity — like `<div>`, `<span>`, and `<p>` — 
 
 ```jsx live
 function App() {
-  const [count, setCount] = useState(0);
-  const ref = useHotkeys("s", () => setCount((prevCount) => prevCount + 1));
+  const [count, setCount] = useState(0)
+  const ref = useHotkeys('s', () => setCount((prevCount) => prevCount + 1))
 
   return (
     <div>
-      <div style={{ padding: "30px" }}>Count: {count}</div>
-      <div style={{ padding: "30px", background: "teal" }} tabIndex={0}>
+      <div style={{ padding: '30px' }}>Count: {count}</div>
+      <div style={{ padding: '30px', background: 'teal' }} tabIndex={0}>
         Focusing this area won't trigger the hotkey.
       </div>
-      <div style={{ padding: "30px", background: "crimson" }} ref={ref} tabIndex={0}>
+      <div style={{ padding: '30px', background: 'crimson' }} ref={ref} tabIndex={0}>
         Focusing this area will trigger the hotkey.
       </div>
     </div>
-  );
+  )
 }
 ```
+
 :::
 
 ## Function signature overloads
@@ -477,18 +500,18 @@ If you want to pass a dependency array but do not need any options, you can pass
 function useHotkeys<T extends Element>(
   keys: string,
   callback: (event: KeyboardEvent, handler: HotkeysEvent) => void,
-  deps: any[] = []
+  deps: any[] = [],
 ): React.RefCallback<T | null>
 ```
 
 So instead of:
 
 ```js
-useHotkeys('a', () => someDependency, undefined, [someDependency]);
+useHotkeys('a', () => someDependency, undefined, [someDependency])
 ```
 
 You can write:
 
 ```js
-useHotkeys('a', () => someDependency, [someDependency]);
+useHotkeys('a', () => someDependency, [someDependency])
 ```

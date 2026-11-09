@@ -11,7 +11,7 @@ import {
   useState,
 } from 'react'
 import { createEvent, fireEvent, render, screen, renderHook, within } from '@testing-library/react'
-import {test, expect, beforeEach, vi} from 'vitest'
+import { test, expect, beforeEach, vi } from 'vite-plus/test'
 
 const wrapper =
   (initialScopes?: string[]): JSXElementConstructor<{ children: ReactNode }> =>
@@ -448,9 +448,7 @@ test('should not trigger when sequence and combination are mixed', async () => {
   vi.advanceTimersByTime(200)
   await user.keyboard('t')
 
-  expect(console.warn).toHaveBeenCalledWith(
-    'Hotkey y>e+e>t contains both + and > which is not supported.',
-  )
+  expect(console.warn).toHaveBeenCalledWith('Hotkey y>e+e>t contains both + and > which is not supported.')
 
   expect(callback).not.toHaveBeenCalled()
 })
@@ -833,16 +831,19 @@ test('should ignore case of form tags', async () => {
   expect(getByTestId('form-tag')).toHaveValue('A')
 })
 
-test('should ignore event when ignoreEventWhen\'s condition matches', async () => {
+test("should ignore event when ignoreEventWhen's condition matches", async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
-  const Component = ({ cb, ignoreEventWhen }: {
-    cb: HotkeyCallback;
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
     ignoreEventWhen?: (e: KeyboardEvent) => boolean
   }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='ignore' data-testid={'test-button'} />
+    return <button className="ignore" data-testid={'test-button'} />
   }
 
   const eventCondition = (e: KeyboardEvent) => {
@@ -863,16 +864,19 @@ test('should ignore event when ignoreEventWhen\'s condition matches', async () =
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match', async () => {
+test("shouldn't ignore event when ignoreEventWhen's condition doesn't match", async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
-  const Component = ({ cb, ignoreEventWhen }: {
-    cb: HotkeyCallback;
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
     ignoreEventWhen?: (e: KeyboardEvent) => boolean
   }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='dont-ignore' data-testid={'test-button'} />
+    return <button className="dont-ignore" data-testid={'test-button'} />
   }
 
   const eventCondition = (e: KeyboardEvent) => {
@@ -896,13 +900,16 @@ test('shouldn\'t ignore event when ignoreEventWhen\'s condition doesn\'t match',
 test('should call ignoreEventWhen callback only when event is a hotkey match', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
-  const Component = ({ cb, ignoreEventWhen }: {
-    cb: HotkeyCallback;
+  const Component = ({
+    cb,
+    ignoreEventWhen,
+  }: {
+    cb: HotkeyCallback
     ignoreEventWhen?: (e: KeyboardEvent) => boolean
   }) => {
     useHotkeys<HTMLDivElement>('a', cb, { ignoreEventWhen })
 
-    return <button className='ignore' data-testid={'test-button'} />
+    return <button className="ignore" data-testid={'test-button'} />
   }
 
   const { getByTestId } = render(<Component cb={vi.fn()} ignoreEventWhen={callback} />)
@@ -1164,7 +1171,7 @@ test('should trigger when the ref is re-attached to another element', async () =
         <button data-testid={'toggle'} onClick={toggle}>
           Toggle
         </button>
-        {isVisible &&  (
+        {isVisible && (
           <div ref={ref} tabIndex={0} data-testid={'conditional-div'}>
             Conditionally rendered hotkey area
           </div>
@@ -1193,7 +1200,6 @@ test('should trigger when the ref is re-attached to another element', async () =
   // Presses outside the `conditional-div` should be ignored
   await userEvent.keyboard('A')
   expect(callback).toHaveBeenCalledTimes(2)
-
 })
 
 test('should allow * as a wildcard', async () => {
@@ -1219,27 +1225,21 @@ test('should listen to function keys f1-f16', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
-test.each([
-  'arrowUp',
-  'arrowDown',
-  'arrowLeft',
-  'arrowRight',
-  'space',
-  'enter',
-  'backspace',
-])('should allow named key %s', async (key) => {
-  const user = userEvent.setup()
-  const callback = vi.fn()
+test.each(['arrowUp', 'arrowDown', 'arrowLeft', 'arrowRight', 'space', 'enter', 'backspace'])(
+  'should allow named key %s',
+  async (key) => {
+    const user = userEvent.setup()
+    const callback = vi.fn()
 
-  renderHook(() => useHotkeys(key, callback))
+    renderHook(() => useHotkeys(key, callback))
 
-  await user.keyboard(key === 'space' ? '[Space]' : `{${key}}`)
+    await user.keyboard(key === 'space' ? '[Space]' : `{${key}}`)
 
-  expect(callback).toHaveBeenCalledTimes(1)
-})
+    expect(callback).toHaveBeenCalledTimes(1)
+  },
+)
 
-test.skip('should trigger when used in portals', async () => {
-})
+test.skip('should trigger when used in portals', async () => {})
 
 test('should parse options and dependencies correctly no matter their position', async () => {
   const user = userEvent.setup()
@@ -1555,8 +1555,7 @@ test('should call preventDefault option function with hotkey and keyboard event'
   const user = userEvent.setup()
   const preventDefault = vi.fn()
 
-  renderHook(() => useHotkeys('a', async () => {
-  }, { preventDefault }))
+  renderHook(() => useHotkeys('a', async () => {}, { preventDefault }))
 
   await user.keyboard('A')
 
@@ -1937,28 +1936,28 @@ test('should be disabled on form tags inside custom elements by default', async 
   const callback = vi.fn()
 
   customElements.define(
-    "custom-input",
+    'custom-input',
     class extends HTMLElement {
       constructor() {
-        super();
+        super()
 
-        const inputEle = document.createElement("input");
-        inputEle.setAttribute("type", "text");
-        inputEle.setAttribute("data-testid", "input");
+        const inputEle = document.createElement('input')
+        inputEle.setAttribute('type', 'text')
+        inputEle.setAttribute('data-testid', 'input')
 
         const shadowRoot = this.attachShadow({
-          mode: "open"
-        });
+          mode: 'open',
+        })
 
-        shadowRoot.appendChild(inputEle);
+        shadowRoot.appendChild(inputEle)
       }
     },
-  );
+  )
 
   const Component = ({ cb }: { cb: HotkeyCallback }) => {
     useHotkeys<HTMLDivElement>('a', cb)
 
-    return <custom-input data-testid={'form-tag'}/>
+    return <custom-input data-testid={'form-tag'} />
   }
 
   const { getByTestId } = render(<Component cb={callback} />)
@@ -2035,8 +2034,8 @@ test('Should trigger only produced key hotkeys', async () => {
   const callbackZ = vi.fn()
   const callbackY = vi.fn()
 
-  renderHook(() => useHotkeys(['z'], callbackZ, {useKey: true}))
-  renderHook(() => useHotkeys(['y'], callbackY, {useKey: true}))
+  renderHook(() => useHotkeys(['z'], callbackZ, { useKey: true }))
+  renderHook(() => useHotkeys(['y'], callbackY, { useKey: true }))
 
   await user.keyboard('Z')
   expect(callbackZ).toHaveBeenCalledTimes(1)

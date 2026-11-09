@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { isHotkeyPressed } from '../lib'
-import {test, expect} from 'vitest'
+import { test, expect } from 'vite-plus/test'
 
 test('clears keys without keyup events when Meta is released', async () => {
   const user = userEvent.setup()
@@ -126,10 +126,12 @@ test('Should clear pressed hotkeys when window blurs', async () => {
 
   expect(isHotkeyPressed('meta')).toBe(true)
 
-  window.document.dispatchEvent(new Event("blur", {
-    bubbles: true,
-    cancelable: true
-  }))
+  window.document.dispatchEvent(
+    new Event('blur', {
+      bubbles: true,
+      cancelable: true,
+    }),
+  )
 
   expect(isHotkeyPressed('meta')).toBe(false)
 })
@@ -185,10 +187,12 @@ test('Should clear pressed hotkeys when contextmenu opens', async () => {
 
   expect(isHotkeyPressed('meta')).toBe(true)
 
-  window.document.dispatchEvent(new Event("contextmenu", {
-    bubbles: true,
-    cancelable: true
-  }))
+  window.document.dispatchEvent(
+    new Event('contextmenu', {
+      bubbles: true,
+      cancelable: true,
+    }),
+  )
 
   // Stuck keys are cleared asynchronously for `contextmenu`. Must check after queue is clear.
   setTimeout(() => {

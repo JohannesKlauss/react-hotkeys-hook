@@ -2,13 +2,13 @@ import { render, act, renderHook } from '@testing-library/react'
 import { HotkeysProvider, useHotkeysContext, useHotkeys } from '../lib'
 import type { ReactNode } from 'react'
 import type { HotkeysContextType } from '../lib/HotkeysProvider'
-import {test, expect} from 'vitest'
+import { test, expect } from 'vite-plus/test'
 
 test('should render children', () => {
   const { getByText } = render(
     <HotkeysProvider>
       <div>Hello</div>
-    </HotkeysProvider>
+    </HotkeysProvider>,
   )
 
   expect(getByText('Hello')).toBeInTheDocument()
@@ -167,7 +167,7 @@ test('should update bound hotkeys when useHotkeys changes its scopes', () => {
       initialProps: {
         scopes: ['foo'],
       },
-    }
+    },
   )
 
   expect(result.current.hotkeys).toHaveLength(1)

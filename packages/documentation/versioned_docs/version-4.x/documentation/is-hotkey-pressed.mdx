@@ -11,7 +11,7 @@ This function allows us to check if the user is currently pressing down a key.
 Import the `isHotkeyPressed` function from the package:
 
 ```js
-import { isHotkeyPressed } from 'react-hotkeys-hook';
+import { isHotkeyPressed } from 'react-hotkeys-hook'
 ```
 
 or if you are using `require` style syntax:
@@ -22,7 +22,7 @@ const { isHotkeyPressed } = require('react-hotkeys-hook')
 const isHotkeyPressed = require('react-hotkeys-hook').isHotkeyPressed
 ```
 
-***
+---
 
 ### Check for pressed keys on callbacks
 
@@ -30,9 +30,9 @@ One common use case would be to check if the user holds down a modifier key.
 
 ```jsx live
 function ExampleComponent() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
-  const onClick = () => isHotkeyPressed('shift') ? setCount(count - 1) : setCount(count + 1);
+  const onClick = () => (isHotkeyPressed('shift') ? setCount(count - 1) : setCount(count + 1))
 
   return (
     <div>
