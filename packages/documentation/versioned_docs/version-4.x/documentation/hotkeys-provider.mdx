@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: "Grouping Hotkeys together"
+title: 'Grouping Hotkeys together'
 ---
 
 # `HotkeysProvider`
@@ -11,7 +11,7 @@ This is useful if you want to disable a group of hotkeys in a certain part of yo
 In order to use the grouping feature, you need to wrap your application with the `HotkeysProvider` component.
 
 ```jsx
-import { HotkeysProvider } from 'react-hotkeys-hook';
+import { HotkeysProvider } from 'react-hotkeys-hook'
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
 Grouping works by passing setting the scope option of a hotkey.
 
 ```jsx
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys } from 'react-hotkeys-hook'
 
 function MyComponent() {
   useHotkeys('ctrl+a', () => console.log('ctrl+a'), { scopes: 'scopeA' })
@@ -52,10 +52,10 @@ If you set a scope on a hotkey, it will **not** be part of the wildcard scope an
 You can enable and disable scopes by using the `useHotkeysContext` hook.
 
 ```jsx
-import { useHotkeysContext } from 'react-hotkeys-hook';
+import { useHotkeysContext } from 'react-hotkeys-hook'
 
 function MyComponent() {
-  const { enableScope, disableScope } = useHotkeysContext();
+  const { enableScope, disableScope } = useHotkeysContext()
 
   return (
     <div>
@@ -78,7 +78,7 @@ If your app is highly dynamic and you want to know which scopes are currently ac
 You can set the initially active scopes by passing an array of strings to the `initiallyActiveScopes` prop of the `HotkeysProvider`.
 
 ```jsx
-import { HotkeysProvider } from 'react-hotkeys-hook';
+import { HotkeysProvider } from 'react-hotkeys-hook'
 
 function App() {
   return (

@@ -50,7 +50,7 @@ export function parseHotkey(
   let isSequence = false
 
   // hotkey might contain a leading space from eg. `ctrl+a, shift+a`
-  // biome-ignore lint/style/noParameterAssign: Sanitation of args variable
+  // oxlint-disable-next-line no-param-reassign -- Sanitize the hotkey argument.
   hotkey = hotkey.trim()
 
   if (hotkey.includes(sequenceSplitKey)) {

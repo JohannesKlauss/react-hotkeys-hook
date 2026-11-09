@@ -61,7 +61,9 @@
   border-radius: var(--radius-sm);
   color: var(--ifm-font-color-secondary);
   cursor: pointer;
-  transition: color 0.15s ease-out, background 0.15s ease-out;
+  transition:
+    color 0.15s ease-out,
+    background 0.15s ease-out;
 }
 
 .heroCopy:hover {

@@ -14,48 +14,40 @@ React Hotkeys Hook is written in TypeScript and therefore ready to go with our T
 Using type safety to prevent the passing of parameters with an incorrect type.
 
 ```tsx
-import { useHotkeys } from "react-hotkeys-hook";
-import { useState } from "React";
+import { useHotkeys } from 'react-hotkeys-hook'
+import { useState } from 'React'
 
 interface Props {
-  hotKey: number;
+  hotKey: number
 }
 
-const MyComponent = ({hotKey}: Props) => {
-  const [count, setCount] = useState(0);
+const MyComponent = ({ hotKey }: Props) => {
+  const [count, setCount] = useState(0)
 
   // This will produce an error, because hotKey has to be of type string.
-  useHotkeys(hotKey, () => setCount(prevCount => prevCount + 1));
+  useHotkeys(hotKey, () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <div>
-      The count is {count}.
-    </div>
-  )
+  return <div>The count is {count}.</div>
 }
 ```
 
-***
+---
 
 Using TypeScript with refs.
 
 ```tsx
-import { useHotkeys } from "react-hotkeys-hook";
-import { useState } from "React";
+import { useHotkeys } from 'react-hotkeys-hook'
+import { useState } from 'React'
 
 interface Props {
-  hotKey: string;
+  hotKey: string
 }
 
-const MyComponent = ({hotKey}: Props) => {
-  const [count, setCount] = useState(0);
+const MyComponent = ({ hotKey }: Props) => {
+  const [count, setCount] = useState(0)
 
-  const ref = useHotkeys<HTMLDivElement>(hotKey, () => setCount(prevCount => prevCount + 1));
+  const ref = useHotkeys<HTMLDivElement>(hotKey, () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <div ref={ref}>
-      The count is {count}.
-    </div>
-  )
+  return <div ref={ref}>The count is {count}.</div>
 }
 ```

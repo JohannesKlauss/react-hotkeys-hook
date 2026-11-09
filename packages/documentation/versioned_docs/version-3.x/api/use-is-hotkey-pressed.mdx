@@ -20,7 +20,7 @@ This hook allows us to check on function execution if a specific key is pressed 
 If a user presses a button we might want to check if a key is pressed down to execute an alternative action for that button.
 
 ```jsx
-const isHotkeyPressed = useIsHotkeyPressed();
+const isHotkeyPressed = useIsHotkeyPressed()
 
-const onClick = () => isHotkeyPressed('shift') ? setCount(count - 1) : setCount(count + 1);
+const onClick = () => (isHotkeyPressed('shift') ? setCount(count - 1) : setCount(count + 1))
 ```

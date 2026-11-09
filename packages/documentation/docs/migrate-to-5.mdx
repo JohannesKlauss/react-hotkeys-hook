@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: "Migrate from 4.x to 5.x"
+title: 'Migrate from 4.x to 5.x'
 ---
 
 # Migrate from 4.x to 5.x
@@ -14,14 +14,16 @@ Version 5 introduces a few breaking changes. This guide walks you through updati
 Starting with version 5, `useHotkeys` listens to the physical key **code** instead of the produced **character** by default.
 
 **What this means:**
-* In v4, `useHotkeys('!', callback)` would trigger when the user typed `!`.
-* In v5, `useHotkeys('!', callback)` does **not** work by default, because `!` is not a physical key code.
+
+- In v4, `useHotkeys('!', callback)` would trigger when the user typed `!`.
+- In v5, `useHotkeys('!', callback)` does **not** work by default, because `!` is not a physical key code.
 
 **How to migrate:**
 
 If you were listening to special characters, you have two options:
 
 1. **Listen to the physical keystroke** (layout-independent):
+
    ```js
    // v5 default behavior
    useHotkeys('shift+1', callback)
@@ -44,10 +46,10 @@ If **all** scopes are disabled in `HotkeysProvider`, no hotkeys will be active.
 
 In v4, the option names for combining and separating keys were confusing:
 
-| v4 name | v5 name | Purpose |
-|---------|---------|---------|
-| `combinationKey` | `splitKey` | Character that joins keys within a combination (default: `+`) |
-| `splitKey` | `delimiter` | Character that separates different hotkey combinations (default: `,`) |
+| v4 name          | v5 name     | Purpose                                                               |
+| ---------------- | ----------- | --------------------------------------------------------------------- |
+| `combinationKey` | `splitKey`  | Character that joins keys within a combination (default: `+`)         |
+| `splitKey`       | `delimiter` | Character that separates different hotkey combinations (default: `,`) |
 
 **Migration:**
 

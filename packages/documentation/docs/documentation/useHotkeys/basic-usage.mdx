@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: "Basic Usage"
+title: 'Basic Usage'
 ---
 
 # useHotkeys
@@ -14,7 +14,7 @@ Every code example on this page is editable — change the code and see the resu
 ## Import
 
 ```js
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys } from 'react-hotkeys-hook'
 ```
 
 Or with `require`:
@@ -33,32 +33,28 @@ The simplest use case is binding a single key to a callback:
 function ExampleComponent() {
   useHotkeys('a', () => alert('Key a was pressed'))
 
-  return (
-    <span>Press the a key to see it work.</span>
-  )
+  return <span>Press the a key to see it work.</span>
 }
 ```
 
 > Click inside the live preview area to focus it before pressing keys.
 
-***
+---
 
 Inside the callback you can do anything. A common pattern is updating component state:
 
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('b', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('b', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <span>Pressed the 'b' key {count} times.</span>
-  )
+  return <span>Pressed the 'b' key {count} times.</span>
 }
 ```
 
 `useHotkeys` attaches the listener when the component mounts and removes it when the component unmounts.
 
-***
+---
 
 ## Multiple hotkeys per component
 
@@ -67,16 +63,14 @@ Since `useHotkeys` is a hook, you can call it multiple times in the same compone
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('q', () => setCount(prevCount => prevCount + 1))
-  useHotkeys('w', () => setCount(prevCount => prevCount - 1))
+  useHotkeys('q', () => setCount((prevCount) => prevCount + 1))
+  useHotkeys('w', () => setCount((prevCount) => prevCount - 1))
 
-  return (
-    <span>The count is {count}.</span>
-  )
+  return <span>The count is {count}.</span>
 }
 ```
 
-***
+---
 
 ## Key combinations
 
@@ -102,11 +96,9 @@ You are not limited to two keys. Combinations like `ctrl+shift+a+c` are also val
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+shift+a+c', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('ctrl+shift+a+c', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <span>Pressed the 'ctrl+shift+a+c' key {count} times.</span>
-  )
+  return <span>Pressed the 'ctrl+shift+a+c' key {count} times.</span>
 }
 ```
 
@@ -114,7 +106,7 @@ function ExampleComponent() {
 It does not matter whether you write `CTRL+S`, `Ctrl+s`, `ctrl+S`, or any other case variation. They all listen for the `ctrl` and `s` keys. Uppercase letters are treated as lowercase — to listen for an uppercase `S`, use `shift+s`.
 :::
 
-***
+---
 
 ## Multiple bindings for one callback
 
@@ -123,11 +115,9 @@ You can bind several different key combinations to the same callback by separati
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+shift+a+c, c, shift+c', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('ctrl+shift+a+c, c, shift+c', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <span>Received the combination {count} times.</span>
-  )
+  return <span>Received the combination {count} times.</span>
 }
 ```
 
@@ -137,7 +127,7 @@ You can also pass an array as the first argument: `useHotkeys(['ctrl+shift+a+c',
 The `ctrl+shift+a+c` and `shift+c` combinations are used by multiple examples on this page. If you already pressed one of them, the example above may start with a count greater than zero. Hotkeys are attached globally unless you use the returned ref to scope them.
 :::
 
-***
+---
 
 ## Sequential hotkeys
 
@@ -146,45 +136,42 @@ You can listen for keys pressed in sequence using the `>` character:
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('g>h>i', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('g>h>i', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <span>Received the combination {count} times.</span>
-  )
+  return <span>Received the combination {count} times.</span>
 }
 ```
 
 In this example, the user must press `g`, then `h`, then `i` in order to trigger the callback.
 
 #### Timeout
+
 By default, `useHotkeys` allows **1 second** between each key in a sequence. If the user does not press the next key within that window, the sequence resets. You can change this with the `sequenceTimeoutMs` option:
 
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('g>h>i>j', () => setCount(prevCount => prevCount + 1), {
+  useHotkeys('g>h>i>j', () => setCount((prevCount) => prevCount + 1), {
     sequenceTimeoutMs: 10000,
   })
 
-  return (
-    <span>Received the combination {count} times.</span>
-  )
+  return <span>Received the combination {count} times.</span>
 }
 ```
 
 Here the user has 10 seconds between each key to complete the `g>h>i>j` sequence (up to 30 seconds total for all four keys).
 
-***
+---
 
 ## Modifiers
 
 `useHotkeys` supports the following modifier keys:
 
-* `shift`
-* `alt`
-* `ctrl`
-* `meta`
-* `mod` — triggers on **either** `ctrl` or `meta`, regardless of platform. This is commonly used as `ctrl` on Windows/Linux and `cmd` on macOS.
+- `shift`
+- `alt`
+- `ctrl`
+- `meta`
+- `mod` — triggers on **either** `ctrl` or `meta`, regardless of platform. This is commonly used as `ctrl` on Windows/Linux and `cmd` on macOS.
 
 :::info `mod` listens to both modifier keys
 `mod` is an alias that triggers if **either** `ctrl` or `meta` is pressed. If you need to listen to the platform's primary modifier **exclusively** (e.g. only `cmd` on macOS or only `ctrl` on Windows), use `ctrl` or `meta` directly instead of `mod`.
@@ -197,42 +184,37 @@ Since version 4, `alt` and `option` are treated as identical. The `meta` key is 
 ```jsx live
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys(
-    'ctrl+shift+a+c, c, shift+c, alt+n, ctrl+d, meta+d',
-    () => setCount(prevCount => prevCount + 1)
-  )
+  useHotkeys('ctrl+shift+a+c, c, shift+c, alt+n, ctrl+d, meta+d', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <span>Received the combination {count} times.</span>
-  )
+  return <span>Received the combination {count} times.</span>
 }
 ```
 
-***
+---
 
 ## Special keys
 
 Arrow keys, return, space, and other special keys have dedicated names:
 
-* `backspace`
-* `tab`
-* `clear`
-* `enter` or `return`
-* `esc` or `escape`
-* `space`
-* `up`, `down`, `left`, `right`
-* `pageup`, `pagedown`
-* `del` or `delete`
-* `f1`, `f2` ... `f19`
+- `backspace`
+- `tab`
+- `clear`
+- `enter` or `return`
+- `esc` or `escape`
+- `space`
+- `up`, `down`, `left`, `right`
+- `pageup`, `pagedown`
+- `del` or `delete`
+- `f1`, `f2` ... `f19`
 
 :::caution Browsers reserve some shortcuts
 Some shortcuts cannot be overridden because they are essential to the browser's safe browsing experience. In Chrome, for example:
 
-* `meta+w` — close tab
-* `meta+n` — new window
-* `meta+t` — new tab
-* `meta+shift+w` — close all tabs of the current window
-* `meta+shift+n` — open incognito window
-* `meta+shift+t` — reopen last closed tab
-* `meta+1..9` — focus corresponding tab
-:::
+- `meta+w` — close tab
+- `meta+n` — new window
+- `meta+t` — new tab
+- `meta+shift+w` — close all tabs of the current window
+- `meta+shift+n` — open incognito window
+- `meta+shift+t` — reopen last closed tab
+- `meta+1..9` — focus corresponding tab
+  :::

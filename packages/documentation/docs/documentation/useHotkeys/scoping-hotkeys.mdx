@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: "Scoping Hotkeys"
+title: 'Scoping Hotkeys'
 ---
 
 # Scoping hotkeys to components
@@ -15,27 +15,23 @@ By default, hotkeys are attached globally — there is no built-in scoping mecha
 ```jsx live noInline
 function UnscopedHotkey() {
   const [count, setCount] = useState(0)
-  useHotkeys('c', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('c', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <p>The count is {count}.</p>
-  )
+  return <p>The count is {count}.</p>
 }
 
 function SecondUnscopedHotkey() {
   const [count, setCount] = useState(0)
-  useHotkeys('c', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('c', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <p>The count is {count}.</p>
-  )
+  return <p>The count is {count}.</p>
 }
 
 render(
   <div>
-    <UnscopedHotkey/>
-    <SecondUnscopedHotkey/>
-  </div>
+    <UnscopedHotkey />
+    <SecondUnscopedHotkey />
+  </div>,
 )
 ```
 
@@ -44,44 +40,40 @@ Every time you press the `c` key, both counters increment. To isolate a hotkey t
 ```jsx live noInline
 function ScopedHotkey() {
   const [count, setCount] = useState(0)
-  const ref = useHotkeys('shift+a', () => setCount(prevCount => prevCount + 1))
+  const ref = useHotkeys('shift+a', () => setCount((prevCount) => prevCount + 1))
 
   return (
     <>
       <p>The count is {count}. Click anywhere except the button to disable the hotkey.</p>
-      <button ref={ref}>
-        Click me to enable the hotkey
-      </button>
+      <button ref={ref}>Click me to enable the hotkey</button>
     </>
   )
 }
 
 function SecondScopedHotkey() {
   const [count, setCount] = useState(0)
-  const ref = useHotkeys('shift+a', () => setCount(prevCount => prevCount + 1))
+  const ref = useHotkeys('shift+a', () => setCount((prevCount) => prevCount + 1))
 
   return (
     <>
       <p>The count is {count}. Click anywhere except the button to disable the hotkey.</p>
-      <button ref={ref}>
-        Click me to enable the hotkey
-      </button>
+      <button ref={ref}>Click me to enable the hotkey</button>
     </>
   )
 }
 
 render(
   <div>
-    <ScopedHotkey/>
-    <hr/>
-    <SecondScopedHotkey/>
-  </div>
+    <ScopedHotkey />
+    <hr />
+    <SecondScopedHotkey />
+  </div>,
 )
 ```
 
 Now each hotkey only fires when its assigned button has focus. You can use this technique for any hotkey, not just duplicates.
 
-***
+---
 
 ## Scoping with non-focusable elements
 
@@ -90,10 +82,10 @@ Relying on a button for focus is rarely useful in real applications. More often,
 ```jsx live
 function ScopedHotkey() {
   const [count, setCount] = useState(0)
-  const ref = useHotkeys('shift+a', () => setCount(prevCount => prevCount + 1))
+  const ref = useHotkeys('shift+a', () => setCount((prevCount) => prevCount + 1))
 
   return (
-    <div ref={ref} tabIndex={-1} style={{border: '2px solid #9e768f', padding: '12px'}}>
+    <div ref={ref} tabIndex={-1} style={{ border: '2px solid #9e768f', padding: '12px' }}>
       <p>The count is {count}. Click inside this area to enable the hotkey.</p>
     </div>
   )
@@ -104,7 +96,7 @@ function ScopedHotkey() {
 Setting `tabIndex` to `-1` makes an element focusable via JavaScript or mouse click, but keeps it out of the keyboard tab order. This prevents accidental disruption of the page's natural tab flow. For more details, see the [MDN page on tabindex](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex).
 :::
 
-***
+---
 
 ## Nesting scoped hotkeys
 
@@ -113,21 +105,21 @@ Scoped hotkeys also work with nested components:
 ```jsx live noInline
 function NestedScopedHotkey() {
   const [count, setCount] = useState(0)
-  const ref = useHotkeys('shift+a', () => setCount(prevCount => prevCount + 1))
+  const ref = useHotkeys('shift+a', () => setCount((prevCount) => prevCount + 1))
 
   return (
-    <div ref={ref} tabIndex={-1} style={{border: '2px solid deeppink', padding: '12px'}}>
+    <div ref={ref} tabIndex={-1} style={{ border: '2px solid deeppink', padding: '12px' }}>
       <p>The count is {count}. Click inside this area to enable the hotkey.</p>
     </div>
   )
 }
 
-function ScopedHotkey({children}) {
+function ScopedHotkey({ children }) {
   const [count, setCount] = useState(0)
-  const ref = useHotkeys('shift+a', () => setCount(prevCount => prevCount + 1))
+  const ref = useHotkeys('shift+a', () => setCount((prevCount) => prevCount + 1))
 
   return (
-    <div ref={ref} tabIndex={-1} style={{border: '2px solid #9e768f', padding: '12px'}}>
+    <div ref={ref} tabIndex={-1} style={{ border: '2px solid #9e768f', padding: '12px' }}>
       <p>The count is {count}. Click inside this area to enable the hotkey.</p>
       {children}
     </div>
@@ -136,8 +128,8 @@ function ScopedHotkey({children}) {
 
 render(
   <ScopedHotkey>
-    <NestedScopedHotkey/>
-  </ScopedHotkey>
+    <NestedScopedHotkey />
+  </ScopedHotkey>,
 )
 ```
 

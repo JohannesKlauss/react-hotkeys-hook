@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-title: "Disable/Enable Hotkeys"
+title: 'Disable/Enable Hotkeys'
 ---
 
 # Disable/Enable Hotkeys
@@ -21,13 +21,13 @@ Using the `enabled` flag in the options object, we can dynamically tell `useHotk
 function ExampleComponent() {
   const [enabled, setEnabled] = useState(false)
   const [count, setCount] = useState(0)
-  useHotkeys('b', () => setCount(prevCount => prevCount + 1), {
+  useHotkeys('b', () => setCount((prevCount) => prevCount + 1), {
     enabled,
   })
 
   return (
     <div>
-      <button onClick={() => setEnabled(prevValue => !prevValue)}>Toggle Hotkey</button>
+      <button onClick={() => setEnabled((prevValue) => !prevValue)}>Toggle Hotkey</button>
       <p>Hotkey is {!enabled && 'not'} enabled.</p>
       <p>Pressed the 'b' key {count} times.</p>
     </div>
@@ -44,7 +44,7 @@ If we use the returned `ref` of the callback to scope our hotkey to a specific s
 this will automatically activate or deactivate our hotkey depending on which part of the page has active focus.
 :::
 
-***
+---
 
 ## Prevent default browser behavior
 
@@ -58,10 +58,14 @@ To prevent the default browser behavior, we can just set `preventDefault` to tru
 
 ```jsx live
 function ExampleComponent() {
-  useHotkeys('meta+s', () => {
-    alert('We saved your progress!')
-    // ... set up our own saving dialog.
-  }, { preventDefault: true })
+  useHotkeys(
+    'meta+s',
+    () => {
+      alert('We saved your progress!')
+      // ... set up our own saving dialog.
+    },
+    { preventDefault: true },
+  )
 
   return (
     <div>
@@ -80,7 +84,7 @@ Additionally `meta + shift + w` (closing all tabs of the current window), `meta 
 `meta + up + 1..9` on the other hand focuses the corresponding tab of the active window and also cannot be overridden.
 :::
 
-***
+---
 
 ### Disable callback execution
 
@@ -91,8 +95,8 @@ from the DOM. To keep the event listeners but not execute the callback, we can g
 function ExampleComponent() {
   useHotkeys('option+b', () => alert('Callback got executed'), {
     enabled: (event, hotkeysEvent) => {
-      return true;
-    }
+      return true
+    },
   })
 
   return (
@@ -128,7 +132,7 @@ If we set `enabled` to `() => false` our callback still won't get executed, but 
 browser behavior will happen.
 :::
 
-***
+---
 
 ### Enable hotkeys on form fields
 
@@ -143,14 +147,18 @@ enable the hotkey on certain form fields. We can use the `enableOnFormTags` opti
 
 ```jsx
 function ExampleComponent() {
-  useHotkeys('meta+s', (e) => {
-    e.preventDefault()
+  useHotkeys(
+    'meta+s',
+    (e) => {
+      e.preventDefault()
 
-    alert('We saved your progress!')
-    // ... set up our own saving dialog.
-  }, {
-    enableOnFormTags: ['input', 'select', 'textarea']
-  })
+      alert('We saved your progress!')
+      // ... set up our own saving dialog.
+    },
+    {
+      enableOnFormTags: ['input', 'select', 'textarea'],
+    },
+  )
 
   return (
     <div>
@@ -164,7 +172,7 @@ We tell `useHotkeys` that the given keystrokes should be listened to and the cal
 focusing an input, select or textarea field. To enable the hotkey on any input tag, set the `enableOnFormTags`
 option to `true`.
 
-***
+---
 
 ### Enable hotkeys on tags leveraging `contentEditable`
 
@@ -180,10 +188,6 @@ function ExampleComponent() {
     enableOnContentEditable: true,
   })
 
-  return (
-    <div contentEditable={true}>
-      You can edit this text and still use all the active shortcuts.
-    </div>
-  )
+  return <div contentEditable={true}>You can edit this text and still use all the active shortcuts.</div>
 }
 ```

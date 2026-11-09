@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-title: "useRecordHotkeys"
+title: 'useRecordHotkeys'
 ---
 
 # useRecordHotkeys
@@ -12,7 +12,7 @@ title: "useRecordHotkeys"
 Import the hook from the package:
 
 ```js
-import { useRecordHotkeys } from 'react-hotkeys-hook';
+import { useRecordHotkeys } from 'react-hotkeys-hook'
 ```
 
 ### Record hotkeys
@@ -45,7 +45,7 @@ Pass a `blacklist` array as the second argument to exclude certain keys from bei
 
 ```jsx live
 function ExampleWithBlacklist() {
-  const [keys, { start, stop, resetKeys, isRecording }] = useRecordHotkeys(false, ['tab', 'enter']);
+  const [keys, { start, stop, resetKeys, isRecording }] = useRecordHotkeys(false, ['tab', 'enter'])
 
   return (
     <div>
@@ -55,7 +55,7 @@ function ExampleWithBlacklist() {
       <button onClick={stop}>Stop</button>
       <button onClick={resetKeys}>Reset Keys</button>
     </div>
-  );
+  )
 }
 ```
 
@@ -64,5 +64,5 @@ function ExampleWithBlacklist() {
 By default, `useRecordHotkeys` records key codes (physical keys). To record the produced character instead, pass `true` as the first argument:
 
 ```jsx
-const [keys, controls] = useRecordHotkeys(true); // records characters like "!" instead of "shift+1"
+const [keys, controls] = useRecordHotkeys(true) // records characters like "!" instead of "shift+1"
 ```

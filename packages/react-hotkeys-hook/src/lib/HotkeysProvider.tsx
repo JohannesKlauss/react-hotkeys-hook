@@ -52,12 +52,11 @@ export const HotkeysProvider = ({ initiallyActiveScopes = ['*'], children }: Pro
     setInternalActiveScopes((prev) => {
       if (prev.includes(scope)) {
         return prev.filter((s) => s !== scope)
-      } else {
-        if (prev.includes('*')) {
-          return [scope]
-        }
-        return Array.from(new Set([...prev, scope]))
       }
+      if (prev.includes('*')) {
+        return [scope]
+      }
+      return Array.from(new Set([...prev, scope]))
     })
   }, [])
 

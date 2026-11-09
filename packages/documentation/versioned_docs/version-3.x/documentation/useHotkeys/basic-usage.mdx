@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: "Basic Usage"
+title: 'Basic Usage'
 ---
 
-import UnreferencedHotkeysNotice from '@site/src/components/UnreferencedHotkeysNotice';
+import UnreferencedHotkeysNotice from '@site/src/components/UnreferencedHotkeysNotice'
 
 # useHotkeys
 
@@ -20,7 +20,7 @@ immediately see the results of our changes.
 Import the `useHotkeys` hook from the package:
 
 ```js
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys } from 'react-hotkeys-hook'
 ```
 
 or when using `require` style syntax:
@@ -40,32 +40,28 @@ hits that key.
 function ExampleComponent() {
   useHotkeys('a', () => alert('Key a was pressed'))
 
-  return (
-    <span>Press the a key to see it work.</span>
-  )
+  return <span>Press the a key to see it work.</span>
 }
 ```
 
 > The hotkeys won't work if any of the Live Editor windows are focused.
 
-***
+---
 
 Inside the callback we can do whatever we like. One common use case is to alter some component state:
 
 ```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('b', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('b', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <span>Pressed the 'b' key {count} times.</span>
-  )
+  return <span>Pressed the 'b' key {count} times.</span>
 }
 ```
 
 `useHotkeys` will create the listener on component mount and destroy the listener once the component unmounts.
 
-***
+---
 
 ## Multiple hotkeys per component
 
@@ -74,16 +70,14 @@ Since `useHotkeys` is a hook, we can use it in one component as much as we like:
 ```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('q', () => setCount(prevCount => prevCount + 1))
-  useHotkeys('w', () => setCount(prevCount => prevCount - 1))
+  useHotkeys('q', () => setCount((prevCount) => prevCount + 1))
+  useHotkeys('w', () => setCount((prevCount) => prevCount - 1))
 
-  return (
-    <span>The count is {count}.</span>
-  )
+  return <span>The count is {count}.</span>
 }
 ```
 
-***
+---
 
 ## Keystrokes
 
@@ -111,11 +105,9 @@ intuitive keystroke for a user to memorize, though).
 ```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+shift+a+c', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('ctrl+shift+a+c', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <span>Pressed the 'ctrl+shift+a+c' key {count} times.</span>
-  )
+  return <span>Pressed the 'ctrl+shift+a+c' key {count} times.</span>
 }
 ```
 
@@ -126,7 +118,7 @@ are treated as lower case letters. If we want to listen to the user pressing the
 to `shift+s`.
 :::
 
-***
+---
 
 ## Multiple hotkeys
 
@@ -136,27 +128,25 @@ a comma sign:
 ```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys('ctrl+shift+a+c, c, shift+c', () => setCount(prevCount => prevCount + 1))
+  useHotkeys('ctrl+shift+a+c, c, shift+c', () => setCount((prevCount) => prevCount + 1))
 
-  return (
-    <span>Received the combination {count} times.</span>
-  )
+  return <span>Received the combination {count} times.</span>
 }
 ```
 
-<UnreferencedHotkeysNotice hotkeyCombination={'ctrl+shift+a+c, shift+c'}/>
+<UnreferencedHotkeysNotice hotkeyCombination={'ctrl+shift+a+c, shift+c'} />
 
-***
+---
 
 ## Modifiers & Special keys
 
 Of course, we also want to leverage more complex keystrokes. `useHotkeys` supports the following modifiers:
 
-* `shift`
-* `option`
-* `alt`
-* `ctrl` or `control`
-* `command` or `cmd`
+- `shift`
+- `option`
+- `alt`
+- `ctrl` or `control`
+- `command` or `cmd`
 
 `cmd`/`command` as well as `ctrl`/`control` can be used synonymously.
 
@@ -171,33 +161,30 @@ work with macOS. We need to use `option`. Also, most shortcuts on Windows and Li
 ```jsx
 function ExampleComponent() {
   const [count, setCount] = useState(0)
-  useHotkeys(
-    'ctrl+shift+a+c, c, shift+c, alt+n, option+n, ctrl+d, command+d, control+d, cmd+d',
-    () => setCount(prevCount => prevCount + 1)
+  useHotkeys('ctrl+shift+a+c, c, shift+c, alt+n, option+n, ctrl+d, command+d, control+d, cmd+d', () =>
+    setCount((prevCount) => prevCount + 1),
   )
 
-  return (
-    <span>Received the combination {count} times.</span>
-  )
+  return <span>Received the combination {count} times.</span>
 }
 ```
 
-***
+---
 
 There are also special keys like arrows, return, space bar, etc. that have their own name that can be used:
 
-* `backspace`
-* `tab`
-* `clear`
-* `enter` or `return`
-* `esc` or `escape`
-* `space`
-* `up`, `down`, `left`, `right`
-* `home`
-* `end`
-* `pageup`, `pagedown`
-* `del` or `delete`
-* `f1`, `f2` ... `f19`
+- `backspace`
+- `tab`
+- `clear`
+- `enter` or `return`
+- `esc` or `escape`
+- `space`
+- `up`, `down`, `left`, `right`
+- `home`
+- `end`
+- `pageup`, `pagedown`
+- `del` or `delete`
+- `f1`, `f2` ... `f19`
 
 :::caution Warning
 Please be aware that there are some hotkeys that we cannot override, because they would interfere with a safe browsing

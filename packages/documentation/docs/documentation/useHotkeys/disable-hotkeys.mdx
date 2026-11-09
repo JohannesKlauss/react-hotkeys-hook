@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-title: "Disable/Enable Hotkeys"
+title: 'Disable/Enable Hotkeys'
 ---
 
 # Disable/Enable Hotkeys
@@ -19,13 +19,13 @@ Use the `enabled` option to control whether a hotkey is active:
 function ExampleComponent() {
   const [enabled, setEnabled] = useState(false)
   const [count, setCount] = useState(0)
-  useHotkeys('b', () => setCount(prevCount => prevCount + 1), {
+  useHotkeys('b', () => setCount((prevCount) => prevCount + 1), {
     enabled,
   })
 
   return (
     <div>
-      <button onClick={() => setEnabled(prevValue => !prevValue)}>Toggle Hotkey</button>
+      <button onClick={() => setEnabled((prevValue) => !prevValue)}>Toggle Hotkey</button>
       <p>Hotkey is {!enabled && 'not'} enabled.</p>
       <p>Pressed the 'b' key {count} times.</p>
     </div>
@@ -39,7 +39,7 @@ This is useful when you want to enable or disable a hotkey based on application 
 If you use the returned `ref` to scope a hotkey to a specific element, the hotkey automatically activates only when that element (or one of its children) has focus.
 :::
 
-***
+---
 
 ## Prevent default browser behavior
 
@@ -50,10 +50,14 @@ Use `mod+s` to match Command+S on macOS and Control+S on other platforms:
 
 ```jsx live
 function ExampleComponent() {
-  useHotkeys('mod+s', () => {
-    alert('We saved your progress!')
-    // ... your own save logic
-  }, { preventDefault: true })
+  useHotkeys(
+    'mod+s',
+    () => {
+      alert('We saved your progress!')
+      // ... your own save logic
+    },
+    { preventDefault: true },
+  )
 
   return (
     <div>
@@ -66,16 +70,16 @@ function ExampleComponent() {
 :::caution Browsers reserve some shortcuts
 Some shortcuts cannot be overridden because they are essential to the browser's safe browsing experience. In Chrome, for example:
 
-* `meta+w` — close tab
-* `meta+n` — new window
-* `meta+t` — new tab
-* `meta+shift+w` — close all tabs of the current window
-* `meta+shift+n` — open incognito window
-* `meta+shift+t` — reopen last closed tab
-* `meta+1..9` — focus corresponding tab
-:::
+- `meta+w` — close tab
+- `meta+n` — new window
+- `meta+t` — new tab
+- `meta+shift+w` — close all tabs of the current window
+- `meta+shift+n` — open incognito window
+- `meta+shift+t` — reopen last closed tab
+- `meta+1..9` — focus corresponding tab
+  :::
 
-***
+---
 
 ### Disable callback execution while keeping listeners
 
@@ -91,9 +95,7 @@ function ExampleComponent() {
 
   return (
     <div>
-      <button onClick={() => setBlockHotkey(prev => !prev)}>
-        {blockHotkey ? 'Unblock' : 'Block'} hotkey
-      </button>
+      <button onClick={() => setBlockHotkey((prev) => !prev)}>{blockHotkey ? 'Unblock' : 'Block'} hotkey</button>
       <p>When blocked, the 'b' key does nothing. When unblocked, it triggers the alert.</p>
     </div>
   )
@@ -118,11 +120,12 @@ function ExampleComponent() {
 ```
 
 :::info Different behavior for `enabled: false` vs `enabled: () => false`
-* `enabled: false` — the browser event is not captured at all. No browser behavior happens.
-* `enabled: () => false` — the event is still captured, so potential browser behavior still occurs, but your callback is skipped.
-:::
 
-***
+- `enabled: false` — the browser event is not captured at all. No browser behavior happens.
+- `enabled: () => false` — the event is still captured, so potential browser behavior still occurs, but your callback is skipped.
+  :::
+
+---
 
 ### Enable hotkeys on form fields
 
@@ -132,13 +135,17 @@ However, some shortcuts — like `meta+s` for saving — should still work while
 
 ```jsx
 function ExampleComponent() {
-  useHotkeys('mod+s', (e) => {
-    e.preventDefault()
-    alert('We saved your progress!')
-    // ... your own save logic
-  }, {
-    enableOnFormTags: ['input', 'select', 'textarea']
-  })
+  useHotkeys(
+    'mod+s',
+    (e) => {
+      e.preventDefault()
+      alert('We saved your progress!')
+      // ... your own save logic
+    },
+    {
+      enableOnFormTags: ['input', 'select', 'textarea'],
+    },
+  )
 
   return (
     <div>
@@ -150,7 +157,7 @@ function ExampleComponent() {
 
 Pass `true` to enable the hotkey on **all** form tags.
 
-***
+---
 
 ### Enable hotkeys on `contentEditable` elements
 
@@ -163,7 +170,7 @@ function ExampleComponent() {
   })
 
   return (
-    <div contentEditable={true} style={{border: '1px solid #ccc', padding: '8px'}}>
+    <div contentEditable={true} style={{ border: '1px solid #ccc', padding: '8px' }}>
       You can edit this text and still use all active shortcuts.
     </div>
   )

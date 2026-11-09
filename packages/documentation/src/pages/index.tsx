@@ -31,8 +31,8 @@ function HomepageHeader() {
         <div className={styles.heroContent}>
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">
-            Keyboard shortcuts for React. One hook, zero complexity. Handle modifier keys, sequences, scopes, and
-            focus traps without leaving your component.
+            Keyboard shortcuts for React. One hook, zero complexity. Handle modifier keys, sequences, scopes, and focus
+            traps without leaving your component.
           </p>
           <div className={styles.heroInstall}>
             <code>npm install react-hotkeys-hook</code>
@@ -43,7 +43,16 @@ function HomepageHeader() {
               aria-label="Copy install command"
               title="Copy"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
               </svg>
@@ -121,8 +130,8 @@ function TaskManagerDemo() {
         <div className={styles.demoIntro}>
           <h2>Try it live</h2>
           <p>
-            Click the preview panel, then press <kbd>N</kbd> to add a task. This demo runs real react-hotkeys-hook
-            code — edit it and see changes instantly.
+            Click the preview panel, then press <kbd>N</kbd> to add a task. This demo runs real react-hotkeys-hook code
+            — edit it and see changes instantly.
           </p>
         </div>
         <div className={styles.demoContainer}>

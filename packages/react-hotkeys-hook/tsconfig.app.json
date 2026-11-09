@@ -22,8 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
-
+    "types": ["vite-plus/test/globals", "@testing-library/jest-dom/vitest"]
   },
   "include": ["src"],
   "exclude": ["src/**/*.test.ts*"]

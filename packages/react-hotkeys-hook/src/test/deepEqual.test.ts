@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest'
+import { test, expect } from 'vite-plus/test'
 import deepEqual from '../lib/deepEqual'
 
 test('Should handle circular references in objects that are ref-equal', () => {

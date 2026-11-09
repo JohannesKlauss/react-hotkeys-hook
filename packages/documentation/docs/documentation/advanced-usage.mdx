@@ -1,6 +1,6 @@
 ---
 sidebar_position: 6
-title: "Advanced Usage"
+title: 'Advanced Usage'
 ---
 
 # Advanced Usage
@@ -27,7 +27,7 @@ useHotkeys(Key.Backspace, () => {
 
 See the [full list of available keys](https://gitlab.com/nfriend/ts-key-enum/-/blob/master/Key.enum.d.ts).
 
-***
+---
 
 ## Building a help panel with metadata
 
@@ -40,26 +40,26 @@ function useActiveHotkeys() {
     { keys: 'ctrl+s', description: 'Save document', scope: 'editor' },
     { keys: 'ctrl+z', description: 'Undo', scope: 'editor' },
     { keys: 'esc', description: 'Close modal', scope: 'modal' },
-  ];
+  ]
 
-  return hotkeys;
+  return hotkeys
 }
 
 function HelpPanel() {
-  const hotkeys = useActiveHotkeys();
+  const hotkeys = useActiveHotkeys()
 
   return (
     <div>
       <h3>Keyboard Shortcuts</h3>
       <ul>
-        {hotkeys.map(h => (
+        {hotkeys.map((h) => (
           <li key={h.keys}>
             <kbd>{h.keys}</kbd> — {h.description}
           </li>
         ))}
       </ul>
     </div>
-  );
+  )
 }
 ```
 
@@ -69,10 +69,10 @@ When registering hotkeys, include the `description` option:
 useHotkeys('ctrl+s', handleSave, {
   description: 'Save the current document',
   metadata: { category: 'file' },
-});
+})
 ```
 
-***
+---
 
 ## Custom hooks built on `useHotkeys`
 
@@ -80,27 +80,27 @@ Wrapping `useHotkeys` in a custom hook keeps your components clean and enforces 
 
 ```tsx
 function useEditorShortcuts() {
-  const { enableScope, disableScope } = useHotkeysContext();
+  const { enableScope, disableScope } = useHotkeysContext()
 
   useHotkeys('ctrl+s', saveDocument, {
     scopes: 'editor',
     preventDefault: true,
     description: 'Save document',
-  });
+  })
 
   useHotkeys('ctrl+z', undo, {
     scopes: 'editor',
     preventDefault: true,
     description: 'Undo',
-  });
+  })
 
   useHotkeys('ctrl+shift+z', redo, {
     scopes: 'editor',
     preventDefault: true,
     description: 'Redo',
-  });
+  })
 
-  return { enableScope, disableScope };
+  return { enableScope, disableScope }
 }
 ```
 
@@ -108,13 +108,13 @@ Then in your editor component:
 
 ```tsx
 function Editor() {
-  useEditorShortcuts();
+  useEditorShortcuts()
 
-  return <div>{/* editor content */}</div>;
+  return <div>{/* editor content */}</div>
 }
 ```
 
-***
+---
 
 ## Listening inside iframes
 
@@ -134,13 +134,13 @@ function InsideFrameComponent() {
 function App() {
   return (
     <FrameComponent>
-      <InsideFrameComponent/>
+      <InsideFrameComponent />
     </FrameComponent>
   )
 }
 ```
 
-***
+---
 
 ## Event listener options
 
@@ -149,7 +149,7 @@ You can pass custom [event listener options](https://developer.mozilla.org/en-US
 ```tsx
 useHotkeys('ctrl+s', handleSave, {
   eventListenerOptions: { passive: true, capture: true },
-});
+})
 ```
 
 This is useful when you need fine-grained control over event propagation.

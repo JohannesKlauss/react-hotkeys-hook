@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 import { HotkeysProvider, useHotkeysContext, useHotkeys } from '../lib'
 import type { ReactNode } from 'react'
-import { test, expect } from 'vitest'
+import { test, expect } from 'vite-plus/test'
 
 test('should return hotkey with correct keys', () => {
   const useIntegratedHotkeys = () => {
@@ -10,9 +10,7 @@ test('should return hotkey with correct keys', () => {
     return useHotkeysContext()
   }
 
-  const wrapper = ({ children }: { children: ReactNode }) => (
-    <HotkeysProvider>{children}</HotkeysProvider>
-  )
+  const wrapper = ({ children }: { children: ReactNode }) => <HotkeysProvider>{children}</HotkeysProvider>
 
   const { result } = renderHook(useIntegratedHotkeys, {
     wrapper,
@@ -64,15 +62,13 @@ test('should return hotkey with correct description and metadata', () => {
   const useIntegratedHotkeys = () => {
     useHotkeys('ctrl+c', () => null, {
       description: 'Copy text',
-      metadata: { category: 'editing', priority: 'high' }
+      metadata: { category: 'editing', priority: 'high' },
     })
 
     return useHotkeysContext()
   }
 
-  const wrapper = ({ children }: { children: ReactNode }) => (
-    <HotkeysProvider>{children}</HotkeysProvider>
-  )
+  const wrapper = ({ children }: { children: ReactNode }) => <HotkeysProvider>{children}</HotkeysProvider>
 
   const { result } = renderHook(useIntegratedHotkeys, {
     wrapper,

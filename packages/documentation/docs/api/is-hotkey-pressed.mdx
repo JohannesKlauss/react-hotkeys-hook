@@ -14,12 +14,12 @@ function isHotkeyPressed(key: string | string[], delimiter: string = ','): boole
 Check if a specific key or combination of keys is currently pressed.
 
 ```jsx
-import { isHotkeyPressed } from 'react-hotkeys-hook';
+import { isHotkeyPressed } from 'react-hotkeys-hook'
 
-const onClick = () => isHotkeyPressed('shift') ? setCount(count => count - 1) : setCount(count => count + 1);
+const onClick = () => (isHotkeyPressed('shift') ? setCount((count) => count - 1) : setCount((count) => count + 1))
 ```
 
-***
+---
 
 ## Arguments
 
@@ -30,9 +30,10 @@ key: string | string[]
 ```
 
 The key or keys to check. This can be:
-* A single keycode string like `'a'`
-* A delimited string of keycodes like `'shift,a'`
-* An array of keycode strings like `['shift', 'a']`
+
+- A single keycode string like `'a'`
+- A delimited string of keycodes like `'shift,a'`
+- An array of keycode strings like `['shift', 'a']`
 
 When multiple keys are provided, **all** of them must be pressed down for the function to return `true`.
 

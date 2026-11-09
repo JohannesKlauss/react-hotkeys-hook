@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: "Migrate from 3.x to 4.x"
+title: 'Migrate from 3.x to 4.x'
 ---
 
 # Migrate from 3.x to 4.x
@@ -12,11 +12,13 @@ There are a few breaking changes in 4.x. This guide will help you migrate your c
 ### `useHotkeys` hook
 
 #### `filter`
+
 The `filter` option no longer exists, it has been merged with the `enabled` option. `enabled` now takes a "trigger". A trigger
 is either a boolean or a function that returns a boolean. If the trigger is a function, it will be called with the key event as
 the first argument. If the trigger returns `true`, the hotkey will be executed. If it returns `false`, the hotkey will be ignored.
 
 #### Old `splitKey` behavior is now found under `combinationKey`
+
 `splitKey` has been renamed to `combinationKey` to avoid confusion with a new feature that actually addresses the split key.
 
 When defining complex hotkeys, you have three parts: The keys, the key that combines keys (e.g. `ctrl` **+** `a` - which
@@ -35,9 +37,11 @@ Beforehand the `dependencies` option was typed as `any[]`. This has been changed
 for a react hook dependency list.
 
 #### `cmd` and `command` keys are no longer supported
+
 If you are using those keys, you have to replace them with `meta`.
 
 #### `enableOnTags` is now renamed to `enableOnFormTags`
+
 The functionality is still the same, but the name is more accurate.
 
 ## Under the hood

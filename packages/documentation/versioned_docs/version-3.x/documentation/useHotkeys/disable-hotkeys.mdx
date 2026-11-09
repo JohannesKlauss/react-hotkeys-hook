@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-title: "Disable/Enable Hotkeys"
+title: 'Disable/Enable Hotkeys'
 ---
 
 # Disable/Enable Hotkeys
@@ -21,13 +21,13 @@ Using the `enabled` flag in the options object, we can dynamically tell `useHotk
 function ExampleComponent() {
   const [enabled, setEnabled] = useState(false)
   const [count, setCount] = useState(0)
-  useHotkeys('b', () => setCount(prevCount => prevCount + 1), {
+  useHotkeys('b', () => setCount((prevCount) => prevCount + 1), {
     enabled,
   })
 
   return (
     <div>
-      <button onClick={() => setEnabled(prevValue => !prevValue)}>Toggle Hotkey</button>
+      <button onClick={() => setEnabled((prevValue) => !prevValue)}>Toggle Hotkey</button>
       <p>Hotkey is {!enabled && 'not'} enabled.</p>
       <p>Pressed the 'b' key {count} times.</p>
     </div>
@@ -43,7 +43,7 @@ If we use the returned `ref` of the callback to scope our hotkey to a specific s
 this will automatically activate or deactivate our hotkey depending on which part of the page has active focus.
 :::
 
-***
+---
 
 ## Prevent default browser behavior
 
@@ -82,7 +82,7 @@ Additionally `cmd + shift + w` (closing all tabs of the current window), `cmd + 
 `cmd + up + 1..9` on the other hand focuses the corresponding tab of the active window and also cannot be overridden.
 :::
 
-***
+---
 
 ### Disable callback execution
 
@@ -94,9 +94,9 @@ In this scenario the hotkey is still active, but the callback won't be called if
 ```jsx
 function ExampleComponent() {
   useHotkeys('option+b', () => alert('Callback got executed'), {
-    filter: e => {
-      return true;
-    }
+    filter: (e) => {
+      return true
+    },
   })
 
   return (
@@ -112,11 +112,11 @@ With the `filter` option in mind we can slightly change our save routine overrid
 ```jsx
 function ExampleComponent() {
   useHotkeys('cmd+s, ctrl+s', () => alert('We saved your progress!'), {
-    filter: e => {
+    filter: (e) => {
       e.preventDefault()
 
       return true
-    }
+    },
   })
 
   return (
@@ -129,7 +129,7 @@ function ExampleComponent() {
 
 This might be preferred if we want to build a custom hook on top of `useHotkeys` that always prevents the default behavior.
 
-***
+---
 
 ### Disable default behavior when callback execution is blocked
 
@@ -142,7 +142,7 @@ option:
 ```jsx
 function ExampleComponent() {
   useHotkeys('cmd+s, ctrl+s', () => alert('We saved your progress!'), {
-    filter: e => {
+    filter: (e) => {
       // .... some logic to deduce if the callback should get triggered or not
 
       // If no logic applies, don't trigger the callback
@@ -165,7 +165,7 @@ This will cause the browser to prevent opening its page saving dialog even thoug
 Currently the return values of `filter` and `filterPreventDefault` are counterintuitive. This will change in version 4.
 :::
 
-***
+---
 
 ### Enable hotkeys on form fields
 
@@ -180,14 +180,18 @@ enable the hotkey on certain form fields. We can use the `enableOnTags` option f
 
 ```jsx
 function ExampleComponent() {
-  useHotkeys('cmd+s, ctrl+s', (e) => {
-    e.preventDefault()
+  useHotkeys(
+    'cmd+s, ctrl+s',
+    (e) => {
+      e.preventDefault()
 
-    alert('We saved your progress!')
-    // ... set up our own saving dialog.
-  }, {
-    enableOnTags: ['INPUT', 'SELECT', 'TEXTAREA']
-  })
+      alert('We saved your progress!')
+      // ... set up our own saving dialog.
+    },
+    {
+      enableOnTags: ['INPUT', 'SELECT', 'TEXTAREA'],
+    },
+  )
 
   return (
     <div>
@@ -205,7 +209,7 @@ Note that the values in the array are case-sensitive. `input` won't work while `
 version 4.
 :::
 
-***
+---
 
 ### Enable hotkeys on tags leveraging `contentEditable`
 
@@ -221,11 +225,7 @@ function ExampleComponent() {
     enableOnContentEditable: true,
   })
 
-  return (
-    <div contentEditable={true}>
-      You can edit this text and still use all the active shortcuts.
-    </div>
-  )
+  return <div contentEditable={true}>You can edit this text and still use all the active shortcuts.</div>
 }
 ```
 
