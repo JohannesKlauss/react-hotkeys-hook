@@ -51,7 +51,7 @@
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.8",
     "@types/node": "24.19.2",
-    "globals": "17.13.0",
+    "globals": "17.14.0",
     "jsdom": "29.1.1",
     "typescript": "7.0.2",
     "vite": "8.1.6",
