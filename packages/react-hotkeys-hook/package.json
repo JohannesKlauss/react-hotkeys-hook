@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc -b && vite build",
     "test": "vitest",
     "prepublishOnly": "vitest run && npm run build"
   },
@@ -44,18 +44,18 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.1.2",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.8",
     "@types/node": "24.19.2",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.1.2",
     "globals": "17.13.0",
     "jsdom": "29.1.1",
-    "typescript": "7.0.2",
-    "vite": "8.1.6",
-    "vitest": "4.1.12",
-    "vite-plugin-dts": "4.5.4"
+    "rolldown-plugin-dts": "0.29.0",
+    "typescript": "7.1.0-beta",
+    "vite": "8.3.5",
+    "vitest": "4.1.12"
   }
 }

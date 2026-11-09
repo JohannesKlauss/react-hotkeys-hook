@@ -90,7 +90,7 @@ export default function useHotkeys<T extends HTMLElement>(
     }
 
     let recordedKeys: string[][] = []
-    let sequenceTimer: ReturnType<typeof setTimeout>[] = []
+    const sequenceTimer: ReturnType<typeof setTimeout>[] = []
 
     const listener = (e: KeyboardEvent, isKeyUp = false) => {
       if (isKeyboardEventTriggeredByInput(e) && !isHotkeyEnabledOnTag(e, memoisedOptions?.enableOnFormTags)) {

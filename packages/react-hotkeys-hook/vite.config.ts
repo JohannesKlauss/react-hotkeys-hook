@@ -1,22 +1,22 @@
 /// <reference types="vite/client" />
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'node:path'
-import dts from 'vite-plugin-dts'
+import { dts } from 'rolldown-plugin-dts'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
-    react(),
-    dts({
-      tsconfigPath: 'tsconfig.app.json',
-      rollupTypes: true,
-    }),
+    react({ exclude: /\.d\.[cm]?ts$/ }),
+    ...(command === 'build' ? dts({ tsconfig: 'tsconfig.build.json' }) : []),
   ],
+  oxc: {
+    exclude: [/\.js$/, /\.d\.[cm]?ts$/],
+  },
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/lib/index.ts'),
+      entry: resolve(import.meta.dirname, 'src/lib/index.ts'),
       formats: ['es'],
     },
     rollupOptions: {
@@ -37,4 +37,4 @@ export default defineConfig({
     setupFiles: 'vitest.setup.ts',
     watch: false,
   },
-})
+}))
