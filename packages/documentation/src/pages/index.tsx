@@ -11,7 +11,7 @@ import styles from './index.module.css'
 
 const featureLinks = [
   {
-    title: 'Focus where it matters.',
+    title: 'Scope shortcuts.',
     description:
       'Attach a shortcut to a focused element, or group shortcuts into scopes for the parts of your app that need them.',
     code: "const ref = useHotkeys('ctrl+b', toggleBold)",
@@ -19,14 +19,14 @@ const featureLinks = [
     link: 'Explore focus and scopes',
   },
   {
-    title: 'More than one key.',
-    description: 'Listen for combinations and sequences, from modifier shortcuts to multi-step commands.',
+    title: 'Use combinations and sequences.',
+    description: 'Listen for keys pressed together or in sequence.',
     code: "useHotkeys('g>i>t', goToInbox)",
     href: '/docs/documentation/useHotkeys/basic-usage',
     link: 'See combinations and sequences',
   },
   {
-    title: 'Make shortcuts their own.',
+    title: 'Record custom shortcuts.',
     description: 'Let users record their own shortcuts with the useRecordHotkeys hook.',
     code: 'const [keys, controls] = useRecordHotkeys()',
     href: '/docs/documentation/use-record-hotkeys',
@@ -63,11 +63,11 @@ function HomepageHeader() {
     <header className={styles.hero}>
       <div className={styles.container}>
         <h1 className={styles.heroTitle}>
-          <span>Keyboard shortcuts,</span>
-          <span>right where you need them.</span>
+          <span>Keyboard shortcuts</span>
+          <span>for React.</span>
         </h1>
         <p className={styles.heroDescription}>
-          A React hook for turning key presses into actions, from a single key to combinations and sequences.
+          Use a React hook to listen for keys, combinations, and sequences in your components.
         </p>
         <div className={styles.heroActions}>
           <Link className={styles.primaryAction} to="/docs/intro">
@@ -86,13 +86,13 @@ function FeaturesSection() {
     <section className={styles.features} aria-labelledby="features-title">
       <div className={styles.container}>
         <div className={styles.featureIntro}>
-          <h2 id="features-title">A little hook. A lot of possibilities.</h2>
-          <p>Start with one shortcut, then make it work for the way your application actually works.</p>
+          <h2 id="features-title">Shortcuts for React components.</h2>
+          <p>Bind keys to actions, limit where shortcuts work, and let users record their own.</p>
         </div>
         <div className={styles.featureLayout}>
           <article className={styles.featureLead}>
-            <h3>One hook, right in your component.</h3>
-            <p>Declare a shortcut next to the action it belongs to. No provider or setup required to get started.</p>
+            <h3>Bind a shortcut.</h3>
+            <p>Call useHotkeys in your component to bind a shortcut to an action. No provider is needed.</p>
             <div className={styles.featureCode}>
               <CodeBlock className="language-jsx">{saveExample}</CodeBlock>
             </div>
@@ -123,7 +123,7 @@ function ClosingSection() {
     <section className={styles.closing}>
       <div className={styles.container}>
         <div className={styles.closingContent}>
-          <h2>Ready to make your first shortcut?</h2>
+          <h2>Add a shortcut to your app.</h2>
           <div className={styles.closingActions}>
             <Link className={styles.closingPrimary} to="/docs/intro">
               Get started <ArrowIcon />

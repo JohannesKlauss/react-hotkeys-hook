@@ -40,7 +40,7 @@ export default function TaskManagerDemo() {
   return (
     <section className={styles.section} id="playground" aria-labelledby="playground-title">
       <div className={styles.intro}>
-        <h2 id="playground-title">Don’t take our word for it. Try it.</h2>
+        <h2 id="playground-title">Try a shortcut.</h2>
         <p>
           Focus the preview and press <kbd>N</kbd> to add a task, or use the button. Edit the code to see what happens
           next.

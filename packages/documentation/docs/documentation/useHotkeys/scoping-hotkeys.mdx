@@ -10,7 +10,7 @@ title: 'Scoping Hotkeys'
 In the previous section we used two keystrokes in two different examples (`ctrl+shift+a+c` and `shift+c`).
 If you press one of those keystrokes, both examples trigger. Why?
 
-By default, hotkeys are attached globally — there is no built-in scoping mechanism that limits a hotkey to only trigger when its component is focused. Here are two components that both listen for the `c` key:
+By default, hotkeys listen globally, regardless of which component has focus. Here are two components that both listen for the `c` key:
 
 ```jsx live noInline
 function UnscopedHotkey() {
@@ -77,7 +77,7 @@ Now each hotkey only fires when its assigned button has focus. You can use this 
 
 ## Scoping with non-focusable elements
 
-Relying on a button for focus is rarely useful in real applications. More often, you want a container — like a modal or a card — to receive focus and enable its hotkeys. Elements like `<div>`, `<section>`, and `<span>` cannot receive focus by default. To make them focusable, add a `tabIndex` attribute:
+You can also scope hotkeys to a container, such as a modal or a card. Elements like `<div>`, `<section>`, and `<span>` cannot receive focus by default. To make them focusable, add a `tabIndex` attribute:
 
 ```jsx live
 function ScopedHotkey() {
