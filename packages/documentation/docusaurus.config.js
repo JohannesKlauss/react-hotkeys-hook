@@ -1,5 +1,4 @@
-const lightCodeTheme = require('prism-react-renderer').themes.github
-const darkCodeTheme = require('prism-react-renderer').themes.dracula
+const { lightCodeTheme, darkCodeTheme } = require('./prism-themes')
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
@@ -17,6 +16,14 @@ module.exports = {
   organizationName: 'Johannes Klauss', // Usually your GitHub org/user name.
   projectName: 'react-hotkeys-hook', // Usually your repo name.
   headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'icon',
+        type: 'image/svg+xml',
+        href: '/img/hotkey.svg',
+      },
+    },
     {
       tagName: 'link',
       attributes: {
@@ -49,17 +56,17 @@ module.exports = {
     },
     navbar: {
       title: 'React Hotkeys Hook',
+      logo: {
+        alt: '',
+        src: 'img/hotkey.svg',
+        width: 32,
+        height: 32,
+      },
       items: [
         {
           type: 'docsVersion',
-          docId: 'intro',
           position: 'left',
           label: 'Documentation',
-        },
-        {
-          to: 'blog',
-          label: 'Blog',
-          position: 'left',
         },
         {
           type: 'docsVersionDropdown',
@@ -189,10 +196,11 @@ module.exports = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: '5.0',
+              label: '5',
             },
           },
         },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },

@@ -13,8 +13,10 @@
   --font-body: 'Libre Franklin', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Monaco, monospace;
 
-  --hue-brand: 280;
-  --hue-accent: 75;
+  /* Coral accent shared with the homepage; button fill stays the same in both themes. */
+  --coral: #ff805b;
+  --coral-hover: #ff9a79;
+  --coral-ink: #251b1b;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -26,10 +28,8 @@
   --space-16: 4rem;
   --space-24: 6rem;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-
+  --ifm-global-radius: 0;
+  --ifm-breadcrumb-border-radius: 0;
   --ifm-alert-border-left-width: 1px;
 }
 
@@ -37,74 +37,114 @@
    LIGHT THEME
    ============================================ */
 html[data-theme='light'] {
-  --ifm-background-color: oklch(97% 0.005 var(--hue-brand));
-  --ifm-background-surface-color: oklch(94% 0.008 var(--hue-brand));
+  --ifm-background-color: #f7f5f0;
+  --ifm-background-surface-color: #efede8;
 
-  --ifm-font-color-base: oklch(22% 0.02 var(--hue-brand));
-  --ifm-font-color-secondary: oklch(45% 0.02 var(--hue-brand));
+  --ifm-font-color-base: #25232a;
+  --ifm-font-color-secondary: #5c5861;
+  --ifm-color-content: #25232a;
+  --ifm-color-content-secondary: #5c5861;
+  --ifm-color-emphasis-200: #e4e0d9;
+  --docsearch-selected-background: #e4e0d9;
 
-  --ifm-color-primary: oklch(55% 0.14 var(--hue-accent));
-  --ifm-color-primary-dark: oklch(48% 0.12 var(--hue-accent));
-  --ifm-color-primary-darker: oklch(42% 0.11 var(--hue-accent));
-  --ifm-color-primary-darkest: oklch(35% 0.1 var(--hue-accent));
-  --ifm-color-primary-light: oklch(62% 0.15 var(--hue-accent));
-  --ifm-color-primary-lighter: oklch(68% 0.16 var(--hue-accent));
-  --ifm-color-primary-lightest: oklch(75% 0.17 var(--hue-accent));
+  /* Dark coral for link/text accents, matching the homepage's light-mode code string color. */
+  --ifm-color-primary: #a13d28;
+  --ifm-color-primary-dark: #902f1c;
+  --ifm-color-primary-darker: #872c1a;
+  --ifm-color-primary-darkest: #6f2415;
+  --ifm-color-primary-light: #b24731;
+  --ifm-color-primary-lighter: #bb4d37;
+  --ifm-color-primary-lightest: #cc6049;
 
-  --ifm-navbar-background-color: oklch(97% 0.005 var(--hue-brand));
-  --ifm-footer-background-color: oklch(12% 0.01 var(--hue-brand));
-  --ifm-hero-background-color: oklch(97% 0.005 var(--hue-brand));
+  --ifm-navbar-background-color: #f7f5f0;
+  --ifm-footer-background-color: #17191f;
+  --ifm-hero-background-color: #f7f5f0;
 
-  --ifm-code-background: oklch(92% 0.008 var(--hue-brand));
-  --ifm-pre-background: oklch(92% 0.008 var(--hue-brand));
+  --ifm-code-background: #f9f8f5;
+  --ifm-pre-background: #f9f8f5;
 
-  --ifm-border-color: oklch(85% 0.01 var(--hue-brand));
-  --ifm-hr-border-color: oklch(85% 0.01 var(--hue-brand));
+  --ifm-border-color: #cbc6c0;
+  --ifm-hr-border-color: #cbc6c0;
 
-  --kbd-bg: oklch(92% 0.008 var(--hue-brand));
-  --kbd-border: oklch(78% 0.01 var(--hue-brand));
-  --kbd-text: oklch(35% 0.02 var(--hue-brand));
-  --kbd-shadow: oklch(80% 0.01 var(--hue-brand));
+  --ifm-focus-ring-color: #3c55a0;
 
-  --code-block-bg: oklch(96% 0.005 var(--hue-brand));
-  --code-block-text: oklch(22% 0.02 var(--hue-brand));
+  --kbd-bg: #efede8;
+  --kbd-border: #cbc6c0;
+  --kbd-text: #5c5861;
+  --kbd-shadow: #cbc6c0;
+
+  --code-block-bg: #f9f8f5;
+  --code-block-text: #25232a;
 }
 
 /* ============================================
    DARK THEME
    ============================================ */
 html[data-theme='dark'] {
-  --ifm-background-color: oklch(16% 0.008 var(--hue-brand));
-  --ifm-background-surface-color: oklch(22% 0.01 var(--hue-brand));
+  --ifm-background-color: #17191f;
+  --ifm-background-surface-color: #20232b;
 
-  --ifm-font-color-base: oklch(94% 0.008 var(--hue-brand));
-  --ifm-font-color-secondary: oklch(68% 0.015 var(--hue-brand));
+  --ifm-font-color-base: #f3efe9;
+  --ifm-font-color-secondary: #c1bdc2;
+  --ifm-color-content: #f3efe9;
+  --ifm-color-content-secondary: #c1bdc2;
+  --ifm-color-emphasis-200: #20232b;
+  --docsearch-selected-background: #30343e;
 
-  --ifm-color-primary: oklch(78% 0.14 var(--hue-accent));
-  --ifm-color-primary-dark: oklch(72% 0.12 var(--hue-accent));
-  --ifm-color-primary-darker: oklch(65% 0.11 var(--hue-accent));
-  --ifm-color-primary-darkest: oklch(58% 0.1 var(--hue-accent));
-  --ifm-color-primary-light: oklch(82% 0.15 var(--hue-accent));
-  --ifm-color-primary-lighter: oklch(86% 0.16 var(--hue-accent));
-  --ifm-color-primary-lightest: oklch(90% 0.17 var(--hue-accent));
+  /* Coral accent, matching the homepage's dark-mode treatment. */
+  --ifm-color-primary: #ff805b;
+  --ifm-color-primary-dark: #ff6a3f;
+  --ifm-color-primary-darker: #fc5d30;
+  --ifm-color-primary-darkest: #e84a1e;
+  --ifm-color-primary-light: #ff9a79;
+  --ifm-color-primary-lighter: #ffa98d;
+  --ifm-color-primary-lightest: #ffc2ac;
 
-  --ifm-navbar-background-color: oklch(16% 0.008 var(--hue-brand));
-  --ifm-footer-background-color: oklch(12% 0.01 var(--hue-brand));
-  --ifm-hero-background-color: oklch(16% 0.008 var(--hue-brand));
+  --ifm-navbar-background-color: #17191f;
+  --ifm-footer-background-color: #15171c;
+  --ifm-hero-background-color: #17191f;
 
-  --ifm-code-background: oklch(14% 0.006 var(--hue-brand));
-  --ifm-pre-background: oklch(14% 0.006 var(--hue-brand));
+  --ifm-code-background: #15171c;
+  --ifm-pre-background: #15171c;
 
-  --ifm-border-color: oklch(30% 0.015 var(--hue-brand));
-  --ifm-hr-border-color: oklch(30% 0.015 var(--hue-brand));
+  --ifm-border-color: #4a4b53;
+  --ifm-hr-border-color: #4a4b53;
 
-  --kbd-bg: oklch(26% 0.012 var(--hue-brand));
-  --kbd-border: oklch(40% 0.015 var(--hue-brand));
-  --kbd-text: oklch(90% 0.008 var(--hue-brand));
-  --kbd-shadow: oklch(20% 0.01 var(--hue-brand));
+  --ifm-focus-ring-color: #b7c8ff;
 
-  --code-block-bg: oklch(12% 0.006 var(--hue-brand));
-  --code-block-text: oklch(94% 0.008 var(--hue-brand));
+  --kbd-bg: #20232b;
+  --kbd-border: #4a4b53;
+  --kbd-text: #f3efe9;
+  --kbd-shadow: #15171c;
+
+  --code-block-bg: #15171c;
+  --code-block-text: #f3efe9;
+}
+
+/* Search loads its own theme later, so map its controls and modal directly. */
+html[data-theme] .DocSearch,
+html[data-theme] .DocSearch-Container {
+  --docsearch-primary-color: var(--ifm-color-primary);
+  --docsearch-soft-primary-color: rgb(255 128 91 / 15%);
+  --docsearch-highlight-color: var(--ifm-color-primary);
+  --docsearch-focus-color: var(--ifm-focus-ring-color);
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-secondary-text-color: var(--ifm-font-color-secondary);
+  --docsearch-muted-color: var(--ifm-font-color-secondary);
+  --docsearch-icon-color: var(--ifm-font-color-secondary);
+  --docsearch-subtle-color: var(--ifm-border-color);
+  --docsearch-background-color: var(--ifm-background-surface-color);
+  --docsearch-search-button-background: var(--ifm-background-surface-color);
+  --docsearch-search-button-text-color: var(--ifm-font-color-secondary);
+  --docsearch-modal-background: var(--ifm-background-color);
+  --docsearch-searchbox-background: var(--ifm-background-surface-color);
+  --docsearch-searchbox-focus-background: var(--ifm-background-surface-color);
+  --docsearch-hit-background: var(--ifm-background-surface-color);
+  --docsearch-hit-highlight-color: var(--docsearch-selected-background);
+  --docsearch-key-background: var(--ifm-background-color);
+  --docsearch-key-color: var(--ifm-font-color-secondary);
+  --docsearch-footer-background: var(--ifm-background-surface-color);
+  --docsearch-logo-color: var(--ifm-color-primary);
 }
 
 /* ============================================
@@ -137,13 +177,13 @@ pre {
    CODE BLOCKS
    ============================================ */
 .theme-code-block {
-  border-radius: var(--radius-md);
+  border-radius: 0;
   overflow: hidden;
 }
 
 .theme-code-block pre {
   background: var(--code-block-bg) !important;
-  border-radius: var(--radius-md);
+  border-radius: 0;
 }
 
 .theme-code-block code {
@@ -155,7 +195,7 @@ pre {
 /* Inline code */
 code:not(pre code) {
   background: var(--ifm-code-background);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   padding: 0.15em 0.4em;
   font-size: 0.85em;
   vertical-align: baseline;
@@ -169,11 +209,11 @@ pre code {
 
 /* Highlight lines */
 html[data-theme='dark'] .docusaurus-highlight-code-line {
-  background-color: oklch(100% 0 0 / 0.06);
+  background-color: rgb(255 255 255 / 6%);
 }
 
 html[data-theme='light'] .docusaurus-highlight-code-line {
-  background-color: oklch(0% 0 0 / 0.05);
+  background-color: rgb(0 0 0 / 5%);
 }
 
 /* ============================================
@@ -191,7 +231,7 @@ kbd {
   min-width: 1.6em;
   background: var(--kbd-bg);
   border: 1px solid var(--kbd-border);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   border-bottom-width: 2px;
   color: var(--kbd-text);
   vertical-align: middle;
@@ -212,7 +252,7 @@ kbd:active {
    ============================================ */
 blockquote {
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: 0;
   background: var(--ifm-background-surface-color);
   border-top: 2px solid var(--ifm-color-primary-lighter);
   padding: var(--space-4) var(--space-6);
@@ -227,7 +267,7 @@ blockquote {
   --ifm-alert-border-width: 1px;
   --ifm-alert-border-left-width: 1px;
   border: 1px solid var(--ifm-alert-border-color);
-  border-radius: var(--radius-md);
+  border-radius: 0;
   background-color: var(--ifm-alert-background-color);
   padding: var(--ifm-alert-padding-vertical) var(--ifm-alert-padding-horizontal);
   color: var(--ifm-alert-foreground-color);
@@ -284,21 +324,23 @@ blockquote {
 .button {
   font-family: var(--font-display);
   font-weight: 500;
-  border-radius: var(--radius-md);
+  border-radius: 0;
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0.625rem 1.25rem;
 }
 
+/* Primary buttons keep the homepage's coral fill with dark ink text in both themes. */
 .button--primary {
-  background: var(--ifm-color-primary);
-  color: oklch(16% 0.008 var(--hue-brand));
+  background: var(--coral);
+  color: var(--coral-ink);
   border: none;
 }
 
 .button--primary:hover {
-  background: var(--ifm-color-primary-light);
+  background: var(--coral-hover);
+  color: var(--coral-ink);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px oklch(78% 0.14 var(--hue-accent) / 0.2);
+  box-shadow: 0 4px 12px rgb(255 128 91 / 30%);
 }
 
 html .button.button--secondary {
@@ -308,8 +350,8 @@ html .button.button--secondary {
 }
 
 html[data-theme='dark'] .button.button--secondary {
-  border-color: oklch(50% 0.02 var(--hue-brand));
-  color: oklch(94% 0.008 var(--hue-brand)) !important;
+  border-color: #5c5d66;
+  color: #f3efe9 !important;
 }
 
 html .button.button--secondary:hover {
@@ -319,11 +361,29 @@ html .button.button--secondary:hover {
 }
 
 /* ============================================
+   FOCUS STATES
+   ============================================ */
+a:focus-visible,
+button:focus-visible,
+.button:focus-visible,
+.menu__link:focus-visible,
+.navbar__link:focus-visible,
+.pagination-nav__link:focus-visible,
+.table-of-contents__link:focus-visible {
+  outline: 3px solid var(--ifm-focus-ring-color);
+  outline-offset: 3px;
+}
+
+/* ============================================
    NAVBAR
    ============================================ */
 .navbar {
   border-bottom: 1px solid var(--ifm-border-color);
   box-shadow: none;
+}
+
+.navbar button.clean-btn {
+  border-radius: 0;
 }
 
 .navbar__title {
@@ -338,12 +398,34 @@ html .button.button--secondary:hover {
   transition: color 0.15s ease-out;
 }
 
+@media (max-width: 380px) {
+  .navbar {
+    padding-inline: 0.75rem;
+  }
+
+  .navbar__brand {
+    margin-right: 0.5rem;
+  }
+
+  .navbar__title {
+    font-size: 0.875rem;
+  }
+}
+
 /* ============================================
    FOOTER
    ============================================ */
 .footer {
   border-top: 1px solid var(--ifm-border-color);
   padding: var(--space-12) 0;
+}
+
+.footer--dark {
+  --ifm-footer-background-color: #15171c;
+  --ifm-footer-color: #c1bdc2;
+  --ifm-footer-link-color: #c1bdc2;
+  --ifm-footer-link-hover-color: #ffab8b;
+  --ifm-footer-title-color: #f3efe9;
 }
 
 .footer__title {
@@ -390,12 +472,22 @@ html .hero--primary {
   line-height: 1.5;
 }
 
+/* Infima hard-codes these radii instead of using the global radius token. */
+.dropdown__link,
+.menu__caret,
+.menu__list-item-collapsible,
+.navbar__search-input,
+.pills__item,
+button.theme-back-to-top-button {
+  border-radius: 0;
+}
+
 /* ============================================
    SIDEBAR & TOC
    ============================================ */
 .menu__link {
   font-family: var(--font-body);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   transition: background 0.15s ease-out;
 }
 
@@ -413,7 +505,7 @@ html .hero--primary {
    ============================================ */
 .pagination-nav__link {
   border: 1px solid var(--ifm-border-color);
-  border-radius: var(--radius-md);
+  border-radius: 0;
   transition: border-color 0.15s ease-out;
 }
 
@@ -425,7 +517,7 @@ html .hero--primary {
    TAGS & LABELS
    ============================================ */
 .tag {
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 500;
@@ -434,8 +526,12 @@ html .hero--primary {
 /* ============================================
    SEARCH
    ============================================ */
-.DocSearch-Modal {
-  border-radius: var(--radius-lg);
+/* DocSearch hard-codes radii on nested controls and focus states. */
+html[data-theme] .DocSearch-Button,
+html[data-theme] .DocSearch-Button *,
+html[data-theme] .DocSearch-Container,
+html[data-theme] .DocSearch-Container * {
+  border-radius: 0;
 }
 
 /* ============================================

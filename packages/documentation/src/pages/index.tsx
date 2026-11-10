@@ -1,181 +1,136 @@
 import React from 'react'
-import clsx from 'clsx'
 import Layout from '@theme/Layout'
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import { useColorMode } from '@docusaurus/theme-common'
-import styles from './index.module.css'
 import CodeBlock from '@theme/CodeBlock'
-import { themes } from 'prism-react-renderer'
+import '@fontsource-variable/manrope'
+import InstallCommand from '../components/InstallCommand'
+import ShortcutCue from '../components/ShortcutCue'
+import TaskManagerDemo from '../components/TaskManagerDemo'
+import styles from './index.module.css'
 
-// @ts-expect-error - theme-live-codeblock types not available
-import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live'
-// @ts-expect-error - theme scope
-import ReactLiveScope from '@theme/ReactLiveScope'
+const featureLinks = [
+  {
+    title: 'Focus where it matters.',
+    description:
+      'Attach a shortcut to a focused element, or group shortcuts into scopes for the parts of your app that need them.',
+    code: "const ref = useHotkeys('ctrl+b', toggleBold)",
+    href: '/docs/documentation/useHotkeys/scoping-hotkeys',
+    link: 'Explore focus and scopes',
+  },
+  {
+    title: 'More than one key.',
+    description: 'Listen for combinations and sequences, from modifier shortcuts to multi-step commands.',
+    code: "useHotkeys('g>i>t', goToInbox)",
+    href: '/docs/documentation/useHotkeys/basic-usage',
+    link: 'See combinations and sequences',
+  },
+  {
+    title: 'Make shortcuts their own.',
+    description: 'Let users record their own shortcuts with the useRecordHotkeys hook.',
+    code: 'const [keys, controls] = useRecordHotkeys()',
+    href: '/docs/documentation/use-record-hotkeys',
+    link: 'Learn about recording',
+  },
+] as const
 
-const heroCode = `import { useHotkeys } from 'react-hotkeys-hook'
+const saveExample = `import { useHotkeys } from 'react-hotkeys-hook'
 
-function App() {
-  useHotkeys('ctrl+k', () => openSearch())
-  useHotkeys('ctrl+s', () => saveDocument(),
-    { preventDefault: true })
+function Editor() {
+  useHotkeys('mod+s', saveDocument, {
+    preventDefault: true,
+  })
 
-  return <div>...</div>
+  return <Document />
 }`
 
-function HomepageHeader() {
-  const { siteConfig } = useDocusaurusContext()
+function ArrowIcon() {
   return (
-    <header className={clsx('hero')}>
-      <div className={clsx('container', styles.heroInner)}>
-        <div className={styles.heroContent}>
-          <h1 className="hero__title">{siteConfig.title}</h1>
-          <p className="hero__subtitle">
-            Keyboard shortcuts for React. One hook, zero complexity. Handle modifier keys, sequences, scopes, and focus
-            traps without leaving your component.
-          </p>
-          <div className={styles.heroInstall}>
-            <code>npm install react-hotkeys-hook</code>
-            <button
-              className={styles.heroCopy}
-              onClick={() => navigator.clipboard.writeText('npm install react-hotkeys-hook')}
-              type="button"
-              aria-label="Copy install command"
-              title="Copy"
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-              </svg>
-            </button>
-          </div>
-          <div className={styles.buttons}>
-            <Link className="button button--primary button--lg" to="/docs/intro">
-              Quick Start
-            </Link>
-            <Link className="button button--secondary button--lg" to="/docs/documentation/installation">
-              Documentation
-            </Link>
-          </div>
-          <div className={styles.heroKeys}>
-            <kbd>Ctrl</kbd>
-            <span>+</span>
-            <kbd>K</kbd>
-            <span style={{ marginLeft: '0.5rem', opacity: 0.6 }}>to search docs</span>
-          </div>
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M4 12h15m-6-6 6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function HomepageHeader() {
+  return (
+    <header className={styles.hero}>
+      <div className={styles.container}>
+        <h1 className={styles.heroTitle}>
+          <span>Keyboard shortcuts,</span>
+          <span>right where you need them.</span>
+        </h1>
+        <p className={styles.heroDescription}>
+          A React hook for turning key presses into actions, from a single key to combinations and sequences.
+        </p>
+        <div className={styles.heroActions}>
+          <Link className={styles.primaryAction} to="/docs/intro">
+            Get started <ArrowIcon />
+          </Link>
+          <InstallCommand />
         </div>
-        <div className={styles.heroVisual}>
-          <div className={styles.heroCodeBlock}>
-            <CodeBlock className="language-tsx">{heroCode}</CodeBlock>
-          </div>
-        </div>
+        <ShortcutCue />
       </div>
     </header>
   )
 }
 
-function StatsSection() {
-  const stats = [
-    { value: '~3KB', label: 'minified + gzipped' },
-    { value: '0', label: 'dependencies' },
-    { value: 'TypeScript', label: 'first-class types' },
-  ]
-
+function FeaturesSection() {
   return (
-    <section className={styles.statsSection}>
-      <div className="container">
-        <div className={styles.statsGrid}>
-          {stats.map((stat) => (
-            <div key={stat.label} className={styles.statItem}>
-              <div className={styles.statValue}>{stat.value}</div>
-              <div className={styles.statLabel}>{stat.label}</div>
-            </div>
-          ))}
+    <section className={styles.features} aria-labelledby="features-title">
+      <div className={styles.container}>
+        <div className={styles.featureIntro}>
+          <h2 id="features-title">A little hook. A lot of possibilities.</h2>
+          <p>Start with one shortcut, then make it work for the way your application actually works.</p>
         </div>
-      </div>
-    </section>
-  )
-}
-
-const taskManagerCode = `function TaskManager() {
-  const [tasks, setTasks] = useState(['Learn useHotkeys', 'Build app', 'Ship it'])
-
-  useHotkeys('n', () => setTasks([...tasks, 'New task']))
-
-  return (
-    <ul>
-      {tasks.map((task, i) => <li key={i}>{task}</li>)}
-    </ul>
-  )
-}
-
-render(<TaskManager />)`
-
-function TaskManagerDemo() {
-  const { colorMode } = useColorMode()
-  const prismTheme = colorMode === 'dark' ? themes.dracula : themes.github
-
-  return (
-    <section className={styles.demoSection}>
-      <div className="container">
-        <div className={styles.demoIntro}>
-          <h2>Try it live</h2>
-          <p>
-            Click the preview panel, then press <kbd>N</kbd> to add a task. This demo runs real react-hotkeys-hook code
-            — edit it and see changes instantly.
-          </p>
-        </div>
-        <div className={styles.demoContainer}>
-          <LiveProvider code={taskManagerCode} scope={ReactLiveScope} noInline theme={prismTheme}>
-            <div className={styles.demoCode}>
-              <div>Editor</div>
-              <LiveEditor />
+        <div className={styles.featureLayout}>
+          <article className={styles.featureLead}>
+            <h3>One hook, right in your component.</h3>
+            <p>Declare a shortcut next to the action it belongs to. No provider or setup required to get started.</p>
+            <div className={styles.featureCode}>
+              <CodeBlock className="language-jsx">{saveExample}</CodeBlock>
             </div>
-            <div className={styles.demoPreview}>
-              <div>Preview</div>
-              <LiveError />
-              <LivePreview />
-            </div>
-          </LiveProvider>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function FeatureSection({
-  title,
-  description,
-  code,
-  label,
-  reversed = false,
-}: {
-  title: string
-  description: string
-  code: string
-  label?: string
-  reversed?: boolean
-}) {
-  return (
-    <section className={styles.featureSection}>
-      <div className="container">
-        <div className={clsx(styles.featureGrid, reversed && styles.featureGridReversed)}>
-          <div>
-            {label && <div className={styles.featureLabel}>{label}</div>}
-            <h2 className={styles.featureTitle}>{title}</h2>
-            <p className={styles.featureDescription}>{description}</p>
+            <Link className={styles.textLink} to="/docs/documentation/useHotkeys/basic-usage">
+              See how it works <ArrowIcon />
+            </Link>
+          </article>
+          <div className={styles.featureList}>
+            {featureLinks.map((feature) => (
+              <article className={styles.featureItem} key={feature.title}>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+                <code>{feature.code}</code>
+                <Link className={styles.textLink} to={feature.href}>
+                  {feature.link} <ArrowIcon />
+                </Link>
+              </article>
+            ))}
           </div>
-          <div className={styles.featureCode}>
-            <CodeBlock className="language-jsx">{code}</CodeBlock>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function ClosingSection() {
+  return (
+    <section className={styles.closing}>
+      <div className={styles.container}>
+        <div className={styles.closingContent}>
+          <h2>Ready to make your first shortcut?</h2>
+          <div className={styles.closingActions}>
+            <Link className={styles.closingPrimary} to="/docs/intro">
+              Get started <ArrowIcon />
+            </Link>
+            <Link className={styles.closingLink} to="/docs/api/use-hotkeys">
+              Browse the API <ArrowIcon />
+            </Link>
           </div>
         </div>
       </div>
@@ -186,66 +141,14 @@ function FeatureSection({
 export default function Home() {
   const { siteConfig } = useDocusaurusContext()
   return (
-    <Layout title={siteConfig.title} description="A react library to use hotkeys in a declarative way">
-      <HomepageHeader />
-      <StatsSection />
-      <main>
-        <TaskManagerDemo />
-
-        <FeatureSection
-          label="API"
-          title="Simple & Declarative"
-          description="Define hotkeys with a single hook call. No complex setup, no providers to wrap, no context to manage. Just import and use."
-          code={`useHotkeys('ctrl+s', () => {
-  saveDocument()
-})`}
-        />
-
-        <FeatureSection
-          label="Focus"
-          title="Scoped to Components"
-          description="Bind hotkeys to specific DOM elements using refs. Shortcuts only trigger when the element has focus — perfect for editors, modals, and multi-pane layouts."
-          code={`function Editor() {
-  const ref = useHotkeys('ctrl+b', () => toggleBold())
-
-  return (
-    <div ref={ref} tabIndex={-1}>
-      Click here to focus, then press ctrl+b
-    </div>
-  )
-}`}
-          reversed
-        />
-
-        <FeatureSection
-          label="Power"
-          title="Sequences & Combinations"
-          description="Handle modifier combinations, key sequences, and overlapping shortcuts. Build vim-style command palettes or complex multi-step workflows."
-          code={`// Modifier combinations
-useHotkeys('ctrl+shift+k', () => deleteLine())
-
-// Sequential hotkeys (vim-style)
-useHotkeys('g>i>t', () => goToInbox())`}
-        />
-
-        <FeatureSection
-          label="Record"
-          title="Record Custom Hotkeys"
-          description="Let users define their own keyboard shortcuts with the useRecordHotkeys hook. Perfect for settings panels, customizable apps, and power-user features."
-          code={`function HotkeyRecorder() {
-  const [keys, { start, stop, isRecording }] = useRecordHotkeys()
-
-  return (
-    <div>
-      <p>Recorded: {Array.from(keys).join(' + ')}</p>
-      <button onClick={isRecording ? stop : start}>
-        {isRecording ? 'Stop' : 'Record'}
-      </button>
-    </div>
-  )
-}`}
-          reversed
-        />
+    <Layout title={siteConfig.title} description="A React hook for declarative keyboard shortcuts.">
+      <main className={styles.homePage}>
+        <HomepageHeader />
+        <div className={styles.container}>
+          <TaskManagerDemo />
+        </div>
+        <FeaturesSection />
+        <ClosingSection />
       </main>
     </Layout>
   )

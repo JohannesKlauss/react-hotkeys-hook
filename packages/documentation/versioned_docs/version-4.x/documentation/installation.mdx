@@ -10,22 +10,30 @@ import CodeBlock from '@theme/CodeBlock'
 
 > Note: React 16.8+ is required to use Hooks.
 
-## Yarn & NPM
+## Package Managers {#yarn--npm}
 
 To install the package we use our favorite package manager.
 
 <Tabs
-  defaultValue="yarn"
+  defaultValue="pnpm"
   values={[
-    { label: 'Yarn', value: 'yarn' },
-    { label: 'NPM', value: 'npm' },
+    { label: 'pnpm', value: 'pnpm' },
+    { label: 'bun', value: 'bun' },
+    { label: 'npm', value: 'npm' },
+    { label: 'yarn', value: 'yarn' },
   ]}
 >
-  <TabItem value="yarn">
-    <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
+  <TabItem value="pnpm">
+    <CodeBlock className="language-shell">pnpm add react-hotkeys-hook@4</CodeBlock>
+  </TabItem>
+  <TabItem value="bun">
+    <CodeBlock className="language-shell">bun add react-hotkeys-hook@4</CodeBlock>
   </TabItem>
   <TabItem value="npm">
-    <CodeBlock className="language-shell">npm i react-hotkeys-hook --save</CodeBlock>
+    <CodeBlock className="language-shell">npm i react-hotkeys-hook@4 --save</CodeBlock>
+  </TabItem>
+  <TabItem value="yarn">
+    <CodeBlock className="language-shell">yarn add react-hotkeys-hook@4</CodeBlock>
   </TabItem>
 </Tabs>
 

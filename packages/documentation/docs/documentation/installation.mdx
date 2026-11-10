@@ -13,21 +13,25 @@ import CodeBlock from '@theme/CodeBlock'
 Install the package using your preferred package manager:
 
 <Tabs
-  defaultValue="npm"
+  defaultValue="pnpm"
   values={[
-    { label: 'NPM', value: 'npm' },
-    { label: 'Bun', value: 'bun' },
-    { label: 'Yarn', value: 'yarn' },
+    { label: 'pnpm', value: 'pnpm' },
+    { label: 'bun', value: 'bun' },
+    { label: 'npm', value: 'npm' },
+    { label: 'yarn', value: 'yarn' },
   ]}
 >
-  <TabItem value="yarn">
-    <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
-  </TabItem>
-  <TabItem value="npm">
-    <CodeBlock className="language-shell">npm i react-hotkeys-hook</CodeBlock>
+  <TabItem value="pnpm">
+    <CodeBlock className="language-shell">pnpm add react-hotkeys-hook</CodeBlock>
   </TabItem>
   <TabItem value="bun">
-    <CodeBlock className="language-shell">bun i react-hotkeys-hook</CodeBlock>
+    <CodeBlock className="language-shell">bun add react-hotkeys-hook</CodeBlock>
+  </TabItem>
+  <TabItem value="npm">
+    <CodeBlock className="language-shell">npm install react-hotkeys-hook</CodeBlock>
+  </TabItem>
+  <TabItem value="yarn">
+    <CodeBlock className="language-shell">yarn add react-hotkeys-hook</CodeBlock>
   </TabItem>
 </Tabs>
 

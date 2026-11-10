@@ -36,6 +36,11 @@ jobs:
         env:
           CI: true
 
+      - name: Test Documentation
+        run: npm run -w packages/documentation test
+        env:
+          CI: true
+
       - name: Build
         run: npm run build
         env:

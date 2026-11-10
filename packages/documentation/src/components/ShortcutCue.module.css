@@ -1,0 +1,241 @@
+.sheet {
+  margin-top: clamp(3.75rem, 7vw, 6rem);
+  border-top: 1px solid var(--home-line);
+  border-bottom: 1px solid var(--home-line);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 0.9fr;
+}
+
+.cell {
+  min-width: 0;
+  padding: 1.65rem 2rem;
+  border-right: 1px solid var(--home-line);
+}
+
+.cell:first-child {
+  padding-left: 0;
+}
+
+.cell:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.label {
+  display: block;
+  margin-bottom: 1.45rem;
+  color: var(--home-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.keyRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.key {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 5rem;
+  height: 5rem;
+  padding: 0 0 0.1rem;
+  border: 0;
+  border-bottom: 5px solid #c65037;
+  border-radius: 0;
+  background: #ff805b;
+  color: #251b1b;
+  cursor: pointer;
+  font:
+    800 2.5rem/1 'Manrope Variable',
+    sans-serif;
+  transition:
+    transform 160ms ease-out,
+    border-bottom-width 160ms ease-out;
+}
+
+.key:hover {
+  background: #ff9a79;
+}
+
+.key:active {
+  transform: translateY(3px);
+  border-bottom-width: 2px;
+}
+
+.key:focus-visible {
+  outline: 3px solid var(--home-focus);
+  outline-offset: 4px;
+}
+
+.hint {
+  max-width: 22ch;
+  margin: 0;
+  color: var(--home-muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.shortcutToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  margin: 0.15rem 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--home-text);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.shortcutToggle[aria-checked='false'] {
+  color: var(--home-muted);
+}
+
+.shortcutToggle:focus-visible {
+  outline: 3px solid var(--home-focus);
+  outline-offset: 3px;
+}
+
+.toggleTrack {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  box-sizing: border-box;
+  width: 2.25rem;
+  height: 1.25rem;
+  padding: 0.1875rem;
+  background: var(--home-muted);
+}
+
+.shortcutToggle:hover .toggleTrack {
+  outline: 1px solid var(--home-muted);
+  outline-offset: 2px;
+}
+
+.shortcutToggle[aria-checked='true'] .toggleTrack {
+  background: var(--ifm-color-primary);
+}
+
+.toggleThumb {
+  width: 0.875rem;
+  height: 0.875rem;
+  background: var(--home-bg);
+  transition: transform 160ms ease-out;
+}
+
+.shortcutToggle[aria-checked='true'] .toggleThumb {
+  transform: translateX(1rem);
+}
+
+.code {
+  overflow-x: auto;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  background: transparent;
+  color: var(--home-text);
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
+.code code {
+  color: inherit;
+  white-space: pre;
+}
+
+.keyword {
+  color: var(--home-code-keyword);
+}
+
+.function {
+  color: var(--home-code-function);
+}
+
+.string {
+  color: var(--home-code-string);
+}
+
+.result {
+  margin: -0.15rem 0 0.45rem;
+  color: var(--home-text);
+  font-size: clamp(1.7rem, 2.5vw, 2.35rem);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+@media (max-width: 996px) {
+  .cell {
+    padding-inline: 1.25rem;
+  }
+
+  .keyRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+
+  .cell,
+  .cell:first-child,
+  .cell:last-child {
+    padding: 1.35rem 0;
+    border-right: 0;
+  }
+
+  .cell:first-child {
+    grid-column: 1;
+    grid-row: 1;
+    padding-right: 1rem;
+    border-right: 1px solid var(--home-line);
+  }
+
+  .cell:nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    border-top: 1px solid var(--home-line);
+  }
+
+  .cell:last-child {
+    grid-column: 2;
+    grid-row: 1;
+    padding-left: 1rem;
+  }
+
+  .label {
+    margin-bottom: 0.9rem;
+  }
+
+  .keyRow {
+    gap: 0.7rem;
+  }
+
+  .key {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .key,
+  .toggleThumb {
+    transition: none;
+  }
+}

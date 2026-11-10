@@ -1,0 +1,131 @@
+.install {
+  position: relative;
+  width: min(100%, 28rem);
+  min-width: 0;
+}
+
+.managers {
+  display: flex;
+  gap: 0.25rem;
+  min-width: 0;
+  margin: 0 0 0.25rem;
+  padding: 0;
+  border: 0;
+}
+
+.visuallyHidden,
+.manager input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.manager {
+  position: relative;
+  margin: 0;
+  cursor: pointer;
+}
+
+.manager span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.25rem;
+  min-height: 2.75rem;
+  padding: 0 0.7rem;
+  border-bottom: 2px solid transparent;
+  color: var(--home-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.manager:hover span {
+  color: var(--home-text);
+}
+
+.manager input:checked + span {
+  border-color: var(--ifm-color-primary);
+  color: var(--home-text);
+}
+
+.manager input:focus-visible + span {
+  outline: 3px solid var(--home-focus);
+  outline-offset: -3px;
+}
+
+.command {
+  display: flex;
+  align-items: center;
+  min-height: 3.5rem;
+  padding: 0.25rem 0.4rem 0.25rem 1rem;
+  border: 1px solid var(--home-line);
+  border-radius: 0;
+  background: var(--home-surface);
+}
+
+.command code {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--home-text);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.copy {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-left: 0.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--home-muted);
+  cursor: pointer;
+}
+
+.copy:hover {
+  background: var(--home-hover);
+  color: var(--home-text);
+}
+
+.copy:focus-visible {
+  outline: 3px solid var(--home-focus);
+  outline-offset: -2px;
+}
+
+.feedback {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  width: 100%;
+  color: var(--home-text);
+  font-size: 0.8rem;
+}
+
+.feedback:empty {
+  display: none;
+}
+
+@media (max-width: 380px) {
+  .command {
+    padding-left: 0.75rem;
+  }
+
+  .command code {
+    font-size: 0.75rem;
+  }
+
+  .copy {
+    margin-left: 0.25rem;
+  }
+}
