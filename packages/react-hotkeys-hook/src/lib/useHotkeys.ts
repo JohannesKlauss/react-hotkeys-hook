@@ -1,4 +1,4 @@
-import type { Hotkey, HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
+import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
 import { type DependencyList, type RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
@@ -8,6 +8,7 @@ import {
   isKeyboardEventTriggeredByInput,
   isScopeActive,
   maybePreventDefault,
+  triggerSequenceHotkey,
 } from './validators'
 import { useHotkeysContext } from './HotkeysProvider'
 import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
@@ -18,32 +19,6 @@ const stopPropagation = (e: KeyboardEvent): void => {
   e.stopPropagation()
   e.preventDefault()
   e.stopImmediatePropagation()
-}
-
-type TriggerGuards = Pick<Options, 'enabled' | 'ignoreEventWhen' | 'preventDefault'>
-
-// Runs the callback unless `ignoreEventWhen`, a repeated keyup or a functional `enabled` rejects the event.
-// Returns whether the callback ran.
-function triggerHotkey(
-  e: KeyboardEvent,
-  hotkey: Hotkey,
-  callback: HotkeyCallback,
-  { enabled, ignoreEventWhen, preventDefault }: TriggerGuards,
-  isRepeatedKeyUp = false,
-): boolean {
-  if (ignoreEventWhen?.(e) || isRepeatedKeyUp) {
-    return false
-  }
-
-  maybePreventDefault(e, hotkey, preventDefault)
-
-  if (!isHotkeyEnabled(e, hotkey, enabled)) {
-    return false
-  }
-
-  callback(e, hotkey)
-
-  return true
 }
 
 const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
@@ -183,7 +158,7 @@ export default function useHotkeys<T extends HTMLElement>(
             clearTimeout(sequenceTimer[index])
             rec.length = 0
 
-            triggerHotkey(e, hotkey, cbRef.current, {
+            triggerSequenceHotkey(e, hotkey, cbRef.current, {
               enabled: enabledRef.current,
               ignoreEventWhen: ignoreEventWhenRef.current,
               preventDefault: preventDefaultRef.current,
@@ -194,13 +169,24 @@ export default function useHotkeys<T extends HTMLElement>(
             isHotkeyMatchingKeyboardEvent(e, hotkey, memoisedOptions?.ignoreModifiers) ||
             hotkey.keys?.includes('*')
           ) {
-            const guards = {
-              enabled: enabledRef.current,
-              ignoreEventWhen: ignoreEventWhenRef.current,
-              preventDefault: preventDefaultRef.current,
+            if (ignoreEventWhenRef.current?.(e)) {
+              return
             }
 
-            if (triggerHotkey(e, hotkey, cbRef.current, guards, isKeyUp && hasTriggeredRef.current) && !isKeyUp) {
+            if (isKeyUp && hasTriggeredRef.current) {
+              return
+            }
+
+            maybePreventDefault(e, hotkey, preventDefaultRef.current)
+
+            if (!isHotkeyEnabled(e, hotkey, enabledRef.current)) {
+              return
+            }
+
+            // Execute the user callback for that hotkey
+            cbRef.current(e, hotkey)
+
+            if (!isKeyUp) {
               hasTriggeredRef.current = true
             }
           }

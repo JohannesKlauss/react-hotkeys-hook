@@ -1,6 +1,6 @@
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
 import { isMacOS, mapCode } from './parseHotkeys'
-import type { FormTags, Hotkey, Scopes, Trigger } from './types'
+import type { FormTags, Hotkey, HotkeyCallback, Options, Scopes, Trigger } from './types'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -14,6 +14,24 @@ export function isHotkeyEnabled(e: KeyboardEvent, hotkey: Hotkey, enabled?: Trig
   }
 
   return enabled === true || enabled === undefined
+}
+
+// Runs the callback of a completed sequence, honouring the same guards as a single key combination.
+export function triggerSequenceHotkey(
+  e: KeyboardEvent,
+  hotkey: Hotkey,
+  callback: HotkeyCallback,
+  { enabled, ignoreEventWhen, preventDefault }: Pick<Options, 'enabled' | 'ignoreEventWhen' | 'preventDefault'>,
+): void {
+  if (ignoreEventWhen?.(e)) {
+    return
+  }
+
+  maybePreventDefault(e, hotkey, preventDefault)
+
+  if (isHotkeyEnabled(e, hotkey, enabled)) {
+    callback(e, hotkey)
+  }
 }
 
 // these are ARIA roles that are considered form fields
