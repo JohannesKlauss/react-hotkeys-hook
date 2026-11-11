@@ -821,6 +821,42 @@ test('should support an empty sequenceSplitKey by splitting the sequence into ch
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test('should not trigger a sequence ending in the sequence separator when enabled returns false', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a>>', callback, { useKey: true, enabled: () => false }))
+
+  await user.keyboard('a')
+  await user.keyboard('{Shift>}>{/Shift}')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('should not trigger a sequence when ignoreEventWhen returns true', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>h', callback, { ignoreEventWhen: () => true }))
+
+  await user.keyboard('g')
+  await user.keyboard('h')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('should trigger a sequence when enabled returns true and ignoreEventWhen returns false', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>h', callback, { enabled: () => true, ignoreEventWhen: () => false }))
+
+  await user.keyboard('g')
+  await user.keyboard('h')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should default to keydown if neither keyup nor keydown is passed', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()

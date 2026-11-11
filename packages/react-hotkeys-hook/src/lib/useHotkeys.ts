@@ -154,11 +154,20 @@ export default function useHotkeys<T extends HTMLElement>(
 
           // If the sequence is complete, trigger the callback
           if (rec.length === hotkey.keys?.length) {
-            maybePreventDefault(e, hotkey, preventDefaultRef.current)
-
-            cbRef.current(e, hotkey)
             clearTimeout(sequenceTimer[index])
             rec.length = 0
+
+            if (ignoreEventWhenRef.current?.(e)) {
+              return
+            }
+
+            maybePreventDefault(e, hotkey, preventDefaultRef.current)
+
+            if (!isHotkeyEnabled(e, hotkey, enabledRef.current)) {
+              return
+            }
+
+            cbRef.current(e, hotkey)
           }
         } else {
           if (
