@@ -2117,6 +2117,26 @@ test('Should not disable later-registered handlers when one uses enabled callbac
   expect(callbackC).toHaveBeenCalledTimes(1)
 })
 
+test('registers a hotkey with an inline enabled callback inside HotkeysProvider', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  function Reproduction() {
+    useHotkeys('ctrl+k', callback, { enabled: () => true })
+    return null
+  }
+
+  render(
+    <HotkeysProvider>
+      <Reproduction />
+    </HotkeysProvider>,
+  )
+
+  await user.keyboard('{Control>}k{/Control}')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('Should work when both scopes and enabled callback are set', async () => {
   const user = userEvent.setup()
 
