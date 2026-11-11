@@ -66,7 +66,7 @@ test('should log a warning when trying to set a scope without a wrapped provider
   expect(callback).not.toHaveBeenCalled()
 })
 
-test('should call hotkey when scopes are set but activatedScopes includes wildcard scope', async () => {
+test('should not call a named hotkey when only the wildcard scope is active', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
 
@@ -83,7 +83,7 @@ test('should call hotkey when scopes are set but activatedScopes includes wildca
 
   await user.keyboard('A')
 
-  expect(callback).toHaveBeenCalled()
+  expect(callback).not.toHaveBeenCalled()
 })
 
 test('should not call hotkey when scopes are set but activatedScopes does not include set scope', async () => {
@@ -102,6 +102,17 @@ test('should not call hotkey when scopes are set but activatedScopes does not in
   render(['bar'])
 
   await user.keyboard('A')
+
+  expect(callback).not.toHaveBeenCalled()
+})
+
+test('does not match a partial scope name', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a', callback, { scopes: 'foobar' }), { wrapper: wrapper(['foo']) })
+
+  await user.keyboard('a')
 
   expect(callback).not.toHaveBeenCalled()
 })
