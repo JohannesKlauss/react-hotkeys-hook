@@ -1,4 +1,4 @@
-import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
+import type { Hotkey, HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
 import { type DependencyList, type RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
 import {
@@ -18,6 +18,24 @@ const stopPropagation = (e: KeyboardEvent): void => {
   e.stopPropagation()
   e.preventDefault()
   e.stopImmediatePropagation()
+}
+
+// Runs the callback of a completed sequence unless `ignoreEventWhen` or a functional `enabled` rejects the event.
+function triggerSequence(
+  e: KeyboardEvent,
+  hotkey: Hotkey,
+  callback: HotkeyCallback,
+  { enabled, ignoreEventWhen, preventDefault }: Pick<Options, 'enabled' | 'ignoreEventWhen' | 'preventDefault'>,
+): void {
+  if (ignoreEventWhen?.(e)) {
+    return
+  }
+
+  maybePreventDefault(e, hotkey, preventDefault)
+
+  if (isHotkeyEnabled(e, hotkey, enabled)) {
+    callback(e, hotkey)
+  }
 }
 
 const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
@@ -157,17 +175,11 @@ export default function useHotkeys<T extends HTMLElement>(
             clearTimeout(sequenceTimer[index])
             rec.length = 0
 
-            if (ignoreEventWhenRef.current?.(e)) {
-              return
-            }
-
-            maybePreventDefault(e, hotkey, preventDefaultRef.current)
-
-            if (!isHotkeyEnabled(e, hotkey, enabledRef.current)) {
-              return
-            }
-
-            cbRef.current(e, hotkey)
+            triggerSequence(e, hotkey, cbRef.current, {
+              enabled: enabledRef.current,
+              ignoreEventWhen: ignoreEventWhenRef.current,
+              preventDefault: preventDefaultRef.current,
+            })
           }
         } else {
           if (

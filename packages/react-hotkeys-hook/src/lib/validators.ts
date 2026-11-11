@@ -107,9 +107,25 @@ function isCaseless(key: string): boolean {
   return key.toLowerCase() === key.toUpperCase()
 }
 
+// With useKey, a symbol binding without an explicit `shift` (e.g. `>`) also matches when the layout needs shift to
+// type it. This only applies to caseless symbols produced by a main-block symbol key, see SHIFTABLE_SYMBOL_CODES.
+function isImplicitShiftAllowed(e: KeyboardEvent, hotkey: Hotkey): boolean {
+  const { shift, keys, useKey } = hotkey
+
+  if (!useKey || shift || !e.shiftKey || keys?.length !== 1) {
+    return false
+  }
+
+  return keys[0] === e.key && isCaseless(e.key) && SHIFTABLE_SYMBOL_CODES.has(e.code)
+}
+
+function isShiftStateMatching(e: KeyboardEvent, hotkey: Hotkey, mappedCode: string): boolean {
+  return hotkey.shift === e.shiftKey || mappedCode === 'shift' || isImplicitShiftAllowed(e, hotkey)
+}
+
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {
-  const { alt, meta, mod, shift, ctrl, keys, useKey } = hotkey
-  const { code, key: producedKey, ctrlKey, metaKey, shiftKey, altKey } = e
+  const { alt, meta, mod, ctrl, keys, useKey } = hotkey
+  const { code, key: producedKey, ctrlKey, metaKey, altKey } = e
 
   const mappedCode = mapCode(code)
   const altGraphKey = typeof e.getModifierState === 'function' && e.getModifierState('AltGraph')
@@ -128,18 +144,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
       return false
     }
 
-    // With useKey, a symbol binding without an explicit `shift` (e.g. `>`) also matches when the layout needs shift to
-    // type it. This only applies to caseless symbols produced by a main-block symbol key, see SHIFTABLE_SYMBOL_CODES.
-    const isSymbolTypedWithShift =
-      useKey &&
-      !shift &&
-      shiftKey &&
-      keys?.length === 1 &&
-      keys[0] === producedKey &&
-      isCaseless(producedKey) &&
-      SHIFTABLE_SYMBOL_CODES.has(code)
-
-    if (shift !== shiftKey && mappedCode !== 'shift' && !isSymbolTypedWithShift) {
+    if (!isShiftStateMatching(e, hotkey, mappedCode)) {
       return false
     }
 
