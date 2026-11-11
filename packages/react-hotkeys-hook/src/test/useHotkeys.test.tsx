@@ -799,6 +799,28 @@ test('should keep explicit shift+symbol bindings with useKey exact', () => {
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test('should support an empty splitKey by splitting the hotkey into characters', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('a', callback, { splitKey: '' }))
+
+  fireEvent.keyDown(document.body, { key: 'a', code: 'KeyA' })
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should support an empty sequenceSplitKey by splitting the sequence into characters', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('ab', callback, { sequenceSplitKey: '' }))
+
+  await user.keyboard('a')
+  await user.keyboard('b')
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should default to keydown if neither keyup nor keydown is passed', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()

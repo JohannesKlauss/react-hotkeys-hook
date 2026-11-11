@@ -40,6 +40,11 @@ export function parseKeysHookInput(keys: string, delimiter = ','): string[] {
 
 // Splits a hotkey while still allowing the separator itself to be used as a key, e.g. `+`, `ctrl++` or `>`
 function splitHotkey(hotkey: string, separator: string): string[] {
+  // An empty separator splits into characters, as String.prototype.split does
+  if (separator === '') {
+    return hotkey.split('')
+  }
+
   if (hotkey === separator) {
     return [separator]
   }
