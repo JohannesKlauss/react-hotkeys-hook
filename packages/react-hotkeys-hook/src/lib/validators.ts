@@ -109,18 +109,30 @@ function isCaseless(key: string): boolean {
 
 // With useKey, a symbol binding without an explicit `shift` (e.g. `>`) also matches when the layout needs shift to
 // type it. This only applies to caseless symbols produced by a main-block symbol key, see SHIFTABLE_SYMBOL_CODES.
+function isShiftableSymbol(e: KeyboardEvent): boolean {
+  return isCaseless(e.key) && SHIFTABLE_SYMBOL_CODES.has(e.code)
+}
+
 function isImplicitShiftAllowed(e: KeyboardEvent, hotkey: Hotkey): boolean {
   const { shift, keys, useKey } = hotkey
 
-  if (!useKey || shift || !e.shiftKey || keys?.length !== 1) {
+  if (!useKey || shift) {
     return false
   }
 
-  return keys[0] === e.key && isCaseless(e.key) && SHIFTABLE_SYMBOL_CODES.has(e.code)
+  if (!e.shiftKey || keys?.length !== 1) {
+    return false
+  }
+
+  return keys[0] === e.key && isShiftableSymbol(e)
 }
 
 function isShiftStateMatching(e: KeyboardEvent, hotkey: Hotkey, mappedCode: string): boolean {
-  return hotkey.shift === e.shiftKey || mappedCode === 'shift' || isImplicitShiftAllowed(e, hotkey)
+  if (hotkey.shift === e.shiftKey || mappedCode === 'shift') {
+    return true
+  }
+
+  return isImplicitShiftAllowed(e, hotkey)
 }
 
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {
