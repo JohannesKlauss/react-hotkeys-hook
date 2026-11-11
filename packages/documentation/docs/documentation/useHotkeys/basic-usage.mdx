@@ -171,10 +171,10 @@ Here the user has 10 seconds between each key to complete the `g>h>i>j` sequence
 - `alt`
 - `ctrl`
 - `meta`
-- `mod` — triggers on **either** `ctrl` or `meta`, regardless of platform. This is commonly used as `ctrl` on Windows/Linux and `cmd` on macOS.
+- `mod` — requires `meta` (`cmd`) on macOS and `ctrl` on other platforms.
 
-:::info `mod` listens to both modifier keys
-`mod` is an alias that triggers if **either** `ctrl` or `meta` is pressed. If you need to listen to the platform's primary modifier **exclusively** (e.g. only `cmd` on macOS or only `ctrl` on Windows), use `ctrl` or `meta` directly instead of `mod`.
+:::info Platform-specific modifier
+Use `mod` for shortcuts that follow the platform's primary modifier. To require a specific modifier on every platform, use `ctrl` or `meta` directly. For example, use `ctrl` to listen for Control on macOS.
 :::
 
 ## Cross-platform compatibility

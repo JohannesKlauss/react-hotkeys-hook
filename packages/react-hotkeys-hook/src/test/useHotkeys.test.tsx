@@ -2066,6 +2066,27 @@ test('Should trigger only produced key hotkeys', async () => {
   expect(callbackY).toHaveBeenCalledTimes(2)
 })
 
+test.each([
+  ['macOS', 'Macintosh', 'Meta'],
+  ['Windows', 'Windows', 'Control'],
+])('mod+backtick requires the platform modifier with useKey on %s', async (_platform, userAgent, modifier) => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+  const userAgentSpy = vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(userAgent)
+
+  try {
+    renderHook(() => useHotkeys('mod+`', callback, { useKey: true }))
+
+    await user.keyboard(`{${modifier}>}\`{/${modifier}}`)
+    expect(callback).toHaveBeenCalledTimes(1)
+
+    await user.keyboard('`')
+    expect(callback).toHaveBeenCalledTimes(1)
+  } finally {
+    userAgentSpy.mockRestore()
+  }
+})
+
 test('Should not fire useKey hotkey with modifiers when only the bare key is pressed', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
