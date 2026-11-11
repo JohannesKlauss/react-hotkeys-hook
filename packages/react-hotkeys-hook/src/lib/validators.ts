@@ -82,8 +82,29 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
   return activeScopes.some((scope) => (typeof scopes === 'string' ? scopes === scope : scopes.includes(scope)))
 }
 
-function isCaseSensitive(key: string): boolean {
-  return key.toLowerCase() !== key.toUpperCase()
+// Physical keys of the main block that produce a symbol. Shift changes what these keys produce on most layouts
+// (e.g. Shift+Period gives `>` and Shift+Equal gives `+` on a US layout). Numpad keys, Space, digits and letters are
+// deliberately not listed: Shift does not change the character they produce (Chromium reports `key: "1"` with
+// `shiftKey: true` for Shift+Numpad1), or, for letters, `a` and `shift+a` must stay distinct.
+const SHIFTABLE_SYMBOL_CODES = new Set([
+  'Backquote',
+  'Minus',
+  'Equal',
+  'BracketLeft',
+  'BracketRight',
+  'Backslash',
+  'Semicolon',
+  'Quote',
+  'Comma',
+  'Period',
+  'Slash',
+  'IntlBackslash',
+  'IntlYen',
+  'IntlRo',
+])
+
+function isCaseless(key: string): boolean {
+  return key.toLowerCase() === key.toUpperCase()
 }
 
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {
@@ -107,10 +128,16 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
       return false
     }
 
-    // With useKey, symbols such as `>` or `+` often need shift to be typed (e.g. shift+. on a US layout).
-    // Letters are excluded so that `a` and `shift+a` stay distinct.
+    // With useKey, a symbol binding without an explicit `shift` (e.g. `>`) also matches when the layout needs shift to
+    // type it. This only applies to caseless symbols produced by a main-block symbol key, see SHIFTABLE_SYMBOL_CODES.
     const isSymbolTypedWithShift =
-      useKey && shiftKey && keys?.length === 1 && keys[0] === producedKey && !isCaseSensitive(producedKey)
+      useKey &&
+      !shift &&
+      shiftKey &&
+      keys?.length === 1 &&
+      keys[0] === producedKey &&
+      isCaseless(producedKey) &&
+      SHIFTABLE_SYMBOL_CODES.has(code)
 
     if (shift !== shiftKey && mappedCode !== 'shift' && !isSymbolTypedWithShift) {
       return false

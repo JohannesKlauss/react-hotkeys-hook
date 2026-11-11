@@ -686,36 +686,33 @@ test('should listen to + if the splitKey is set to something different then +', 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should listen to a lone + with useKey without changing the splitKey', async () => {
-  const user = userEvent.setup()
+test('should listen to a lone + with useKey without changing the splitKey', () => {
   const callback = vi.fn()
 
   renderHook(() => useHotkeys('+', callback, { useKey: true }))
 
-  await user.keyboard('{Shift>}+{/Shift}')
+  fireEvent.keyDown(document.body, { key: '+', code: 'Equal', shiftKey: true })
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should listen to a lone > with useKey without treating it as a sequence', async () => {
-  const user = userEvent.setup()
+test('should listen to a lone > with useKey without treating it as a sequence', () => {
   const callback = vi.fn()
 
   renderHook(() => useHotkeys('>', callback, { useKey: true }))
 
-  await user.keyboard('{Shift>}>{/Shift}')
+  fireEvent.keyDown(document.body, { key: '>', code: 'Period', shiftKey: true })
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
-test('should listen to + after a modifier with useKey', async () => {
-  const user = userEvent.setup()
+test('should listen to + after a modifier with useKey', () => {
   const callback = vi.fn()
 
   renderHook(() => useHotkeys('ctrl++', callback, { useKey: true }))
 
-  await user.keyboard('{Shift>}+{/Shift}')
-  await user.keyboard('{Control>}{Shift>}+{/Shift}{/Control}')
+  fireEvent.keyDown(document.body, { key: '+', code: 'Equal', shiftKey: true })
+  fireEvent.keyDown(document.body, { key: '+', code: 'Equal', shiftKey: true, ctrlKey: true })
 
   expect(callback).toHaveBeenCalledTimes(1)
 })
@@ -741,6 +738,64 @@ test('should still require shift for letters with useKey', async () => {
   await user.keyboard('{Shift>}A{/Shift}')
   await user.keyboard('a')
 
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should not treat shift+numpad digits as a shifted symbol with useKey', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('1', callback, { useKey: true }))
+
+  // Chromium reports key "1" with shiftKey for Shift+Numpad1, but shift did not produce that character.
+  fireEvent.keyDown(document.body, { key: '1', code: 'Numpad1', shiftKey: true })
+  expect(callback).toHaveBeenCalledTimes(0)
+
+  fireEvent.keyDown(document.body, { key: '1', code: 'Numpad1' })
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should not treat shift+numpad add as a shifted + with a custom splitKey', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('+', callback, { useKey: true, splitKey: '_' }))
+
+  fireEvent.keyDown(document.body, { key: '+', code: 'NumpadAdd', shiftKey: true })
+  expect(callback).toHaveBeenCalledTimes(0)
+
+  fireEvent.keyDown(document.body, { key: '+', code: 'NumpadAdd' })
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger > with useKey when it is typed with shift on the period key', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('>', callback, { useKey: true }))
+
+  fireEvent.keyDown(document.body, { key: '>', code: 'Period', shiftKey: true })
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should trigger + with useKey and a custom splitKey when typed with shift on the equal key', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('+', callback, { useKey: true, splitKey: '_' }))
+
+  fireEvent.keyDown(document.body, { key: '+', code: 'Equal', shiftKey: true })
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should keep explicit shift+symbol bindings with useKey exact', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('shift+.', callback, { useKey: true }))
+
+  // `.` produced without shift does not match an explicit shift binding
+  fireEvent.keyDown(document.body, { key: '.', code: 'Period' })
+  expect(callback).toHaveBeenCalledTimes(0)
+
+  fireEvent.keyDown(document.body, { key: '.', code: 'Period', shiftKey: true })
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
