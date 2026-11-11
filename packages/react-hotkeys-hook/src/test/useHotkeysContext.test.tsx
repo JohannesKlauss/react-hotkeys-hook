@@ -37,6 +37,24 @@ test('should return hotkey with correct scope', () => {
 
   expect(result.current.hotkeys).toHaveLength(1)
   expect(result.current.hotkeys[0].hotkey).toEqual('ctrl+b')
+  expect(result.current.hotkeys[0].scopes).toEqual(['scope'])
+})
+
+test('updates registered hotkeys when their scopes change', () => {
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <HotkeysProvider initiallyActiveScopes={['first', 'second']}>{children}</HotkeysProvider>
+  )
+  const { result, rerender } = renderHook(
+    ({ scopes }: { scopes: string }) => {
+      useHotkeys('a', () => null, { scopes })
+      return useHotkeysContext()
+    },
+    { wrapper, initialProps: { scopes: 'first' } },
+  )
+
+  expect(result.current.hotkeys.map((hotkey) => hotkey.scopes)).toEqual(['first'])
+  rerender({ scopes: 'second' })
+  expect(result.current.hotkeys.map((hotkey) => hotkey.scopes)).toEqual(['second'])
 })
 
 test('should not return hotkey with different scope', () => {

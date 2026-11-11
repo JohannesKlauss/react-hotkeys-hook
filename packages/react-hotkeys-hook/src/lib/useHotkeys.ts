@@ -126,14 +126,7 @@ export default function useHotkeys<T extends HTMLElement>(
 
         const rec = (recordedKeys[index] ||= [])
 
-        const hotkey = parseHotkey(
-          key,
-          memoisedOptions?.splitKey,
-          memoisedOptions?.sequenceSplitKey,
-          memoisedOptions?.useKey,
-          memoisedOptions?.description,
-          memoisedOptions?.metadata,
-        )
+        const hotkey = parseHotkey(key, memoisedOptions)
 
         if (hotkey.isSequence) {
           // Restart the timeout — if the next key isn't pressed in time, reset the sequence
@@ -234,16 +227,7 @@ export default function useHotkeys<T extends HTMLElement>(
 
     if (proxy) {
       parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
-        proxy.addHotkey(
-          parseHotkey(
-            key,
-            memoisedOptions?.splitKey,
-            memoisedOptions?.sequenceSplitKey,
-            memoisedOptions?.useKey,
-            memoisedOptions?.description,
-            memoisedOptions?.metadata,
-          ),
-        )
+        proxy.addHotkey(parseHotkey(key, memoisedOptions))
       })
     }
 
@@ -255,16 +239,7 @@ export default function useHotkeys<T extends HTMLElement>(
 
       if (proxy) {
         parseKeysHookInput(_keys, memoisedOptions?.delimiter).forEach((key) => {
-          proxy.removeHotkey(
-            parseHotkey(
-              key,
-              memoisedOptions?.splitKey,
-              memoisedOptions?.sequenceSplitKey,
-              memoisedOptions?.useKey,
-              memoisedOptions?.description,
-              memoisedOptions?.metadata,
-            ),
-          )
+          proxy.removeHotkey(parseHotkey(key, memoisedOptions))
         })
       }
 

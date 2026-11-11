@@ -79,7 +79,7 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
     return true
   }
 
-  return activeScopes.some((scope) => scopes.includes(scope)) || activeScopes.includes('*')
+  return activeScopes.some((scope) => (typeof scopes === 'string' ? scopes === scope : scopes.includes(scope)))
 }
 
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {
