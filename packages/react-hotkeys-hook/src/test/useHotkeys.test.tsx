@@ -753,6 +753,26 @@ test('should trigger twice if keyup and keydown are passed', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
 })
 
+test.each([
+  { keyupDelivered: true, expected: ['keydown', 'keyup'] },
+  { keyupDelivered: false, expected: ['keydown'] },
+])(
+  'should dispatch meta shortcut callbacks only for delivered events: $keyupDelivered',
+  ({ keyupDelivered, expected }) => {
+    const callback = vi.fn()
+    renderHook(() => useHotkeys('meta+b', callback, { keydown: true, keyup: true }))
+
+    fireEvent.keyDown(document, { key: 'Meta', code: 'MetaLeft', metaKey: true })
+    fireEvent.keyDown(document, { key: 'b', code: 'KeyB', metaKey: true })
+    if (keyupDelivered) {
+      fireEvent.keyUp(document, { key: 'b', code: 'KeyB', metaKey: true })
+    }
+    fireEvent.keyUp(document, { key: 'Meta', code: 'MetaLeft' })
+
+    expect(callback.mock.calls.map(([event]) => event.type)).toEqual(expected)
+  },
+)
+
 test('should be disabled on form tags by default', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
