@@ -8,6 +8,7 @@ import {
   isKeyboardEventTriggeredByInput,
   isScopeActive,
   maybePreventDefault,
+  triggerSequenceHotkey,
 } from './validators'
 import { useHotkeysContext } from './HotkeysProvider'
 import { useBoundHotkeysProxy } from './BoundHotkeysProxyProvider'
@@ -154,11 +155,14 @@ export default function useHotkeys<T extends HTMLElement>(
 
           // If the sequence is complete, trigger the callback
           if (rec.length === hotkey.keys?.length) {
-            maybePreventDefault(e, hotkey, preventDefaultRef.current)
-
-            cbRef.current(e, hotkey)
             clearTimeout(sequenceTimer[index])
             rec.length = 0
+
+            triggerSequenceHotkey(e, hotkey, cbRef.current, {
+              enabled: enabledRef.current,
+              ignoreEventWhen: ignoreEventWhenRef.current,
+              preventDefault: preventDefaultRef.current,
+            })
           }
         } else {
           if (

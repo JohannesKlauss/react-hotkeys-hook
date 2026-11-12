@@ -1,6 +1,6 @@
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
 import { isMacOS, mapCode } from './parseHotkeys'
-import type { FormTags, Hotkey, Scopes, Trigger } from './types'
+import type { FormTags, Hotkey, HotkeyCallback, Options, Scopes, Trigger } from './types'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
   if ((typeof preventDefault === 'function' && preventDefault(e, hotkey)) || preventDefault === true) {
@@ -14,6 +14,24 @@ export function isHotkeyEnabled(e: KeyboardEvent, hotkey: Hotkey, enabled?: Trig
   }
 
   return enabled === true || enabled === undefined
+}
+
+// Runs the callback of a completed sequence, honouring the same guards as a single key combination.
+export function triggerSequenceHotkey(
+  e: KeyboardEvent,
+  hotkey: Hotkey,
+  callback: HotkeyCallback,
+  { enabled, ignoreEventWhen, preventDefault }: Pick<Options, 'enabled' | 'ignoreEventWhen' | 'preventDefault'>,
+): void {
+  if (ignoreEventWhen?.(e)) {
+    return
+  }
+
+  maybePreventDefault(e, hotkey, preventDefault)
+
+  if (isHotkeyEnabled(e, hotkey, enabled)) {
+    callback(e, hotkey)
+  }
 }
 
 // these are ARIA roles that are considered form fields
@@ -82,9 +100,62 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
   return activeScopes.some((scope) => (typeof scopes === 'string' ? scopes === scope : scopes.includes(scope)))
 }
 
+// Physical keys of the main block that produce a symbol. Shift changes what these keys produce on most layouts
+// (e.g. Shift+Period gives `>` and Shift+Equal gives `+` on a US layout). Numpad keys, Space, digits and letters are
+// deliberately not listed: Shift does not change the character they produce (Chromium reports `key: "1"` with
+// `shiftKey: true` for Shift+Numpad1), or, for letters, `a` and `shift+a` must stay distinct.
+const SHIFTABLE_SYMBOL_CODES = new Set([
+  'Backquote',
+  'Minus',
+  'Equal',
+  'BracketLeft',
+  'BracketRight',
+  'Backslash',
+  'Semicolon',
+  'Quote',
+  'Comma',
+  'Period',
+  'Slash',
+  'IntlBackslash',
+  'IntlYen',
+  'IntlRo',
+])
+
+function isCaseless(key: string): boolean {
+  return key.toLowerCase() === key.toUpperCase()
+}
+
+// With useKey, a symbol binding without an explicit `shift` (e.g. `>`) also matches when the layout needs shift to
+// type it. This only applies to caseless symbols produced by a main-block symbol key, see SHIFTABLE_SYMBOL_CODES.
+function isShiftableSymbol(e: KeyboardEvent): boolean {
+  return isCaseless(e.key) && SHIFTABLE_SYMBOL_CODES.has(e.code)
+}
+
+function isImplicitShiftAllowed(e: KeyboardEvent, hotkey: Hotkey): boolean {
+  const { shift, keys, useKey } = hotkey
+
+  if (!useKey || shift) {
+    return false
+  }
+
+  if (!e.shiftKey || keys?.length !== 1) {
+    return false
+  }
+
+  return keys[0] === e.key && isShiftableSymbol(e)
+}
+
+function isShiftStateMatching(e: KeyboardEvent, hotkey: Hotkey, mappedCode: string): boolean {
+  if (hotkey.shift === e.shiftKey || mappedCode === 'shift') {
+    return true
+  }
+
+  return isImplicitShiftAllowed(e, hotkey)
+}
+
 export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, ignoreModifiers = false): boolean => {
-  const { alt, meta, mod, shift, ctrl, keys, useKey } = hotkey
-  const { code, key: producedKey, ctrlKey, metaKey, shiftKey, altKey } = e
+  const { alt, meta, mod, ctrl, keys, useKey } = hotkey
+  const { code, key: producedKey, ctrlKey, metaKey, altKey } = e
 
   const mappedCode = mapCode(code)
   const altGraphKey = typeof e.getModifierState === 'function' && e.getModifierState('AltGraph')
@@ -103,7 +174,7 @@ export const isHotkeyMatchingKeyboardEvent = (e: KeyboardEvent, hotkey: Hotkey, 
       return false
     }
 
-    if (shift !== shiftKey && mappedCode !== 'shift') {
+    if (!isShiftStateMatching(e, hotkey, mappedCode)) {
       return false
     }
 
