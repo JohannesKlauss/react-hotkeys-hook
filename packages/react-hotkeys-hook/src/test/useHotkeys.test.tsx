@@ -1756,6 +1756,27 @@ test('should not trigger callback twice when pressing a key and then a modifier'
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test.each([
+  { keys: '[Space>][ShiftLeft>][/ShiftLeft][/Space]', ignoreModifiers: false, expected: ['keydown', 'keyup'] },
+  { keys: '[ShiftLeft>][Space>][/Space][/ShiftLeft]', ignoreModifiers: false, expected: [] },
+  { keys: '[ShiftLeft>][Space>][/Space][/ShiftLeft]', ignoreModifiers: true, expected: ['keydown', 'keyup'] },
+  { keys: '[Space>][ShiftLeft>][/Space][/ShiftLeft]', ignoreModifiers: true, expected: ['keydown', 'keyup'] },
+])(
+  'should match space events with modifier changes: $keys, ignoreModifiers=$ignoreModifiers',
+  async ({ keys, ignoreModifiers, expected }) => {
+    const user = userEvent.setup()
+    const callback = vi.fn()
+
+    renderHook(() => useHotkeys('space', callback, { keydown: true, keyup: true, ignoreModifiers }))
+
+    await user.keyboard(keys)
+
+    expect(callback.mock.calls.map(([event]) => [event.type, event.code])).toEqual(
+      expected.map((type) => [type, 'Space']),
+    )
+  },
+)
+
 test('should not trigger callback when modifier is pressed while holding unrelated key', async () => {
   const user = userEvent.setup()
   const callback = vi.fn()
