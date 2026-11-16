@@ -17,16 +17,13 @@ export function isHotkeyEnabled(e: KeyboardEvent, hotkey: Hotkey, enabled?: Trig
 }
 
 // Runs the callback of a completed sequence, honouring the same guards as a single key combination.
+// ignoreEventWhen is checked by the caller for every key of the sequence, before it is recorded.
 export function triggerSequenceHotkey(
   e: KeyboardEvent,
   hotkey: Hotkey,
   callback: HotkeyCallback,
-  { enabled, ignoreEventWhen, preventDefault }: Pick<Options, 'enabled' | 'ignoreEventWhen' | 'preventDefault'>,
+  { enabled, preventDefault }: Pick<Options, 'enabled' | 'preventDefault'>,
 ): void {
-  if (ignoreEventWhen?.(e)) {
-    return
-  }
-
   maybePreventDefault(e, hotkey, preventDefault)
 
   if (isHotkeyEnabled(e, hotkey, enabled)) {
@@ -100,11 +97,21 @@ export function isScopeActive(activeScopes: string[], scopes?: Scopes): boolean 
   return activeScopes.some((scope) => (typeof scopes === 'string' ? scopes === scope : scopes.includes(scope)))
 }
 
-// Physical keys of the main block that produce a symbol. Shift changes what these keys produce on most layouts
-// (e.g. Shift+Period gives `>` and Shift+Equal gives `+` on a US layout). Numpad keys, Space, digits and letters are
-// deliberately not listed: Shift does not change the character they produce (Chromium reports `key: "1"` with
-// `shiftKey: true` for Shift+Numpad1), or, for letters, `a` and `shift+a` must stay distinct.
+// Physical keys of the main block whose character changes with Shift on most layouts (e.g. Shift+Period gives `>`,
+// Shift+Equal gives `+` and Shift+Digit1 gives `!` on a US layout). Numpad keys, Space and letters are deliberately
+// not listed: Shift does not change the character they produce (Chromium reports `key: "1"` with `shiftKey: true` for
+// Shift+Numpad1), or, for letters, `a` and `shift+a` must stay distinct.
 const SHIFTABLE_SYMBOL_CODES = new Set([
+  'Digit0',
+  'Digit1',
+  'Digit2',
+  'Digit3',
+  'Digit4',
+  'Digit5',
+  'Digit6',
+  'Digit7',
+  'Digit8',
+  'Digit9',
   'Backquote',
   'Minus',
   'Equal',

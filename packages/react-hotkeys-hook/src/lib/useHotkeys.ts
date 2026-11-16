@@ -130,6 +130,11 @@ export default function useHotkeys<T extends HTMLElement>(
         const hotkey = parseHotkey(key, memoisedOptions)
 
         if (hotkey.isSequence) {
+          // An ignored event is skipped entirely, so it neither advances nor resets the sequence
+          if (ignoreEventWhenRef.current?.(e)) {
+            return
+          }
+
           // Restart the timeout — if the next key isn't pressed in time, reset the sequence
           // clearTimeout with undefined is a no-op: https://developer.mozilla.org/en-US/docs/Web/API/Window/clearTimeout
           clearTimeout(sequenceTimer[index])
@@ -160,7 +165,6 @@ export default function useHotkeys<T extends HTMLElement>(
 
             triggerSequenceHotkey(e, hotkey, cbRef.current, {
               enabled: enabledRef.current,
-              ignoreEventWhen: ignoreEventWhenRef.current,
               preventDefault: preventDefaultRef.current,
             })
           }

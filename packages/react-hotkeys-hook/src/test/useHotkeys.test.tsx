@@ -786,6 +786,28 @@ test('should trigger + with useKey and a custom splitKey when typed with shift o
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
+test('should trigger ! with useKey when it is typed with shift on a digit key', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('!', callback, { useKey: true }))
+
+  fireEvent.keyDown(document.body, { key: '!', code: 'Digit1', shiftKey: true })
+
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
+test('should not trigger a digit with useKey when shift on the digit key produces a symbol', () => {
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('1', callback, { useKey: true }))
+
+  fireEvent.keyDown(document.body, { key: '!', code: 'Digit1', shiftKey: true })
+  expect(callback).toHaveBeenCalledTimes(0)
+
+  fireEvent.keyDown(document.body, { key: '1', code: 'Digit1' })
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('should keep explicit shift+symbol bindings with useKey exact', () => {
   const callback = vi.fn()
 
@@ -843,6 +865,31 @@ test('should not trigger a sequence when ignoreEventWhen returns true', async ()
   await user.keyboard('h')
 
   expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('should not trigger a sequence when ignoreEventWhen rejects only an intermediate key', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>h', callback, { ignoreEventWhen: (e) => e.key === 'g' }))
+
+  await user.keyboard('g')
+  await user.keyboard('h')
+
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('should not let an ignored key break a sequence in progress', async () => {
+  const user = userEvent.setup()
+  const callback = vi.fn()
+
+  renderHook(() => useHotkeys('g>h', callback, { ignoreEventWhen: (e) => e.key === 'x' }))
+
+  await user.keyboard('g')
+  await user.keyboard('x')
+  await user.keyboard('h')
+
+  expect(callback).toHaveBeenCalledTimes(1)
 })
 
 test('should trigger a sequence when enabled returns true and ignoreEventWhen returns false', async () => {
