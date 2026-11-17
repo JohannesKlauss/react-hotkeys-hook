@@ -1,5 +1,5 @@
 import { isHotkeyPressed, isReadonlyArray } from './isHotkeyPressed'
-import { isMacOS, mapCode } from './parseHotkeys'
+import { isHotkeyModifier, isMacOS, mapCode } from './parseHotkeys'
 import type { FormTags, Hotkey, HotkeyCallback, Options, Scopes, Trigger } from './types'
 
 export function maybePreventDefault(e: KeyboardEvent, hotkey: Hotkey, preventDefault?: Trigger): void {
@@ -16,8 +16,18 @@ export function isHotkeyEnabled(e: KeyboardEvent, hotkey: Hotkey, enabled?: Trig
   return enabled === true || enabled === undefined
 }
 
+// A sequence skips a key without recording it, so the key neither advances nor resets the sequence, when it is a
+// modifier (TODO: make modifiers work with sequences) or when ignoreEventWhen rejects the event.
+export function isSkippedSequenceKey(
+  e: KeyboardEvent,
+  key: string,
+  ignoreEventWhen?: Options['ignoreEventWhen'],
+): boolean {
+  return isHotkeyModifier(key.toLowerCase()) || ignoreEventWhen?.(e) === true
+}
+
 // Runs the callback of a completed sequence, honouring the same guards as a single key combination.
-// ignoreEventWhen is checked by the caller for every key of the sequence, before it is recorded.
+// ignoreEventWhen is checked for every key of the sequence before it is recorded, see isSkippedSequenceKey.
 export function triggerSequenceHotkey(
   e: KeyboardEvent,
   hotkey: Hotkey,

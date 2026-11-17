@@ -1,12 +1,13 @@
 import type { HotkeyCallback, Keys, Options, OptionsOrDependencyArray } from './types'
 import { type DependencyList, type RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { mapCode, parseHotkey, parseKeysHookInput, isHotkeyModifier } from './parseHotkeys'
+import { mapCode, parseHotkey, parseKeysHookInput } from './parseHotkeys'
 import {
   isHotkeyEnabled,
   isHotkeyEnabledOnTag,
   isHotkeyMatchingKeyboardEvent,
   isKeyboardEventTriggeredByInput,
   isScopeActive,
+  isSkippedSequenceKey,
   maybePreventDefault,
   triggerSequenceHotkey,
 } from './validators'
@@ -130,11 +131,6 @@ export default function useHotkeys<T extends HTMLElement>(
         const hotkey = parseHotkey(key, memoisedOptions)
 
         if (hotkey.isSequence) {
-          // An ignored event is skipped entirely, so it neither advances nor resets the sequence
-          if (ignoreEventWhenRef.current?.(e)) {
-            return
-          }
-
           // Restart the timeout — if the next key isn't pressed in time, reset the sequence
           // clearTimeout with undefined is a no-op: https://developer.mozilla.org/en-US/docs/Web/API/Window/clearTimeout
           clearTimeout(sequenceTimer[index])
@@ -144,8 +140,7 @@ export default function useHotkeys<T extends HTMLElement>(
 
           const currentKey = hotkey.useKey ? e.key : mapCode(e.code)
 
-          // TODO: Make modifiers work with sequences
-          if (isHotkeyModifier(currentKey.toLowerCase())) {
+          if (isSkippedSequenceKey(e, currentKey, ignoreEventWhenRef.current)) {
             return
           }
 
