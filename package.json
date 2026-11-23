@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react-dom": "19.2.9",
     "vite-plus": "1.4.0"
   },
   "peerDependencies": {
