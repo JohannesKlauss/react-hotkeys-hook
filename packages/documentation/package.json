@@ -35,7 +35,7 @@
   "devDependencies": {
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.8",
-    "@tsconfig/docusaurus": "2.0.9",
+    "@tsconfig/docusaurus": "2.0.10",
     "docusaurus-plugin-llms": "^0.6.0",
     "jsdom": "29.1.1",
     "vite-plus": "1.4.0"
