@@ -40,7 +40,7 @@
     "lint": "vp lint packages"
   },
   "devDependencies": {
-    "react": "19.2.7",
+    "react": "19.2.9",
     "react-dom": "19.2.7",
     "vite-plus": "1.4.0"
   },
